@@ -2,3 +2,8 @@ Debug.win32
 Release.win32
 .vs
 .DS_Store
+.idea
+/cocos2d/cocos/platform/android/libcocos2dx/libcocos2dx.iml
+/proj.android/app/cccpp1.iml
+/proj.android/proj.android.iml
+/cocos2d/cocos/platform/android/libcocos2dx/build

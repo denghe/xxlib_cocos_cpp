@@ -3,12 +3,11 @@ import org.gradle.internal.os.OperatingSystem
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
-
+    compileSdkVersion 18
     defaultConfig {
         applicationId "net.denghe.cccpp1"
-        minSdkVersion PROP_MIN_SDK_VERSION
-        targetSdkVersion PROP_TARGET_SDK_VERSION
+        minSdkVersion 18
+        targetSdkVersion 18
         versionCode 1
         versionName "1.0"
 
@@ -23,19 +22,17 @@ android {
                                         project.file("../../cocos2d/cocos").absolutePath,
                                         project.file("../../cocos2d/external").absolutePath]
                     if (OperatingSystem.current().isWindows()) {
-                        module_paths = module_paths.collect {it.replaceAll('\\\\', '/')}
+                        module_paths = module_paths.collect { it.replaceAll('\\\\', '/') }
                         arguments 'NDK_MODULE_PATH=' + module_paths.join(";")
-                    }
-                    else {
+                    } else {
                         arguments 'NDK_MODULE_PATH=' + module_paths.join(':')
                     }
                 }
-            }
-            else if (PROP_BUILD_TYPE == 'cmake') {
+            } else if (PROP_BUILD_TYPE == 'cmake') {
                 cmake {
                     targets 'MyGame'
-                    arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_static", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE", \
-                              "-DUSE_CHIPMUNK=TRUE", "-DUSE_BULLET=TRUE"
+                    arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_static", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE",  \
+                               "-DUSE_CHIPMUNK=TRUE", "-DUSE_BULLET=TRUE"
                     cppFlags "-frtti -fexceptions"
                 }
             }
@@ -43,33 +40,29 @@ android {
 
         ndk {
             abiFilters = []
-            abiFilters.addAll(PROP_APP_ABI.split(':').collect{it as String})
+            abiFilters.addAll(PROP_APP_ABI.split(':').collect { it as String })
         }
     }
-
     sourceSets.main {
         java.srcDir "src"
         res.srcDir "res"
         manifest.srcFile "AndroidManifest.xml"
         assets.srcDir "../../Resources"
     }
-
     externalNativeBuild {
         if (PROP_BUILD_TYPE == 'ndk-build') {
             ndkBuild {
                 path "jni/Android.mk"
             }
-        }
-        else if (PROP_BUILD_TYPE == 'cmake') {
+        } else if (PROP_BUILD_TYPE == 'cmake') {
             cmake {
                 path "../../CMakeLists.txt"
             }
         }
     }
-
     signingConfigs {
 
-       release {
+        release {
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 storeFile file(RELEASE_STORE_FILE)
                 storePassword RELEASE_STORE_PASSWORD
@@ -78,7 +71,6 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             debuggable false
@@ -109,6 +101,8 @@ android {
             }
         }
     }
+    productFlavors {
+    }
 }
 
 android.applicationVariants.all { variant ->
@@ -125,6 +119,6 @@ android.applicationVariants.all { variant ->
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':libcocos2dx')
 }
