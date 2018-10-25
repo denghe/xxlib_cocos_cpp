@@ -25,6 +25,19 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#include "platform/android/jni/JniHelper.h"
+void uuid_generate(unsigned char* buf)
+{
+	auto s = cocos2d::JniHelper::callStaticStringMethod(
+		"org/cocos2dx/cpp_empty_tests/AppActivity", "GetUUID");
+	// todo: s -> buf
+}
+#endif
+
+
+
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
