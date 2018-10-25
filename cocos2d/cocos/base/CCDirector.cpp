@@ -1470,6 +1470,8 @@ void Director::mainLoop()
     }
     else if (! _invalid)
     {
+		if (mainLoopCallback) mainLoopCallback();
+
         drawScene();
      
         // release the objects

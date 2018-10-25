@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -26,6 +26,8 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
+#include "lua.hpp"
+#include "xx_uv.h"
 
 /**
 @brief    The cocos2d Application.
@@ -35,9 +37,23 @@ Private inheritance here hides part of interface from Director.
 class  AppDelegate : private cocos2d::Application
 {
 public:
+	xx::MemPool mp;
+	xx::UvLoop_u uv;
+	inline static lua_State* L = nullptr;
+	inline static cocos2d::Scene* scene = nullptr;
+	inline static AppDelegate* instance = nullptr;
+
+	inline static const std::string projectName = "cccpp1";
+	inline static cocos2d::Size designResolutionSize = cocos2d::Size(1280, 720);
+	inline static cocos2d::Size visibleSize;
+	inline static cocos2d::Vec2 origin;
+
+	// 重启 cocos & lua & uv
+	void Restart();
+	bool restarted = false;
+
     AppDelegate();
     virtual ~AppDelegate();
-
     virtual void initGLContextAttrs();
 
     /**

@@ -58,7 +58,6 @@ include_directories(
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
 	 Classes/AppDelegate.cpp
-	 Classes/HelloWorldScene.cpp
 	 xxlib/http_parser.c
 	 xxlib/ikcp.cpp
 	 xxlib/xx_uv.cpp
@@ -99,7 +98,6 @@ list(APPEND GAME_SOURCE
 	 
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/HelloWorldScene.h
      )
 
 if(ANDROID)

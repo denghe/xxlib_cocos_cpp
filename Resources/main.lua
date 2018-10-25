@@ -1,0 +1,36 @@
+﻿cc.restart()
+
+--[[
+gCoro = gCoro or coroutine.create(function()
+	local yield = coroutine.yield
+	while true do
+		print(1)
+		yield()
+		print(2)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		yield()
+		print(3)
+		print(cc)
+		print(cc.restart)
+		cc.restart()
+	end
+end)
+coroutine.resume(gCoro)
+]]

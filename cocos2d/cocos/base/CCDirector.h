@@ -398,6 +398,9 @@ public:
     /** Enables/disables OpenGL depth test. */
     void setDepthTest(bool on);
 
+	// xx
+	std::function<void()> mainLoopCallback;
+
     void mainLoop();
     /** Invoke main loop with delta time. Then `calculateDeltaTime` can just use the delta time directly.
      * The delta time paseed may include vsync time. See issue #17806
