@@ -1,0 +1,4 @@
+Debug.win32
+Release.win32
+.vs
+.DS_Store
