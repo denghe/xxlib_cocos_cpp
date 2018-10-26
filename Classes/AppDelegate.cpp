@@ -91,8 +91,11 @@ AppDelegate::AppDelegate()
 
 AppDelegate::~AppDelegate()
 {
-	lua_close(L);
-	L = nullptr;
+	if (L)
+	{
+		lua_close(L);
+		L = nullptr;
+	}
 
 #if USE_AUDIO_ENGINE
 	cocos2d::experimental::AudioEngine::end();

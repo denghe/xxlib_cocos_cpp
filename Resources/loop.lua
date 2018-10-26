@@ -1,1 +1,1 @@
-﻿coroutine_resume(gMainLoopCoro)
+﻿resume(gMainLoopCoro)

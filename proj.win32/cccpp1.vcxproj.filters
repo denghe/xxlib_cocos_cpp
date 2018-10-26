@@ -329,4 +329,12 @@
       <Filter>resource</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\xxlib\lua.natvis">
+      <Filter>xxlib</Filter>
+    </Natvis>
+    <Natvis Include="..\xxlib\xx.natvis">
+      <Filter>xxlib</Filter>
+    </Natvis>
+  </ItemGroup>
 </Project>
