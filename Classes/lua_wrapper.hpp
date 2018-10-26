@@ -1,14 +1,12 @@
 ﻿#pragma once
 
-// 一组全局公用容器. 用于解决读取 lua 参数遇到c异常时 cpp 对象不方便回滚的问题( 除非 lua*.c 用 cpp 串编 ). 还能提升点性能.
+// 一组全局公用 & 复用容器. 
 inline static std::vector<float> gFloats;
 inline static std::vector<double> gDoubles;
 inline static std::vector<std::string> gStrings;
 inline static std::vector<int> gInts;
 inline static std::vector<int64_t> gLongs;
 
-// 全局自增函数 id
-inline static int autoIncFuncId = 0;
 
 inline const char * const LuaKey_null = "null";
 inline const char * const LuaKey_Callbacks = "Callbacks";
@@ -30,7 +28,52 @@ inline const char * const LuaKey_TextureCache = "TextureCache";
 // ...
 
 
+// 被 std::function 携带, 当捕获列表析构发生时, 自动从 L 中反注册函数
+struct Lua_FuncHolder : xx::Object
+{
+	// 全局自增函数 id
+	inline static int autoIncFuncId = 1;
 
+	int funcId;
+	Lua_FuncHolder(xx::MemPool* const& mp, lua_State* const& L, int const& idx)
+		: xx::Object(mp)
+		, funcId(autoIncFuncId)
+	{
+		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// ..., t
+		lua_pushvalue(L, idx);										// ..., t, func
+		lua_rawseti(L, -2, funcId);									// ..., t
+		lua_pop(L, 1);												// ...
+		++autoIncFuncId;
+	}
+
+	Lua_FuncHolder(Lua_FuncHolder const&) = delete;
+
+	// 将函数压栈( 之后调用方接着压入 参数 )
+	inline void PushFunc() const
+	{
+		lua_rawgeti(AppDelegate::L, 1, funcId);						// funcs, func
+	}
+
+	// 调用函数, 返回产生了多少个返回值( 之后调用方读出返回值, 并 settop(1) 清除它们 )
+	inline int CallFunc(int const& numArgs) const
+	{
+		auto L = AppDelegate::L;
+		if (int r = lua_pcall(L, numArgs, LUA_MULTRET, 0))			// funcs
+		{
+			std::cout << lua_tostring(L, -1) << std::endl;
+			lua_pop(L, 1);
+		}
+		return lua_gettop(L) - 1;
+	}
+
+	// 随 lambda 析构时删掉函数
+	~Lua_FuncHolder()
+	{
+		auto L = AppDelegate::L;
+		lua_pushnil(L);												// funcs, nil
+		lua_rawseti(L, 1, funcId);									// funcs
+	}
+};
 
 // 试着将 idx 所在转为 T** 取出 T*. 检查 metatable. 有问题直接报错
 template<typename T, int idx>
@@ -86,15 +129,13 @@ inline bool Lua_ToBoolean(lua_State* const& L)
 
 // 试着将 idx 所在转为 funcId. 有问题直接报错
 template<int idx>
-inline bool Lua_ToFuncId(lua_State* const& L)
+inline xx::Ptr<Lua_FuncHolder> Lua_ToFuncHolder(lua_State* const& L)
 {
 	if (!lua_isfunction(L, idx))
 	{
 		luaL_error(L, "args[%d] is not function.", idx);
 	}
-	lua_pushvalue(L, idx);
-	lua_rawseti(L, LUA_REGISTRYINDEX, ++autoIncFuncId);
-	return autoIncFuncId;
+	return AppDelegate::mp->MPCreatePtr<Lua_FuncHolder>(L, idx);
 }
 
 // 试着将 idx 所在转为 T. 有问题直接报错
@@ -367,6 +408,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 	}, 0);
 	lua_rawset(L, -3);
 
+
 	lua_pushstring(L, "setLocalZOrder");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
@@ -374,6 +416,70 @@ inline void Lua_Register_Node(lua_State* const& L)
 		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
 		decltype(auto) z = Lua_ToNumber<int, 2>(L);
 		o->setLocalZOrder(z);
+		return 0;
+	}, 0);
+	lua_rawset(L, -3);
+
+
+	lua_pushstring(L, "convertToNodeSpace");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		decltype(auto) v = Lua_ToVec2(L, "convertToNodeSpace");
+		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		auto r = o->convertToNodeSpace(v);
+		lua_pushnumber(L, r.x);
+		lua_pushnumber(L, r.y);
+		return 2;
+	}, 0);
+	lua_rawset(L, -3);
+
+
+	lua_pushstring(L, "getContentSize");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		auto r = o->getContentSize();
+		lua_pushnumber(L, r.width);
+		lua_pushnumber(L, r.height);
+		return 2;
+	}, 0);
+	lua_rawset(L, -3);
+
+
+	lua_pushstring(L, "containsPoint");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		decltype(auto) v = Lua_ToVec2(L, "containsPoint");
+		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		auto s = o->getContentSize();
+		cocos2d::Rect r(0, 0, s.width, s.height);
+		auto b = r.containsPoint(v);
+		lua_pushboolean(L, b);
+		return 1;
+	}, 0);
+	lua_rawset(L, -3);
+
+
+	lua_pushstring(L, "containsTouchPoint");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		decltype(auto) t = Lua_ToPointer<cocos2d::Touch, 2>(L, LuaKey_Touch);
+		auto p = o->convertTouchToNodeSpace(t);
+		auto b = o->boundingBox().containsPoint(p);
+		lua_pushboolean(L, b);
+		return 1;
+	}, 0);
+	lua_rawset(L, -3);
+
+
+	lua_pushstring(L, "addEventListenerWithSceneGraphPriority");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		if (lua_gettop(L) < 2) return luaL_error(L, "addEventListenerWithSceneGraphPriority error! need 2 args: self, listener");
+		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		decltype(auto) l = Lua_ToPointer<cocos2d::EventListener, 2>(L, LuaKey_EventListener);
+		o->getEventDispatcher()->addEventListenerWithSceneGraphPriority(l, o);
 		return 0;
 	}, 0);
 	lua_rawset(L, -3);
@@ -390,12 +496,18 @@ inline void Lua_Register_Scene(lua_State* const& L)
 inline void Lua_Register_Touch(lua_State* const& L)
 {
 	Lua_NewCcMT(L, LuaKey_Touch, LuaKey_Ref);
+
+	// touch->getLocation()
+
 	lua_pop(L, 1);
 }
 
 inline void Lua_Register_Event(lua_State* const& L)
 {
 	Lua_NewCcMT(L, LuaKey_Event, LuaKey_Ref);
+
+	// event->getCurrentTarget()
+
 	lua_pop(L, 1);
 }
 
@@ -439,15 +551,40 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 		decltype(auto) o = new (std::nothrow) cocos2d::EventListenerTouchAllAtOnce();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
-		return Lua_NewUserdataMT(L, o, LuaKey_Layer);
+		return Lua_NewUserdataMT(L, o, LuaKey_EventListenerTouchAllAtOnce);
 	}, 0);
 	lua_rawset(L, -3);
 
-	//typedef std::function<void(const std::vector<Touch*>&, Event*)> ccTouchesCallback;
-	//ccTouchesCallback onTouchesBegan;
+	lua_pushstring(L, "onTouchesBegan");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		if (lua_gettop(L) < 2) return luaL_error(L, "onTouchesBegan error! need 2 args: self, func");
+		decltype(auto) o = Lua_ToPointer<cocos2d::EventListenerTouchAllAtOnce, 1>(L, LuaKey_EventListenerTouchAllAtOnce);
+		decltype(auto) f = Lua_ToFuncHolder<2>(L);
+
+		o->onTouchesBegan = [f = std::move(f)](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
+		{
+			decltype(auto) L = AppDelegate::L;
+			f->PushFunc();
+			Lua_NewUserdataMT(L, e, LuaKey_Event);
+			for (decltype(auto) t : ts)
+			{
+				Lua_NewUserdataMT(L, t, LuaKey_Touch);
+			}
+			int numResults = f->CallFunc(ts.size() + 1);
+			if (numResults)
+			{
+				std::cout << "warning: callback func does not need return values!" << std::endl;
+				lua_settop(L, 1);	// 清除返回值. 如果有的话. 这里不需要返回值.
+			}
+		};
+		return 0;
+	}, 0);
+	lua_rawset(L, -3);
+
 	//ccTouchesCallback onTouchesMoved;
-	//ccTouchesCallback onTouchesEnded;
-	//ccTouchesCallback onTouchesCancelled;
+//ccTouchesCallback onTouchesEnded;
+//ccTouchesCallback onTouchesCancelled;
 
 	lua_pop(L, 1);
 }
@@ -462,9 +599,12 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 		decltype(auto) o = new (std::nothrow) cocos2d::EventListenerTouchOneByOne();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
-		return Lua_NewUserdataMT(L, o, LuaKey_Layer);
+		return Lua_NewUserdataMT(L, o, LuaKey_EventListenerTouchOneByOne);
 	}, 0);
 	lua_rawset(L, -3);
+
+	// void setSwallowTouches(bool needSwallow);
+	// bool isSwallowTouches();
 
 	lua_pop(L, 1);
 }
@@ -584,14 +724,12 @@ inline void Lua_Register_Texture(lua_State* const& L)
 
 inline void Lua_Register_cc(lua_State* const& L)
 {
-	//LuaKey_Callbacks
-	lua_createtable(L, 0, 100);										// cc
-
-
+	// 创建全局 cc 基表
 	lua_createtable(L, 0, 100);										// cc
 	lua_pushvalue(L, -1);											// cc, cc
 	lua_setglobal(L, "cc");											// cc
 
+	// 创建 重启游戏 函数
 	lua_pushstring(L, "restart");									// cc, "restart"
 	lua_pushcclosure(L, [](lua_State* L)							// cc, "restart", func
 	{
@@ -604,6 +742,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	}, 0);
 	lua_rawset(L, -3);												// cc
 
+	// 创建 拿 scene 函数
 	lua_pushstring(L, "scene");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
@@ -613,24 +752,40 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	// todo: more like addSearchPath...
 
-	Lua_Register_Ref(L);											// cc
-	Lua_Register_Node(L);											// cc
-	Lua_Register_Scene(L);											// cc
-	Lua_Register_Sprite(L);											// cc
-	//Lua_Register_SpriteFrame(L);									// cc
-	Lua_Register_Texture(L);										// cc
-	Lua_Register_TextureCache(L);									// cc
+	// 创建 cc.Xxxxxx 元表及函数
+	Lua_Register_Ref(L);
+	Lua_Register_Node(L);
+	Lua_Register_Scene(L);
+	Lua_Register_Touch(L);
+	Lua_Register_Event(L);
+	Lua_Register_EventListener(L);
+	Lua_Register_EventListenerTouchAllAtOnce(L);
+	Lua_Register_EventListenerTouchOneByOne(L);
+	Lua_Register_Sprite(L);
+	//Lua_Register_SpriteFrame(L);							
+	Lua_Register_Texture(L);
+	Lua_Register_TextureCache(L);
 	// .....
 	// .....
 	lua_pop(L, 1);													//
+	assert(lua_gettop(L) == 0);
 }
 
 inline int Lua_Main(lua_State* L)
 {
+	assert(L == AppDelegate::L);
+
+	// 加载常用库
 	luaL_openlibs(L);
 
+	// 创建函数表
+	lua_createtable(L, 0, 100);										// funcs
+	lua_rawsetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		//
+
+	// 加载 cc.*
 	Lua_Register_cc(L);
 
+	// 加载 main
 	if (int r = luaL_loadfile(L, "main.lua"))						// main
 	{
 		std::cout << "r = " << r << ", errmsg = " << lua_tostring(L, -1) << std::endl;
@@ -638,6 +793,7 @@ inline int Lua_Main(lua_State* L)
 		return 0;
 	}
 
+	// 执行 main
 	if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))					//
 	{
 		std::cout << lua_tostring(L, -1) << std::endl;
@@ -645,30 +801,39 @@ inline int Lua_Main(lua_State* L)
 		return r;
 	}
 
-	if (int r = luaL_loadfile(L, "loop.lua"))						// loop
+	// 拿出函数表
+	lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		// funcs
+
+	// 加载 loop
+	if (int r = luaL_loadfile(L, "loop.lua"))						// funcs, loop
 	{
 		std::cout << "r = " << r << ", errmsg = " << lua_tostring(L, -1) << std::endl;
 		lua_pop(L, 1);
 		return 0;
 	}
 
-	lua_pushlightuserdata(L, (void*)LuaKey_FrameUpdateFunc);		// loop, key
-	lua_pushvalue(L, 1);											// loop, key, loop
-	lua_rawset(L, LUA_REGISTRYINDEX);								// loop
-	assert(lua_gettop(L) == 1);										// loop
+	// 放入函数表
+	lua_rawsetp(L, 1, (void*)LuaKey_FrameUpdateFunc);				// funcs
 	lua_pop(L, 1);													//
 
-	cocos2d::Director::getInstance()->mainLoopCallback = [L]
+	// 注册每帧回调 cpp 函数
+	cocos2d::Director::getInstance()->mainLoopCallback = []
 	{
-		lua_pushlightuserdata(L, (void*)LuaKey_FrameUpdateFunc);	// key
-		lua_rawget(L, LUA_REGISTRYINDEX);							// loop
-		if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))				//
+		decltype(auto) L = AppDelegate::L;
+
+		// root L[1] 已被放置了 函数表
+		assert(lua_gettop(L) == 1);									// funcs
+
+		// 拿出 loop, 执行之
+		lua_rawgetp(L, 1, (void*)LuaKey_FrameUpdateFunc);			// funcs, loop
+		if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))				// funcs
 		{
 			std::cout << lua_tostring(L, -1) << std::endl;
 			lua_pop(L, 1);
 		}
 	};
 
+	assert(lua_gettop(L) == 0);
 	return 0;
 }
 
@@ -678,16 +843,18 @@ inline int Lua_Init()
 	{
 		return ((xx::MemPool*)ud)->Realloc(ptr, nsize, osize);
 	}
-	, &AppDelegate::instance->mp);
+	, AppDelegate::mp);
 
 	assert(L);
 
-	lua_pushcclosure(L, &Lua_Main, 0);
-	if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))
+	lua_pushcclosure(L, &Lua_Main, 0);								// cfunc
+	if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))					//
 	{
 		std::cout << lua_tostring(L, -1) << std::endl;
 		lua_pop(L, 1);
 		return r;
 	}
+	lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		// funcs
+
 	return 0;
 }

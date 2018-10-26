@@ -121,6 +121,12 @@ namespace xx
 		return Ptr<T>(Create<T>(std::forward<Args>(args)...));
 	}
 
+	template<typename T, typename...Args>
+	Unique<T> MemPool::CreateUnique(Args&&...args) noexcept
+	{
+		return Unique<T>(Create<T>(std::forward<Args>(args)...));
+	}
+
 
 	template<typename T, typename...Args>
 	T* MemPool::CreateTo(T*& outPtr, Args&&...args) noexcept
@@ -152,6 +158,12 @@ namespace xx
 	Ptr<T> MemPool::MPCreatePtr(Args&&...args) noexcept
 	{
 		return CreatePtr<T>(this, std::forward<Args>(args)...);
+	}
+
+	template<typename T, typename...Args>
+	Unique<T> MemPool::MPCreateUnique(Args&&...args) noexcept
+	{
+		return CreateUnique<T>(this, std::forward<Args>(args)...);
 	}
 
 

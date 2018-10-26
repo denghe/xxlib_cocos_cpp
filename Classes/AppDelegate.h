@@ -37,8 +37,10 @@ Private inheritance here hides part of interface from Director.
 class  AppDelegate : private cocos2d::Application
 {
 public:
-	xx::MemPool mp;
+	xx::MemPool mp_;
 	xx::UvLoop_u uv;
+
+	inline static xx::MemPool* mp = nullptr;
 	inline static lua_State* L = nullptr;
 	inline static cocos2d::Scene* scene = nullptr;
 	inline static AppDelegate* instance = nullptr;
@@ -50,7 +52,7 @@ public:
 
 	// 重启 cocos & lua & uv
 	void Restart();
-	bool restarted = false;
+	int restarted = 0;
 
     AppDelegate();
     virtual ~AppDelegate();

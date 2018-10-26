@@ -59,6 +59,12 @@ namespace xx
 	template<typename T>
 	class Ref;
 
+	template<typename T>
+	class Unique;
+
+	template<typename T>
+	class Weak;
+
 	class BBuffer;
 	class Object;
 	class String;
@@ -104,6 +110,9 @@ namespace xx
 		Ptr<T> CreatePtr(Args&&...args) noexcept;
 
 		template<typename T, typename...Args>
+		Unique<T> CreateUnique(Args&&...args) noexcept;
+
+		template<typename T, typename...Args>
 		T* CreateTo(T*& outPtr, Args&&...args) noexcept;
 
 		template<typename T, typename...Args>
@@ -117,6 +126,9 @@ namespace xx
 
 		template<typename T, typename...Args>
 		Ptr<T> MPCreatePtr(Args&&...args) noexcept;
+
+		template<typename T, typename...Args>
+		Unique<T> MPCreateUnique(Args&&...args) noexcept;
 
 		template<typename T, typename...Args>
 		bool MPCreateTo(T*& outPtr, Args&&...args) noexcept;
