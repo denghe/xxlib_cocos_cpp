@@ -1,7 +1,4 @@
-﻿cc.restart()
-
---[[
-gCoro = gCoro or coroutine.create(function()
+﻿local function mainLoop()
 	local yield = coroutine.yield
 	while true do
 		print(1)
@@ -31,6 +28,9 @@ gCoro = gCoro or coroutine.create(function()
 		print(cc.restart)
 		cc.restart()
 	end
-end)
-coroutine.resume(gCoro)
-]]
+end
+
+coroutine_create = coroutine.create
+coroutine_resume = coroutine.resume
+
+gMainLoopCoro = coroutine_create(mainLoop)
