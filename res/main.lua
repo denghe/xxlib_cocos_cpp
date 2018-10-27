@@ -13,11 +13,13 @@ listener:onTouchesBegan(function(...)
 	for i = 2, #args do
 		local t = args[i]
 		if sprite:containsTouch(t) then
-			print(t:getLocation())
+			print("t:getLocation() = "..t:getLocation())
 		end
 	end
 end)
 sprite:addEventListener(listener)
+
+
 
 
 coroutine_create = coroutine.create

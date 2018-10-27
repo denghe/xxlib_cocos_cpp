@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef var
 #define var decltype(auto)
 #endif
@@ -833,34 +833,31 @@ inline int Lua_Main(lua_State* L)
 	// 加载常用库
 	luaL_openlibs(L);
 
-    var fu = cocos2d::FileUtils::getInstance();
-    var mainPath = fu->fullPathForFilename("main.lua");
-    var rootPath = std::string(mainPath.data(), mainPath.size() - 8);   // cut "main.lua"
-    var searchPath = rootPath + "?.lua";
-    
-    // set code base path
-    lua_getglobal(L, "package");
-    lua_getfield(L, -1, "path");
-    lua_pushlstring(L, searchPath.data(), searchPath.size());
-    lua_setfield(L, -3, "path");
-    lua_pop(L, 2);
-    
-	// 设置 file loader
-    
-    // todo
+	// 使用 main.lua 得到资源根路径
+	var fu = cocos2d::FileUtils::getInstance();
+	var mainPath = fu->fullPathForFilename("main.lua");
+	var rootPath = std::string(mainPath.data(), mainPath.size() - 8);   // cut "main.lua"
 
+	// 设置 lua 里面 require 的 search path
+	lua_getglobal(L, "package");
+	lua_getfield(L, -1, "path");
+	var searchPath = rootPath + "?.lua";
+	lua_pushlstring(L, searchPath.data(), searchPath.size());
+	lua_setfield(L, -3, "path");
+	lua_pop(L, 2);
 
 	// 创建函数表
 	lua_createtable(L, 0, 100);										// funcs
 	lua_rawsetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		//
 
-	// 加载 cc.*
+	// 加载 cc.* 对象 & 函数映射
 	Lua_Register_cc(L);
 
 	// 加载 main
 	if (int r = luaL_loadfile(L, mainPath.c_str()))						    // main
 	{
-		std::cout << "r = " << r << ", errmsg = " << lua_tostring(L, -1) << std::endl;
+		auto s = lua_tostring(L, -1);
+		std::cout << "r = " << r << ", errmsg = " << (s ? s : "") << std::endl;
 		lua_pop(L, 1);
 		return 0;
 	}
@@ -868,7 +865,8 @@ inline int Lua_Main(lua_State* L)
 	// 执行 main
 	if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))					//
 	{
-		std::cout << lua_tostring(L, -1) << std::endl;
+		auto s = lua_tostring(L, -1);
+		std::cout << "r = " << r << ", errmsg = " << (s ? s : "") << std::endl;
 		lua_pop(L, 1);
 		return r;
 	}
@@ -877,17 +875,19 @@ inline int Lua_Main(lua_State* L)
 	lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		// funcs
 
 	// 加载 loop
-    var loopPath = fu->fullPathForFilename("loop.lua");
+	var loopPath = fu->fullPathForFilename("loop.lua");
 	if (int r = luaL_loadfile(L, loopPath.c_str()))	                // funcs, loop
 	{
-		std::cout << "r = " << r << ", errmsg = " << lua_tostring(L, -1) << std::endl;
+		auto s = lua_tostring(L, -1);
+		std::cout << "r = " << r << ", errmsg = " << (s ? s : "") << std::endl;
 		lua_pop(L, 1);
 		return 0;
 	}
 
-	// 放入函数表
+	// 将 loop 放入函数表
 	lua_rawsetp(L, 1, (void*)LuaKey_FrameUpdateFunc);				// funcs
 	lua_pop(L, 1);													//
+
 
 	// 注册每帧回调 cpp 函数
 	cocos2d::Director::getInstance()->mainLoopCallback = []
@@ -901,7 +901,8 @@ inline int Lua_Main(lua_State* L)
 		lua_rawgetp(L, 1, (void*)LuaKey_FrameUpdateFunc);			// funcs, loop
 		if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))				// funcs
 		{
-			std::cout << lua_tostring(L, -1) << std::endl;
+			auto s = lua_tostring(L, -1);
+			std::cout << "r = " << r << ", errmsg = " << (s ? s : "") << std::endl;
 			lua_pop(L, 1);
 		}
 	};
@@ -910,20 +911,23 @@ inline int Lua_Main(lua_State* L)
 	return 0;
 }
 
+
 inline int Lua_Init()
 {
+	// 使用内存池创建 lua state ( 部分操作性能提升 40% )
 	var L = gLua = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
 	{
 		return ((xx::MemPool*)ud)->Realloc(ptr, nsize, osize);
 	}
 	, mp);
-
 	assert(L);
 
+	// 将 Lua_Main 压入 L 安全执行
 	lua_pushcclosure(L, &Lua_Main, 0);								// cfunc
 	if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))					//
 	{
-		std::cout << lua_tostring(L, -1) << std::endl;
+		auto s = lua_tostring(L, -1);
+		std::cout << "r = " << r << ", errmsg = " << (s ? s : "") << std::endl;
 		lua_pop(L, 1);
 		return r;
 	}

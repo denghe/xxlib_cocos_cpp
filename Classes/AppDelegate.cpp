@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos2d-x.org
@@ -171,6 +171,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	// 原点坐标( 有些软按键设备原点就不是 0,0 )
 	origin = director->getVisibleOrigin();
+
+
+	cocos2d::FileUtils::getInstance()->setSearchPaths({ "/", "res/" });
+	var s = cocos2d::FileUtils::getInstance()->fullPathForFilename("main.lua");
+
     
 	cocos2d::Director::getInstance()->restartCallback = [this]
 	{
