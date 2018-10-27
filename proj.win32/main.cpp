@@ -59,19 +59,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
 	}
 #endif
 
-	std::wstring str;
-	str.resize(16384);
-	decltype(auto) n = GetCurrentDirectory(16384, str.data());
-	str.resize(wcslen(str.data()));
-	str.append(L"/..");
-	//SetCurrentDirectory(str.c_str());
-	std::wcout << L"root dir: " << str << std::endl;
-	auto len = 2 * str.size() + 1;
-	std::string s2;
-	s2.resize(len);
-	s2.resize(wcstombs(s2.data(), str.c_str(), len));
-	cocos2d::FileUtils::getInstance()->setDefaultResourceRootPath(s2);
-
 	AppDelegate app;
 	return cocos2d::Application::getInstance()->run();
 }

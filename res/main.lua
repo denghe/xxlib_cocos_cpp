@@ -1,4 +1,4 @@
-local f = require "xxx"
+local f = require "xxx.lua"
 f()
 
 local scene = cc.scene()

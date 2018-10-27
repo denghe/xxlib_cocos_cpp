@@ -92,7 +92,24 @@ void uuid_generate(unsigned char* buf)
 
 void InitGlobals(bool first)
 {
-    cocos2d::FileUtils::getInstance()->setSearchPaths({"/", "res/"});
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+	std::wstring str;
+	str.resize(16384);
+	decltype(auto) n = GetCurrentDirectory(16384, str.data());
+	str.resize(wcslen(str.data()));
+	str.append(L"/..");
+	auto len = 2 * str.size() + 1;
+	std::string s2;
+	s2.resize(len);
+	s2.resize(wcstombs(s2.data(), str.c_str(), len));
+	cocos2d::FileUtils::getInstance()->setDefaultResourceRootPath(s2);
+#endif
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	cocos2d::FileUtils::getInstance()->setSearchPaths({ "assets/" });
+#else
+	cocos2d::FileUtils::getInstance()->setSearchPaths({ "res/" });
+#endif
 
 	if (first)
 	{
@@ -172,9 +189,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 	// 原点坐标( 有些软按键设备原点就不是 0,0 )
 	origin = director->getVisibleOrigin();
 
-
-	cocos2d::FileUtils::getInstance()->setSearchPaths({ "/", "res/" });
-	var s = cocos2d::FileUtils::getInstance()->fullPathForFilename("main.lua");
 
     
 	cocos2d::Director::getInstance()->restartCallback = [this]
