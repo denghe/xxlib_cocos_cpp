@@ -1,5 +1,5 @@
-﻿print(package)
-print(package.loaders)
+local f = require "xxx"
+f()
 
 local scene = cc.scene()
 local texture = cc.TextureCache.addImage("hi.png")
