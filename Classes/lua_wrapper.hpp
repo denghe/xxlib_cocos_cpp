@@ -1,4 +1,7 @@
 ﻿#pragma once
+#ifndef var
+#define var decltype(auto)
+#endif
 
 // 一组全局公用 & 复用容器. 
 inline static std::vector<float> gFloats;
@@ -57,7 +60,7 @@ struct Lua_FuncHolder : xx::Object
 	// 调用函数, 返回产生了多少个返回值( 之后调用方读出返回值, 并 settop(1) 清除它们 )
 	inline int CallFunc(int const& numArgs) const
 	{
-		auto L = AppDelegate::L;
+		var L = AppDelegate::L;
 		if (int r = lua_pcall(L, numArgs, LUA_MULTRET, 0))			// funcs
 		{
 			std::cout << lua_tostring(L, -1) << std::endl;
@@ -69,7 +72,7 @@ struct Lua_FuncHolder : xx::Object
 	// 随 lambda 析构时删掉函数
 	~Lua_FuncHolder()
 	{
-		auto L = AppDelegate::L;
+		var L = AppDelegate::L;
 		lua_pushnil(L);												// funcs, nil
 		lua_rawseti(L, 1, funcId);									// funcs
 	}
@@ -83,7 +86,7 @@ inline T* Lua_ToPointer(lua_State* const& L, char const* const& mtKey)
 	{
 		luaL_error(L, "args[%d] is not userdata.", idx);
 	}
-	decltype(auto) p = (T**)lua_touserdata(L, idx);
+	var p = (T**)lua_touserdata(L, idx);
 	if (!p)
 	{
 		luaL_error(L, "args[%d] is nullptr.", idx, mtKey);
@@ -184,7 +187,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 		if constexpr (std::is_same<T, int>::value)
 		{
 			int isNum = 0;
-			decltype(auto) v = (T)lua_tointegerx(L, -1, &isNum);
+			var v = (T)lua_tointegerx(L, -1, &isNum);
 			if (!isNum)
 			{
 				luaL_error(L, "args[%d][%d] is not int.", idx, n);
@@ -194,7 +197,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 		else if constexpr (std::is_same<T, int64_t>::value)
 		{
 			int isNum = 0;
-			decltype(auto) v = (T)lua_tointegerx(L, -1, &isNum);
+			var v = (T)lua_tointegerx(L, -1, &isNum);
 			if (!isNum)
 			{
 				luaL_error(L, "args[%d][%d] is not long.", idx, n);
@@ -204,7 +207,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 		else if constexpr (std::is_same<T, float>::value)
 		{
 			int isNum = 0;
-			decltype(auto) v = (T)lua_tonumberx(L, -1, &isNum);
+			var v = (T)lua_tonumberx(L, -1, &isNum);
 			if (!isNum)
 			{
 				luaL_error(L, "args[%d][%d] is not float.", idx, n);
@@ -214,7 +217,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 		else if constexpr (std::is_same<T, double>::value)
 		{
 			int isNum = 0;
-			decltype(auto) v = (T)lua_tonumberx(L, -1, &isNum);
+			var v = (T)lua_tonumberx(L, -1, &isNum);
 			if (!isNum)
 			{
 				luaL_error(L, "args[%d][%d] is not double.", idx, n);
@@ -228,7 +231,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 				luaL_error(L, "args[%d][%d] is not string.", idx, n);
 			}
 			size_t len;
-			decltype(auto) buf = lua_tolstring(L, -1, &len);
+			var buf = lua_tolstring(L, -1, &len);
 			gStrings.emplace(buf, len);
 		}
 		lua_pop(L, 1);							// ... t, k
@@ -247,14 +250,14 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 inline cocos2d::Vec2 Lua_ToVec2(lua_State* const& L, char const* const& funcName)
 {
 	cocos2d::Vec2 rtv;
-	decltype(auto) numArgs = lua_gettop(L);
+	var numArgs = lua_gettop(L);
 	if (numArgs < 2)
 	{
 		luaL_error(L, "%s error! need 1 args: {x,y} or 2 args: x,y", funcName);
 	}
 	if (numArgs == 2)	// {x,y}
 	{
-		decltype(auto) vals = Lua_ToValues<float, 2>(L);
+		var vals = Lua_ToValues<float, 2>(L);
 		if (vals.size() != 2)
 		{
 			luaL_error(L, "%s error! need 1 args: {x,y} or 2 args: x,y", funcName);
@@ -273,7 +276,7 @@ inline cocos2d::Vec2 Lua_ToVec2(lua_State* const& L, char const* const& funcName
 // 创建一个 userdata 存对象指针, 并设置其元表
 inline int Lua_NewUserdataMT(lua_State* const& L, void* const& o, char const* const& mtKey)
 {
-	decltype(auto) ph = (void**)lua_newuserdata(L, sizeof(void**));	// ..., &o
+	var ph = (void**)lua_newuserdata(L, sizeof(void**));	// ..., &o
 	*ph = o;
 	lua_rawgetp(L, LUA_REGISTRYINDEX, mtKey);						// ..., &o, mt
 	lua_setmetatable(L, -2);										// ..., &o
@@ -310,7 +313,7 @@ inline void Lua_Register_Ref(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)							// cc, Ref, "retain", func
 	{
 		if (lua_gettop(L) < 1) return luaL_error(L, "retain error! need 1 args: self");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Ref, 1>(L, LuaKey_Ref);
+		var o = Lua_ToPointer<cocos2d::Ref, 1>(L, LuaKey_Ref);
 		o->retain();
 		return 0;
 	}, 0);
@@ -320,7 +323,7 @@ inline void Lua_Register_Ref(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 1) return luaL_error(L, "release error! need 1 args: self");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Ref, 1>(L, LuaKey_Ref);
+		var o = Lua_ToPointer<cocos2d::Ref, 1>(L, LuaKey_Ref);
 		o->release();
 		return 0;
 	}, 0);
@@ -330,7 +333,7 @@ inline void Lua_Register_Ref(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 1) return luaL_error(L, "autorelease error! need 1 args: self");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Ref, 1>(L, LuaKey_Ref);
+		var o = Lua_ToPointer<cocos2d::Ref, 1>(L, LuaKey_Ref);
 		o->autorelease();
 		return 0;
 	}, 0);
@@ -340,7 +343,7 @@ inline void Lua_Register_Ref(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 1) return luaL_error(L, "getReferenceCount error! need 1 args: self");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Ref, 1>(L, LuaKey_Ref);
+		var o = Lua_ToPointer<cocos2d::Ref, 1>(L, LuaKey_Ref);
 		lua_pushinteger(L, o->getReferenceCount());
 		return 1;
 	}, 0);
@@ -356,7 +359,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushstring(L, "new");										// cc, Node, "new"
 	lua_pushcclosure(L, [](lua_State* L)							// cc, Node, "new", func
 	{
-		decltype(auto) o = new (std::nothrow) cocos2d::Node();		// 从 create() 函数抄的. 可能需要和具体的 init 相配合
+		var o = new (std::nothrow) cocos2d::Node();		// 从 create() 函数抄的. 可能需要和具体的 init 相配合
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_NewUserdataMT(L, o, LuaKey_Node);
@@ -368,8 +371,8 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 1) return luaL_error(L, "addChild error! need 2 args: self");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
-		decltype(auto) c = Lua_ToPointer<cocos2d::Node, 2>(L, LuaKey_Node);
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var c = Lua_ToPointer<cocos2d::Node, 2>(L, LuaKey_Node);
 		o->addChild(c);
 		return 0;
 	}, 0);
@@ -380,7 +383,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 1) return luaL_error(L, "removeFromParent error! need 1 args: self");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
 		o->removeFromParent();
 		return 0;
 	}, 0);
@@ -390,8 +393,8 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushstring(L, "setPosition");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) xy = Lua_ToVec2(L, "setPosition");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var xy = Lua_ToVec2(L, "setPosition");
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
 		o->setPosition(xy.x, xy.y);
 		return 0;
 	}, 0);
@@ -401,8 +404,8 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushstring(L, "setAnchorPoint");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) xy = Lua_ToVec2(L, "setAnchorPoint");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var xy = Lua_ToVec2(L, "setAnchorPoint");
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
 		o->setAnchorPoint(xy);
 		return 0;
 	}, 0);
@@ -413,8 +416,8 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "setLocalZOrder error! need 2 args: self, int z-order");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
-		decltype(auto) z = Lua_ToNumber<int, 2>(L);
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var z = Lua_ToNumber<int, 2>(L);
 		o->setLocalZOrder(z);
 		return 0;
 	}, 0);
@@ -424,9 +427,9 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushstring(L, "convertToNodeSpace");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) v = Lua_ToVec2(L, "convertToNodeSpace");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
-		auto r = o->convertToNodeSpace(v);
+		var v = Lua_ToVec2(L, "convertToNodeSpace");
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var r = o->convertToNodeSpace(v);
 		lua_pushnumber(L, r.x);
 		lua_pushnumber(L, r.y);
 		return 2;
@@ -437,8 +440,8 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushstring(L, "getContentSize");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
-		auto r = o->getContentSize();
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var r = o->getContentSize();
 		lua_pushnumber(L, r.width);
 		lua_pushnumber(L, r.height);
 		return 2;
@@ -449,11 +452,11 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushstring(L, "containsPoint");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) v = Lua_ToVec2(L, "containsPoint");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
-		auto s = o->getContentSize();
+		var v = Lua_ToVec2(L, "containsPoint");
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var s = o->getContentSize();
 		cocos2d::Rect r(0, 0, s.width, s.height);
-		auto b = r.containsPoint(v);
+		var b = r.containsPoint(v);
 		lua_pushboolean(L, b);
 		return 1;
 	}, 0);
@@ -463,10 +466,10 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushstring(L, "containsTouchPoint");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
-		decltype(auto) t = Lua_ToPointer<cocos2d::Touch, 2>(L, LuaKey_Touch);
-		auto p = o->convertTouchToNodeSpace(t);
-		auto b = o->boundingBox().containsPoint(p);
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var t = Lua_ToPointer<cocos2d::Touch, 2>(L, LuaKey_Touch);
+		var p = o->convertTouchToNodeSpace(t);
+		var b = o->boundingBox().containsPoint(p);
 		lua_pushboolean(L, b);
 		return 1;
 	}, 0);
@@ -477,8 +480,8 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "addEventListenerWithSceneGraphPriority error! need 2 args: self, listener");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
-		decltype(auto) l = Lua_ToPointer<cocos2d::EventListener, 2>(L, LuaKey_EventListener);
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var l = Lua_ToPointer<cocos2d::EventListener, 2>(L, LuaKey_EventListener);
 		o->getEventDispatcher()->addEventListenerWithSceneGraphPriority(l, o);
 		return 0;
 	}, 0);
@@ -497,7 +500,30 @@ inline void Lua_Register_Touch(lua_State* const& L)
 {
 	Lua_NewCcMT(L, LuaKey_Touch, LuaKey_Ref);
 
-	// touch->getLocation()
+	
+	lua_pushstring(L, "getLocation");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		if (lua_gettop(L) < 1) return luaL_error(L, "getLocation error! need 1 args: self");
+		var o = Lua_ToPointer<cocos2d::Touch, 1>(L, LuaKey_Touch);
+		var v = o->getLocation();
+		lua_pushnumber(L, v.x);
+		lua_pushnumber(L, v.y);
+		return 2;
+	}, 0);
+	lua_rawset(L, -3);
+
+	lua_pushstring(L, "getLocationInView");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		if (lua_gettop(L) < 1) return luaL_error(L, "getLocationInView error! need 1 args: self");
+		var o = Lua_ToPointer<cocos2d::Touch, 1>(L, LuaKey_Touch);
+		var v = o->getLocationInView();
+		lua_pushnumber(L, v.x);
+		lua_pushnumber(L, v.y);
+		return 2;
+	}, 0);
+	lua_rawset(L, -3);
 
 	lua_pop(L, 1);
 }
@@ -519,8 +545,8 @@ inline void Lua_Register_EventListener(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "setEnabled error! need 2 args: self, bool");
-		decltype(auto) o = Lua_ToPointer<cocos2d::EventListener, 1>(L, LuaKey_EventListener);
-		decltype(auto) b = Lua_ToBoolean<2>(L);
+		var o = Lua_ToPointer<cocos2d::EventListener, 1>(L, LuaKey_EventListener);
+		var b = Lua_ToBoolean<2>(L);
 		o->setEnabled(b);
 		return 0;
 	}, 0);
@@ -531,7 +557,7 @@ inline void Lua_Register_EventListener(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 1) return luaL_error(L, "setEnabled error! need 1 args: self");
-		decltype(auto) o = Lua_ToPointer<cocos2d::EventListener, 1>(L, LuaKey_EventListener);
+		var o = Lua_ToPointer<cocos2d::EventListener, 1>(L, LuaKey_EventListener);
 		bool rtv = o->isEnabled();
 		lua_pushboolean(L, rtv);
 		return 1;
@@ -548,7 +574,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 	lua_pushstring(L, "new");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) o = new (std::nothrow) cocos2d::EventListenerTouchAllAtOnce();
+		var o = new (std::nothrow) cocos2d::EventListenerTouchAllAtOnce();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_NewUserdataMT(L, o, LuaKey_EventListenerTouchAllAtOnce);
@@ -559,15 +585,15 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "onTouchesBegan error! need 2 args: self, func");
-		decltype(auto) o = Lua_ToPointer<cocos2d::EventListenerTouchAllAtOnce, 1>(L, LuaKey_EventListenerTouchAllAtOnce);
-		decltype(auto) f = Lua_ToFuncHolder<2>(L);
+		var o = Lua_ToPointer<cocos2d::EventListenerTouchAllAtOnce, 1>(L, LuaKey_EventListenerTouchAllAtOnce);
+		var f = Lua_ToFuncHolder<2>(L);
 
 		o->onTouchesBegan = [f = std::move(f)](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 		{
-			decltype(auto) L = AppDelegate::L;
+			var L = AppDelegate::L;
 			f->PushFunc();
 			Lua_NewUserdataMT(L, e, LuaKey_Event);
-			for (decltype(auto) t : ts)
+			for (var t : ts)
 			{
 				Lua_NewUserdataMT(L, t, LuaKey_Touch);
 			}
@@ -596,7 +622,7 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 	lua_pushstring(L, "new");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) o = new (std::nothrow) cocos2d::EventListenerTouchOneByOne();
+		var o = new (std::nothrow) cocos2d::EventListenerTouchOneByOne();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_NewUserdataMT(L, o, LuaKey_EventListenerTouchOneByOne);
@@ -616,7 +642,7 @@ inline void Lua_Register_Layer(lua_State* const& L)
 	lua_pushstring(L, "new");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) o = new (std::nothrow) cocos2d::Layer();
+		var o = new (std::nothrow) cocos2d::Layer();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_NewUserdataMT(L, o, LuaKey_Layer);
@@ -633,7 +659,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	lua_pushstring(L, "new");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		decltype(auto) o = new (std::nothrow) cocos2d::Sprite();
+		var o = new (std::nothrow) cocos2d::Sprite();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_NewUserdataMT(L, o, LuaKey_Sprite);
@@ -644,8 +670,8 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "initWithTexture error! need 2 args: self, texture");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
-		decltype(auto) t = Lua_ToPointer<cocos2d::Texture2D, 2>(L, LuaKey_Texture);
+		var o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
+		var t = Lua_ToPointer<cocos2d::Texture2D, 2>(L, LuaKey_Texture);
 		o->initWithTexture(t);
 		return 0;
 	}, 0);
@@ -655,8 +681,8 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "initWithFileName error! need 2 args: self, texture");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
-		decltype(auto) fn = Lua_ToString<2>(L);
+		var o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
+		var fn = Lua_ToString<2>(L);
 		o->initWithFile(std::string(fn.first, fn.second));
 		return 0;
 	}, 0);
@@ -666,8 +692,8 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "initWithSpriteFrameName error! need 2 args: self, texture");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
-		decltype(auto) sfn = Lua_ToString<2>(L);
+		var o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
+		var sfn = Lua_ToString<2>(L);
 		o->initWithSpriteFrameName(std::string(sfn.first, sfn.second));
 		return 0;
 	}, 0);
@@ -677,8 +703,8 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "initWithSpriteFrame error! need 2 args: self, texture");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
-		decltype(auto) sf = Lua_ToPointer<cocos2d::SpriteFrame, 2>(L, LuaKey_SpriteFrame);
+		var o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
+		var sf = Lua_ToPointer<cocos2d::SpriteFrame, 2>(L, LuaKey_SpriteFrame);
 		o->initWithSpriteFrame(sf);
 		return 0;
 	}, 0);
@@ -688,8 +714,8 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 2) return luaL_error(L, "setSpriteFrame error! need 2 args: self, spriteFrame");
-		decltype(auto) o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
-		decltype(auto) sf = Lua_ToPointer<cocos2d::SpriteFrame, 2>(L, LuaKey_SpriteFrame);
+		var o = Lua_ToPointer<cocos2d::Sprite, 1>(L, LuaKey_Sprite);
+		var sf = Lua_ToPointer<cocos2d::SpriteFrame, 2>(L, LuaKey_SpriteFrame);
 		o->setSpriteFrame(sf);
 		return 0;
 	}, 0);
@@ -706,8 +732,8 @@ inline void Lua_Register_TextureCache(lua_State* const& L)
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		if (lua_gettop(L) < 1) return luaL_error(L, "addImage error! need 1 args: texture's file name.");
-		decltype(auto) fn = Lua_ToString<1>(L);
-		decltype(auto) o = cocos2d::TextureCache::getInstance()->addImage(std::string(fn.first, fn.second));
+		var fn = Lua_ToString<1>(L);
+		var o = cocos2d::TextureCache::getInstance()->addImage(std::string(fn.first, fn.second));
 		if (!o) return 0;
 		return Lua_NewUserdataMT(L, o, LuaKey_Texture);
 	}, 0);
@@ -819,7 +845,7 @@ inline int Lua_Main(lua_State* L)
 	// 注册每帧回调 cpp 函数
 	cocos2d::Director::getInstance()->mainLoopCallback = []
 	{
-		decltype(auto) L = AppDelegate::L;
+		var L = AppDelegate::L;
 
 		// root L[1] 已被放置了 函数表
 		assert(lua_gettop(L) == 1);									// funcs
@@ -839,7 +865,7 @@ inline int Lua_Main(lua_State* L)
 
 inline int Lua_Init()
 {
-	decltype(auto) L = AppDelegate::L = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
+	var L = AppDelegate::L = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
 	{
 		return ((xx::MemPool*)ud)->Realloc(ptr, nsize, osize);
 	}

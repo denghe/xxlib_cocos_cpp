@@ -1149,6 +1149,9 @@ void Director::restartDirector()
     ScriptEvent scriptEvent(kRestartGame, nullptr);
     ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&scriptEvent);
 #endif
+
+	// xx
+	if (restartCallback) restartCallback();
 }
 
 void Director::setNextScene()
@@ -1470,6 +1473,7 @@ void Director::mainLoop()
     }
     else if (! _invalid)
     {
+		// xx
 		if (mainLoopCallback) mainLoopCallback();
 
         drawScene();

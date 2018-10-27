@@ -400,6 +400,7 @@ public:
 
 	// xx
 	std::function<void()> mainLoopCallback;
+	std::function<void()> restartCallback;
 
     void mainLoop();
     /** Invoke main loop with delta time. Then `calculateDeltaTime` can just use the delta time directly.

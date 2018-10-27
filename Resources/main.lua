@@ -9,9 +9,10 @@ listener:onTouchesBegan(function(...)
 	local e = args[1]
 	for i = 2, #args do
 		local t = args[i]
-		if sprite:containsTouchPoint(t) then
-			print(t)
-		end
+		print(t:getLocationInView())
+		print(t:getLocation())
+		--if sprite:containsTouchPoint(t) then
+		--end
 	end
 end)
 sprite:addEventListenerWithSceneGraphPriority(listener)
