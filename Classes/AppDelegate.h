@@ -26,8 +26,29 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
+
+
+// 附加一组方便使用的全局量, 以及 mp, uv, lua 单例环境
+
 #include "lua.hpp"
 #include "xx_uv.h"
+
+inline const std::string projectName = "cccpp1";
+inline cocos2d::Size designResolutionSize = cocos2d::Size(1280, 720);
+inline cocos2d::Size visibleSize;
+inline cocos2d::Vec2 origin;
+inline cocos2d::Director* director = nullptr;
+
+inline xx::MemPool mp_, *mp = &mp_;
+inline xx::UvLoop_u uv;
+inline lua_State* gLua = nullptr;
+inline cocos2d::Scene* gScene = nullptr;
+
+void InitMpUvLuaScene(bool first = true);
+void ReleaseLua();
+
+
+
 
 /**
 @brief    The cocos2d Application.
@@ -37,21 +58,6 @@ Private inheritance here hides part of interface from Director.
 class  AppDelegate : private cocos2d::Application
 {
 public:
-	xx::MemPool mp_;
-	xx::UvLoop_u uv;
-
-	inline static xx::MemPool* mp = nullptr;
-	inline static lua_State* L = nullptr;
-	inline static cocos2d::Scene* scene = nullptr;
-	inline static AppDelegate* instance = nullptr;
-
-	void Init(bool first = true);
-
-	inline static const std::string projectName = "cccpp1";
-	inline static cocos2d::Size designResolutionSize = cocos2d::Size(1280, 720);
-	inline static cocos2d::Size visibleSize;
-	inline static cocos2d::Vec2 origin;
-
     AppDelegate();
     virtual ~AppDelegate();
     virtual void initGLContextAttrs();
@@ -77,4 +83,3 @@ public:
 };
 
 #endif // _APP_DELEGATE_H_
-

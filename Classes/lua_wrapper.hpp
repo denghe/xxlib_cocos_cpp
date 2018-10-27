@@ -4,30 +4,30 @@
 #endif
 
 // 一组全局公用 & 复用容器. 
-inline static std::vector<float> gFloats;
-inline static std::vector<double> gDoubles;
-inline static std::vector<std::string> gStrings;
-inline static std::vector<int> gInts;
-inline static std::vector<int64_t> gLongs;
+inline xx::List<float> gFloats(mp);
+inline xx::List<double> gDoubles(mp);
+inline xx::List<xx::String> gStrings(mp);
+inline xx::List<int> gInts(mp);
+inline xx::List<int64_t> gLongs(mp);
 
 
-inline const char * const LuaKey_null = "null";
-inline const char * const LuaKey_Callbacks = "Callbacks";
-inline const char * const LuaKey_FrameUpdateFunc = "FrameUpdateFunc";
-inline const char * const LuaKey_UvLoop = "UvLoop";
-inline const char * const LuaKey_Ref = "Ref";
-inline const char * const LuaKey_Touch = "Touch";
-inline const char * const LuaKey_Event = "Event";
-inline const char * const LuaKey_EventListener = "EventListener";
-inline const char * const LuaKey_EventListenerTouchOneByOne = "EventListenerTouchOneByOne";
-inline const char * const LuaKey_EventListenerTouchAllAtOnce = "EventListenerTouchAllAtOnce";
-inline const char * const LuaKey_Node = "Node";
-inline const char * const LuaKey_Scene = "Scene";
-inline const char * const LuaKey_Layer = "Layer";
-inline const char * const LuaKey_Sprite = "Sprite";
-inline const char * const LuaKey_SpriteFrame = "SpriteFrame";
-inline const char * const LuaKey_Texture = "Texture";
-inline const char * const LuaKey_TextureCache = "TextureCache";
+inline const char* const LuaKey_null = "null";
+inline const char* const LuaKey_Callbacks = "Callbacks";
+inline const char* const LuaKey_FrameUpdateFunc = "FrameUpdateFunc";
+inline const char* const LuaKey_UvLoop = "UvLoop";
+inline const char* const LuaKey_Ref = "Ref";
+inline const char* const LuaKey_Touch = "Touch";
+inline const char* const LuaKey_Event = "Event";
+inline const char* const LuaKey_EventListener = "EventListener";
+inline const char* const LuaKey_EventListenerTouchOneByOne = "EventListenerTouchOneByOne";
+inline const char* const LuaKey_EventListenerTouchAllAtOnce = "EventListenerTouchAllAtOnce";
+inline const char* const LuaKey_Node = "Node";
+inline const char* const LuaKey_Scene = "Scene";
+inline const char* const LuaKey_Layer = "Layer";
+inline const char* const LuaKey_Sprite = "Sprite";
+inline const char* const LuaKey_SpriteFrame = "SpriteFrame";
+inline const char* const LuaKey_Texture = "Texture";
+inline const char* const LuaKey_TextureCache = "TextureCache";
 // ...
 
 
@@ -54,13 +54,13 @@ struct Lua_FuncHolder : xx::Object
 	// 将函数压栈( 之后调用方接着压入 参数 )
 	inline void PushFunc() const
 	{
-		lua_rawgeti(AppDelegate::L, 1, funcId);						// funcs, func
+		lua_rawgeti(gLua, 1, funcId);						// funcs, func
 	}
 
 	// 调用函数, 返回产生了多少个返回值( 之后调用方读出返回值, 并 settop(1) 清除它们 )
 	inline int CallFunc(int const& numArgs) const
 	{
-		var L = AppDelegate::L;
+		var L = gLua;
 		if (int r = lua_pcall(L, numArgs, LUA_MULTRET, 0))			// funcs
 		{
 			std::cout << lua_tostring(L, -1) << std::endl;
@@ -72,7 +72,7 @@ struct Lua_FuncHolder : xx::Object
 	// 随 lambda 析构时删掉函数
 	~Lua_FuncHolder()
 	{
-		var L = AppDelegate::L;
+		var L = gLua;
 		lua_pushnil(L);												// funcs, nil
 		lua_rawseti(L, 1, funcId);									// funcs
 	}
@@ -138,7 +138,7 @@ inline xx::Ptr<Lua_FuncHolder> Lua_ToFuncHolder(lua_State* const& L)
 	{
 		luaL_error(L, "args[%d] is not function.", idx);
 	}
-	return AppDelegate::mp->MPCreatePtr<Lua_FuncHolder>(L, idx);
+	return mp->MPCreatePtr<Lua_FuncHolder>(L, idx);
 }
 
 // 试着将 idx 所在转为 T. 有问题直接报错
@@ -170,14 +170,14 @@ inline T Lua_ToNumber(lua_State* const& L)
 
 // 试着将 idx 所在 table 转为 vector<T>. 有问题直接报错. 外部已判断过类型是 table.
 template<typename T, int idx>
-inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
+inline xx::List<T> const& Lua_ToValues(lua_State* const& L)
 {
 	// clear
-	if constexpr (std::is_same<T, int>::value) { gInts.clear(); }
-	else if constexpr (std::is_same<T, int64_t>::value) { gLongs.clear(); }
-	else if constexpr (std::is_same<T, float>::value) { gFloats.clear(); }
-	else if constexpr (std::is_same<T, double>::value) { gDoubles.clear(); }
-	else { gStrings.clear(); }
+	if constexpr (std::is_same<T, int>::value) { gInts.Clear(); }
+	else if constexpr (std::is_same<T, int64_t>::value) { gLongs.Clear(); }
+	else if constexpr (std::is_same<T, float>::value) { gFloats.Clear(); }
+	else if constexpr (std::is_same<T, double>::value) { gDoubles.Clear(); }
+	else { gStrings.Clear(); }
 
 	// foreach fill
 	lua_pushnil(L);								// ... t, nil
@@ -192,7 +192,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 			{
 				luaL_error(L, "args[%d][%d] is not int.", idx, n);
 			}
-			gInts.push_back(v);
+			gInts.Add(v);
 		}
 		else if constexpr (std::is_same<T, int64_t>::value)
 		{
@@ -202,7 +202,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 			{
 				luaL_error(L, "args[%d][%d] is not long.", idx, n);
 			}
-			gLongs.push_back(v);
+			gLongs.Add(v);
 		}
 		else if constexpr (std::is_same<T, float>::value)
 		{
@@ -212,7 +212,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 			{
 				luaL_error(L, "args[%d][%d] is not float.", idx, n);
 			}
-			gFloats.push_back(v);
+			gFloats.Add(v);
 		}
 		else if constexpr (std::is_same<T, double>::value)
 		{
@@ -222,7 +222,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 			{
 				luaL_error(L, "args[%d][%d] is not double.", idx, n);
 			}
-			gDoubles.push_back(v);
+			gDoubles.Add(v);
 		}
 		else	// string
 		{
@@ -232,7 +232,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 			}
 			size_t len;
 			var buf = lua_tolstring(L, -1, &len);
-			gStrings.emplace(buf, len);
+			gStrings.Emplace(mp, buf, len);
 		}
 		lua_pop(L, 1);							// ... t, k
 		++n;
@@ -258,7 +258,7 @@ inline cocos2d::Vec2 Lua_ToVec2(lua_State* const& L, char const* const& funcName
 	if (numArgs == 2)	// {x,y}
 	{
 		var vals = Lua_ToValues<float, 2>(L);
-		if (vals.size() != 2)
+		if (vals.dataLen != 2)
 		{
 			luaL_error(L, "%s error! need 1 args: {x,y} or 2 args: x,y", funcName);
 		}
@@ -506,10 +506,10 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_rawset(L, -3);
 
 
-	lua_pushstring(L, "addEventListenerWithSceneGraphPriority");
+	lua_pushstring(L, "addEventListener");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		if (lua_gettop(L) < 2) return luaL_error(L, "addEventListenerWithSceneGraphPriority error! need 2 args: self, listener");
+		if (lua_gettop(L) < 2) return luaL_error(L, "addEventListener( WithSceneGraphPriority ) error! need 2 args: self, listener");
 		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
 		var l = Lua_ToPointer<cocos2d::EventListener, 2>(L, LuaKey_EventListener);
 		o->getEventDispatcher()->addEventListenerWithSceneGraphPriority(l, o);
@@ -530,7 +530,6 @@ inline void Lua_Register_Touch(lua_State* const& L)
 {
 	Lua_NewCcMT(L, LuaKey_Touch, LuaKey_Ref);
 
-	
 	lua_pushstring(L, "getLocation");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
@@ -620,7 +619,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 
 		o->onTouchesBegan = [f = std::move(f)](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 		{
-			var L = AppDelegate::L;
+			var L = gLua;
 			f->PushFunc();
 			Lua_NewUserdataMT(L, e, LuaKey_Event);
 			for (var t : ts)
@@ -803,7 +802,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	lua_pushstring(L, "scene");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
-		return Lua_NewUserdataMT(L, AppDelegate::scene, LuaKey_Scene);
+		return Lua_NewUserdataMT(L, gScene, LuaKey_Scene);
 	}, 0);
 	lua_rawset(L, -3);
 
@@ -830,7 +829,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 inline int Lua_Main(lua_State* L)
 {
-	assert(L == AppDelegate::L);
+	assert(L == gLua);
 
 	// 加载常用库
 	luaL_openlibs(L);
@@ -876,7 +875,7 @@ inline int Lua_Main(lua_State* L)
 	// 注册每帧回调 cpp 函数
 	cocos2d::Director::getInstance()->mainLoopCallback = []
 	{
-		var L = AppDelegate::L;
+		var L = gLua;
 
 		// root L[1] 已被放置了 函数表
 		assert(lua_gettop(L) == 1);									// funcs
@@ -896,11 +895,11 @@ inline int Lua_Main(lua_State* L)
 
 inline int Lua_Init()
 {
-	var L = AppDelegate::L = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
+	var L = gLua = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
 	{
 		return ((xx::MemPool*)ud)->Realloc(ptr, nsize, osize);
 	}
-	, AppDelegate::mp);
+	, mp);
 
 	assert(L);
 

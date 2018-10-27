@@ -14,7 +14,7 @@ listener:onTouchesBegan(function(...)
 		end
 	end
 end)
-sprite:addEventListenerWithSceneGraphPriority(listener)
+sprite:addEventListener(listener)
 
 
 coroutine_create = coroutine.create

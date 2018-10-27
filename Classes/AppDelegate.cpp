@@ -90,16 +90,15 @@ void uuid_generate(unsigned char* buf)
 #include "lua_wrapper.hpp"
 
 
-// 
-void AppDelegate::Init(bool first)
+void InitMpUvLuaScene(bool first)
 {
 	// 创建 Scene 单例并运行
-	scene = cocos2d::Scene::create();
-	cocos2d::Director::getInstance()->runWithScene(scene);
+	gScene = cocos2d::Scene::create();
+	cocos2d::Director::getInstance()->runWithScene(gScene);
 
 	if (!first)
 	{
-		lua_close(L);
+		lua_close(gLua);
 	}
 
 	// 初始化 uv loop
@@ -110,24 +109,21 @@ void AppDelegate::Init(bool first)
 	assert(!r);
 }
 
+void ReleaseLua()
+{
+	if (gLua)
+	{
+		lua_close(gLua);
+	}
+}
+
 AppDelegate::AppDelegate()
 {
-	instance = this;
-	mp = &mp_;
-
-	cocos2d::Director::getInstance()->restartCallback = [this]
-	{
-		Init(false);
-	};
 }
 
 AppDelegate::~AppDelegate()
 {
-	if (L)
-	{
-		lua_close(L);
-		L = nullptr;
-	}
+	ReleaseLua();
 
 #if USE_AUDIO_ENGINE
 	cocos2d::experimental::AudioEngine::end();
@@ -150,7 +146,7 @@ void AppDelegate::initGLContextAttrs()
 bool AppDelegate::applicationDidFinishLaunching()
 {
 	// initialize director
-	auto director = cocos2d::Director::getInstance();
+	director = cocos2d::Director::getInstance();
 	auto glview = director->getOpenGLView();
 	if (!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
@@ -174,8 +170,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 	// 原点坐标( 有些软按键设备原点就不是 0,0 )
 	origin = director->getVisibleOrigin();
 
-	// 初始化一切运行时
-	Init();
+
+	cocos2d::Director::getInstance()->restartCallback = [this]
+	{
+		InitMpUvLuaScene(false);
+	};
+	InitMpUvLuaScene();
 
 	return true;
 }
