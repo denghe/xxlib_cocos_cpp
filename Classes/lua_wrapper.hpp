@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #ifndef var
 #define var decltype(auto)
 #endif
@@ -231,7 +231,7 @@ inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 			}
 			size_t len;
 			var buf = lua_tolstring(L, -1, &len);
-			gStrings.emplace(buf, len);
+			gStrings.emplace_back(buf, len);
 		}
 		lua_pop(L, 1);							// ... t, k
 		++n;
