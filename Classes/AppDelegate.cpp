@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos2d-x.org
@@ -92,6 +92,8 @@ void uuid_generate(unsigned char* buf)
 
 void InitGlobals(bool first)
 {
+    cocos2d::FileUtils::getInstance()->setSearchPaths({"/", "res/"});
+
 	if (first)
 	{
 		mp = new xx::MemPool();
@@ -169,15 +171,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	// 原点坐标( 有些软按键设备原点就不是 0,0 )
 	origin = director->getVisibleOrigin();
-
-
+    
 	cocos2d::Director::getInstance()->restartCallback = [this]
 	{
 		InitGlobals(false);
 	};
 	InitGlobals();
-
-	//cocos2d::FileUtils::getInstance()->fullPathForFilename
 
 	return true;
 }

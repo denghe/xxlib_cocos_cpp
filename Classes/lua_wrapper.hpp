@@ -833,7 +833,21 @@ inline int Lua_Main(lua_State* L)
 	// 加载常用库
 	luaL_openlibs(L);
 
+    var fu = cocos2d::FileUtils::getInstance();
+    var mainPath = fu->fullPathForFilename("main.lua");
+    var rootPath = std::string(mainPath.data(), mainPath.size() - 8);   // cut "main.lua"
+    var searchPath = rootPath + "?.lua";
+    
+    // set code base path
+    lua_getglobal(L, "package");
+    lua_getfield(L, -1, "path");
+    lua_pushlstring(L, searchPath.data(), searchPath.size());
+    lua_setfield(L, -3, "path");
+    lua_pop(L, 2);
+    
 	// 设置 file loader
+    
+    // todo
 
 
 	// 创建函数表
@@ -844,7 +858,7 @@ inline int Lua_Main(lua_State* L)
 	Lua_Register_cc(L);
 
 	// 加载 main
-	if (int r = luaL_loadfile(L, "main.lua"))						// main
+	if (int r = luaL_loadfile(L, mainPath.c_str()))						    // main
 	{
 		std::cout << "r = " << r << ", errmsg = " << lua_tostring(L, -1) << std::endl;
 		lua_pop(L, 1);
@@ -863,7 +877,8 @@ inline int Lua_Main(lua_State* L)
 	lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		// funcs
 
 	// 加载 loop
-	if (int r = luaL_loadfile(L, "loop.lua"))						// funcs, loop
+    var loopPath = fu->fullPathForFilename("loop.lua");
+	if (int r = luaL_loadfile(L, loopPath.c_str()))	                // funcs, loop
 	{
 		std::cout << "r = " << r << ", errmsg = " << lua_tostring(L, -1) << std::endl;
 		lua_pop(L, 1);
