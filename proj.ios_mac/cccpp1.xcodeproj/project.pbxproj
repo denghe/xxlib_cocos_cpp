@@ -41,6 +41,8 @@
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
 		D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B0611A1803AB670077942B /* CoreMotion.framework */; };
+		E387F18D2184BA5D00C2842F /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = E387F18C2184BA5D00C2842F /* Resources */; };
+		E387F18E2184BA5D00C2842F /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = E387F18C2184BA5D00C2842F /* Resources */; };
 		ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7B1B68A1F400C3958E /* libiconv.dylib */; };
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
 		F53349452184642F005E9755 /* xx_uv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F53349272184642F005E9755 /* xx_uv.cpp */; };
@@ -49,10 +51,6 @@
 		F53349482184642F005E9755 /* http_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F533493A2184642F005E9755 /* http_parser.c */; };
 		F53349492184642F005E9755 /* ikcp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F533493B2184642F005E9755 /* ikcp.cpp */; };
 		F533494A2184642F005E9755 /* ikcp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F533493B2184642F005E9755 /* ikcp.cpp */; };
-		F533496221846D30005E9755 /* main.lua in Resources */ = {isa = PBXBuildFile; fileRef = F533495E21846D30005E9755 /* main.lua */; };
-		F533496321846D30005E9755 /* loop.lua in Resources */ = {isa = PBXBuildFile; fileRef = F533495F21846D30005E9755 /* loop.lua */; };
-		F533496421846D30005E9755 /* btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F533496021846D30005E9755 /* btn.png */; };
-		F533496521846D30005E9755 /* hi.png in Resources */ = {isa = PBXBuildFile; fileRef = F533496121846D30005E9755 /* hi.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,6 +129,7 @@
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D6B0611A1803AB670077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		E387F18C2184BA5D00C2842F /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
 		ED545A7B1B68A1F400C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		F533491C2184642F005E9755 /* xx_dict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_dict.h; sourceTree = "<group>"; };
@@ -170,10 +169,6 @@
 		F533493F2184642F005E9755 /* xx_random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_random.h; sourceTree = "<group>"; };
 		F53349402184642F005E9755 /* fixed_function.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fixed_function.hpp; sourceTree = "<group>"; };
 		F53349412184642F005E9755 /* xx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx.h; sourceTree = "<group>"; };
-		F533495E21846D30005E9755 /* main.lua */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.lua; path = ../Resources/main.lua; sourceTree = "<group>"; };
-		F533495F21846D30005E9755 /* loop.lua */ = {isa = PBXFileReference; lastKnownFileType = text; name = loop.lua; path = ../Resources/loop.lua; sourceTree = "<group>"; };
-		F533496021846D30005E9755 /* btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn.png; path = ../Resources/btn.png; sourceTree = "<group>"; };
-		F533496121846D30005E9755 /* hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hi.png; path = ../Resources/hi.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,10 +254,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				F533496021846D30005E9755 /* btn.png */,
-				F533496121846D30005E9755 /* hi.png */,
-				F533495F21846D30005E9755 /* loop.lua */,
-				F533495E21846D30005E9755 /* main.lua */,
+				E387F18C2184BA5D00C2842F /* Resources */,
 				F533491B2184642F005E9755 /* xxlib */,
 				46880B8319C43A87006E1F66 /* Classes */,
 				1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */,
@@ -483,10 +475,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F533496221846D30005E9755 /* main.lua in Resources */,
-				F533496321846D30005E9755 /* loop.lua in Resources */,
-				F533496421846D30005E9755 /* btn.png in Resources */,
-				F533496521846D30005E9755 /* hi.png in Resources */,
+				E387F18D2184BA5D00C2842F /* Resources in Resources */,
 				1A88B2641FC3D9C9005C14AE /* Images.xcassets in Resources */,
 				1AF87B891F6F781D007BE51C /* LaunchScreenBackground.png in Resources */,
 				1AF87B881F6F781D007BE51C /* LaunchScreen.storyboard in Resources */,
@@ -497,6 +486,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E387F18E2184BA5D00C2842F /* Resources in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
