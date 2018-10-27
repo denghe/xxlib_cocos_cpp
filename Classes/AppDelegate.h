@@ -45,14 +45,12 @@ public:
 	inline static cocos2d::Scene* scene = nullptr;
 	inline static AppDelegate* instance = nullptr;
 
+	void Init(bool first = true);
+
 	inline static const std::string projectName = "cccpp1";
 	inline static cocos2d::Size designResolutionSize = cocos2d::Size(1280, 720);
 	inline static cocos2d::Size visibleSize;
 	inline static cocos2d::Vec2 origin;
-
-	// 重启 cocos & lua & uv
-	void Restart();
-	int restarted = 0;
 
     AppDelegate();
     virtual ~AppDelegate();

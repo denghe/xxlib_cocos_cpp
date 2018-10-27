@@ -759,10 +759,11 @@ inline void Lua_Register_cc(lua_State* const& L)
 	lua_pushstring(L, "restart");									// cc, "restart"
 	lua_pushcclosure(L, [](lua_State* L)							// cc, "restart", func
 	{
-		std::cout << "restart" << std::endl;
-		cocos2d::Director::getInstance()->mainLoopCallback = []
+		var d = cocos2d::Director::getInstance();
+		d->mainLoopCallback = [d]
 		{
-			AppDelegate::instance->Restart();
+			d->restart();
+			d->mainLoopCallback = nullptr;
 		};
 		return 0;
 	}, 0);

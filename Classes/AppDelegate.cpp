@@ -90,40 +90,35 @@ void uuid_generate(unsigned char* buf)
 #include "lua_wrapper.hpp"
 
 
-void AppDelegate::Restart()
+// 
+void AppDelegate::Init(bool first)
 {
-	++restarted;
-	if (restarted == 1)
+	// 创建 Scene 单例并运行
+	scene = cocos2d::Scene::create();
+	cocos2d::Director::getInstance()->runWithScene(scene);
+
+	if (!first)
 	{
-		cocos2d::Director::getInstance()->restart();
+		lua_close(L);
 	}
-	else if(restarted == 3)
-	{
-		// 已知问题: 重启后 touch 检测错乱
 
-		if (L)
-		{
-			lua_close(L);
-			L = nullptr;
-		}
-		uv.MPCreate(mp);
+	// 初始化 uv loop
+	uv.MPCreate(mp);
 
-		// 创建 Scene 单例并运行
-		scene = cocos2d::Scene::create();
-		cocos2d::Director::getInstance()->runWithScene(scene);
-
-		// 初始化 lua 部分
-		int r = Lua_Init();
-		assert(!r);
-
-		restarted = 0;
-	}
+	// 初始化 lua 部分
+	int r = Lua_Init();
+	assert(!r);
 }
 
 AppDelegate::AppDelegate()
 {
 	instance = this;
 	mp = &mp_;
+
+	cocos2d::Director::getInstance()->restartCallback = [this]
+	{
+		Init(false);
+	};
 }
 
 AppDelegate::~AppDelegate()
@@ -150,8 +145,6 @@ void AppDelegate::initGLContextAttrs()
 	GLContextAttrs glContextAttrs = { 8, 8, 8, 8, 24, 8, 0 };
 
 	cocos2d::GLView::setGLContextAttrs(glContextAttrs);
-
-	std::cout << "initGLContextAttrs"<<std::endl;
 }
 
 bool AppDelegate::applicationDidFinishLaunching()
@@ -169,40 +162,20 @@ bool AppDelegate::applicationDidFinishLaunching()
 	}
 	glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::SHOW_ALL);
 
-	auto v = cocos2d::Director::getInstance()->convertToGL({ 500,500 });
-	std::cout << v.x << std::endl;
+	// turn on display FPS
+	director->setDisplayStats(true);
 
-	cocos2d::Director::getInstance()->restartCallback = []
-	{
-		auto v = cocos2d::Director::getInstance()->convertToGL({ 500,500 });
-		std::cout << v.x << std::endl;
-	};
-	director->restart();
+	// set FPS. the default value is 1.0/60 if you don't call this
+	director->setAnimationInterval(1.0f / 60);
 
-	return true;
+	// 可视区域尺寸
+	visibleSize = director->getVisibleSize();
 
-	//// turn on display FPS
-	//director->setDisplayStats(true);
+	// 原点坐标( 有些软按键设备原点就不是 0,0 )
+	origin = director->getVisibleOrigin();
 
-	//// set FPS. the default value is 1.0/60 if you don't call this
-	//director->setAnimationInterval(1.0f / 60);
-
-	//// 可视区域尺寸
-	//visibleSize = director->getVisibleSize();
-
-	//// 原点坐标( 有些软按键设备原点就不是 0,0 )
-	//origin = director->getVisibleOrigin();
-
-	//// 初始化 uv loop
-	//uv.MPCreate(mp);
-
-	//// 创建 Scene 单例并运行
-	//scene = cocos2d::Scene::create();
-	//cocos2d::Director::getInstance()->runWithScene(scene);
-
-	//// 初始化 lua 部分
-	//int r = Lua_Init();
-	//assert(!r);
+	// 初始化一切运行时
+	Init();
 
 	return true;
 }

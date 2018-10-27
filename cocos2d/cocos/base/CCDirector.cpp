@@ -1151,6 +1151,7 @@ void Director::restartDirector()
 #endif
 
 	// xx
+	setGLDefaultValues();
 	if (restartCallback) restartCallback();
 }
 
