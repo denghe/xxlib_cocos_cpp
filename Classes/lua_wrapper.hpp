@@ -3,12 +3,11 @@
 #define var decltype(auto)
 #endif
 
-// 一组全局公用 & 复用容器. 
-inline xx::List<float> gFloats(mp);
-inline xx::List<double> gDoubles(mp);
-inline xx::List<xx::String> gStrings(mp);
-inline xx::List<int> gInts(mp);
-inline xx::List<int64_t> gLongs(mp);
+inline std::vector<float> gFloats;
+inline std::vector<double> gDoubles;
+inline std::vector<std::string> gStrings;
+inline std::vector<int> gInts;
+inline std::vector<int64_t> gLongs;
 
 
 inline const char* const LuaKey_null = "null";
@@ -170,14 +169,14 @@ inline T Lua_ToNumber(lua_State* const& L)
 
 // 试着将 idx 所在 table 转为 vector<T>. 有问题直接报错. 外部已判断过类型是 table.
 template<typename T, int idx>
-inline xx::List<T> const& Lua_ToValues(lua_State* const& L)
+inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
 {
 	// clear
-	if constexpr (std::is_same<T, int>::value) { gInts.Clear(); }
-	else if constexpr (std::is_same<T, int64_t>::value) { gLongs.Clear(); }
-	else if constexpr (std::is_same<T, float>::value) { gFloats.Clear(); }
-	else if constexpr (std::is_same<T, double>::value) { gDoubles.Clear(); }
-	else { gStrings.Clear(); }
+	if constexpr (std::is_same<T, int>::value) { gInts.clear(); }
+	else if constexpr (std::is_same<T, int64_t>::value) { gLongs.clear(); }
+	else if constexpr (std::is_same<T, float>::value) { gFloats.clear(); }
+	else if constexpr (std::is_same<T, double>::value) { gDoubles.clear(); }
+	else { gStrings.clear(); }
 
 	// foreach fill
 	lua_pushnil(L);								// ... t, nil
@@ -192,7 +191,7 @@ inline xx::List<T> const& Lua_ToValues(lua_State* const& L)
 			{
 				luaL_error(L, "args[%d][%d] is not int.", idx, n);
 			}
-			gInts.Add(v);
+			gInts.push_back(v);
 		}
 		else if constexpr (std::is_same<T, int64_t>::value)
 		{
@@ -202,7 +201,7 @@ inline xx::List<T> const& Lua_ToValues(lua_State* const& L)
 			{
 				luaL_error(L, "args[%d][%d] is not long.", idx, n);
 			}
-			gLongs.Add(v);
+			gLongs.push_back(v);
 		}
 		else if constexpr (std::is_same<T, float>::value)
 		{
@@ -212,7 +211,7 @@ inline xx::List<T> const& Lua_ToValues(lua_State* const& L)
 			{
 				luaL_error(L, "args[%d][%d] is not float.", idx, n);
 			}
-			gFloats.Add(v);
+			gFloats.push_back(v);
 		}
 		else if constexpr (std::is_same<T, double>::value)
 		{
@@ -222,7 +221,7 @@ inline xx::List<T> const& Lua_ToValues(lua_State* const& L)
 			{
 				luaL_error(L, "args[%d][%d] is not double.", idx, n);
 			}
-			gDoubles.Add(v);
+			gDoubles.push_back(v);
 		}
 		else	// string
 		{
@@ -232,7 +231,7 @@ inline xx::List<T> const& Lua_ToValues(lua_State* const& L)
 			}
 			size_t len;
 			var buf = lua_tolstring(L, -1, &len);
-			gStrings.Emplace(mp, buf, len);
+			gStrings.emplace(buf, len);
 		}
 		lua_pop(L, 1);							// ... t, k
 		++n;
@@ -258,7 +257,7 @@ inline cocos2d::Vec2 Lua_ToVec2(lua_State* const& L, char const* const& funcName
 	if (numArgs == 2)	// {x,y}
 	{
 		var vals = Lua_ToValues<float, 2>(L);
-		if (vals.dataLen != 2)
+		if (vals.size() != 2)
 		{
 			luaL_error(L, "%s error! need 1 args: {x,y} or 2 args: x,y", funcName);
 		}
@@ -833,6 +832,9 @@ inline int Lua_Main(lua_State* L)
 
 	// 加载常用库
 	luaL_openlibs(L);
+
+	// 设置 file loader
+
 
 	// 创建函数表
 	lua_createtable(L, 0, 100);										// funcs

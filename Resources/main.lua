@@ -1,4 +1,7 @@
-﻿local scene = cc.scene()
+﻿print(package)
+print(package.loaders)
+
+local scene = cc.scene()
 local texture = cc.TextureCache.addImage("hi.png")
 local sprite = cc.Sprite.new()
 sprite:initWithTexture(texture)

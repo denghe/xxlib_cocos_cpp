@@ -39,15 +39,13 @@ inline cocos2d::Size visibleSize;
 inline cocos2d::Vec2 origin;
 inline cocos2d::Director* director = nullptr;
 
-inline xx::MemPool mp_, *mp = &mp_;
-inline xx::UvLoop_u uv;
+inline xx::MemPool* mp = nullptr;
+inline xx::UvLoop* uv = nullptr;
 inline lua_State* gLua = nullptr;
 inline cocos2d::Scene* gScene = nullptr;
 
-void InitMpUvLuaScene(bool first = true);
-void ReleaseLua();
-
-
+void InitGlobals(bool first = true);
+void ReleaseGlobals();
 
 
 /**

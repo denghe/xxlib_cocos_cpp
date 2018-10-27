@@ -90,31 +90,31 @@ void uuid_generate(unsigned char* buf)
 #include "lua_wrapper.hpp"
 
 
-void InitMpUvLuaScene(bool first)
+void InitGlobals(bool first)
 {
-	// 创建 Scene 单例并运行
+	if (first)
+	{
+		mp = new xx::MemPool();
+	}
+	else
+	{
+		lua_close(gLua);
+		uv->Release();
+	}
+	uv = mp->MPCreate<xx::UvLoop>();
+
 	gScene = cocos2d::Scene::create();
 	cocos2d::Director::getInstance()->runWithScene(gScene);
 
-	if (!first)
-	{
-		lua_close(gLua);
-	}
-
-	// 初始化 uv loop
-	uv.MPCreate(mp);
-
-	// 初始化 lua 部分
 	int r = Lua_Init();
 	assert(!r);
 }
 
-void ReleaseLua()
+void ReleaseGlobals()
 {
-	if (gLua)
-	{
-		lua_close(gLua);
-	}
+	lua_close(gLua);
+	uv->Release();
+	delete mp;
 }
 
 AppDelegate::AppDelegate()
@@ -123,7 +123,7 @@ AppDelegate::AppDelegate()
 
 AppDelegate::~AppDelegate()
 {
-	ReleaseLua();
+	ReleaseGlobals();
 
 #if USE_AUDIO_ENGINE
 	cocos2d::experimental::AudioEngine::end();
@@ -173,9 +173,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	cocos2d::Director::getInstance()->restartCallback = [this]
 	{
-		InitMpUvLuaScene(false);
+		InitGlobals(false);
 	};
-	InitMpUvLuaScene();
+	InitGlobals();
+
+	//cocos2d::FileUtils::getInstance()->fullPathForFilename
 
 	return true;
 }
