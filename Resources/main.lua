@@ -9,7 +9,7 @@ listener:onTouchesBegan(function(...)
 	local e = args[1]
 	for i = 2, #args do
 		local t = args[i]
-		if sprite:containsTouchPoint(t) then
+		if sprite:containsTouch(t) then
 			print(t:getLocation())
 		end
 	end
@@ -24,10 +24,12 @@ yield = coroutine.yield
 local function mainLoop()
 	local yield = _G.yield
 	local scene = cc.scene()
+	sprite:setScale(1, 2)
+	sprite:setAnchorPoint(0,0)
 	while true do
-		for i = 1, 120 do
+		for i = 1, 420 do
 			yield()
-			-- sprite:removeFromParent()
+			sprite:setRotation(i)
 			sprite:setPosition(i+200, i+200)
 		end
 		cc.restart()

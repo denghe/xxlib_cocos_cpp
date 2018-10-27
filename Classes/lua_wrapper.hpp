@@ -424,6 +424,29 @@ inline void Lua_Register_Node(lua_State* const& L)
 	lua_rawset(L, -3);
 
 
+	lua_pushstring(L, "setRotation");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		if (lua_gettop(L) < 2) return luaL_error(L, "setRotation error! need 2 args: self, float angle( 360 )");
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		var r = Lua_ToNumber<float, 2>(L);
+		o->setRotation(r);
+		return 0;
+	}, 0);
+	lua_rawset(L, -3);
+
+
+	lua_pushstring(L, "setScale");
+	lua_pushcclosure(L, [](lua_State* L)
+	{
+		var v = Lua_ToVec2(L, "setScale");
+		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+		o->setScale(v.x, v.y);
+		return 0;
+	}, 0);
+	lua_rawset(L, -3);
+
+
 	lua_pushstring(L, "convertToNodeSpace");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
@@ -454,22 +477,29 @@ inline void Lua_Register_Node(lua_State* const& L)
 	{
 		var v = Lua_ToVec2(L, "containsPoint");
 		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
+
 		var s = o->getContentSize();
 		cocos2d::Rect r(0, 0, s.width, s.height);
 		var b = r.containsPoint(v);
+
 		lua_pushboolean(L, b);
 		return 1;
 	}, 0);
 	lua_rawset(L, -3);
 
 
-	lua_pushstring(L, "containsTouchPoint");
+	lua_pushstring(L, "containsTouch");
 	lua_pushcclosure(L, [](lua_State* L)
 	{
 		var o = Lua_ToPointer<cocos2d::Node, 1>(L, LuaKey_Node);
 		var t = Lua_ToPointer<cocos2d::Touch, 2>(L, LuaKey_Touch);
-		var p = o->convertTouchToNodeSpace(t);
-		var b = o->boundingBox().containsPoint(p);
+
+		var tL = t->getLocation();
+		var p = o->convertToNodeSpace(tL);
+		var s = o->getContentSize();
+		cocos2d::Rect r{ 0,0, s.width, s.height };
+		var b = r.containsPoint(p);
+
 		lua_pushboolean(L, b);
 		return 1;
 	}, 0);
