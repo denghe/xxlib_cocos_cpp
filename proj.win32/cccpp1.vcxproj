@@ -175,6 +175,10 @@
     <ClInclude Include="..\Classes\lua_pushxxx.hpp" />
     <ClInclude Include="..\Classes\lua_toxxx.hpp" />
     <ClInclude Include="..\Classes\lua_init.hpp" />
+    <ClInclude Include="..\Classes\lua_xx.hpp" />
+    <ClInclude Include="..\Classes\lua_xx_bbuffer.hpp" />
+    <ClInclude Include="..\Classes\lua_xx_mempool.hpp" />
+    <ClInclude Include="..\Classes\lua_xx_uvloop.hpp" />
     <ClInclude Include="..\xxlib\fixed_function.hpp" />
     <ClInclude Include="..\xxlib\http_parser.h" />
     <ClInclude Include="..\xxlib\ikcp.h" />

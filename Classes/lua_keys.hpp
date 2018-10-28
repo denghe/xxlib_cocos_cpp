@@ -1,9 +1,17 @@
 ﻿#pragma once
 
 inline const char* const LuaKey_null = "null";
+
+inline const char* const LuaKey_xx = "xx";
+inline const char* const LuaKey_MemPool = "MemPool";
+inline const char* const LuaKey_BBuffer = "BBuffer";
+inline const char* const LuaKey_UvLoop = "UvLoop";
+inline const char* const LuaKey_UvTcpClient = "UvTcpClient";
+
 inline const char* const LuaKey_Callbacks = "Callbacks";
 inline const char* const LuaKey_FrameUpdateFunc = "FrameUpdateFunc";
-inline const char* const LuaKey_UvLoop = "UvLoop";
+
+inline const char* const LuaKey_cc = "cc";
 inline const char* const LuaKey_Ref = "Ref";
 inline const char* const LuaKey_Touch = "Touch";
 inline const char* const LuaKey_Event = "Event";

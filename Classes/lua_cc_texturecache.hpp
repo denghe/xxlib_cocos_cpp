@@ -2,7 +2,7 @@
 
 inline void Lua_Register_TextureCache(lua_State* const& L)
 {
-	Lua_NewCcMT(L, LuaKey_TextureCache);
+	Lua_NewMT(L, LuaKey_TextureCache);
 
 	Lua_NewFunc(L, "addImage", [](lua_State* L)
 	{

@@ -279,6 +279,8 @@ xx::UvDnsVisitor::UvDnsVisitor(UvLoop* const& loop, String_p& domainName, std::f
 	((addrinfo*)hints)->ai_protocol = 0;// IPPROTO_TCP;
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 	((addrinfo*)hints)->ai_flags = AI_DEFAULT;
+#else
+	((addrinfo*)hints)->ai_flags = 0;
 #endif
 
 	resolver = Alloc(sizeof(uv_getaddrinfo_t), { this, memHeader().versionNumber });

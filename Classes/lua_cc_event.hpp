@@ -2,7 +2,7 @@
 
 inline void Lua_Register_Event(lua_State* const& L)
 {
-	Lua_NewCcMT(L, LuaKey_Event, LuaKey_Ref);
+	Lua_NewMT(L, LuaKey_Event, LuaKey_Ref);
 
 	// event->getCurrentTarget()
 

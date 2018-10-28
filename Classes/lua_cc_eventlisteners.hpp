@@ -2,7 +2,7 @@
 
 inline void Lua_Register_EventListener(lua_State* const& L)
 {
-	Lua_NewCcMT(L, LuaKey_EventListener, LuaKey_Ref);
+	Lua_NewMT(L, LuaKey_EventListener, LuaKey_Ref);
 
 	Lua_NewFunc(L, "setEnabled", [](lua_State* L)
 	{
@@ -24,7 +24,7 @@ inline void Lua_Register_EventListener(lua_State* const& L)
 
 inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 {
-	Lua_NewCcMT(L, LuaKey_EventListenerTouchAllAtOnce, LuaKey_EventListener);
+	Lua_NewMT(L, LuaKey_EventListenerTouchAllAtOnce, LuaKey_EventListener);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
@@ -47,6 +47,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 				gEvent = e;
 				lua_pushcclosure(L, [](lua_State* L)							// cfunc
 				{
+					lua_checkstack(L, gTouchs->size() + 3);
 					lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
 					lua_rawgeti(L, 1, gFuncId);									// funcs, func
 					Lua_NewUserdataMT(L, gEvent, LuaKey_Event);					// funcs, func, event
@@ -85,6 +86,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 				gEvent = e;
 				lua_pushcclosure(L, [](lua_State* L)							// cfunc
 				{
+					lua_checkstack(L, gTouchs->size() + 3);
 					lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
 					lua_rawgeti(L, 1, gFuncId);									// funcs, func
 					Lua_NewUserdataMT(L, gEvent, LuaKey_Event);					// funcs, func, event
@@ -123,6 +125,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 				gEvent = e;
 				lua_pushcclosure(L, [](lua_State* L)							// cfunc
 				{
+					lua_checkstack(L, gTouchs->size() + 3);
 					lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
 					lua_rawgeti(L, 1, gFuncId);									// funcs, func
 					Lua_NewUserdataMT(L, gEvent, LuaKey_Event);					// funcs, func, event
@@ -161,6 +164,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 				gEvent = e;
 				lua_pushcclosure(L, [](lua_State* L)							// cfunc
 				{
+					lua_checkstack(L, gTouchs->size() + 3);
 					lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
 					lua_rawgeti(L, 1, gFuncId);									// funcs, func
 					Lua_NewUserdataMT(L, gEvent, LuaKey_Event);					// funcs, func, event
@@ -196,7 +200,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 
 inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 {
-	Lua_NewCcMT(L, LuaKey_EventListenerTouchOneByOne, LuaKey_EventListener);
+	Lua_NewMT(L, LuaKey_EventListenerTouchOneByOne, LuaKey_EventListener);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{

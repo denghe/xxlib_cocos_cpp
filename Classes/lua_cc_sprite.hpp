@@ -2,7 +2,7 @@
 
 inline void Lua_Register_Sprite(lua_State* const& L)
 {
-	Lua_NewCcMT(L, LuaKey_Sprite, LuaKey_Node);
+	Lua_NewMT(L, LuaKey_Sprite, LuaKey_Node);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{

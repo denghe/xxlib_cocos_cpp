@@ -13,6 +13,7 @@ inline int gFuncId = 0;
 inline cocos2d::Touch* gTouch = nullptr;
 inline cocos2d::Event* gEvent = nullptr;
 inline std::vector<cocos2d::Touch*> const* gTouchs = nullptr;
+inline xx::List<xx::String>* gListString = nullptr;
 
 #include "lua_keys.hpp"
 #include "lua_funcholder.hpp"
@@ -31,6 +32,11 @@ inline std::vector<cocos2d::Touch*> const* gTouchs = nullptr;
 #include "lua_cc_texturecache.hpp"
 #include "lua_cc_texture.hpp"
 #include "lua_cc.hpp"
+
+#include "lua_xx_mempool.hpp"
+#include "lua_xx_bbuffer.hpp"
+#include "lua_xx_uvloop.hpp"
+#include "lua_xx.hpp"
 
 #include "lua_init.hpp"
 //...

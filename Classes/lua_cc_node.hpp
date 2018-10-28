@@ -2,7 +2,7 @@
 
 inline void Lua_Register_Node(lua_State* const& L)
 {
-	Lua_NewCcMT(L, LuaKey_Node, LuaKey_Ref);						// cc, Node : Ref
+	Lua_NewMT(L, LuaKey_Node, LuaKey_Ref);						// cc, Node : Ref
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{

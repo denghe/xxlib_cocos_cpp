@@ -191,6 +191,18 @@
     <ClInclude Include="..\Classes\lua_pushxxx.hpp">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\lua_xx.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_xx_uvloop.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_xx_mempool.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_xx_bbuffer.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\xxlib\lua.natvis">

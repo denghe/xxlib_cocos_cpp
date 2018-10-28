@@ -31,10 +31,6 @@ inline int Lua_Main(lua_State* L)
 	// 加载常用库
 	luaL_openlibs(L);
 
-	// 注册 null 到全局
-	lua_pushlightuserdata(L, nullptr);								// null
-	lua_setglobal(L, LuaKey_null);									//
-
 	// 替换 print 的实现 for android 输出
 	lua_pushcclosure(L, [](lua_State* L)							// package, searchers, func
 	{
@@ -73,10 +69,16 @@ inline int Lua_Main(lua_State* L)
 	lua_pop(L, 2);													//
 
 
+	// 注册 null 到全局
+	lua_pushlightuserdata(L, nullptr);								// null
+	lua_setglobal(L, LuaKey_null);									//
+
 	// 创建函数表
 	lua_createtable(L, 0, 100);										// funcs
 	lua_rawsetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		//
 
+	// 加载 xx.* 对象 & 函数映射
+	Lua_Register_xx(L);
 
 	// 加载 cc.* 对象 & 函数映射
 	Lua_Register_cc(L);
@@ -109,8 +111,10 @@ inline int Lua_Main(lua_State* L)
 	// 注册每帧回调 cpp 函数
 	cocos2d::Director::getInstance()->mainLoopCallback = []
 	{
-		var L = gLua;
+		// 先执行 uvloop
+		uv->Run(xx::UvRunMode::NoWait);
 
+		var L = gLua;
 		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
 
 		// 拿出 loop, 执行之

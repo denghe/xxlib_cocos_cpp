@@ -5,7 +5,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	// 创建全局 cc 基表
 	lua_createtable(L, 0, 100);										// cc
 	lua_pushvalue(L, -1);											// cc, cc
-	lua_setglobal(L, "cc");											// cc
+	lua_setglobal(L, LuaKey_cc);									// cc
 
 	// 创建 重启游戏 函数
 	Lua_NewFunc(L, "restart", [](lua_State* L)

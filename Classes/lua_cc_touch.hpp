@@ -2,7 +2,7 @@
 
 inline void Lua_Register_Touch(lua_State* const& L)
 {
-	Lua_NewCcMT(L, LuaKey_Touch, LuaKey_Ref);
+	Lua_NewMT(L, LuaKey_Touch, LuaKey_Ref);
 
 	Lua_NewFunc(L, "getLocation", [](lua_State* L)
 	{

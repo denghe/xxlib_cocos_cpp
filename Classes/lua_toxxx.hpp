@@ -72,8 +72,8 @@ inline Lua_FuncHolder Lua_ToFuncHolder(lua_State* const& L)
 
 // 试着将 idx 所在转为 T** 取出 T*
 // 还需要进一步检测 mt 父子关系, 以及最终指针的 dynamic cast 来进一步判断, 以后上全局内存池方案再说
-template<typename T, int idx>
-inline T* Lua_ToPointer(lua_State* const& L, char const* const& typeName)
+template<typename T>
+inline T* Lua_ToPointer(lua_State* const& L, int const& idx, char const* const& typeName)
 {
 	if (!lua_isuserdata(L, idx))
 	{
@@ -86,6 +86,15 @@ inline T* Lua_ToPointer(lua_State* const& L, char const* const& typeName)
 	}
 	return *p;
 }
+
+// 试着将 idx 所在转为 T** 取出 T*
+// 还需要进一步检测 mt 父子关系, 以及最终指针的 dynamic cast 来进一步判断, 以后上全局内存池方案再说
+template<typename T, int idx>
+inline T* Lua_ToPointer(lua_State* const& L, char const* const& typeName)
+{
+	return Lua_ToPointer<T>(L, idx, typeName);
+}
+
 
 
 
