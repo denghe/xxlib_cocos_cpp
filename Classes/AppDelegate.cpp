@@ -87,7 +87,7 @@ void uuid_generate(unsigned char* buf)
 #include "lzio.c"
 
 
-#include "lua_wrapper.hpp"
+#include "lua_all.hpp"
 
 
 void InitGlobals(bool first)

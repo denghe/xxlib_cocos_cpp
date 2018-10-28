@@ -37,7 +37,8 @@ local function mainLoop()
 			sprite:setRotation(i)
 			sprite:setPosition(i+200, i+200)
 		end
-		cc.restart()
+		--cc.restart()
+		listener:onTouchesBegan()
 	end
 end
 gMainLoopCoro = coroutine_create(mainLoop)

@@ -10,6 +10,9 @@
     <Filter Include="xxlib">
       <UniqueIdentifier>{0f00b345-4bdf-475b-acd5-dbd9e313252a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{0c6667db-ae2a-4c75-ba92-f1a84992e4ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -137,8 +140,56 @@
     <ClInclude Include="..\xxlib\xx_uv.hpp">
       <Filter>xxlib</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_wrapper.hpp">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\lua_all.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_event.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_eventlisteners.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_node.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_ref.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_scene.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_sprite.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_texture.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_texturecache.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_touch.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_funcholder.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_keys.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_newxxx.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_toxxx.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_init.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_pushxxx.hpp">
+      <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

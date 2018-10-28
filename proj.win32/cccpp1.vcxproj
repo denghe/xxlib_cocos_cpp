@@ -158,7 +158,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\lua_wrapper.hpp" />
+    <ClInclude Include="..\Classes\lua_all.hpp" />
+    <ClInclude Include="..\Classes\lua_cc.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_event.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_eventlisteners.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_node.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_ref.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_scene.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_sprite.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_texture.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_texturecache.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_touch.hpp" />
+    <ClInclude Include="..\Classes\lua_funcholder.hpp" />
+    <ClInclude Include="..\Classes\lua_keys.hpp" />
+    <ClInclude Include="..\Classes\lua_newxxx.hpp" />
+    <ClInclude Include="..\Classes\lua_pushxxx.hpp" />
+    <ClInclude Include="..\Classes\lua_toxxx.hpp" />
+    <ClInclude Include="..\Classes\lua_init.hpp" />
     <ClInclude Include="..\xxlib\fixed_function.hpp" />
     <ClInclude Include="..\xxlib\http_parser.h" />
     <ClInclude Include="..\xxlib\ikcp.h" />
