@@ -58,11 +58,15 @@ inline T Lua_ToNumber(lua_State* const& L)
 template<int idx>
 inline Lua_FuncHolder Lua_ToFuncHolder(lua_State* const& L)
 {
+	if (lua_islightuserdata(L, idx) && lua_touserdata(L, idx) == nullptr)
+	{
+		return Lua_FuncHolder(0);
+	}
 	if (!lua_isfunction(L, idx))
 	{
 		luaL_error(L, "error! args[%d] is not function.", idx);
 	}
-	return Lua_FuncHolder(L, idx);
+	return Lua_FuncHolder(idx);
 }
 
 
@@ -103,7 +107,7 @@ inline std::tuple<T*, float, float> Lua_ToTFF(lua_State* const& L, char const* c
 template<typename T>
 inline std::tuple<T*, float> Lua_ToTF(lua_State* const& L, char const* const& errMsg, char const* const& tName)
 {
-	if (lua_gettop(L) < 3)
+	if (lua_gettop(L) < 2)
 	{
 		luaL_error(L, "%s", errMsg);
 	}
@@ -114,11 +118,22 @@ inline std::tuple<T*, float> Lua_ToTF(lua_State* const& L, char const* const& er
 template<typename T>
 inline std::tuple<T*, int> Lua_ToTI(lua_State* const& L, char const* const& errMsg, char const* const& tName)
 {
-	if (lua_gettop(L) < 3)
+	if (lua_gettop(L) < 2)
 	{
 		luaL_error(L, "%s", errMsg);
 	}
 	return std::make_tuple(Lua_ToPointer<T, 1>(L, tName), Lua_ToNumber<int, 2>(L));
+}
+
+// 试着将 idx:1 开始位置所在转为 T, bool
+template<typename T>
+inline std::tuple<T*, bool> Lua_ToTB(lua_State* const& L, char const* const& errMsg, char const* const& tName)
+{
+	if (lua_gettop(L) < 2)
+	{
+		luaL_error(L, "%s", errMsg);
+	}
+	return std::make_tuple(Lua_ToPointer<T, 1>(L, tName), Lua_ToBoolean<2>(L));
 }
 
 // 试着将 idx:1 所在转为 T, string
@@ -132,6 +147,18 @@ inline std::tuple<T*, std::pair<char const*, size_t>> Lua_ToTS(lua_State* const&
 	return std::make_tuple(Lua_ToPointer<T, 1>(L, tName), Lua_ToString<2>(L));
 }
 
+// 试着将 idx:1 所在转为 T, func
+template<typename T>
+inline std::tuple<T*, Lua_FuncHolder> Lua_ToTf(lua_State* const& L, char const* const& errMsg, char const* const& tName)
+{
+	if (lua_gettop(L) < 2)
+	{
+		luaL_error(L, "%s", errMsg);
+	}
+	return std::make_tuple(Lua_ToPointer<T, 1>(L, tName), Lua_ToFuncHolder<2>(L));
+}
+
+
 // 试着将 idx:1 开始位置所在转为 T
 template<typename T>
 inline std::tuple<T*> Lua_ToT(lua_State* const& L, char const* const& errMsg, char const* const& tName)
@@ -140,7 +167,7 @@ inline std::tuple<T*> Lua_ToT(lua_State* const& L, char const* const& errMsg, ch
 	{
 		luaL_error(L, "%s", errMsg);
 	}
-	return std::make_tuple(Lua_ToPointer<T1, 1>(L, t1Name));
+	return std::make_tuple(Lua_ToPointer<T, 1>(L, tName));
 }
 
 // 试着将 idx:1 开始位置所在转为 T1, T2

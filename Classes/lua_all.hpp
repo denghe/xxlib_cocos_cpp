@@ -10,6 +10,12 @@
 // todo: 限定 self, x, y 只有一种参数格式. 不可变长以简化设计
 // todo: 延迟到回调外执行的队列
 
+// 用于将参数转为全局以便立即在无法传参的函数中使用
+inline int gFuncId = 0;
+inline cocos2d::Touch* gTouch = nullptr;
+inline cocos2d::Event* gEvent = nullptr;
+inline std::vector<cocos2d::Touch*> const* gTouchs = nullptr;
+
 #include "lua_keys.hpp"
 #include "lua_funcholder.hpp"
 #include "lua_pushxxx.hpp"

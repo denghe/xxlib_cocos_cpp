@@ -8,30 +8,25 @@ inline void Lua_Register_cc(lua_State* const& L)
 	lua_setglobal(L, "cc");											// cc
 
 	// 创建 重启游戏 函数
-	lua_pushstring(L, "restart");									// cc, "restart"
-	lua_pushcclosure(L, [](lua_State* L)							// cc, "restart", func
+	Lua_NewFunc(L, "restart", [](lua_State* L)
 	{
-		var d = cocos2d::Director::getInstance();
-		d->mainLoopCallback = [d]
+		cocos2d::Director::getInstance()->mainLoopCallback = []
 		{
-			d->restart();
-			d->mainLoopCallback = nullptr;
+			// 这个函数只是打个重启标记. 下帧才开始重启
+			cocos2d::Director::getInstance()->restart();
 		};
 		return 0;
-	}, 0);
-	lua_rawset(L, -3);												// cc
+	});
 
 	// 创建 拿 scene 函数
-	lua_pushstring(L, "scene");
-	lua_pushcclosure(L, [](lua_State* L)
+	Lua_NewFunc(L, "scene", [](lua_State* L)
 	{
 		return Lua_NewUserdataMT(L, gScene, LuaKey_Scene);
-	}, 0);
-	lua_rawset(L, -3);
+	});
 
 	// todo: more like addSearchPath...
 
-	// 创建 cc.Xxxxxx 元表及函数
+	// 创建 cc.Xxxxxx 元表及函数									// cc
 	Lua_Register_Ref(L);
 	Lua_Register_Node(L);
 	Lua_Register_Scene(L);
@@ -46,6 +41,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_TextureCache(L);
 	// .....
 	// .....
+
 	lua_pop(L, 1);													//
 	assert(lua_gettop(L) == 0);
 }
