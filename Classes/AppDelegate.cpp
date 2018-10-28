@@ -189,12 +189,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 	// 原点坐标( 有些软按键设备原点就不是 0,0 )
 	origin = director->getVisibleOrigin();
 
-
-    
+	// 重启完成后重置运行时环境
 	cocos2d::Director::getInstance()->restartCallback = [this]
 	{
 		InitGlobals(false);
 	};
+
+	// 初始化运行时环境
 	InitGlobals();
 
 	return true;

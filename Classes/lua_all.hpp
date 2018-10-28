@@ -4,10 +4,8 @@
 #define var decltype(auto)
 #endif
 
+// todo: 补 create 系列函数
 // todo: 优化函数名和使用, 考虑参考 cocos lua 框架代码提供 return self 以便连写
-// todo: 根 L 上留个 funcs 不可取. 还是运行时取表安全
-// todo: L 都是一个值. 局部能省传参
-// todo: 限定 self, x, y 只有一种参数格式. 不可变长以简化设计
 // todo: 延迟到回调外执行的队列
 
 // 用于将参数转为全局以便立即在无法传参的函数中使用
