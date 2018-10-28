@@ -4,29 +4,23 @@ inline void Lua_Register_Touch(lua_State* const& L)
 {
 	Lua_NewCcMT(L, LuaKey_Touch, LuaKey_Ref);
 
-	lua_pushstring(L, "getLocation");
-	lua_pushcclosure(L, [](lua_State* L)
+	Lua_NewFunc(L, "getLocation", [](lua_State* L)
 	{
-		if (lua_gettop(L) < 1) return luaL_error(L, "getLocation error! need 1 args: self");
-		var o = Lua_ToPointer<cocos2d::Touch, 1>(L, LuaKey_Touch);
-		var v = o->getLocation();
-		lua_pushnumber(L, v.x);
-		lua_pushnumber(L, v.y);
+		var t = Lua_ToT<cocos2d::Touch>(L, "getLocation error! need 1 args: self", LuaKey_Touch);
+		var r = std::get<0>(t)->getLocation();
+		lua_pushnumber(L, r.x);
+		lua_pushnumber(L, r.y);
 		return 2;
-	}, 0);
-	lua_rawset(L, -3);
+	});
 
-	lua_pushstring(L, "getLocationInView");
-	lua_pushcclosure(L, [](lua_State* L)
+	Lua_NewFunc(L, "getLocationInView", [](lua_State* L)
 	{
-		if (lua_gettop(L) < 1) return luaL_error(L, "getLocationInView error! need 1 args: self");
-		var o = Lua_ToPointer<cocos2d::Touch, 1>(L, LuaKey_Touch);
-		var v = o->getLocationInView();
-		lua_pushnumber(L, v.x);
-		lua_pushnumber(L, v.y);
+		var t = Lua_ToT<cocos2d::Touch>(L, "getLocationInView error! need 1 args: self", LuaKey_Touch);
+		var r = std::get<0>(t)->getLocationInView();
+		lua_pushnumber(L, r.x);
+		lua_pushnumber(L, r.y);
 		return 2;
-	}, 0);
-	lua_rawset(L, -3);
+	});
 
 	lua_pop(L, 1);
 }

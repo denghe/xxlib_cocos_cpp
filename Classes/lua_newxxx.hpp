@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-// 创建一个 userdata 存对象指针, 并设置其元表
+// 创建一个 userdata 存对象指针, 并设置其元表. 返回 1
 inline int Lua_NewUserdataMT(lua_State* const& L, void* const& o, char const* const& mtKey)
 {
 	var ph = (void**)lua_newuserdata(L, sizeof(void**));	// ..., &o

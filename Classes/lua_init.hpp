@@ -31,6 +31,10 @@ inline int Lua_Main(lua_State* L)
 	// 加载常用库
 	luaL_openlibs(L);
 
+	// 注册 null 到全局
+	lua_pushlightuserdata(L, nullptr);								// null
+	lua_setglobal(L, LuaKey_null);									//
+
 	// 替换 print 的实现 for android 输出
 	lua_pushcclosure(L, [](lua_State* L)							// package, searchers, func
 	{
@@ -107,17 +111,16 @@ inline int Lua_Main(lua_State* L)
 	{
 		var L = gLua;
 
-		// root L[1] 已被放置了 函数表
-		assert(lua_gettop(L) == 1);									// funcs
+		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
 
 		// 拿出 loop, 执行之
-		lua_rawgetp(L, 1, (void*)LuaKey_FrameUpdateFunc);			// funcs, loop
-		if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))				// funcs
+		lua_rawgetp(L, -1, (void*)LuaKey_FrameUpdateFunc);			// funcs, loop
+		if (int r = lua_pcall(L, 0, 0, 0))							// funcs
 		{
 			auto s = lua_tostring(L, -1);
 			CCLOG("%d %s", r, (s ? s : ""));
-			lua_pop(L, 1);
 		}
+		lua_settop(L, 0);
 	};
 
 	assert(lua_gettop(L) == 0);
@@ -143,7 +146,7 @@ inline int Lua_Init()
 		lua_pop(L, 1);
 		return r;
 	}
-	lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		// funcs
 
+	assert(lua_gettop(L) == 0);										//
 	return 0;
 }

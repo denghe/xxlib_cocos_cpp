@@ -58,9 +58,6 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 					lua_settop(L, 0);											// 
 					return 0;
 				}, 0);
-				gFuncId = 0;
-				gTouchs = nullptr;
-				gEvent = nullptr;
 				if (int r = lua_pcall(L, 0, 0, 0))								//
 				{
 					cocos2d::log("%s", lua_tostring(L, -1));
@@ -99,9 +96,6 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 					lua_settop(L, 0);											// 
 					return 0;
 				}, 0);
-				gFuncId = 0;
-				gTouchs = nullptr;
-				gEvent = nullptr;
 				if (int r = lua_pcall(L, 0, 0, 0))								//
 				{
 					cocos2d::log("%s", lua_tostring(L, -1));
@@ -140,9 +134,6 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 					lua_settop(L, 0);											// 
 					return 0;
 				}, 0);
-				gFuncId = 0;
-				gTouchs = nullptr;
-				gEvent = nullptr;
 				if (int r = lua_pcall(L, 0, 0, 0))								//
 				{
 					cocos2d::log("%s", lua_tostring(L, -1));
@@ -181,9 +172,6 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 					lua_settop(L, 0);											// 
 					return 0;
 				}, 0);
-				gFuncId = 0;
-				gTouchs = nullptr;
-				gEvent = nullptr;
 				if (int r = lua_pcall(L, 0, 0, 0))								//
 				{
 					cocos2d::log("%s", lua_tostring(L, -1));
@@ -246,7 +234,6 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 				gEvent = e;
 				lua_pushcclosure(L, [](lua_State* L)							// cfunc
 				{
-					var L = gLua;
 					lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
 					lua_rawgeti(L, 1, gFuncId);									// funcs, func
 					Lua_NewUserdataMT(L, gEvent, LuaKey_Event);					// funcs, func, event
@@ -295,9 +282,6 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 					lua_settop(L, 0);											// 
 					return 0;
 				}, 0);
-				gFuncId = 0;
-				gTouch = nullptr;
-				gEvent = nullptr;
 				if (int r = lua_pcall(L, 0, 0, 0))								//
 				{
 					cocos2d::log("%s", lua_tostring(L, -1));
@@ -333,9 +317,6 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 					lua_settop(L, 0);											// 
 					return 0;
 				}, 0);
-				gFuncId = 0;
-				gTouch = nullptr;
-				gEvent = nullptr;
 				if (int r = lua_pcall(L, 0, 0, 0))								//
 				{
 					cocos2d::log("%s", lua_tostring(L, -1));
@@ -371,9 +352,6 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 					lua_settop(L, 0);											// 
 					return 0;
 				}, 0);
-				gFuncId = 0;
-				gTouch = nullptr;
-				gEvent = nullptr;
 				if (int r = lua_pcall(L, 0, 0, 0))								//
 				{
 					cocos2d::log("%s", lua_tostring(L, -1));

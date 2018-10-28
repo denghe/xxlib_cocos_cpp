@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-// todo: 调查 restart 时为啥 holder 析构没有执行
+// 注意: 当前 cocos 有 listener 析构泄露的 bug. 引用计数为 2. 删不掉. 导致 Lua_FuncHolder 也无法析构.
 
 // 被 std::function 携带, 当捕获列表析构发生时, 自动从 L 中反注册函数
 struct Lua_FuncHolder

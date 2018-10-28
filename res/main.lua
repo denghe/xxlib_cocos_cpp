@@ -29,16 +29,17 @@ yield = coroutine.yield
 local function mainLoop()
 	local yield = _G.yield
 	local scene = cc.scene()
-	sprite:setScale(1, 2)
-	sprite:setAnchorPoint(0,0)
+	sprite:setScaleXY(1, 2)
+	sprite:setAnchorPoint(0, 0)
 	while true do
-		for i = 1, 420 do
+		for i = 1, 60 do
 			yield()
 			sprite:setRotation(i)
 			sprite:setPosition(i+200, i+200)
 		end
-		--cc.restart()
-		listener:onTouchesBegan()
+
+		-- 已知问题: listener 在 restart 时不会被回收. refs = 2
+		cc.restart()
 	end
 end
 gMainLoopCoro = coroutine_create(mainLoop)

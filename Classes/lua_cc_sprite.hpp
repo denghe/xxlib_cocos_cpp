@@ -4,15 +4,13 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 {
 	Lua_NewCcMT(L, LuaKey_Sprite, LuaKey_Node);
 
-	lua_pushstring(L, "new");
-	lua_pushcclosure(L, [](lua_State* L)
+	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
 		var o = new (std::nothrow) cocos2d::Sprite();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_NewUserdataMT(L, o, LuaKey_Sprite);
-	}, 0);
-	lua_rawset(L, -3);
+	});
 
 	Lua_NewFunc(L, "initWithTexture", [](lua_State* L)
 	{
