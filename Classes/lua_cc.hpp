@@ -12,11 +12,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	{
 		cocos2d::Director::getInstance()->mainLoopCallback = []
 		{
-			gScene->removeAllChildrenWithCleanup(true);
-			cocos2d::Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
-
-			// 这个函数只是打个重启标记. 下帧才开始重启
-			cocos2d::Director::getInstance()->restart();		// 已知问题: listener 绑的 function 似乎并没被正确回收
+			cocos2d::Director::getInstance()->restart();	// 下帧重启
 		};
 		return 0;
 	});
