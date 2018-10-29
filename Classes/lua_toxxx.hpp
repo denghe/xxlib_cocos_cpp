@@ -60,13 +60,13 @@ inline Lua_FuncHolder Lua_ToFuncHolder(lua_State* const& L)
 {
 	if (lua_islightuserdata(L, idx) && lua_touserdata(L, idx) == nullptr)
 	{
-		return Lua_FuncHolder(0);
+		return Lua_FuncHolder(L, 0);
 	}
 	if (!lua_isfunction(L, idx))
 	{
 		luaL_error(L, "error! args[%d] is not function.", idx);
 	}
-	return Lua_FuncHolder(idx);
+	return Lua_FuncHolder(L, idx);
 }
 
 

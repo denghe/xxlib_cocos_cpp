@@ -26,8 +26,6 @@ inline int get_string_for_print(lua_State* L, std::string* out)
 
 inline int Lua_Main(lua_State* L)
 {
-	assert(L == gLua);
-
 	// 加载常用库
 	luaL_openlibs(L);
 

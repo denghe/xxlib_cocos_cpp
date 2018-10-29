@@ -22,15 +22,15 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 		}
 		var domain = Lua_ToString<1>(L);
 		var timeoutMS = Lua_ToNumber<int, 2>(L);
-		var callback = Lua_ToFuncHolder<3>(L);
-		if (!callback.funcId)
+		var f = Lua_ToFuncHolder<3>(L);
+		if (!f.funcId)
 		{
 			luaL_error(L, "error! args[3] is not function.");
 		}
-		uv->GetIPList(domain.first, [callback = std::move(callback)](xx::List<xx::String>* ips)
+		uv->GetIPList(domain.first, [f = std::move(f)](xx::List<xx::String>* ips)
 		{
 			var L = gLua;
-			gFuncId = callback.funcId;
+			gFuncId = f.funcId;
 			gListString = ips;
 			lua_pushcclosure(L, [](lua_State* L)							// cfunc
 			{
