@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // todo
 // 常用于压入一串返回值并 return 其个数
@@ -6,7 +6,7 @@
 template<typename T>
 void Lua_Push(T const& v)
 {
-	if constexpr (std::is_integer<T, int>)
+	if constexpr (std::is_integral_v<T>)
 	{
 
 	}
