@@ -203,6 +203,12 @@
     <ClInclude Include="..\Classes\lua_xx_bbuffer.hpp">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\lua_xx_uvtcpclient.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_xx_object.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\xxlib\lua.natvis">

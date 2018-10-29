@@ -1,4 +1,7 @@
 ﻿#pragma once
+
+// 这个对象受 lua 管理生命周期. Create 出来之后不需要主动释放
+// 不会被 cpp 层持有, 传入后都是 memcpy
 struct Lua_BBuffer : public xx::BBuffer
 {
 	Lua_BBuffer() : BBuffer(mp) {}
@@ -162,7 +165,7 @@ struct Lua_BBuffer : public xx::BBuffer
 		{
 			luaL_error(L, "less arg nums. expect %d+", top);
 		}
-		return *Lua_ToPointer<Lua_BBuffer, 1>(L, LuaKey_BBuffer);
+		return *Lua_ToPointer<Lua_BBuffer*, 1>(L, LuaKey_BBuffer);
 	}
 
 	inline static int GetDataLen(lua_State* L)
@@ -557,7 +560,7 @@ struct Lua_BBuffer : public xx::BBuffer
 				Write((uint8_t)2);
 				if (WriteOffset(L, i))
 				{
-					var bb = Lua_ToPointer<Lua_BBuffer>(L, i, LuaKey_BBuffer);
+					var bb = Lua_ToPointer<Lua_BBuffer*>(L, i, LuaKey_BBuffer);
 					if (!bb)
 					{
 						luaL_error(L, "WriteObject only support userdata is BBuffer.");

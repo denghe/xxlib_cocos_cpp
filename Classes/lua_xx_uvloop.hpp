@@ -3,25 +3,22 @@
 // 向 lua 映射全局的 UvTcpClient 表/元表
 inline void Lua_Register_UvLoop(lua_State* const& L)
 {
-	Lua_NewMT(L, LuaKey_UvLoop);									// t
+	Lua_NewMT(L, LuaKey_UvLoop);									// xx, t
 
-	//Lua_NewFunc(L, "CreateTcpClient", [](lua_State* L)
-	//{
-	//	//uv->CreateTcpClient();
-	//	// todo
-	//	//Lua_NewUserdataMT(L, )
-	//	return 1;
-	//});
+	Lua_NewFunc(L, "Xxx", [](lua_State* L)
+	{
+		return 0;
+	});
 
 	Lua_NewFunc(L, "GetIPList", [](lua_State* L)
 	{
 		var numArgs = lua_gettop(L);
 		if (numArgs < 3)
 		{
-			luaL_error(L, "GetIPList error! need 3 args: domain, timeoutMS, callback.");
+			luaL_error(L, "GetIPList error! need 3 args: domain, timeoutSec, callback.");
 		}
 		var domain = Lua_ToString<1>(L);
-		var timeoutMS = Lua_ToNumber<int, 2>(L);
+		var timeoutMS = Lua_ToNumber<double, 2>(L) * 1000;
 		var f = Lua_ToFuncHolder<3>(L);
 		if (!f.funcId)
 		{
@@ -60,5 +57,5 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 		return 0;
 	});
 
-	lua_pop(L, 1);													//
+	lua_pop(L, 1);													// xx
 }

@@ -3,6 +3,7 @@
 inline const char* const LuaKey_null = "null";
 
 inline const char* const LuaKey_xx = "xx";
+inline const char* const LuaKey_Object = "Object";
 inline const char* const LuaKey_MemPool = "MemPool";
 inline const char* const LuaKey_BBuffer = "BBuffer";
 inline const char* const LuaKey_UvLoop = "UvLoop";

@@ -4,7 +4,8 @@ this.stateGroupName = "main"
 this.opened = false
 
 this.Open = function()
-	assert(not this.opened)
+	assert(not this.opened)	-- 流程检查
+	assert(this.autoCloseDelayFrames)	-- 参数检查
 	
 	-- 加载一张贴图
 	local texture = cc.TextureCache.addImage("hi.png")
@@ -34,7 +35,7 @@ this.Open = function()
 		sprite:setScaleXY(1, 1.5)
 		sprite:setAnchorPoint(0, 0)
 		--while true do
-			for i = 1, 180 do
+			for i = 1, this.autoCloseDelayFrames do
 				yield()
 				sprite:setRotation(i)
 				sprite:setPosition(i+200, i+200)
@@ -45,7 +46,7 @@ this.Open = function()
 	
 	-- 定义关闭函数
 	this.Close = function()
-		assert(this.opened)
+		assert(this.opened)	-- 流程检查
 
 		-- 移除精灵( 顺带会移除其 bind 的 listener )
 		sprite:removeFromParent()

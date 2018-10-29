@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // todo
 // 常用于压入一串返回值并 return 其个数

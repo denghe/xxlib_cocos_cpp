@@ -111,8 +111,7 @@ gScene = cc.scene()
 -- 适合在协程环境使用
 gGetIPList = function(domain, timeoutSec)
 	local rt = { 1 }
-	xx.UvLoop.GetIPList(domain, timeoutSec * 1000, function(...)
-		print("111")
+	xx.UvLoop.GetIPList(domain, timeoutSec, function(...)
 		rt[1] = {...}
 	end)
 	while rt[1] == 1 do
@@ -162,8 +161,9 @@ go(function()
 	end
 end)
 
--- 模拟加载一个状态. 如果状态关闭了, 再次打开它. 3 次后重启动程序
+-- 模拟加载一个状态. 3 秒后状态关闭. 再次打开它. 3 次后重启动程序
 local panel = require "panel.lua"
+panel.autoCloseDelayFrames = 180
 go(function()
 	for i = 1, 3 do
 		gStates_Open(panel)
