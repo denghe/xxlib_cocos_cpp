@@ -1,4 +1,4 @@
--- test require
+ï»¿-- test require
 local f = require "xxx.lua"
 f()
 
@@ -59,7 +59,7 @@ local co = coroutine_create(function()
 	end
 end)
 
--- ×¢²áÃ¿Ö¡»Øµ÷£¬»Ö¸´ co Ğ­³ÌÖ´ĞĞ
+-- æ³¨å†Œæ¯å¸§å›è°ƒï¼Œæ¢å¤ co åç¨‹æ‰§è¡Œ
 cc.mainLoopCallback(function()
 	local ok, msg = resume(co)
 	if not ok then
