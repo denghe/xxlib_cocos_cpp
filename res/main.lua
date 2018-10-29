@@ -40,13 +40,12 @@ sprite:addEventListener(listener)
 listener:release()
 
 -- test coroutine
-coroutine_create = coroutine.create
-resume = coroutine.resume
-yield = coroutine.yield
+local coroutine_create = coroutine.create
+local coroutine_state = coroutine.state
+local resume = coroutine.resume
+local yield = coroutine.yield
 
-local function mainLoop()
-	local yield = _G.yield
-	local scene = cc.scene()
+local co = coroutine_create(function()
 	sprite:setScaleXY(1, 2)
 	sprite:setAnchorPoint(0, 0)
 	while true do
@@ -58,5 +57,13 @@ local function mainLoop()
 
 		cc.restart()
 	end
-end
-gMainLoopCoro = coroutine_create(mainLoop)
+end)
+
+-- 注册每帧回调，恢复 co 协程执行
+cc.mainLoopCallback(function()
+	local ok, msg = resume(co)
+	if not ok then
+		print("resume not ok, msg = "..msg)
+		cc.mainLoopCallback(null)
+	end
+end)

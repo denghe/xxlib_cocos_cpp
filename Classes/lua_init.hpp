@@ -87,45 +87,10 @@ inline int Lua_Main(lua_State* L)
 	if (int r = luaL_dostring(L, "require \"main.lua\""))			//
 	{
 		auto s = lua_tostring(L, -1);
-		CCLOG("%d %s", r, (s ? s : ""));
+		cocos2d::log("%d %s", r, (s ? s : ""));
 		lua_pop(L, 1);
 		return 0;
 	}
-
-	// 拿出函数表
-	lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);		// funcs
-
-	// 加载 loop.lua
-	if (int r = luaL_dostring(L, "return require \"loop.lua\""))	// funcs, loop
-	{
-		auto s = lua_tostring(L, -1);
-		CCLOG("%d %s", r, (s ? s : ""));
-		lua_pop(L, 1);
-		return 0;
-	}
-
-	// 将 loop 放入函数表
-	lua_rawsetp(L, 1, (void*)LuaKey_FrameUpdateFunc);				// funcs
-	lua_pop(L, 1);													//
-
-	// 注册每帧回调 cpp 函数
-	cocos2d::Director::getInstance()->mainLoopCallback = []
-	{
-		// 先执行 uvloop
-		uv->Run(xx::UvRunMode::NoWait);
-
-		var L = gLua;
-		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
-
-		// 拿出 loop, 执行之
-		lua_rawgetp(L, -1, (void*)LuaKey_FrameUpdateFunc);			// funcs, loop
-		if (int r = lua_pcall(L, 0, 0, 0))							// funcs
-		{
-			auto s = lua_tostring(L, -1);
-			CCLOG("%d %s", r, (s ? s : ""));
-		}
-		lua_settop(L, 0);
-	};
 
 	assert(lua_gettop(L) == 0);
 	return 0;
@@ -146,7 +111,7 @@ inline int Lua_Init()
 	if (int r = lua_pcall(L, 0, LUA_MULTRET, 0))					//
 	{
 		auto s = lua_tostring(L, -1);
-		CCLOG("%d %s", r, (s ? s : ""));
+		cocos2d::log("%d %s", r, (s ? s : ""));
 		lua_pop(L, 1);
 		return r;
 	}

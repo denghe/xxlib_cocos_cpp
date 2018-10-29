@@ -27,6 +27,50 @@ inline void Lua_Register_cc(lua_State* const& L)
 		return Lua_NewUserdataMT(L, gScene, LuaKey_Scene);
 	});
 
+	// 创建 注册帧回调 函数
+	Lua_NewFunc(L, "mainLoopCallback", [](lua_State* L)
+	{
+		if (lua_gettop(L) < 1)
+		{
+			return luaL_error(L, "mainLoopCallback error! need 1 args: func/null");
+		}
+		var f = Lua_ToFuncHolder<1>(L);
+		if (f.funcId)
+		{
+			cocos2d::Director::getInstance()->mainLoopCallback = [f = std::move(f)]
+			{
+				uv->Run(xx::UvRunMode::NoWait);
+
+				var L = gLua;
+				gFuncId = f.funcId;
+				lua_pushcclosure(L, [](lua_State* L)							// cfunc
+				{
+					lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
+					lua_rawgeti(L, 1, gFuncId);									// funcs, func
+					lua_call(L, 0, 0);											// funcs, ...?
+					lua_settop(L, 0);											// 
+					return 0;
+				}, 0);
+				if (int r = lua_pcall(L, 0, 0, 0))								//
+				{
+					cocos2d::log("%s", lua_tostring(L, -1));
+					lua_pop(L, 1);
+				}
+			};
+		}
+		else
+		{
+			cocos2d::Director::getInstance()->mainLoopCallback = []
+			{
+				uv->Run(xx::UvRunMode::NoWait);
+			};
+		}
+
+		return 0;
+	});
+
+
+
 	// todo: more like addSearchPath...
 
 	// 创建 cc.Xxxxxx 元表及函数									// cc
