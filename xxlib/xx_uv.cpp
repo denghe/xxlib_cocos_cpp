@@ -44,31 +44,6 @@ static void AllocCB(uv_handle_t* h, size_t suggested_size, uv_buf_t* buf) noexce
 }
 
 // 地址转为 IP
-static int AddressToIP(sockaddr_in* addr, char* buf, size_t bufLen, bool includePort = true) noexcept
-{
-	int r = 0;
-	if (addr->sin_family == AF_INET6)
-	{
-		if ((r = uv_ip6_name((sockaddr_in6*)addr, buf, (int)bufLen))) return r;
-		if (includePort)
-		{
-			auto dataLen = strlen(buf);
-			sprintf(buf + dataLen, ":%d", ntohs(((sockaddr_in6*)addr)->sin6_port));
-		}
-	}
-	else
-	{
-		if ((r = uv_ip4_name(addr, buf, (int)bufLen))) return r;
-		if (includePort)
-		{
-			auto dataLen = strlen(buf);
-			sprintf(buf + dataLen, ":%d", ntohs(addr->sin_port));
-		}
-	}
-	return 0;
-}
-
-
 static int FillIP(sockaddr_in6& saddr, char* buf, size_t bufLen, bool includePort = true) noexcept
 {
 	int r = 0;
