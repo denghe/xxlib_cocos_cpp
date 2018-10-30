@@ -121,6 +121,17 @@ gGetIPList = function(domain, timeoutSec)
 end
 
 
+-- 网络解包并返回. 失败返回 nil
+gBBToObject = function(bb)
+	if bb ~= nil then
+		local success, pkg = pcall(function() return bb:ReadRoot() end)
+		if success then
+			return pkg
+		end
+	end
+end
+
+
 -- 注册每帧执行函数
 cc.mainLoopCallback(function()
 	-- 隐藏执行 uv.Run(Once)

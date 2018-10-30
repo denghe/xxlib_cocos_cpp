@@ -173,9 +173,6 @@
     <ClInclude Include="..\Classes\lua_cc_touch.hpp">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_funcholder.hpp">
-      <Filter>lua</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\lua_keys.hpp">
       <Filter>lua</Filter>
     </ClInclude>
@@ -207,6 +204,9 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\lua_to_xxx.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_func.hpp">
       <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>

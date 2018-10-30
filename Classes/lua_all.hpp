@@ -7,10 +7,10 @@
 // todo: 优化函数名和使用, 考虑参考 cocos lua 框架代码提供 return self 以便连写
 
 #include "lua_keys.hpp"
-#include "lua_funcholder.hpp"
-#include "lua_pushxxx.hpp"
-#include "lua_newxxx.hpp"
-#include "lua_toxxx.hpp"
+#include "lua_func.hpp"
+#include "lua_pushcall.hpp"
+#include "lua_new_xxx.hpp"
+#include "lua_to_xxx.hpp"
 
 #include "lua_cc_ref.hpp"
 #include "lua_cc_node.hpp"

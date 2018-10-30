@@ -14,6 +14,7 @@ inline const char* const LuaKey_cc = "cc";
 
 
 struct Lua_BBuffer;
+struct Lua_Func;
 
 template<typename T>
 struct TypeNames;
