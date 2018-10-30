@@ -10,6 +10,7 @@ struct Lua_FuncHolder
 
 	// 将函数放入 funcs 表. 保存 key.
 	int funcId = 0;
+	Lua_FuncHolder() = default;
 	Lua_FuncHolder(lua_State* const& L, int const& idx)
 	{
 		if (!idx) return;

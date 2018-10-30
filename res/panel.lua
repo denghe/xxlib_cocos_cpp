@@ -6,15 +6,19 @@ this.opened = false
 this.Open = function()
 	assert(not this.opened)	-- 流程检查
 	assert(this.autoCloseDelayFrames)	-- 参数检查
-	
+
+	-- 绘制一个精灵
+	--[[
 	-- 加载一张贴图
 	local texture = cc.TextureCache.addImage("hi.png")
 
-	-- 绘制一个精灵
 	local sprite = cc.Sprite.new()
 	sprite:initWithTexture(texture)
 	gScene:addChild(sprite)
 	sprite:release()
+	]]
+	local sprite = cc.Sprite.createWithFileName("hi.png")
+							:SetOAP(gScene, 0.5, 0.5, 100, 100);
 
 	-- 创建单个点击监听器
 	local listener = cc.EventListenerTouchOneByOne.new()
@@ -30,17 +34,15 @@ this.Open = function()
 	sprite:addEventListener(listener)
 	listener:release()
 
-	-- 创建动画播放协程. 3 秒后 Close()
+	-- 创建动画播放协程. autoCloseDelayFrames 帧后 Close()
 	gCoros_Push(function()
 		sprite:setScaleXY(1, 1.5)
 		sprite:setAnchorPoint(0, 0)
-		--while true do
-			for i = 1, this.autoCloseDelayFrames do
-				yield()
-				sprite:setRotation(i)
-				sprite:setPosition(i+200, i+200)
-			end
-		--end
+		for i = 1, this.autoCloseDelayFrames do
+			yield()
+			sprite:setRotation(i)
+			sprite:setPosition(100 + i, 100 + i)
+		end
 		gStates_Close(this)
 	end)
 	
