@@ -96,7 +96,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 
 		var o = cocos2d::Sprite::create(std::get<0>(t));
 		if (!o) return 0;
-		Lua_NewUserdataMT(L, o, LuaKey_Node);
+		Lua_NewUserdataMT(L, o, LuaKey_Sprite);
 		std::get<1>(t)->addChild(o);
 		o->setPosition(std::get<2>(t), std::get<3>(t));
 		o->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });
