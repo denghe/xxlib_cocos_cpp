@@ -14,7 +14,7 @@ int Lua_Push(lua_State* const& L, T const& v)
 	{
 		lua_pushnumber(L, v);
 	}
-	else if constexpr (std::is_same_v<T, boolean>)
+	else if constexpr (std::is_same_v<T, bool>)
 	{
 		lua_pushboolean(L, (int)v);
 	}
@@ -46,10 +46,17 @@ int Lua_Push(lua_State* const& L, T const& v)
 	return 1;
 }
 
-template<typename A, typename...Args>
-void Lua_PushsCore(lua_State* const& L, A const& arg, Args const&...args)
+template<typename Arg, typename...Args>
+void Lua_PushsCore(lua_State* const& L, Arg const& arg)
 {
 	Lua_Push(L, arg);
+}
+
+template<typename Arg, typename...Args>
+void Lua_PushsCore(lua_State* const& L, Arg const& arg, Args const&...args)
+{
+	Lua_Push(L, arg);
+	Lua_PushsCore(L, args...);
 }
 
 // 压入一串返回值并 return 其个数

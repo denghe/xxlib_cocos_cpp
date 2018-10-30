@@ -31,7 +31,7 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		v.assign(s, len);
 		return;
 	}
-	else if constexpr (std::is_same_v<T, boolean>)
+	else if constexpr (std::is_same_v<T, bool>)
 	{
 		if (!lua_isboolean(L, idx)) goto LabError;
 		v = lua_toboolean(L, idx);
@@ -54,7 +54,8 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 	}
 	else
 	{
-		static_assert(false);
+		//static_assert(false);
+		assert(false);
 	}
 LabError:
 	luaL_error(L, "error! args[%d] is not %s", idx, TypeNames<T>::value);
