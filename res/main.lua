@@ -160,7 +160,7 @@ end)
 -- 模拟 2 秒一次域名解析成 ip 列表
 go(function()
 	while true do
-		local ips = gGetIPList("www.baidu.com", 2)
+		local ips = gGetIPList("www.baidu.com", 5)
 		if #ips == 0 then
 			print("GetIPList fail or timeout")
 		else

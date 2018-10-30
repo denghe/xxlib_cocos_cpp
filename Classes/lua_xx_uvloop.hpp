@@ -12,7 +12,7 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 		{
 			luaL_error(L, "error! args[3] is not function.");
 		}
-		uv->GetIPList(std::get<0>(t).c_str(), [f = std::move(std::get<2>(t))](xx::List<xx::String>* ips)
+		uv->GetIPList(std::get<0>(t).c_str(), [f = std::move(std::get<2>(t))](xx::List<xx::String_p>* ips)
 		{
 			var L = gLua;
 			if (!ips || !ips->dataLen)

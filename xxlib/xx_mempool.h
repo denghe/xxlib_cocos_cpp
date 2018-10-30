@@ -70,6 +70,8 @@ namespace xx
 	class String;
 	template <typename TK, typename TV>
 	class Dict;
+	template <typename TK>
+	class HashSet;
 
 
 	/***********************************************************************************/
@@ -190,6 +192,9 @@ namespace xx
 		// BBuffer 序列化 & 反序列化时会用到
 		Dict<void*, size_t>* ptrStore;
 		Dict<size_t, std::pair<void*, uint16_t>>* idxStore;
+
+		// 域名解析去重会用到
+		HashSet<xx::Ptr<xx::String>>* strs;
 	};
 
 

@@ -86,15 +86,15 @@ namespace xx
 		UvLoop& loop;
 		String_p domainName;
 		int indexAtDict = -1;
-		std::function<void(List<String>*)> cb;
+		std::function<void(List<String_p>*)> cb;
 		xx::Weak<UvTimer> timeouter;
-		List<String> results;
+		List<String_p> results;
 
 		void* hints = nullptr;
 		void* resolver = nullptr;
 		static void OnResolvedCBImpl(void *resolver, int status, void *res);
 
-		UvDnsVisitor(UvLoop* const& loop, String_p& domainName, std::function<void(List<String>*)>&& cb, int timeoutMS = 0);
+		UvDnsVisitor(UvLoop* const& loop, String_p& domainName, std::function<void(List<String_p>*)>&& cb, int timeoutMS = 0);
 		~UvDnsVisitor();
 	};
 
@@ -131,7 +131,7 @@ namespace xx
 
 		// 根据域名得到 ip 列表. 超时触发空值回调. 如果反复针对相同域名发起查询, 且上次的查询还没触发回调, 将返回 false.
 		// 回调参数 bool 为 true: ipv4. false: ipv6
-		bool GetIPList(char const* const& domainName, std::function<void(List<String>*)>&& cb, int timeoutMS = 0);
+		bool GetIPList(char const* const& domainName, std::function<void(List<String_p>*)>&& cb, int timeoutMS = 0);
 
 
 		// 延迟执行, 以实现执行 需要出了当前函数才能执行的代码. 本质是 timeoutMS, 0 的 timer, 函数执行过后 timer 将自杀. 如果 timer 创建失败将返回非 0.

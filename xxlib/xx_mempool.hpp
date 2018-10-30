@@ -20,10 +20,12 @@ namespace xx
 		headers.fill(nullptr);
 		MPCreateTo(ptrStore);
 		MPCreateTo(idxStore);
+		MPCreateTo(strs);
 	}
 
 	inline MemPool::~MemPool() noexcept
 	{
+		Release(strs);
 		Release(idxStore);
 		Release(ptrStore);
 		for (auto header : headers)

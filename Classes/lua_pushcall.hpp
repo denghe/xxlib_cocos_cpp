@@ -26,6 +26,10 @@ int Lua_Push(lua_State* const& L, T const& v)
 	{
 		lua_pushlstring(L, v.buf, v.dataLen);
 	}
+	else if constexpr (std::is_same_v<T, xx::String_p>)
+	{
+		lua_pushlstring(L, v->buf, v->dataLen);
+	}
 	else if constexpr (std::is_same_v<T, Lua_Func>)
 	{
 		assert(v.funcId);

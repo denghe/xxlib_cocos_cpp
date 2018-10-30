@@ -220,7 +220,7 @@ int xx::UvLoop::DelayExecute(std::function<void()>&& func, int const& timeoutMS)
 
 
 
-bool xx::UvLoop::GetIPList(char const* const& domainName, std::function<void(List<String>*)>&& cb, int timeoutMS)
+bool xx::UvLoop::GetIPList(char const* const& domainName, std::function<void(List<String_p>*)>&& cb, int timeoutMS)
 {
 	auto s = mempool->Str(domainName);
 	if (dnsVisitors.Find(s) != -1) return false;
@@ -238,13 +238,14 @@ bool xx::UvLoop::GetIPList(char const* const& domainName, std::function<void(Lis
 
 
 
-xx::UvDnsVisitor::UvDnsVisitor(UvLoop* const& loop, String_p& domainName, std::function<void(List<String>*)>&& cb, int timeoutMS)
+xx::UvDnsVisitor::UvDnsVisitor(UvLoop* const& loop, String_p& domainName, std::function<void(List<String_p>*)>&& cb, int timeoutMS)
 	: xx::Object(loop->mempool)
 	, loop(*loop)
 	, domainName(domainName)
 	, cb(std::move(cb))
 	, results(loop->mempool)
 {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 	hints = Alloc(sizeof(addrinfo));
 	if (!hints) throw - 1;
 	xx::ScopeGuard sg_hints([&]() noexcept { Free(hints); hints = nullptr; });
@@ -252,10 +253,7 @@ xx::UvDnsVisitor::UvDnsVisitor(UvLoop* const& loop, String_p& domainName, std::f
 	((addrinfo*)hints)->ai_family = PF_UNSPEC;
 	((addrinfo*)hints)->ai_socktype = SOCK_STREAM;
 	((addrinfo*)hints)->ai_protocol = 0;// IPPROTO_TCP;
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 	((addrinfo*)hints)->ai_flags = AI_DEFAULT;
-#else
-	((addrinfo*)hints)->ai_flags = 0;
 #endif
 
 	resolver = Alloc(sizeof(uv_getaddrinfo_t), { this, memHeader().versionNumber });
@@ -280,7 +278,9 @@ xx::UvDnsVisitor::UvDnsVisitor(UvLoop* const& loop, String_p& domainName, std::f
 
 	sg_resolver2.Cancel();
 	sg_resolver.Cancel();
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 	sg_hints.Cancel();
+#endif
 }
 
 xx::UvDnsVisitor::~UvDnsVisitor()
@@ -316,48 +316,33 @@ void xx::UvDnsVisitor::OnResolvedCBImpl(void *resolver, int status, void *res)
 	{
 		auto ai = (addrinfo*)res;
 
-		// 已知苹果下面会返回前后两条重复的 ip 地址
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-		xx::String s1(self->mempool);
+		// 已知 ios & android 下面会返回重复的 ip 地址. 保险起见去重一下
+		auto mp = self->mempool;
+		mp->strs->Clear();
 		do
 		{
-			xx::String s2(self->mempool);
-			s2.Resize(32);
+			auto s = mp->Str();
+			s->Resize(64);
 			if (ai->ai_addr->sa_family == AF_INET6)
 			{
-				uv_ip6_name((sockaddr_in6*)ai->ai_addr, s2.buf, s2.bufLen);
+				uv_ip6_name((sockaddr_in6*)ai->ai_addr, s->buf, s->bufLen);
 			}
 			else
 			{
-				uv_ip4_name((sockaddr_in*)ai->ai_addr, s2.buf, s2.bufLen);
-}
-			s2.dataLen = strlen(s2.buf);
-			if (!s1.Equals(s2))
-			{
-				s1.Assign(s2);
-				self->results.Add(std::move(s2));
+				uv_ip4_name((sockaddr_in*)ai->ai_addr, s->buf, s->bufLen);
 			}
+			s->dataLen = strlen(s->buf);
+			mp->strs->Add(s);
 			ai = ai->ai_next;
-#else
-		do
-		{
-			auto& s = self->results.Emplace(self->mempool);
-			s.Resize(32);
-			if (ai->ai_addr->sa_family == AF_INET6)
-			{
-				uv_ip6_name((sockaddr_in6*)ai->ai_addr, s.buf, s.bufLen);
-			}
-			else
-			{
-				uv_ip4_name((sockaddr_in*)ai->ai_addr, s.buf, s.bufLen);
-			}
-			s.dataLen = strlen(s.buf);
-			ai = ai->ai_next;
-#endif
 		} while (ai);
-
 		uv_freeaddrinfo((addrinfo*)res);
+
+		for (decltype(auto) s : *mp->strs)
+		{
+			self->results.Add(s);
 		}
+		mp->strs->Clear();
+	}
 
 	if (self->cb)
 	{
