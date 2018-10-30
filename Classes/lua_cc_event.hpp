@@ -2,7 +2,7 @@
 
 inline void Lua_Register_Event(lua_State* const& L)
 {
-	Lua_NewMT(L, LuaKey_Event, LuaKey_Ref);
+	Lua_NewMT(L, TypeNames<cocos2d::Event*>::value, TypeNames<cocos2d::Ref*>::value);
 
 	// event->getCurrentTarget()
 

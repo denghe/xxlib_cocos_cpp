@@ -1,17 +1,5 @@
 ﻿#pragma once
 
-// 创建一个 userdata 存对象指针, 并设置其元表. 返回 1
-template<typename T = void*>
-inline int Lua_NewUserdataMT(lua_State* const& L, T const& o, char const* const& mtKey)
-{
-	if (!o) return 0;
-	var ph = (T*)lua_newuserdata(L, sizeof(T));						// ..., &o
-	*ph = o;
-	lua_rawgetp(L, LUA_REGISTRYINDEX, mtKey);						// ..., &o, mt
-	lua_setmetatable(L, -2);										// ..., &o
-	return 1;
-}
-
 // 创建 ??.元表 到栈顶. 同时在注册表里面也存一份
 inline void Lua_NewMT(lua_State* const& L, char const* const& mtKey, char const* const& parentMtKey = nullptr)
 {

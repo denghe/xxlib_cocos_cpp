@@ -101,7 +101,7 @@ struct Lua_BBuffer : public xx::BBuffer
 		lua_pushvalue(L, -1);								// mt, mt
 		lua_setfield(L, -2, "__metatable");					// mt
 
-		lua_setglobal(L, LuaKey_BBuffer);					// 
+		lua_setglobal(L, TypeNames<xx::BBuffer*>::value);	// 
 	}
 
 
@@ -123,7 +123,7 @@ struct Lua_BBuffer : public xx::BBuffer
 	inline static int Create(lua_State* L)
 	{
 		var self = *(Lua_BBuffer**)lua_newuserdata(L, sizeof(void*));	// ..., ud
-		lua_getglobal(L, LuaKey_BBuffer);					// ..., ud, mt
+		lua_getglobal(L, TypeNames<xx::BBuffer*>::value);	// ..., ud, mt
 
 		if (!(self = mp->Create<Lua_BBuffer>()))
 		{
@@ -149,7 +149,7 @@ struct Lua_BBuffer : public xx::BBuffer
 		lua_getfield(L, 1, "typeId");						// t, int
 		var typeId = (int)lua_tointeger(L, -1);
 
-		lua_pushlightuserdata(L, (void*)LuaKey_BBuffer);	// t, int, name
+		lua_pushlightuserdata(L, (void*)TypeNames<xx::BBuffer*>::value);	// t, int, name
 		lua_rawget(L, LUA_REGISTRYINDEX);					// t, int, typeIdProtos
 		lua_pushvalue(L, 1);								// t, int, typeIdProtos, t
 		lua_rawseti(L, -2, typeId);							// t, int, typeIdProtos
@@ -673,7 +673,7 @@ struct Lua_BBuffer : public xx::BBuffer
 
 		if (typeId > 2)		// 1, 2 没有 proto
 		{
-			lua_pushlightuserdata(L, (void*)LuaKey_BBuffer);
+			lua_pushlightuserdata(L, (void*)TypeNames<xx::BBuffer*>::value);
 			lua_rawget(L, LUA_REGISTRYINDEX);	// bb, ..., typeIdProtos
 			lua_rawgeti(L, -1, typeId);			// bb, ..., typeIdProtos, proto?
 			if (lua_isnil(L, -1))

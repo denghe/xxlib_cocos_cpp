@@ -2,14 +2,14 @@
 
 inline void Lua_Register_Sprite(lua_State* const& L)
 {
-	Lua_NewMT(L, LuaKey_Sprite, LuaKey_Node);
+	Lua_NewMT(L, TypeNames<cocos2d::Sprite*>::value, TypeNames<cocos2d::Node*>::value);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
 		var o = new (std::nothrow) cocos2d::Sprite();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
-		return Lua_NewUserdataMT(L, o, LuaKey_Sprite);
+		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "initWithTexture", [](lua_State* L)
@@ -43,35 +43,35 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		var o = cocos2d::Sprite::create();
-		return Lua_NewUserdataMT(L, o, LuaKey_Sprite);
+		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "createWithFileName", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<std::string>(L, "createWithFileName error! need 1 args: pic file name");
 		var o = cocos2d::Sprite::create(std::get<0>(t));
-		return Lua_NewUserdataMT(L, o, LuaKey_Sprite);
+		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "createWithSpriteFrame", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::SpriteFrame*>(L, "createWithSpriteFrame error! need 1 args: spriteFrame");
 		var o = cocos2d::Sprite::createWithSpriteFrame(std::get<0>(t));
-		return Lua_NewUserdataMT(L, o, LuaKey_Sprite);
+		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "createWithSpriteFrameName", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<std::string>(L, "createWithSpriteFrameName error! need 1 args: sprite frame name");
 		var o = cocos2d::Sprite::createWithSpriteFrameName(std::get<0>(t));
-		return Lua_NewUserdataMT(L, o, LuaKey_Sprite);
+		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "createWithTexture", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::Texture2D*>(L, "createWithTexture error! need 1 args: texture");
 		var o = cocos2d::Sprite::createWithTexture(std::get<0>(t));
-		return Lua_NewUserdataMT(L, o, LuaKey_Sprite);
+		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "setSpriteFrame", [](lua_State* L)
@@ -96,7 +96,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 
 		var o = cocos2d::Sprite::create(std::get<0>(t));
 		if (!o) return 0;
-		Lua_NewUserdataMT(L, o, LuaKey_Sprite);
+		Lua_Push(L, o);
 		std::get<1>(t)->addChild(o);
 		o->setPosition(std::get<2>(t), std::get<3>(t));
 		o->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });

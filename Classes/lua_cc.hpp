@@ -20,39 +20,19 @@ inline void Lua_Register_cc(lua_State* const& L)
 	// 创建 拿 scene 函数
 	Lua_NewFunc(L, "scene", [](lua_State* L)
 	{
-		return Lua_NewUserdataMT(L, gScene, LuaKey_Scene);
+		return Lua_Push(L, gScene);
 	});
 
-	// 创建 注册帧回调 函数
+	// 创建 帧循环事件设置 函数
 	Lua_NewFunc(L, "mainLoopCallback", [](lua_State* L)
 	{
-		if (lua_gettop(L) < 1)
+		var t = Lua_ToTuple<Lua_Func>(L, "mainLoopCallback error! need 1 args: func/null");
+		if (std::get<0>(t))
 		{
-			return luaL_error(L, "mainLoopCallback error! need 1 args: func/null");
-		}
-		Lua_FuncHolder f;
-		Lua_Get<Lua_FuncHolder>(f, L, 1);
-		if (f.funcId)
-		{
-			cocos2d::Director::getInstance()->mainLoopCallback = [f = std::move(f)]
+			cocos2d::Director::getInstance()->mainLoopCallback = [f = std::move(std::get<0>(t))]
 			{
-				uv->Run(xx::UvRunMode::NoWait);
-
-				var L = gLua;
-				gFuncId = f.funcId;
-				lua_pushcclosure(L, [](lua_State* L)							// cfunc
-				{
-					lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// funcs
-					lua_rawgeti(L, 1, gFuncId);									// funcs, func
-					lua_call(L, 0, 0);											// funcs, ...?
-					lua_settop(L, 0);											// 
-					return 0;
-				}, 0);
-				if (int r = lua_pcall(L, 0, 0, 0))								//
-				{
-					cocos2d::log("%s", lua_tostring(L, -1));
-					lua_pop(L, 1);
-				}
+				uv->Run(xx::UvRunMode::NoWait);		// 这个需要一直在的
+				Lua_PCall(gLua, f);
 			};
 		}
 		else
@@ -62,11 +42,44 @@ inline void Lua_Register_cc(lua_State* const& L)
 				uv->Run(xx::UvRunMode::NoWait);
 			};
 		}
-
 		return 0;
 	});
 
+	// 创建 程序被切到后台事件设置 函数
+	Lua_NewFunc(L, "enterBackground", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<Lua_Func>(L, "enterBackground error! need 1 args: func/null");
+		if (std::get<0>(t))
+		{
+			enterBackground = [f = std::move(std::get<0>(t))]
+			{
+				Lua_PCall(gLua, f);
+			};
+		}
+		else
+		{
+			enterBackground = nullptr;
+		}
+		return 0;
+	});
 
+	// 创建 程序被切到前台事件设置 函数
+	Lua_NewFunc(L, "enterForeground", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<Lua_Func>(L, "enterForeground error! need 1 args: func/null");
+		if (std::get<0>(t))
+		{
+			enterForeground = [f = std::move(std::get<0>(t))]
+			{
+				Lua_PCall(gLua, f);
+			};
+		}
+		else
+		{
+			enterForeground = nullptr;
+		}
+		return 0;
+	});
 
 	// todo: more like addSearchPath...
 

@@ -2,20 +2,20 @@
 
 inline void Lua_Register_Node(lua_State* const& L)
 {
-	Lua_NewMT(L, LuaKey_Node, LuaKey_Ref);						// cc, Node : Ref
+	Lua_NewMT(L, TypeNames<cocos2d::Node*>::value, TypeNames<cocos2d::Ref*>::value);						// cc, Node : Ref
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
 		var o = new (std::nothrow) cocos2d::Node();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
-		return Lua_NewUserdataMT(L, o, LuaKey_Node);
+		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		var o = cocos2d::Node::create();
-		return Lua_NewUserdataMT(L, o, LuaKey_Node);
+		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "addChild", [](lua_State* L)
@@ -149,7 +149,12 @@ inline void Lua_Register_Node(lua_State* const& L)
 		return 0;
 	});
 
-
+	Lua_NewFunc(L, "removeAllChildrenWithCleanup", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Scene*, bool>(L, "removeAllChildrenWithCleanup error! need 2 args: self, bool");
+		std::get<0>(t)->removeAllChildrenWithCleanup(std::get<1>(t));
+		return 0;
+	});
 
 
 

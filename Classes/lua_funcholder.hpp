@@ -1,15 +1,21 @@
 ﻿#pragma once
 
-// 被 std::function 携带, 当捕获列表析构发生时, 自动从 L 中反注册函数
-struct Lua_FuncHolder
+// 被 std::function 携带, 移动捕获. 当捕获列表析构发生时, 自动从 L 中反注册函数
+struct Lua_Func
 {
 	// 全局自增函数 id
 	inline static int autoIncFuncId = 1;
 
 	// 将函数放入 funcs 表. 保存 key.
 	int funcId = 0;
-	Lua_FuncHolder() = default;
-	Lua_FuncHolder(lua_State* const& L, int const& idx)
+
+	inline operator bool() const
+	{
+		return funcId != 0;
+	}
+
+	Lua_Func() = default;
+	Lua_Func(lua_State* const& L, int const& idx)
 	{
 		if (!idx) return;
 		funcId = autoIncFuncId;
@@ -20,21 +26,21 @@ struct Lua_FuncHolder
 		++autoIncFuncId;
 	}
 
-	// 没拷贝构造 std::function 编译不过( 实际不会执行 )
-	Lua_FuncHolder(Lua_FuncHolder const&)
+	// 不写这个拷贝构造 std::function 编译报错( 实际不会执行 )
+	Lua_Func(Lua_Func const&)
 	{
 		throw - 1;
 	}
 
 	// 移动构造
-	Lua_FuncHolder(Lua_FuncHolder && o)
+	Lua_Func(Lua_Func && o)
 		: funcId(o.funcId)
 	{
 		o.funcId = 0;
 	}
 
 	// 移动赋值
-	Lua_FuncHolder& operator=(Lua_FuncHolder && o)
+	inline Lua_Func& operator=(Lua_Func && o)
 	{
 		funcId = o.funcId;
 		o.funcId = 0;
@@ -42,7 +48,7 @@ struct Lua_FuncHolder
 	}
 
 	// 随 lambda 析构时根据 funcId 删掉函数
-	~Lua_FuncHolder()
+	~Lua_Func()
 	{
 		if (!gLua || !funcId) return;
 		var L = gLua;

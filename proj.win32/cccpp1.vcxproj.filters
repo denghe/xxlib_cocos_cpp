@@ -179,16 +179,7 @@
     <ClInclude Include="..\Classes\lua_keys.hpp">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_newxxx.hpp">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_toxxx.hpp">
-      <Filter>lua</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\lua_init.hpp">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_pushxxx.hpp">
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\lua_xx.hpp">
@@ -207,6 +198,15 @@
       <Filter>lua</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\lua_xx_object.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_pushcall.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_new_xxx.hpp">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_to_xxx.hpp">
       <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>

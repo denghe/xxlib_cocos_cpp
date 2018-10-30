@@ -1,98 +1,6 @@
 ﻿#pragma once
 
 template<typename T>
-struct TypeNames
-{
-	inline static const char* value = "unknown";
-};
-template<>
-struct TypeNames<int>
-{
-	inline static const char* value = "int";
-};
-template<>
-struct TypeNames<int64_t>
-{
-	inline static const char* value = "int64";
-};
-template<>
-struct TypeNames<float>
-{
-	inline static const char* value = "float";
-};
-template<>
-struct TypeNames<double>
-{
-	inline static const char* value = "double";
-};
-template<>
-struct TypeNames<const char*>
-{
-	inline static const char* value = "string";
-};
-template<>
-struct TypeNames<std::string>
-{
-	inline static const char* value = "string";
-};
-template<>
-struct TypeNames<Lua_FuncHolder>
-{
-	inline static const char* value = "func";
-};
-
-template<>
-struct TypeNames<cocos2d::Ref*>
-{
-	inline static const char* value = "Ref*";
-};
-template<>
-struct TypeNames<cocos2d::Node*>
-{
-	inline static const char* value = "Node*";
-};
-template<>
-struct TypeNames<cocos2d::Sprite*>
-{
-	inline static const char* value = "Sprite*";
-};
-template<>
-struct TypeNames<cocos2d::Touch*>
-{
-	inline static const char* value = "Touch*";
-};
-template<>
-struct TypeNames<cocos2d::EventListener*>
-{
-	inline static const char* value = "EventListener*";
-};
-template<>
-struct TypeNames<cocos2d::EventListenerTouchAllAtOnce*>
-{
-	inline static const char* value = "EventListenerTouchAllAtOnce*";
-};
-template<>
-struct TypeNames<cocos2d::EventListenerTouchOneByOne*>
-{
-	inline static const char* value = "EventListenerTouchOneByOne*";
-};
-
-template<>
-struct TypeNames<xx::BBuffer*>
-{
-	inline static const char* value = "BBuffer*";
-};
-template<>
-struct TypeNames<xx::UvTcpClient_w>
-{
-	inline static const char* value = "xx::UvTcpClient_w";
-};
-
-
-// todo: more names
-
-
-template<typename T>
 void Lua_Get(T& v, lua_State* const& L, int const& idx)
 {
 	if constexpr (std::is_integral_v<T>)
@@ -109,10 +17,10 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		if (!isNum) goto LabError;
 		return;
 	}
-	else if constexpr (std::is_same_v<T, const char*>)
+	else if constexpr (std::is_same_v<T, const char*> || std::is_same_v<T, char*>)
 	{
 		if (!lua_isstring(L, idx)) goto LabError;
-		v = lua_tostring(L, idx);
+		v = (char*)lua_tostring(L, idx);
 		return;
 	}
 	else if constexpr (std::is_same_v<T, std::string>)
@@ -129,11 +37,11 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		v = lua_toboolean(L, idx);
 		return;
 	}
-	else if constexpr (std::is_same_v<T, Lua_FuncHolder>)
+	else if constexpr (std::is_same_v<T, Lua_Func>)
 	{
 		if (lua_islightuserdata(L, idx) && lua_touserdata(L, idx) == nullptr) return;
 		if (!lua_isfunction(L, idx)) goto LabError;
-		v = std::move(Lua_FuncHolder(L, idx));
+		v = std::move(Lua_Func(L, idx));
 		return;
 	}
 	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsRef_v<T>)
