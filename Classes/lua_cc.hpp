@@ -30,7 +30,8 @@ inline void Lua_Register_cc(lua_State* const& L)
 		{
 			return luaL_error(L, "mainLoopCallback error! need 1 args: func/null");
 		}
-		var f = Lua_ToFuncHolder<1>(L);
+		Lua_FuncHolder f;
+		Lua_Get<Lua_FuncHolder>(f, L, 1);
 		if (f.funcId)
 		{
 			cocos2d::Director::getInstance()->mainLoopCallback = [f = std::move(f)]

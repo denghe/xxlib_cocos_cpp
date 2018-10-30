@@ -4,6 +4,7 @@
 template<typename T = void*>
 inline int Lua_NewUserdataMT(lua_State* const& L, T const& o, char const* const& mtKey)
 {
+	if (!o) return 0;
 	var ph = (T*)lua_newuserdata(L, sizeof(T));						// ..., &o
 	*ph = o;
 	lua_rawgetp(L, LUA_REGISTRYINDEX, mtKey);						// ..., &o, mt

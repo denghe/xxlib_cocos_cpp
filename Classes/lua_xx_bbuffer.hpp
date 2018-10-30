@@ -165,7 +165,9 @@ struct Lua_BBuffer : public xx::BBuffer
 		{
 			luaL_error(L, "less arg nums. expect %d+", top);
 		}
-		return *Lua_ToPointer<Lua_BBuffer*, 1>(L, LuaKey_BBuffer);
+		Lua_BBuffer* self = nullptr;
+		Lua_Get<Lua_BBuffer*>(self, L, 1);
+		return *self;
 	}
 
 	inline static int GetDataLen(lua_State* L)
@@ -560,7 +562,8 @@ struct Lua_BBuffer : public xx::BBuffer
 				Write((uint8_t)2);
 				if (WriteOffset(L, i))
 				{
-					var bb = Lua_ToPointer<Lua_BBuffer*>(L, i, LuaKey_BBuffer);
+					Lua_BBuffer* bb = nullptr;
+					Lua_Get<Lua_BBuffer*>(bb, L, i);
 					if (!bb)
 					{
 						luaL_error(L, "WriteObject only support userdata is BBuffer.");

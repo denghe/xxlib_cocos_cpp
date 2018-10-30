@@ -15,7 +15,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "__gc", [](lua_State* L)
 	{
-		var t = Lua_ToT<xx::UvTcpClient_w>(L, "__gc error! need 1 args: self", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w>(L, "__gc error! need 1 args: self");
 		assert(std::get<0>(t));
 		std::get<0>(t)->Release();
 		return 0;
@@ -23,7 +23,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "Send", [](lua_State* L)
 	{
-		var t = Lua_ToTT<xx::UvTcpClient_w, xx::BBuffer*>(L, "Send error! need 2 args: self, BBuffer", LuaKey_UvTcpClient, LuaKey_BBuffer);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, xx::BBuffer*>(L, "Send error! need 2 args: self, BBuffer");
 		assert(std::get<0>(t));
 		var r = std::get<0>(t)->Send(*std::get<1>(t));
 		lua_pushinteger(L, r);
@@ -32,7 +32,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "SendRequest", [](lua_State* L)
 	{
-		var t = Lua_ToTTFd<xx::UvTcpClient_w, xx::BBuffer*>(L, "SendRequest error! need 4 args: self, BBuffer, callback, timeoutSec", LuaKey_UvTcpClient, LuaKey_BBuffer);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, xx::BBuffer*, Lua_FuncHolder, float>(L, "SendRequest error! need 4 args: self, BBuffer, callback, timeoutSec");
 		assert(std::get<0>(t));
 		if (!std::get<2>(t).funcId) return luaL_error(L, "SendRequest error! callback can't be null.");
 		var r = std::get<0>(t)->SendRequest(*std::get<1>(t), [self = std::get<0>(t), f = std::move(std::get<2>(t))](uint32_t ser, xx::BBuffer* bb)
@@ -83,7 +83,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "SendResponse", [](lua_State* L)
 	{
-		var t = Lua_ToTiT<xx::UvTcpClient_w, xx::BBuffer*>(L, "SendResponse error! need 3 args: self, serial, BBuffer", LuaKey_UvTcpClient, LuaKey_BBuffer);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, int, xx::BBuffer*>(L, "SendResponse error! need 3 args: self, serial, BBuffer");
 		assert(std::get<0>(t));
 		var r = std::get<0>(t)->SendResponse(std::get<1>(t), *std::get<2>(t));
 		lua_pushinteger(L, r);
@@ -92,25 +92,25 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "SetAddress", [](lua_State* L)
 	{
-		var t = Lua_ToTsi<xx::UvTcpClient_w>(L, "SetAddress error! need 3 args: self, ipv4, port", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, const char*, int>(L, "SetAddress error! need 3 args: self, ipv4, port");
 		assert(std::get<0>(t));
-		var r = std::get<0>(t)->SetAddress(std::get<1>(t).first, std::get<2>(t));
+		var r = std::get<0>(t)->SetAddress(std::get<1>(t), std::get<2>(t));
 		lua_pushinteger(L, r);
 		return 1;
 	});
 
 	Lua_NewFunc(L, "SetAddress6", [](lua_State* L)
 	{
-		var t = Lua_ToTsi<xx::UvTcpClient_w>(L, "SetAddress6 error! need 3 args: self, ipv6, port", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, const char*, int>(L, "SetAddress6 error! need 3 args: self, ipv6, port");
 		assert(std::get<0>(t));
-		var r = std::get<0>(t)->SetAddress6(std::get<1>(t).first, std::get<2>(t));
+		var r = std::get<0>(t)->SetAddress6(std::get<1>(t), std::get<2>(t));
 		lua_pushinteger(L, r);
 		return 1;
 	});
 
 	Lua_NewFunc(L, "Connect", [](lua_State* L)
 	{
-		var t = Lua_ToTd<xx::UvTcpClient_w>(L, "Connect error! need 2 args: self, timeoutMS", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, float>(L, "Connect error! need 2 args: self, timeoutSec");
 		assert(std::get<0>(t));
 		var r = std::get<0>(t)->Connect(std::get<1>(t) * 1000);
 		lua_pushinteger(L, r);
@@ -119,7 +119,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "Disconnect", [](lua_State* L)
 	{
-		var t = Lua_ToTb<xx::UvTcpClient_w>(L, "Disconnect error! need 2 args: self, runCallback:bool", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, bool>(L, "Disconnect error! need 2 args: self, runCallback:bool");
 		assert(std::get<0>(t));
 		std::get<0>(t)->Disconnect(std::get<1>(t));
 		return 0;
@@ -127,7 +127,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "GetState", [](lua_State* L)
 	{
-		var t = Lua_ToT<xx::UvTcpClient_w>(L, "GetState error! need 1 args: self", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w>(L, "GetState error! need 1 args: self");
 		assert(std::get<0>(t));
 		lua_pushinteger(L, (int)std::get<0>(t)->state);
 		return 1;
@@ -135,7 +135,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnConnect", [](lua_State* L)
 	{
-		var t = Lua_ToTF<xx::UvTcpClient_w>(L, "OnConnect error! need 2 args: self, func/null", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, Lua_FuncHolder>(L, "OnConnect error! need 2 args: self, func/null");
 		if (std::get<1>(t).funcId)
 		{
 			std::get<0>(t)->OnConnect = [self = std::get<0>(t), f = std::move(std::get<1>(t))](int status)
@@ -169,7 +169,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnDisconnect", [](lua_State* L)
 	{
-		var t = Lua_ToTF<xx::UvTcpClient_w>(L, "OnDisconnect error! need 2 args: self, func/null", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, Lua_FuncHolder>(L, "OnDisconnect error! need 2 args: self, func/null");
 		if (std::get<1>(t).funcId)
 		{
 			std::get<0>(t)->OnDisconnect = [self = std::get<0>(t), f = std::move(std::get<1>(t))]()
@@ -201,7 +201,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnReceivePackage", [](lua_State* L)
 	{
-		var t = Lua_ToTF<xx::UvTcpClient_w>(L, "OnReceivePackage error! need 2 args: self, func(bb)/null", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, Lua_FuncHolder>(L, "OnReceivePackage error! need 2 args: self, func(bb)/null");
 		if (std::get<1>(t).funcId)
 		{
 			std::get<0>(t)->OnReceivePackage = [self = std::get<0>(t), f = std::move(std::get<1>(t))](xx::BBuffer& bb)
@@ -238,7 +238,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnReceiveRequest", [](lua_State* L)
 	{
-		var t = Lua_ToTF<xx::UvTcpClient_w>(L, "OnReceiveRequest error! need 2 args: self, func(bb)/null", LuaKey_UvTcpClient);
+		var t = Lua_ToTuple<xx::UvTcpClient_w, Lua_FuncHolder>(L, "OnReceiveRequest error! need 2 args: self, func(bb)/null");
 		if (std::get<1>(t).funcId)
 		{
 			std::get<0>(t)->OnReceiveRequest = [self = std::get<0>(t), f = std::move(std::get<1>(t))](uint32_t serial, xx::BBuffer& bb)

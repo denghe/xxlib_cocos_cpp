@@ -12,19 +12,12 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 
 	Lua_NewFunc(L, "GetIPList", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
-		if (numArgs < 3)
-		{
-			luaL_error(L, "GetIPList error! need 3 args: domain, timeoutSec, callback.");
-		}
-		var domain = Lua_ToString<1>(L);
-		var timeoutMS = Lua_ToNumber<double, 2>(L) * 1000;
-		var f = Lua_ToFuncHolder<3>(L);
-		if (!f.funcId)
+		var t = Lua_ToTuple<std::string, float, Lua_FuncHolder>(L, "GetIPList error! need 3 args: domain, timeoutSec, callback.");
+		if (!std::get<2>(t).funcId)
 		{
 			luaL_error(L, "error! args[3] is not function.");
 		}
-		uv->GetIPList(domain.first, [f = std::move(f)](xx::List<xx::String>* ips)
+		uv->GetIPList(std::get<0>(t).c_str(), [f = std::move(std::get<2>(t))](xx::List<xx::String>* ips)
 		{
 			var L = gLua;
 			gFuncId = f.funcId;
@@ -53,7 +46,7 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 				cocos2d::log("%s", lua_tostring(L, -1));
 				lua_pop(L, 1);
 			}
-		}, timeoutMS);
+		}, std::get<1>(t) * 1000);
 		return 0;
 	});
 
