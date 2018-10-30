@@ -7,18 +7,8 @@ this.Open = function()
 	assert(not this.opened)	-- 流程检查
 	assert(this.autoCloseDelayFrames)	-- 参数检查
 
-	-- 绘制一个精灵
-	--[[
-	-- 加载一张贴图
-	local texture = cc.TextureCache.addImage("hi.png")
-
-	local sprite = cc.Sprite.new()
-	sprite:initWithTexture(texture)
-	gScene:addChild(sprite)
-	sprite:release()
-	]]
-	local sprite = cc.Sprite.createWithFileName("hi.png")
-							:SetOAP(gScene, 0.5, 0.5, 100, 100);
+	-- 创建一个精灵 by 文件名, 放入 scene. 指定坐标, 停靠点
+	local sprite = cc.Sprite.CreateWithFOPA("hi.png", gScene, 450, 300, 0, 0);
 
 	-- 创建单个点击监听器
 	local listener = cc.EventListenerTouchOneByOne.new()
@@ -41,7 +31,6 @@ this.Open = function()
 		for i = 1, this.autoCloseDelayFrames do
 			yield()
 			sprite:setRotation(i)
-			sprite:setPosition(100 + i, 100 + i)
 		end
 		gStates_Close(this)
 	end)

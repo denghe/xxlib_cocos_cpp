@@ -86,5 +86,27 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 		return 0;
 	});
 
+
+
+
+
+
+
+	// 增加一组易于使用的函数. 大写开头. 和 cocos 本体函数以示区别
+
+	Lua_NewFunc(L, "CreateWithFOPA", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string, cocos2d::Node*, float, float, float, float>
+			(L, "CreateWithFOPA(Create with FileName, add to Owner, set Positon, set Anchor) error! need 6 args: owner, fileName, px, py, ax, ay");
+
+		var o = cocos2d::Sprite::create(std::get<0>(t));
+		if (!o) return 0;
+		Lua_NewUserdataMT(L, o, LuaKey_Node);
+		std::get<1>(t)->addChild(o);
+		o->setPosition(std::get<2>(t), std::get<3>(t));
+		o->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });
+		return 1;
+	});
+
 	lua_pop(L, 1);
 }

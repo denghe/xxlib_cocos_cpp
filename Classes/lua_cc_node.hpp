@@ -157,40 +157,6 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	// 增加一组易于使用的函数. 大写开头. 和 cocos 本体函数以示区别
 
-	Lua_NewFunc(L, "SetOP", [](lua_State* L)
-	{
-		var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Node*, float, float>
-			(L, "SetOP(Owner Positon) error! need 4 args: self, owner, px, py");
-		std::get<1>(t)->addChild(std::get<0>(t));
-		std::get<0>(t)->setPosition(std::get<2>(t),std::get<3>(t));
-		lua_pushvalue(L, 1);
-		return 1;
-	});
-
-	Lua_NewFunc(L, "SetOPA", [](lua_State* L)
-	{
-		var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Node*, float, float, float, float>
-			(L, "SetOPA(Owner Positon Anchor) error! need 6 args: self, owner, px, py, ax, ay");
-		std::get<1>(t)->addChild(std::get<0>(t));
-		std::get<0>(t)->setPosition(std::get<2>(t),std::get<3>(t));
-		std::get<0>(t)->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });
-		lua_pushvalue(L, 1);
-		return 1;
-	});
-
-	Lua_NewFunc(L, "SetOPAS", [](lua_State* L)
-	{
-		var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Node*, float, float, float, float, float, float>
-			(L, "SetOPAS(Owner Positon Anchor ScaleXY) error! need 8 args: self, owner, px, py, ax, ay, sx, sy");
-		std::get<1>(t)->addChild(std::get<0>(t));
-		std::get<0>(t)->setPosition(std::get<2>(t), std::get<3>(t));
-		std::get<0>(t)->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });
-		std::get<0>(t)->setScaleX(std::get<6>(t));
-		std::get<0>(t)->setScaleY(std::get<7>(t));
-		lua_pushvalue(L, 1);
-		return 1;
-	});
-
 	Lua_NewFunc(L, "SetVZ", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::Node*, bool, int>(L, "SetVZ(Visible LocalZOrder) error! need 3 args: self, visible(bool), z(int)");
@@ -199,6 +165,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 		lua_pushvalue(L, 1);
 		return 1;
 	});
+	// todo: more
 
 	lua_pop(L, 1);													// cc
 }
