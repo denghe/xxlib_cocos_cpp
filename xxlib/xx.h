@@ -42,9 +42,6 @@ namespace std
 	template<class T1, class T2>
 	inline constexpr bool is_same_v = is_same<T1, T2>::value;
 
-	template<int idx, class T>
-	using tuple_element_t<idx, T> = typename tuple_element<idx, T>::type;
-
 	template<class MutexType>
 	class scoped_lock
 	{
