@@ -173,6 +173,93 @@ bool xx::UvLoop::Alive() const noexcept
 	return uv_loop_alive((uv_loop_t*)ptr) != 0;
 }
 
+bool xx::UvLoop::CreateTcpClientEx(char const* const& domainName, int const& port, std::function<void(xx::UvTcpClient_w)>&& cb, int const& timeoutMS) noexcept
+{
+	if (!cb) return false;
+
+	struct Ctx : xx::Object
+	{
+		int n;
+		bool called;
+		std::function<void(xx::UvTcpClient_w)> cb;
+		Ctx(xx::MemPool* const& mp, int const& n, std::function<void(xx::UvTcpClient_w)>&& cb)
+			: xx::Object(mp)
+			, n(n)
+			, called(false)
+			, cb(std::move(cb))
+		{
+		}
+	};
+	auto ctx = mempool->MPCreatePtr<Ctx>(0, std::move(cb));
+
+	return GetIPList(domainName, [this, port, ctx, timeoutMS](xx::List<xx::String_p>* ips)
+	{
+		if (!ips || !ips->dataLen)
+		{
+			ctx->cb(xx::UvTcpClient_w());
+			return;
+		}
+		ctx->n = ips->dataLen;
+		for (decltype(auto) ip : *ips)
+		{
+			decltype(auto) conn = CreateTcpClient();
+			int r = 0;
+			if (ip->Find(':') != size_t(-1))
+			{
+				r = conn->SetAddress6(ip->c_str(), port);
+			}
+			else
+			{
+				r = conn->SetAddress(ip->c_str(), port);
+			}
+			if (r)
+			{
+				--ctx->n;
+				if (!ctx->n)
+				{
+					ctx->cb(xx::UvTcpClient_w());
+				}
+				conn->Release();
+				continue;
+			}
+			conn->OnConnect = [=] (int status)
+			{
+				--ctx->n;				// 减计数
+				if (ctx->called)		// 如果已经选出连接, 就直接自杀
+				{
+					conn->Release();
+					return;
+				}
+				if (status && !ctx->n)	// 如果没连上且这是最后一个连接, 就发起空回调后自杀
+				{
+					ctx->cb(xx::UvTcpClient_w());
+					conn->Release();
+					return;
+				}
+				ctx->called = true;		// 打选中标记
+				// 安全的清 OnConnect 并执行回调
+				auto ctx_ = ctx;
+				auto conn_ = conn;
+				conn_->OnConnect = nullptr;
+				ctx_->cb(conn_);
+				return;
+			};
+			r = conn->Connect(timeoutMS);
+			if (r)
+			{
+				conn->Release();
+				--ctx->n;
+				if (!ctx->n)
+				{
+					ctx->cb(xx::UvTcpClient_w());
+				}
+				continue;
+			}
+		}
+	}, timeoutMS);
+}
+
+
 xx::UvTcpListener_w xx::UvLoop::CreateTcpListener() noexcept
 {
 	return mempool->Create<UvTcpListener>(*this);

@@ -33,7 +33,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 	{
 		var t = Lua_ToTuple<xx::UvTcpClient_w, xx::BBuffer*, Lua_Func, float>(L, "SendRequest error! need 4 args: self, BBuffer, callback, timeoutSec");
 		assert(std::get<0>(t));
-		if (!std::get<2>(t).funcId) return luaL_error(L, "SendRequest error! callback can't be null.");
+		if (!std::get<2>(t)) return luaL_error(L, "SendRequest error! callback can't be null.");
 		var r = std::get<0>(t)->SendRequest(*std::get<1>(t), [self = std::get<0>(t), f = std::move(std::get<2>(t))](uint32_t ser, xx::BBuffer* bb)
 		{
 			if (!self) return;
@@ -121,7 +121,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 	Lua_NewFunc(L, "OnConnect", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<xx::UvTcpClient_w, Lua_Func>(L, "OnConnect error! need 2 args: self, func/null");
-		if (std::get<1>(t).funcId)
+		if (std::get<1>(t))
 		{
 			std::get<0>(t)->OnConnect = [self = std::get<0>(t), f = std::move(std::get<1>(t))](int status)
 			{
@@ -139,7 +139,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 	Lua_NewFunc(L, "OnDisconnect", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<xx::UvTcpClient_w, Lua_Func>(L, "OnDisconnect error! need 2 args: self, func/null");
-		if (std::get<1>(t).funcId)
+		if (std::get<1>(t))
 		{
 			std::get<0>(t)->OnDisconnect = [self = std::get<0>(t), f = std::move(std::get<1>(t))]()
 			{
@@ -157,7 +157,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 	Lua_NewFunc(L, "OnReceivePackage", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<xx::UvTcpClient_w, Lua_Func>(L, "OnReceivePackage error! need 2 args: self, func(bb)/null");
-		if (std::get<1>(t).funcId)
+		if (std::get<1>(t))
 		{
 			std::get<0>(t)->OnReceivePackage = [self = std::get<0>(t), f = std::move(std::get<1>(t))](xx::BBuffer& bb)
 			{
@@ -182,7 +182,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 	Lua_NewFunc(L, "OnReceiveRequest", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<xx::UvTcpClient_w, Lua_Func>(L, "OnReceiveRequest error! need 2 args: self, func(serial, bb)/null");
-		if (std::get<1>(t).funcId)
+		if (std::get<1>(t))
 		{
 			std::get<0>(t)->OnReceiveRequest = [self = std::get<0>(t), f = std::move(std::get<1>(t))](uint32_t serial, xx::BBuffer& bb)
 			{
