@@ -34,7 +34,7 @@ inline int Lua_Main(lua_State* L)
 	{
 		std::string t;
 		get_string_for_print(L, &t);
-		cocos2d::log("[LUA-print] %s", t.c_str());
+		cocos2d::log("%s", t.c_str());	// [LUA-print] 
 		return 0;
 	}, 0);
 	lua_setglobal(L, "print");

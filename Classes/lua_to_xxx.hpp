@@ -3,7 +3,13 @@
 template<typename T>
 void Lua_Get(T& v, lua_State* const& L, int const& idx)
 {
-	if constexpr (std::is_integral_v<T>)
+	if constexpr (std::is_same_v<T, bool>)
+	{
+		if (!lua_isboolean(L, idx)) goto LabError;
+		v = lua_toboolean(L, idx);
+		return;
+	}
+	else if constexpr (std::is_integral_v<T>)	// 这个判断包含了 bool 所以 bool 判断放上面
 	{
 		int isNum = 0;
 		v = (T)lua_tointegerx(L, idx, &isNum);
@@ -29,12 +35,6 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		size_t len;
 		var s = lua_tolstring(L, idx, &len);
 		v.assign(s, len);
-		return;
-	}
-	else if constexpr (std::is_same_v<T, bool>)
-	{
-		if (!lua_isboolean(L, idx)) goto LabError;
-		v = lua_toboolean(L, idx);
 		return;
 	}
 	else if constexpr (std::is_same_v<T, Lua_Func>)

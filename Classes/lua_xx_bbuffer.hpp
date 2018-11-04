@@ -103,8 +103,10 @@ struct Lua_BBuffer : public xx::BBuffer
 
 		lua_setglobal(L, TypeNames<xx::BBuffer*>::value);	// 
 
-		// typeIdProtos
-		CreateTypeIdProtos(L);
+		// make typeIdProtos store
+		lua_pushlightuserdata(L, (void*)TypeNames<xx::BBuffer*>::value);
+		lua_createtable(L, 0, 512);
+		lua_rawset(L, LUA_REGISTRYINDEX);
 	}
 
 
@@ -119,7 +121,7 @@ struct Lua_BBuffer : public xx::BBuffer
 		self->~Lua_BBuffer();
 		self->ReleasePtrDict(L);							// 异常: 因为是移除, 应该不会抛
 		self->ReleaseIdxDict(L);
-		self->ReleaseTypeIdProtos(L);
+		//self->ReleaseTypeIdProtos(L);
 		return 0;
 	}
 
@@ -432,19 +434,6 @@ struct Lua_BBuffer : public xx::BBuffer
 	inline static int ReadNullableFloat(lua_State* L) { return   ReadNullableNum<float>(L); }
 	inline static int ReadNullableDouble(lua_State* L) { return  ReadNullableNum<double>(L); }
 
-
-	inline static void CreateTypeIdProtos(lua_State* L)
-	{
-		lua_pushlightuserdata(L, (void*)TypeNames<xx::BBuffer*>::value);
-		lua_createtable(L, 0, 512);
-		lua_rawset(L, LUA_REGISTRYINDEX);
-	}
-	inline static void ReleaseTypeIdProtos(lua_State* L)
-	{
-		lua_pushlightuserdata(L, (void*)TypeNames<xx::BBuffer*>::value);
-		lua_pushnil(L);
-		lua_rawset(L, LUA_REGISTRYINDEX);
-	}
 
 	inline void CreatePtrDict(lua_State* L)
 	{

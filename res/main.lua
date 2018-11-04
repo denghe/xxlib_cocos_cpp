@@ -28,6 +28,76 @@ List_Create = function()
 end
 
 
+-- 方便输出表结构
+function DumpTable( t )  
+    local cache = {}
+    local function DumpSubTable(t,indent)
+        if (cache[tostring(t)]) then
+            print(indent.."*"..tostring(t))
+        else
+            cache[tostring(t)] = true
+            if (type(t)=="table") then
+                for pos,val in pairs(t) do
+                    if (type(val)=="table") then
+                        print(indent.."["..pos.."] => "..tostring(t).." {")
+                        DumpSubTable(val,indent..string.rep(" ",string.len(pos)+8))
+                        print(indent..string.rep(" ",string.len(pos)+6).."}")
+                    elseif (type(val)=="string") then
+                        print(indent.."["..pos..'] => "'..val..'"')
+                    else
+                        print(indent.."["..pos.."] => "..tostring(val))
+                    end
+                end
+            else
+                print(indent..tostring(t))
+            end
+        end
+    end
+    if (type(t)=="table") then
+        print(tostring(t).." {")
+        DumpSubTable(t,"  ")
+        print("}")
+    else
+        DumpSubTable(t,"  ")
+    end
+    print()
+end
+
+
+-- 方便输出包结构
+function DumpPackage(t)
+	function DumpPackageCore(t, indent)
+		local spaces = string.rep(" ",indent)
+		print(spaces.."typeName : "..t.__proto.typeName)
+		for k, v in pairs(t) do
+			if k == "__proto"
+				or k == "__index"
+				or k == "__newindex"
+				or k == "__isReleased"
+				or k == "Release" then
+				-- do nothing
+			elseif type(v) == "table" then
+				DumpPackageCore(v, indent + 4)
+			else
+				print(spaces.."["..k.."] = "..tostring(v))
+			end
+		end
+	end
+	local ts = { t }
+	function GetMetatables(t)
+		local mt = getmetatable(t)
+		if mt ~= nil then
+			ts[#ts + 1] = mt
+			GetMetatables(mt)
+		end
+	end
+	GetMetatables(t)
+	for i = #ts, 1, -1 do
+		DumpPackageCore(t, (#ts - i) * 4)
+	end
+end
+
+
 -- 全局帧数
 gFrameNumber = 0
 
@@ -164,9 +234,9 @@ function CreateUvTcpClient(domain, port, timeoutSec)
 	return rtv[1]
 end
 
--- 上面函数的 lua 实现
+-- 上面函数的 lua 实现( 备用 )
 function CreateUvTcpClient2(domain, port, timeoutSec)
-	local ips = gGetIPList(domain, timeoutSec)
+	local ips = GetIPList(domain, timeoutSec)
 	if #ips == 0 then
 		return
 	else
@@ -199,6 +269,9 @@ function CreateUvTcpClient2(domain, port, timeoutSec)
 		while rtv.c == null and rtv.numFinished < #ips do
 			yield()
 		end
+		if rtv.c == null then
+			return nil 
+		end
 		return rtv.c
 	end
 end
@@ -211,6 +284,8 @@ BBToObject = function(bb)
 		local success, pkg = pcall(function() return bb:ReadRoot() end)
 		if success then
 			return pkg
+		else
+			print(pkg)
 		end
 	end
 end
@@ -224,8 +299,8 @@ SendRequest = function(c, p)
 	bb:Clear()
 	bb:WriteRoot(p)
 	local t = { null }
-	c:SendRequest(bb, function(bb)
-		t[1] = BBToObject(bb)
+	c:SendRequest(bb, function(b)
+		t[1] = BBToObject(b)
 	end, 5)
 	while t[1] == null do
 		yield()
@@ -268,12 +343,16 @@ local panel = require "panel.lua"
 panel.autoCloseDelayFrames = 180
 go(function()
 	for i = 1, 3 do
-		yield()
-		gStates_Open(panel)
-		gStates_WaitDisappear(panel)
+		yield()			-- 循环语句后习惯性放一条 yield() 防御式编程
+
+		gStates_Open(panel)				-- 打开面板
+		gStates_WaitDisappear(panel)	-- 等待面板消失( 这个面板会自动关闭 )
 	end
-	cc.restart()
+	cc.restart()		-- 重启
 end)
+
+
+
 
 
 
@@ -282,31 +361,73 @@ require "PKG_class.lua"
 
 -- 测试网络层
 go(function()
+
 ::LabCreateConn::
 	yield()
 
 	print("try connect.")
 	local c = CreateUvTcpClient("www.baidu.com", 80, 2)
 	if c == nil then
-		SleepSec(1)
+		--SleepSec(1)
 		goto LabCreateConn
 	end
 	print("connected. SendRequest")
 	local pkg = PKG_Client_Login_Auth.Create()
-	pkg.pkgMD5 = "md5"
-	pkg.username = u
-	pkg.password = p
+	pkg.pkgMD5 = PKG_PkgGenMd5_Value
+	pkg.username = "abc"
+	pkg.password = "123123"
 	local r = SendRequest(c, pkg)
 	if r == nil then
 		print("waiting SendRequest timeout")
 	else
-		print("SendRequest recved data = ")
-		print(r)
+		print("SendRequest recved: ")
+		DumpPackage(r)
 	end
 
+	print("wait disconnect...")
 	while c:GetState() == 2 do
 		yield()
 	end
 	print("Disconnected.")
 	goto LabCreateConn
+
 end)
+
+
+--[[
+
+-- 测试网络层2
+go(function()
+
+::LabCreateConn::
+	yield()
+
+	print("try connect.")
+	local c = CreateUvTcpClient("127.0.0.1", 10000, 2)
+	if c == nil then
+		--SleepSec(1)
+		goto LabCreateConn
+	end
+	print("connected. SendRequest")
+	local pkg = PKG_Client_Login_Auth.Create()
+	pkg.pkgMD5 = PKG_PkgGenMd5_Value
+	pkg.username = "abc"
+	pkg.password = "123123"
+	local r = SendRequest(c, pkg)
+	if r == nil then
+		print("waiting SendRequest timeout")
+	else
+		print("SendRequest recved: ")
+		DumpPackage(r)
+	end
+
+	print("wait disconnect...")
+	while c:GetState() == 2 do
+		yield()
+	end
+	print("Disconnected.")
+	goto LabCreateConn
+
+end)
+
+]]

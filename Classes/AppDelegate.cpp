@@ -98,8 +98,13 @@ void InitGlobals(bool first)
 void ReleaseGlobals()
 {
 	lua_close(gLua);
+	gLua = nullptr;
+
 	uv->Release();
+	uv = nullptr;
+
 	delete mp;
+	mp = nullptr;
 }
 
 AppDelegate::AppDelegate()

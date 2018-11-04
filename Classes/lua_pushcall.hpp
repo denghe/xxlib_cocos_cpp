@@ -35,6 +35,10 @@ int Lua_Push(lua_State* const& L, T const& v)
 		assert(v.funcId);
 		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// ..., funcs
 		lua_rawgeti(L, -1, v.funcId);								// ..., funcs, func
+		if (!lua_isfunction(L, -1))
+		{
+			luaL_error(L, "v.funcId:%d is bad.", v.funcId);
+		}
 		lua_replace(L, -2);											// ..., func
 	}
 	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsRef_v<T>)

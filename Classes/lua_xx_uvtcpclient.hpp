@@ -36,7 +36,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 		if (!std::get<2>(t)) return luaL_error(L, "SendRequest error! callback can't be null.");
 		var r = std::get<0>(t)->SendRequest(*std::get<1>(t), [self = std::get<0>(t), f = std::move(std::get<2>(t))](uint32_t ser, xx::BBuffer* bb)
 		{
-			if (!self) return;
+			if (!self || !gLua) return;
 			if (self->rpcSerials)
 				self->rpcSerials->Remove(ser);
 
@@ -162,7 +162,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 		{
 			std::get<0>(t)->OnReceivePackage = [self = std::get<0>(t), f = std::move(std::get<1>(t))](xx::BBuffer& bb)
 			{
-				if (!self) return;
+				if (!self || !gLua) return;
 				var L = gLua;
 				Lua_Push(L, f);												// func
 
@@ -187,7 +187,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 		{
 			std::get<0>(t)->OnReceiveRequest = [self = std::get<0>(t), f = std::move(std::get<1>(t))](uint32_t serial, xx::BBuffer& bb)
 			{
-				if (!self) return;
+				if (!self || !gLua) return;
 				var L = gLua;
 				Lua_Pushs(L, f, serial);									// func, serial
 

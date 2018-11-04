@@ -15,6 +15,8 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 		uv->GetIPList(std::get<0>(t).c_str(), [f = std::move(std::get<2>(t))](xx::List<xx::String_p>* ips)
 		{
 			var L = gLua;
+			if (!L) return;
+
 			if (!ips || !ips->dataLen)
 			{
 				Lua_PCall(L, f);
@@ -43,6 +45,8 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 		var b = uv->CreateTcpClientEx(std::get<0>(t).c_str(), std::get<1>(t), [f = std::move(std::get<2>(t))](xx::UvTcpClient_w c)
 		{
 			var L = gLua;
+			if (!L) return;
+
 			if (!c)
 			{
 				Lua_PCall(L, f);
