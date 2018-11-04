@@ -31,13 +31,14 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 
 	Lua_NewFunc(L, "SendRequest", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<xx::UvTcpClient_w, xx::BBuffer*, Lua_Func, float>(L, "SendRequest error! need 4 args: self, BBuffer, callback, timeoutSec");
+		var t = Lua_ToTuple<xx::UvTcpClient_w, xx::BBuffer*, Lua_Func, int>(L, "SendRequest error! need 4 args: self, BBuffer, callback, timeoutSec");
 		assert(std::get<0>(t));
 		if (!std::get<2>(t)) return luaL_error(L, "SendRequest error! callback can't be null.");
 		var r = std::get<0>(t)->SendRequest(*std::get<1>(t), [self = std::get<0>(t), f = std::move(std::get<2>(t))](uint32_t ser, xx::BBuffer* bb)
 		{
 			if (!self) return;
-			if (self->rpcSerials) self->rpcSerials->Remove(ser);
+			if (self->rpcSerials)
+				self->rpcSerials->Remove(ser);
 
 			var L = gLua;
 			Lua_Push(L, f);												// func
@@ -51,7 +52,7 @@ inline void Lua_Register_UvTcpClient(lua_State* const& L)
 				Lua_PCall(L, 1);
 			}
 
-		}, std::get<3>(t) * 1000);
+		}, std::get<3>(t));
 
 		if (r)
 		{

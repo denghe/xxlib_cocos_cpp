@@ -51,42 +51,6 @@ void uuid_generate(unsigned char* buf)
 #include "audio/include/SimpleAudioEngine.h"
 #endif
 
-// lua 所有文件在此窜编, 以支持 cpp exception.
-
-#include "lapi.c"
-#include "lauxlib.c"
-#include "lbaselib.c"
-#include "lbitlib.c"
-#include "lcode.c"
-#include "lcorolib.c"
-#include "lctype.c"
-#include "ldblib.c"
-#include "ldebug.c"
-#include "ldo.c"
-#include "ldump.c"
-#include "lfunc.c"
-#include "lgc.c"
-#include "linit.c"
-#include "liolib.c"
-#include "llex.c"
-#include "lmathlib.c"
-#include "lmem.c"
-#include "loadlib.c"
-#include "lobject.c"
-#include "lopcodes.c"
-#include "loslib.c"
-#include "lparser.c"
-#include "lstate.c"
-#include "lstring.c"
-#include "lstrlib.c"
-#include "ltable.c"
-#include "ltablib.c"
-#include "ltm.c"
-#include "lundump.c"
-#include "lutf8lib.c"
-#include "lvm.c"
-#include "lzio.c"
-
 
 #include "lua_all.hpp"
 
@@ -122,6 +86,7 @@ void InitGlobals(bool first)
 		uv->Release();
 	}
 	uv = mp->MPCreate<xx::UvLoop>();
+	uv->InitRpcTimeoutManager();
 
 	gScene = cocos2d::Scene::create();
 	cocos2d::Director::getInstance()->runWithScene(gScene);

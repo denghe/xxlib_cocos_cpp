@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "lua.hpp"
+
 #ifndef var
 #define var decltype(auto)
 #endif

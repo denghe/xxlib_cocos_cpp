@@ -849,7 +849,7 @@ void xx::UvTcpUdpBase::RpcTraceCallback() noexcept
 		{
 			loop.rpcMgr->Callback(serial, nullptr);
 		}
-		assert(rpcSerials->Empty());
+		assert(!memHeader().versionNumber || rpcSerials->Empty());
 	}
 }
 
