@@ -53,6 +53,7 @@ void uuid_generate(unsigned char* buf)
 
 
 #include "cocos/ui/CocosGUI.h"
+#include "extensions/cocos-ext.h"
 
 #include "lua_all.hpp"
 

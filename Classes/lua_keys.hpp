@@ -310,6 +310,16 @@ struct TypeNames<cocos2d::Layer*>
 	inline static const char* value = "Layer";
 };
 template<>
+struct TypeNames<cocos2d::extension::ScrollView*>
+{
+	inline static const char* value = "ScrollView";
+};
+template<>
+struct TypeNames<cocos2d::extension::TableView*>
+{
+	inline static const char* value = "ScrollView";
+};
+template<>
 struct TypeNames<cocos2d::Sprite*>
 {
 	inline static const char* value = "Sprite";
@@ -342,6 +352,11 @@ template<>
 struct TypeNames<cocos2d::ui::Button*>
 {
 	inline static const char* value = "UIButton";
+};
+template<>
+struct TypeNames<cocos2d::ui::ImageView*>
+{
+	inline static const char* value = "ImageView";
 };
 
 // todo: more

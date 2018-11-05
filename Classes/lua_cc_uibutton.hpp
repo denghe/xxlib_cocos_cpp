@@ -34,9 +34,4 @@ inline void Lua_Register_uiButton(lua_State* const& L)
 
 	lua_pop(L, 1);
 
-	lua_pushstring(L, "UITextureResType");
-	lua_createtable(L, 2, 0);
-	lua_pushstring(L, "LOCAL");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TextureResType::LOCAL);	lua_rawset(L, -3);
-	lua_pushstring(L, "PLIST");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TextureResType::PLIST);	lua_rawset(L, -3);
-	lua_rawset(L, -3);
 }

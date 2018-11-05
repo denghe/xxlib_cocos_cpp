@@ -23,6 +23,14 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 
 	lua_pop(L, 1);
 
+
+	lua_pushstring(L, "UITextureResType");
+	lua_createtable(L, 2, 0);
+	lua_pushstring(L, "LOCAL");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TextureResType::LOCAL);	lua_rawset(L, -3);
+	lua_pushstring(L, "PLIST");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TextureResType::PLIST);	lua_rawset(L, -3);
+	lua_rawset(L, -3);
+
+
 	lua_pushstring(L, "UITouchEventType");
 	lua_createtable(L, 4, 0);
 	lua_pushstring(L, "BEGAN");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TouchEventType::BEGAN);	lua_rawset(L, -3);
