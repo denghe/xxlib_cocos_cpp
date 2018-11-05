@@ -9,7 +9,7 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		v = lua_toboolean(L, idx);
 		return;
 	}
-	else if constexpr (std::is_integral_v<T>)	// 这个判断包含了 bool 所以 bool 判断放上面
+	else if constexpr (std::is_enum_v<T> || std::is_integral_v<T>)	// 这个判断包含了 bool 所以 bool 判断放上面
 	{
 		int isNum = 0;
 		v = (T)lua_tointegerx(L, idx, &isNum);
@@ -84,12 +84,16 @@ struct Lua_ForEach
 	}
 };
 
+// 不传 errMsg 表示不检查参数个数
 template<typename...TS>
-inline std::tuple<TS...> Lua_ToTuple(lua_State* const& L, char const* const& errMsg)
+inline std::tuple<TS...> Lua_ToTuple(lua_State* const& L, char const* const& errMsg = "")
 {
-	if (lua_gettop(L) < sizeof...(TS))
+	if (errMsg)
 	{
-		luaL_error(L, "%s", errMsg);
+		if (lua_gettop(L) < sizeof...(TS))
+		{
+			luaL_error(L, "%s", errMsg);
+		}
 	}
 	std::tuple<TS...> t;
 	Lua_ForEach<sizeof...(TS), std::tuple<TS...>>::FillTuple(t, L);

@@ -47,14 +47,22 @@ int Lua_Push(lua_State* const& L, T const& v)
 	}
 	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsRef_v<T>)
 	{
-		// 还需要进一步检测 mt 父子关系, 以及最终指针的 dynamic cast 来进一步判断, 以后上全局内存池方案再说
+		// todo: 还需要进一步检测 mt 父子关系, 以及最终指针的 dynamic cast 来进一步判断, 以后上全局内存池方案再说
 		var ph = (T*)lua_newuserdata(L, sizeof(T));					// ..., &o
 		*ph = v;
 		lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
 		lua_setmetatable(L, -2);									// ..., &o
 	}
-	// todo: table??
-
+	else if constexpr (std::is_same_v<T, cocos2d::Vector<cocos2d::Node*>>)
+	{
+		lua_createtable(L, v.size(), 0);
+		int i = 0;
+		for (var node : v)
+		{
+			Lua_Push(L, node);
+			lua_rawseti(L, -2, ++i);
+		}
+	}
 	return 1;
 }
 

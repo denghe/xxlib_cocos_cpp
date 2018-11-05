@@ -91,7 +91,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	Lua_NewFunc(L, "addSearchPath", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<std::string, bool>(L, "addSearchPath error! need 2 args: path(string), front(bool)");
+		var t = Lua_ToTuple<std::string, bool>(L, "addSearchPath error! need 2 args: string path, bool front");
 		cocos2d::FileUtils::getInstance()->addSearchPath(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
@@ -125,14 +125,14 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	Lua_NewFunc(L, "addEventListenerWithSceneGraphPriority", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "addEventListenerWithSceneGraphPriority error! need 2 args: listener, target(Node)");
+		var t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "addEventListenerWithSceneGraphPriority error! need 2 args: EventListener listener, Node target");
 		cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "removeEventListener", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "removeEventListener error! need 1 args: listener");
+		var t = Lua_ToTuple<cocos2d::EventListener*>(L, "removeEventListener error! need 1 args: EventListener listener");
 		cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(std::get<0>(t));
 		return 0;
 	});
