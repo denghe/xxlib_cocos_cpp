@@ -8,6 +8,9 @@
 
 // todo: 优化函数名和使用, 考虑参考 cocos lua 框架代码提供 return self 以便连写
 
+// 用于临时存放为 Sequence, Spawns 传的参
+inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
+
 #include "lua_keys.hpp"
 #include "lua_func.hpp"
 #include "lua_pushcall.hpp"

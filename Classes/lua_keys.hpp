@@ -90,6 +90,11 @@ struct TypeNames<cocos2d::FiniteTimeAction*>
 	inline static const char* value = "FiniteTimeAction";
 };
 template<>
+struct TypeNames<cocos2d::ActionInstant*>
+{
+	inline static const char* value = "ActionInstant";
+};
+template<>
 struct TypeNames<cocos2d::ActionInterval*>
 {
 	inline static const char* value = "ActionInterval";
@@ -143,6 +148,121 @@ template<>
 struct TypeNames<cocos2d::SkewBy*>
 {
 	inline static const char* value = "SkewBy";
+};
+template<>
+struct TypeNames<cocos2d::ResizeTo*>
+{
+	inline static const char* value = "ResizeTo";
+};
+template<>
+struct TypeNames<cocos2d::ResizeBy*>
+{
+	inline static const char* value = "ResizeBy";
+};
+template<>
+struct TypeNames<cocos2d::JumpBy*>
+{
+	inline static const char* value = "JumpBy";
+};
+template<>
+struct TypeNames<cocos2d::JumpTo*>
+{
+	inline static const char* value = "JumpTo";
+};
+template<>
+struct TypeNames<cocos2d::BezierBy*>
+{
+	inline static const char* value = "BezierBy";
+};
+template<>
+struct TypeNames<cocos2d::BezierTo*>
+{
+	inline static const char* value = "BezierTo";
+};
+template<>
+struct TypeNames<cocos2d::ScaleBy*>
+{
+	inline static const char* value = "ScaleBy";
+};
+template<>
+struct TypeNames<cocos2d::ScaleTo*>
+{
+	inline static const char* value = "ScaleTo";
+};
+template<>
+struct TypeNames<cocos2d::Blink*>
+{
+	inline static const char* value = "Blink";
+};
+template<>
+struct TypeNames<cocos2d::FadeTo*>
+{
+	inline static const char* value = "FadeTo";
+};
+template<>
+struct TypeNames<cocos2d::FadeIn*>
+{
+	inline static const char* value = "FadeIn";
+};
+template<>
+struct TypeNames<cocos2d::FadeOut*>
+{
+	inline static const char* value = "FadeOut";
+};
+template<>
+struct TypeNames<cocos2d::TintTo*>
+{
+	inline static const char* value = "TintTo";
+};
+template<>
+struct TypeNames<cocos2d::TintBy*>
+{
+	inline static const char* value = "TintBy";
+};
+template<>
+struct TypeNames<cocos2d::DelayTime*>
+{
+	inline static const char* value = "DelayTime";
+};
+template<>
+struct TypeNames<cocos2d::Show*>
+{
+	inline static const char* value = "Show";
+};
+template<>
+struct TypeNames<cocos2d::Hide*>
+{
+	inline static const char* value = "Hide";
+};
+template<>
+struct TypeNames<cocos2d::ToggleVisibility*>
+{
+	inline static const char* value = "ToggleVisibility";
+};
+template<>
+struct TypeNames<cocos2d::RemoveSelf*>
+{
+	inline static const char* value = "RemoveSelf";
+};
+template<>
+struct TypeNames<cocos2d::FlipX*>
+{
+	inline static const char* value = "FlipX";
+};
+template<>
+struct TypeNames<cocos2d::FlipY*>
+{
+	inline static const char* value = "FlipY";
+};
+template<>
+struct TypeNames<cocos2d::Place*>
+{
+	inline static const char* value = "Place";
+};
+template<>
+struct TypeNames<cocos2d::CallFunc*>
+{
+	inline static const char* value = "CallFunc";
 };
 template<>
 struct TypeNames<cocos2d::Touch*>
