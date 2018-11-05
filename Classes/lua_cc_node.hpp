@@ -229,6 +229,68 @@ inline void Lua_Register_Node(lua_State* const& L)
 	});
 
 
+	Lua_NewFunc(L, "runAction", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Action*>(L, "runAction error! need 2 args: self, action");
+		var r = std::get<0>(t)->runAction(std::get<1>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "stopAllActions", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*>(L, "stopAllActions error! need 1 args: self");
+		std::get<0>(t)->stopAllActions();
+		return 0;
+	});
+
+	Lua_NewFunc(L, "stopAction", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Action*>(L, "stopAction error! need 2 args: self, action");
+		std::get<0>(t)->stopAction(std::get<1>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "stopActionByTag", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*, int>(L, "stopActionByTag error! need 2 args: self, tag");
+		std::get<0>(t)->stopActionByTag(std::get<1>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "stopAllActionsByTag", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*, int>(L, "stopAllActionsByTag error! need 2 args: self, tag");
+		std::get<0>(t)->stopAllActionsByTag(std::get<1>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "stopActionsByFlags", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*, int>(L, "stopActionsByFlags error! need 2 args: self, flag");
+		std::get<0>(t)->stopActionsByFlags(std::get<1>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "getActionByTag", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*, int>(L, "getActionByTag error! need 2 args: self, action");
+		var r = std::get<0>(t)->getActionByTag(std::get<1>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getNumberOfRunningActions", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*>(L, "getNumberOfRunningActions error! need 1 args: self");
+		var r = std::get<0>(t)->getNumberOfRunningActions();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getNumberOfRunningActionsByTag", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Node*, int>(L, "getNumberOfRunningActionsByTag error! need 2 args: self, tag");
+		var r = std::get<0>(t)->getNumberOfRunningActionsByTag(std::get<1>(t));
+		return Lua_Pushs(L, r);
+	});
 
 
 

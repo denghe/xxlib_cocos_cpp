@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+// 用于临时存放为 Sequence, Spawns 传的参
+inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
+
 inline void Lua_Register_cc(lua_State* const& L)
 {
 	// 创建全局 cc 基表
@@ -146,6 +149,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	// 创建 cc.Xxxxxx 元表及函数									// cc
 	Lua_Register_Ref(L);
+	Lua_Register_Actions(L);
 	Lua_Register_Node(L);
 	Lua_Register_Scene(L);
 	Lua_Register_Touch(L);
@@ -158,6 +162,8 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_Texture(L);
 	Lua_Register_TextureCache(L);
 	// .....
+	Lua_Register_uiWidget(L);
+	Lua_Register_uiButton(L);
 	// .....
 
 	lua_pop(L, 1);													//

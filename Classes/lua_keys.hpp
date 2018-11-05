@@ -11,6 +11,7 @@ inline const char* const LuaKey_Callbacks = "Callbacks";
 inline const char* const LuaKey_FrameUpdateFunc = "FrameUpdateFunc";
 
 inline const char* const LuaKey_cc = "cc";
+inline const char* const LuaKey_ccui = "ccui";
 
 
 struct Lua_BBuffer;
@@ -73,11 +74,76 @@ struct TypeNames<cocos2d::Ref*>
 {
 	inline static const char* value = "Ref";
 };
-//template<>
-//struct TypeNames<cocos2d::FileUtils*>
-//{
-//	inline static const char* value = "FileUtils";
-//};
+template<>
+struct TypeNames<cocos2d::Action*>
+{
+	inline static const char* value = "Action";
+};
+template<>
+struct TypeNames<cocos2d::Speed*>
+{
+	inline static const char* value = "Speed";
+};
+template<>
+struct TypeNames<cocos2d::FiniteTimeAction*>
+{
+	inline static const char* value = "FiniteTimeAction";
+};
+template<>
+struct TypeNames<cocos2d::ActionInterval*>
+{
+	inline static const char* value = "ActionInterval";
+};
+template<>
+struct TypeNames<cocos2d::Spawn*>
+{
+	inline static const char* value = "Spawn";
+};
+template<>
+struct TypeNames<cocos2d::Repeat*>
+{
+	inline static const char* value = "Repeat";
+};
+template<>
+struct TypeNames<cocos2d::RepeatForever*>
+{
+	inline static const char* value = "RepeatForever";
+};
+template<>
+struct TypeNames<cocos2d::Sequence*>
+{
+	inline static const char* value = "Sequence";
+};
+template<>
+struct TypeNames<cocos2d::RotateTo*>
+{
+	inline static const char* value = "RotateTo";
+};
+template<>
+struct TypeNames<cocos2d::RotateBy*>
+{
+	inline static const char* value = "RotateBy";
+};
+template<>
+struct TypeNames<cocos2d::MoveBy*>
+{
+	inline static const char* value = "MoveBy";
+};
+template<>
+struct TypeNames<cocos2d::MoveTo*>
+{
+	inline static const char* value = "MoveTo";
+};
+template<>
+struct TypeNames<cocos2d::SkewTo*>
+{
+	inline static const char* value = "SkewTo";
+};
+template<>
+struct TypeNames<cocos2d::SkewBy*>
+{
+	inline static const char* value = "SkewBy";
+};
 template<>
 struct TypeNames<cocos2d::Touch*>
 {
@@ -142,6 +208,20 @@ template<>
 struct TypeNames<cocos2d::TextureCache*>
 {
 	inline static const char* value = "TextureCache";
+};
+// todo: more
+
+
+
+template<>
+struct TypeNames<cocos2d::ui::Widget*>
+{
+	inline static const char* value = "UIWidget";
+};
+template<>
+struct TypeNames<cocos2d::ui::Button*>
+{
+	inline static const char* value = "UIButton";
 };
 
 // todo: more

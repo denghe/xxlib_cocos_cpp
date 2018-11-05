@@ -52,6 +52,8 @@ void uuid_generate(unsigned char* buf)
 #endif
 
 
+#include "cocos/ui/CocosGUI.h"
+
 #include "lua_all.hpp"
 
 
