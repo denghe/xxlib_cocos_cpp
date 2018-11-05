@@ -11,7 +11,7 @@ this.Open = function()
 	local sprite = cc.Sprite.CreateWithFOPA("hi.png", gScene, 450, 300, 0, 0);
 
 	-- 创建单个点击监听器
-	local listener = cc.EventListenerTouchOneByOne.new()
+	local listener = cc.EventListenerTouchOneByOne.create()
 	listener:onTouchBegan(function(...)
 		local e, t = ...
 		if sprite:containsTouch(t) then
@@ -21,8 +21,7 @@ this.Open = function()
 			return false
 		end
 	end)
-	sprite:addEventListener(listener)
-	listener:release()
+	cc.addEventListenerWithSceneGraphPriority(listener, sprite)
 
 	-- 创建动画播放协程. autoCloseDelayFrames 帧后 Close()
 	gCoros_Push(function()

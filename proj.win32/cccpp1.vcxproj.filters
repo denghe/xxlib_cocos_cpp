@@ -389,6 +389,9 @@
     <ClInclude Include="..\lua\src\lzio.h">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_layer.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\xxlib\lua.natvis">

@@ -18,6 +18,10 @@ int Lua_Push(lua_State* const& L, T const& v)
 	{
 		lua_pushboolean(L, (int)v);
 	}
+	else if constexpr (std::is_enum_v<T>)
+	{
+		lua_pushinteger(L, (int)v);
+	}
 	else if constexpr (std::is_same_v<T, std::string>)
 	{
 		lua_pushlstring(L, v.data(), v.size());

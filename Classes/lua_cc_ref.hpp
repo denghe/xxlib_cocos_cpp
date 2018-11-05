@@ -28,8 +28,8 @@ inline void Lua_Register_Ref(lua_State* const& L)
 	Lua_NewFunc(L, "getReferenceCount", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::Ref*>(L, "getReferenceCount error! need 1 args: self");
-		lua_pushinteger(L, std::get<0>(t)->getReferenceCount());
-		return 1;
+		var r = std::get<0>(t)->getReferenceCount();
+		return Lua_Push(L, r);
 	});
 
 	lua_pop(L, 1);													// cc

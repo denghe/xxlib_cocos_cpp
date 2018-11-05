@@ -18,8 +18,21 @@ inline void Lua_Register_EventListener(lua_State* const& L)
 		return Lua_Push(L, r);
 	});
 
+	Lua_NewFunc(L, "checkAvailable", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::EventListener*>(L, "checkAvailable error! need 1 args: self");
+		var r = std::get<0>(t)->checkAvailable();
+		return Lua_Push(L, r);
+	});
+
+
 	lua_pop(L, 1);
 }
+
+
+
+
+
 
 inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 {
@@ -30,6 +43,13 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 		var o = new (std::nothrow) cocos2d::EventListenerTouchAllAtOnce();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
+		return Lua_Push(L, o);
+	});
+
+	Lua_NewFunc(L, "create", [](lua_State* L)
+	{
+		var o = cocos2d::EventListenerTouchAllAtOnce::create();
+		if (!o) return 0;
 		return Lua_Push(L, o);
 	});
 
@@ -153,6 +173,13 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 		return Lua_Push(L, o);
 	});
 
+	Lua_NewFunc(L, "create", [](lua_State* L)
+	{
+		var o = cocos2d::EventListenerTouchOneByOne::create();
+		if (!o) return 0;
+		return Lua_Push(L, o);
+	});
+
 	Lua_NewFunc(L, "setSwallowTouches", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, bool>(L, "setSwallowTouches error! need 2 args: self, bool");
@@ -233,6 +260,67 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 		else
 		{
 			std::get<0>(t)->onTouchCancelled = nullptr;
+		}
+		return 0;
+	});
+
+	lua_pop(L, 1);
+}
+
+
+
+
+
+
+inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::EventListenerKeyboard*>::value, TypeNames<cocos2d::EventListener*>::value);
+
+	Lua_NewFunc(L, "new", [](lua_State* L)
+	{
+		var o = new (std::nothrow) cocos2d::EventListenerKeyboard();
+		if (!o) return 0;
+		if (!o->init()) { delete o; return 0; }
+		return Lua_Push(L, o);
+	});
+
+	Lua_NewFunc(L, "create", [](lua_State* L)
+	{
+		var o = cocos2d::EventListenerKeyboard::create();
+		if (!o) return 0;
+		return Lua_Push(L, o);
+	});
+
+	Lua_NewFunc(L, "onKeyPressed", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyPressed error! need 2 args: self, func/null");
+		if (std::get<1>(t))
+		{
+			std::get<0>(t)->onKeyPressed = [f = std::move(std::get<1>(t))](cocos2d::EventKeyboard::KeyCode kc, cocos2d::Event* e)
+			{
+				Lua_PCall(gLua, f, e, kc);
+			};
+		}
+		else
+		{
+			std::get<0>(t)->onKeyPressed = nullptr;
+		}
+		return 0;
+	});
+
+	Lua_NewFunc(L, "onKeyReleased", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyReleased error! need 2 args: self, func/null");
+		if (std::get<1>(t))
+		{
+			std::get<0>(t)->onKeyReleased = [f = std::move(std::get<1>(t))](cocos2d::EventKeyboard::KeyCode kc, cocos2d::Event* e)
+			{
+				Lua_PCall(gLua, f, e, kc);
+			};
+		}
+		else
+		{
+			std::get<0>(t)->onKeyReleased = nullptr;
 		}
 		return 0;
 	});

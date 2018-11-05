@@ -394,6 +394,11 @@ go(function()
 end)
 
 
+
+
+print(cc.getTargetPlatform())
+
+
 --[[
 
 -- 测试网络层2

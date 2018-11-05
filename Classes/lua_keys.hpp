@@ -18,9 +18,8 @@ struct Lua_Func;
 
 template<typename T>
 struct TypeNames;
-//{
-//	inline static const char* value = "unknown";
-//};
+
+
 template<>
 struct TypeNames<int>
 {
@@ -74,6 +73,11 @@ struct TypeNames<cocos2d::Ref*>
 {
 	inline static const char* value = "Ref";
 };
+//template<>
+//struct TypeNames<cocos2d::FileUtils*>
+//{
+//	inline static const char* value = "FileUtils";
+//};
 template<>
 struct TypeNames<cocos2d::Touch*>
 {
@@ -98,6 +102,11 @@ template<>
 struct TypeNames<cocos2d::EventListenerTouchAllAtOnce*>
 {
 	inline static const char* value = "EventListenerTouchAllAtOnce";
+};
+template<>
+struct TypeNames<cocos2d::EventListenerKeyboard*>
+{
+	inline static const char* value = "EventListenerKeyboard";
 };
 template<>
 struct TypeNames<cocos2d::Node*>

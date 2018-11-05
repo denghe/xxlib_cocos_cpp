@@ -81,7 +81,68 @@ inline void Lua_Register_cc(lua_State* const& L)
 		return 0;
 	});
 
-	// todo: more like addSearchPath...
+
+	Lua_NewFunc(L, "setPopupNotify", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<bool>(L, "setPopupNotify error! need 1 args: bool");
+		cocos2d::FileUtils::getInstance()->setPopupNotify(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "addSearchPath", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string, bool>(L, "addSearchPath error! need 2 args: path(string), front(bool)");
+		cocos2d::FileUtils::getInstance()->addSearchPath(std::get<0>(t), std::get<1>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "getWritablePath", [](lua_State* L)
+	{
+		return Lua_Push(L, cocos2d::FileUtils::getInstance()->getWritablePath());
+	});
+
+	Lua_NewFunc(L, "getTargetPlatform", [](lua_State* L)
+	{
+		return Lua_Push(L, cocos2d::Application::getInstance()->getTargetPlatform());
+	});
+
+	lua_pushstring(L, "Platform");
+	lua_createtable(L, 11, 0);
+	lua_pushstring(L, "OS_WINDOWS");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WINDOWS);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_LINUX");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_LINUX);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_MAC");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_MAC);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_ANDROID");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_ANDROID);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_IPHONE");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_IPHONE);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_IPAD");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_IPAD);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_BLACKBERRY");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_BLACKBERRY);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_NACL");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_NACL);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_EMSCRIPTEN");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_EMSCRIPTEN);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_TIZEN");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_TIZEN);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_WINRT");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WINRT);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_WP8");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WP8);	lua_rawset(L, -3);
+	lua_rawset(L, -3);
+
+
+	Lua_NewFunc(L, "addEventListenerWithSceneGraphPriority", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "addEventListenerWithSceneGraphPriority error! need 2 args: listener, target(Node)");
+		cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(std::get<0>(t), std::get<1>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeEventListener", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "removeEventListener error! need 1 args: listener");
+		cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(std::get<0>(t));
+		return 0;
+	});
+
+
+
+
+
+
+	// todo: more
 
 	// 创建 cc.Xxxxxx 元表及函数									// cc
 	Lua_Register_Ref(L);
