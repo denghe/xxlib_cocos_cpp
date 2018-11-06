@@ -854,7 +854,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 
 
-
+	// todo
 
 	//Lua_NewMT(L, TypeNames<cocos2d::Animation*>::value, TypeNames<cocos2d::Ref*>::value);
 
@@ -891,4 +891,13 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	//lua_pop(L, 1);
 
+
+
+
+
+
+
+	// EaseXXXXXXXXXXXXXXXXXXXXX
+
+	// .......
 }

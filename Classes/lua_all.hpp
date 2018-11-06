@@ -20,6 +20,7 @@ inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
 #include "lua_cc_ref.hpp"
 #include "lua_cc_actions.hpp"
 #include "lua_cc_node.hpp"
+#include "lua_cc_label.hpp"
 #include "lua_cc_scene.hpp"
 #include "lua_cc_touch.hpp"
 #include "lua_cc_event.hpp"

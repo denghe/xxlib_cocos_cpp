@@ -173,6 +173,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_EventListenerTouchAllAtOnce(L);
 	Lua_Register_EventListenerTouchOneByOne(L);
 	Lua_Register_Sprite(L);
+	Lua_Register_Label(L);
 	Lua_Register_ScrollViews(L);
 	//Lua_Register_SpriteFrame(L);							
 	Lua_Register_Texture(L);
