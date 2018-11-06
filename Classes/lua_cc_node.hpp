@@ -27,11 +27,13 @@ inline void Lua_Register_Node(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Node*>(L);
 			std::get<0>(t)->addChild(std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Node*, int>(L);
 			std::get<0>(t)->addChild(std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		case 4:
 		{
@@ -45,6 +47,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 				var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Node*, int, std::string>(L);
 				std::get<0>(t)->addChild(std::get<1>(t), std::get<2>(t), std::get<3>(t));
 			}
+			break;
 		}
 		default:
 			return luaL_error(L, "addChild error! need 2 ~ 4 args: self, Node child, int localZOrder, int tag/string name");
@@ -73,11 +76,11 @@ inline void Lua_Register_Node(lua_State* const& L)
 		var t = Lua_ToTuple<cocos2d::Node*, std::string, Lua_Func>(L, "enumerateChildren error! need 3 args: self, string name, function<bool(Node* node)>");
 		std::get<0>(t)->enumerateChildren(std::get<1>(t), [f = std::move(std::get<2>(t))](cocos2d::Node* node)->bool
 		{
-			var L = gLua;
-			assert(!lua_gettop(L));
-			Lua_PCall(L, f, node);
-			if (!lua_gettop(L)) return false;
-			return lua_toboolean(L, 1);
+			assert(!lua_gettop(gLua));
+			Lua_PCall(gLua, f, node);
+			var t = Lua_ToTuple<bool>(gLua, "enumerateChildren return error! need return 1 result: bool");
+			lua_settop(gLua, 0);
+			return std::get<0>(t);
 		});
 		return 0;
 	});
@@ -132,11 +135,13 @@ inline void Lua_Register_Node(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Node*>(L);
 			std::get<0>(t)->removeChild(std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, cocos2d::Node*, bool>(L);
 			std::get<0>(t)->removeChild(std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "removeChild error! need 2 ~ 3 args: self, Node child, bool cleanup = true");
@@ -153,11 +158,13 @@ inline void Lua_Register_Node(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, int>(L);
 			std::get<0>(t)->removeChildByTag(std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, int, bool>(L);
 			std::get<0>(t)->removeChildByTag(std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "removeChildByTag error! need 2 ~ 3 args: self, int tag, bool cleanup = true");
@@ -174,11 +181,13 @@ inline void Lua_Register_Node(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, std::string>(L);
 			std::get<0>(t)->removeChildByName(std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, std::string, bool>(L);
 			std::get<0>(t)->removeChildByName(std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "removeChildByName error! need 2 ~ 3 args: self, string name, bool cleanup = true");
@@ -398,21 +407,25 @@ inline void Lua_Register_Node(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, float>(L);
 			std::get<0>(t)->setRotation(std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, float, float>(L);
 			std::get<0>(t)->setRotation3D({ std::get<1>(t), std::get<2>(t), 0 });
+			break;
 		}
 		case 4:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, float, float, float>(L);
 			std::get<0>(t)->setRotation3D({ std::get<1>(t), std::get<2>(t), std::get<3>(t) });
+			break;
 		}
 		case 5:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, float, float, float, float>(L);
 			std::get<0>(t)->setRotationQuat({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
+			break;
 		}
 		default:
 			return luaL_error(L, "setScale error! need 2 ~ 5 args: self, float angle / angleX, float angleY, float angleZ, float W");
@@ -461,17 +474,20 @@ inline void Lua_Register_Node(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, float>(L);
 			std::get<0>(t)->setScale(std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, float, float>(L);
 			std::get<0>(t)->setScale(std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		case 4:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, float, float, float>(L);
 			std::get<0>(t)->setScale(std::get<1>(t), std::get<2>(t));
 			std::get<0>(t)->setScaleZ(std::get<3>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "setScale error! need 2 ~ 4 args: self, float scaleX&Y / scaleX, float scaleY, float scaleZ");
@@ -646,7 +662,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "setColor", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, int, int, int>(L, "setColor error! need 4 args: self, byte r, byte g, byte b");
+		var t = Lua_ToTuple<cocos2d::Node*, GLubyte, GLubyte, GLubyte>(L, "setColor error! need 4 args: self, GLubyte r, GLubyte g, GLubyte b");
 		std::get<0>(t)->setColor({ std::get<1>(t), std::get<2>(t), std::get<3>(t) });
 		return 0;
 	});
@@ -659,7 +675,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "updateDisplayedColor", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, int, int, int>(L, "updateDisplayedColor error! need 4 args: self, byte parentR, byte parentG, byte parentB");
+		var t = Lua_ToTuple<cocos2d::Node*, GLubyte, GLubyte, GLubyte>(L, "updateDisplayedColor error! need 4 args: self, GLubyte parentR, GLubyte parentG, GLubyte parentB");
 		std::get<0>(t)->updateDisplayedColor({ std::get<1>(t), std::get<2>(t), std::get<3>(t) });
 		return 0;
 	});
@@ -706,7 +722,9 @@ inline void Lua_Register_Node(lua_State* const& L)
 		}
 		std::get<0>(t)->setOnEnterCallback([f = std::get<1>(t)]
 		{
+			assert(!lua_gettop(gLua));
 			Lua_PCall(gLua, f);
+			lua_settop(gLua, 0);
 		});
 		return 0;
 	});
@@ -720,7 +738,9 @@ inline void Lua_Register_Node(lua_State* const& L)
 		}
 		std::get<0>(t)->setOnExitCallback([f = std::get<1>(t)]
 		{
+			assert(!lua_gettop(gLua));
 			Lua_PCall(gLua, f);
+			lua_settop(gLua, 0);
 		});
 		return 0;
 	});
@@ -734,11 +754,13 @@ inline void Lua_Register_Node(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, int>(L);
 			std::get<0>(t)->setCameraMask(std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<cocos2d::Node*, int, bool>(L);
 			std::get<0>(t)->setCameraMask(std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "setCameraMask error! need 2 ~ 3 args: self, unsigned short mask, bool applyChildren = true");
@@ -809,7 +831,9 @@ inline void Lua_Register_Node(lua_State* const& L)
 		}
 		std::get<0>(t)->schedule([f = std::get<1>(t)](float delta) 
 		{
+			assert(!lua_gettop(gLua));
 			Lua_PCall(gLua, f, delta);
+			lua_settop(gLua, 0);
 		}
 		, std::get<2>(t), std::get<3>(t), std::get<4>(t), std::get<5>(t));
 		return 0;

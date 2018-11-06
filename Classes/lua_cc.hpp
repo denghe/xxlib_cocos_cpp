@@ -32,7 +32,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 			cocos2d::Director::getInstance()->mainLoopCallback = [f = std::move(std::get<0>(t))]
 			{
 				uv->Run(xx::UvRunMode::NoWait);		// 这个需要一直在的
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -53,7 +55,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 		{
 			enterBackground = [f = std::move(std::get<0>(t))]
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -71,7 +75,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 		{
 			enterForeground = [f = std::move(std::get<0>(t))]
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f);
+				lua_settop(gLua, 0);
 			};
 		}
 		else

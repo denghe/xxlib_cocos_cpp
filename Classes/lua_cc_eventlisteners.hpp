@@ -60,15 +60,16 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 		{
 			std::get<0>(t)->onTouchesBegan = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 			{
-				var L = gLua;
-				lua_checkstack(L, ts.size() + 3);
-				Lua_Push(L, f);
-				Lua_Push(L, e);
+				assert(!lua_gettop(gLua));
+				lua_checkstack(gLua, ts.size() + 3);
+				Lua_Push(gLua, f);
+				Lua_Push(gLua, e);
 				for (var t : ts)
 				{
-					Lua_Push(L, t);
+					Lua_Push(gLua, t);
 				}
-				Lua_PCall(L, ts.size() + 1);
+				Lua_PCall(gLua, ts.size() + 1);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -85,15 +86,16 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 		{
 			std::get<0>(t)->onTouchesMoved = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 			{
-				var L = gLua;
-				lua_checkstack(L, ts.size() + 3);
-				Lua_Push(L, f);
-				Lua_Push(L, e);
+				assert(!lua_gettop(gLua));
+				lua_checkstack(gLua, ts.size() + 3);
+				Lua_Push(gLua, f);
+				Lua_Push(gLua, e);
 				for (var t : ts)
 				{
-					Lua_Push(L, t);
+					Lua_Push(gLua, t);
 				}
-				Lua_PCall(L, ts.size() + 1);
+				Lua_PCall(gLua, ts.size() + 1);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -110,15 +112,16 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 		{
 			std::get<0>(t)->onTouchesEnded = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 			{
-				var L = gLua;
-				lua_checkstack(L, ts.size() + 3);
-				Lua_Push(L, f);
-				Lua_Push(L, e);
+				assert(!lua_gettop(gLua));
+				lua_checkstack(gLua, ts.size() + 3);
+				Lua_Push(gLua, f);
+				Lua_Push(gLua, e);
 				for (var t : ts)
 				{
-					Lua_Push(L, t);
+					Lua_Push(gLua, t);
 				}
-				Lua_PCall(L, ts.size() + 1);
+				Lua_PCall(gLua, ts.size() + 1);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -135,15 +138,16 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 		{
 			std::get<0>(t)->onTouchesCancelled = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 			{
-				var L = gLua;
-				lua_checkstack(L, ts.size() + 3);
-				Lua_Push(L, f);
-				Lua_Push(L, e);
+				assert(!lua_gettop(gLua));
+				lua_checkstack(gLua, ts.size() + 3);
+				Lua_Push(gLua, f);
+				Lua_Push(gLua, e);
 				for (var t : ts)
 				{
-					Lua_Push(L, t);
+					Lua_Push(gLua, t);
 				}
-				Lua_PCall(L, ts.size() + 1);
+				Lua_PCall(gLua, ts.size() + 1);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -201,9 +205,11 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 		{
 			std::get<0>(t)->onTouchBegan = [f = std::move(std::get<1>(t))](cocos2d::Touch* touch, cocos2d::Event* e)
 			{
-				var L = gLua;
-				Lua_PCall(L, f, e, touch);
-				return (bool)lua_toboolean(L, 1);
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, e, touch);
+				var t = Lua_ToTuple<bool>(gLua, "onTouchBegan return error! need return 1 result: bool");
+				lua_settop(gLua, 0);
+				return std::get<0>(t);
 			};
 		}
 		else
@@ -220,7 +226,9 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 		{
 			std::get<0>(t)->onTouchMoved = [f = std::move(std::get<1>(t))](cocos2d::Touch* touch, cocos2d::Event* e)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, e, touch);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -237,7 +245,9 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 		{
 			std::get<0>(t)->onTouchEnded = [f = std::move(std::get<1>(t))](cocos2d::Touch* touch, cocos2d::Event* e)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, e, touch);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -254,7 +264,9 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 		{
 			std::get<0>(t)->onTouchCancelled = [f = std::move(std::get<1>(t))](cocos2d::Touch* touch, cocos2d::Event* e)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, e, touch);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -298,7 +310,9 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 		{
 			std::get<0>(t)->onKeyPressed = [f = std::move(std::get<1>(t))](cocos2d::EventKeyboard::KeyCode kc, cocos2d::Event* e)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, e, kc);
+				lua_settop(gLua, 0);
 			};
 		}
 		else
@@ -315,7 +329,9 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 		{
 			std::get<0>(t)->onKeyReleased = [f = std::move(std::get<1>(t))](cocos2d::EventKeyboard::KeyCode kc, cocos2d::Event* e)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, e, kc);
+				lua_settop(gLua, 0);
 			};
 		}
 		else

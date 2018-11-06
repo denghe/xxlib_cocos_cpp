@@ -9,7 +9,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 		var o = new (std::nothrow) cocos2d::Sprite();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
-		return Lua_Push(L, o);
+		return Lua_Pushs(L, o);
 	});
 
 	Lua_NewFunc(L, "initWithTexture", [](lua_State* L)
@@ -49,30 +49,32 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 		case 0:
 		{
 			o = cocos2d::Sprite::create();
+			break;
 		}
 		case 1:
 		{
 			var t = Lua_ToTuple<std::string>(L);
 			o = cocos2d::Sprite::create(std::get<0>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "create Node error! need 0 ~ 1 args: string imageFileName");
 		}
-		return Lua_Push(L, o);
+		return Lua_Pushs(L, o);
 	});
 
 	Lua_NewFunc(L, "createWithSpriteFrame", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::SpriteFrame*>(L, "createWithSpriteFrame error! need 1 args: spriteFrame");
 		var o = cocos2d::Sprite::createWithSpriteFrame(std::get<0>(t));
-		return Lua_Push(L, o);
+		return Lua_Pushs(L, o);
 	});
 
 	Lua_NewFunc(L, "createWithSpriteFrameName", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<std::string>(L, "createWithSpriteFrameName error! need 1 args: sprite frame name");
 		var o = cocos2d::Sprite::createWithSpriteFrameName(std::get<0>(t));
-		return Lua_Push(L, o);
+		return Lua_Pushs(L, o);
 	});
 
 	Lua_NewFunc(L, "createWithTexture", [](lua_State* L)
@@ -85,21 +87,24 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<cocos2d::Texture2D*>(L);
 			o = cocos2d::Sprite::createWithTexture(std::get<0>(t));
+			break;
 		}
 		case 5:
 		{
 			var t = Lua_ToTuple<cocos2d::Texture2D*, float, float, float, float>(L);
 			o = cocos2d::Sprite::createWithTexture(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
+			break;
 		}
 		case 6:
 		{
 			var t = Lua_ToTuple<cocos2d::Texture2D*, float, float, float, float, bool>(L);
 			o = cocos2d::Sprite::createWithTexture(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) }, std::get<5>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "create Node error! need 1, 5, 6 args: Texture2D texture, float rectX, rectY, rectW, rectH, bool rotated = false");
 		}
-		return Lua_Push(L, o);
+		return Lua_Pushs(L, o);
 	});
 
 	Lua_NewFunc(L, "setSpriteFrame", [](lua_State* L)
@@ -120,6 +125,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 				var t = Lua_ToTuple<cocos2d::Sprite*, cocos2d::SpriteFrame*>(L, msg);
 				std::get<0>(t)->setSpriteFrame(std::get<1>(t));
 			}
+			break;
 		}
 		default:
 			return luaL_error(L, "%s", msg);
@@ -145,6 +151,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 				var t = Lua_ToTuple<cocos2d::Sprite*, cocos2d::Texture2D*>(L, msg);
 				std::get<0>(t)->setTexture(std::get<1>(t));
 			}
+			break;
 		}
 		default:
 			return luaL_error(L, "%s", msg);
@@ -156,14 +163,14 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	{
 		var t = Lua_ToTuple<cocos2d::Sprite*, cocos2d::SpriteFrame*>(L, "isFrameDisplayed error! need 2 args: self, SpriteFrame frame");
 		var r = std::get<0>(t)->isFrameDisplayed(std::get<1>(t));
-		return Lua_Push(L, r);
+		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getSpriteFrame", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::Sprite*>(L, "getSpriteFrame error! need 1 args: self");
 		var r = std::get<0>(t)->getSpriteFrame();
-		return Lua_Push(L, r);
+		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setDisplayFrameWithAnimationName", [](lua_State* L)
@@ -177,7 +184,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	{
 		var t = Lua_ToTuple<cocos2d::Sprite*>(L, "isFlippedX error! need 1 args: self");
 		var r = std::get<0>(t)->isFlippedX();
-		return Lua_Push(L, r);
+		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setFlippedX", [](lua_State* L)
@@ -191,7 +198,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	{
 		var t = Lua_ToTuple<cocos2d::Sprite*>(L, "isFlippedY error! need 1 args: self");
 		var r = std::get<0>(t)->isFlippedY();
-		return Lua_Push(L, r);
+		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setFlippedY", [](lua_State* L)
@@ -205,7 +212,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	{
 		var t = Lua_ToTuple<cocos2d::Sprite*>(L, "isStretchEnabled error! need 1 args: self");
 		var r = std::get<0>(t)->isStretchEnabled();
-		return Lua_Push(L, r);
+		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setStretchEnabled", [](lua_State* L)
@@ -219,16 +226,29 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	{
 		var t = Lua_ToTuple<cocos2d::Sprite*>(L, "getResourceType error! need 1 args: self");
 		var r = std::get<0>(t)->getResourceType();
-		return Lua_Push(L, r);
+		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getResourceName", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::Sprite*>(L, "getResourceName error! need 1 args: self");
 		var r = std::get<0>(t)->getResourceName();
-		return Lua_Push(L, r);
+		return Lua_Pushs(L, r);
 	});
 
+	Lua_NewFunc(L, "setBlendFunc", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::ui::ImageView*, GLenum, GLenum>(L, "setBlendFunc error! need 3 args: self, GLenum src, dst");
+		std::get<0>(t)->setBlendFunc({ std::get<1>(t), std::get<2>(t) });
+		return 0;
+	});
+
+	Lua_NewFunc(L, "getBlendFunc", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Sprite*>(L, "getBlendFunc error! need 1 args: self");
+		var r = std::get<0>(t)->getBlendFunc();
+		return Lua_Pushs(L, r.src, r.dst);
+	});
 
 
 
@@ -246,7 +266,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 
 		var o = cocos2d::Sprite::create(std::get<0>(t));
 		if (!o) return 0;
-		Lua_Push(L, o);
+		Lua_Pushs(L, o);
 		std::get<1>(t)->addChild(o);
 		o->setPosition(std::get<2>(t), std::get<3>(t));
 		o->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });

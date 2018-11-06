@@ -166,16 +166,19 @@ inline void Lua_Register_Actions(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::RotateTo::create(std::get<0>(t), std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::RotateTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		case 4:
 		{
 			var t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::RotateTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t) });
+			break;
 		}
 		default:
 			return luaL_error(L, "create RotateTo error! need 2 ~ 4 args: float duration, float dstAngleX, float dstAngleY, float dstAngleZ");
@@ -206,16 +209,19 @@ inline void Lua_Register_Actions(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::RotateBy::create(std::get<0>(t), std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::RotateBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		case 4:
 		{
 			var t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::RotateBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t) });
+			break;
 		}
 		default:
 			return luaL_error(L, "create RotateBy error! need 2 ~ 4 args: float duration, float deltaAngleX, float deltaAngleY, float deltaAngleZ");
@@ -246,11 +252,13 @@ inline void Lua_Register_Actions(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::MoveBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) });
+			break;
 		}
 		case 4:
 		{
 			var t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::MoveBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t) });
+			break;
 		}
 		default:
 			return luaL_error(L, "create MoveBy error! need 3 ~ 4 args: float duration, float deltaX, float deltaY, float deltaZ");
@@ -280,11 +288,13 @@ inline void Lua_Register_Actions(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::MoveTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) });
+			break;
 		}
 		case 4:
 		{
 			var t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::MoveTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t) });
+			break;
 		}
 		default:
 			return luaL_error(L, "create MoveTo error! need 3 ~ 4 args: float duration, float dstX, float dstY, float dstZ");
@@ -468,16 +478,19 @@ inline void Lua_Register_Actions(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::ScaleTo::create(std::get<0>(t), std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::ScaleTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		case 4:
 		{
 			var t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::ScaleTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "create ScaleTo error! need 2 ~ 4 args: float duration, float sXY/sX, float sY, float sZ");
@@ -508,16 +521,19 @@ inline void Lua_Register_Actions(lua_State* const& L)
 		{
 			var t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::ScaleBy::create(std::get<0>(t), std::get<1>(t));
+			break;
 		}
 		case 3:
 		{
 			var t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::ScaleBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			break;
 		}
 		case 4:
 		{
 			var t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::ScaleBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
+			break;
 		}
 		default:
 			return luaL_error(L, "create ScaleBy error! need 2 ~ 4 args: float duration, float sXY/sX, float sY, float sZ");
@@ -822,7 +838,9 @@ inline void Lua_Register_Actions(lua_State* const& L)
 		}
 		var r = cocos2d::CallFunc::create([f = std::move(std::get<0>(t))]
 		{
+			assert(!lua_gettop(gLua));
 			Lua_PCall(gLua, f);
+			lua_settop(gLua, 0);
 		});
 		return Lua_Push(L, r);
 

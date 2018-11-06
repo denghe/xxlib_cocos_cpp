@@ -6,21 +6,21 @@
 template<typename T>
 int Lua_Push(lua_State* const& L, T const& v)
 {
-	if constexpr (std::is_integral_v<T>)
-	{
-		lua_pushinteger(L, v);
-	}
-	else if constexpr (std::is_floating_point_v<T>)
-	{
-		lua_pushnumber(L, v);
-	}
-	else if constexpr (std::is_same_v<T, bool>)
+	if constexpr (std::is_same_v<T, bool>)
 	{
 		lua_pushboolean(L, (int)v);
 	}
 	else if constexpr (std::is_enum_v<T>)
 	{
 		lua_pushinteger(L, (int)v);
+	}
+	else if constexpr (std::is_integral_v<T>)
+	{
+		lua_pushinteger(L, v);
+	}
+	else if constexpr (std::is_floating_point_v<T>)
+	{
+		lua_pushnumber(L, v);
 	}
 	else if constexpr (std::is_same_v<T, std::string>)
 	{

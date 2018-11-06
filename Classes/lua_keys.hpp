@@ -339,6 +339,16 @@ struct TypeNames<cocos2d::TextureCache*>
 {
 	inline static const char* value = "TextureCache";
 };
+template<>
+struct TypeNames<GLubyte>
+{
+	inline static const char* value = "GLubyte";
+};
+template<>
+struct TypeNames<GLenum>
+{
+	inline static const char* value = "GLenum";
+};
 // todo: more
 
 
@@ -357,6 +367,36 @@ template<>
 struct TypeNames<cocos2d::ui::ImageView*>
 {
 	inline static const char* value = "ImageView";
+};
+template<>
+struct TypeNames<cocos2d::ui::Widget::FocusDirection>
+{
+	inline static const char* value = "FocusDirection";
+};
+template<>
+struct TypeNames<cocos2d::ui::Widget::PositionType>
+{
+	inline static const char* value = "PositionType";
+};
+template<>
+struct TypeNames<cocos2d::ui::Widget::SizeType>
+{
+	inline static const char* value = "SizeType";
+};
+template<>
+struct TypeNames<cocos2d::ui::Widget::TouchEventType>
+{
+	inline static const char* value = "TouchEventType";
+};
+template<>
+struct TypeNames<cocos2d::ui::Widget::TextureResType>
+{
+	inline static const char* value = "TextureResType";
+};
+template<>
+struct TypeNames<cocos2d::ui::Widget::BrightStyle>
+{
+	inline static const char* value = "BrightStyle";
 };
 
 // todo: more
