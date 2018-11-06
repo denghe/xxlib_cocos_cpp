@@ -88,6 +88,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 	});
 
 
+
+
+
 	Lua_NewFunc(L, "setPopupNotify", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<bool>(L, "setPopupNotify error! need 1 args: bool");
@@ -106,6 +109,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 	{
 		return Lua_Push(L, cocos2d::FileUtils::getInstance()->getWritablePath());
 	});
+
+
+
 
 	Lua_NewFunc(L, "getTargetPlatform", [](lua_State* L)
 	{
@@ -129,6 +135,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 	lua_rawset(L, -3);
 
 
+
+
+
 	Lua_NewFunc(L, "addEventListenerWithSceneGraphPriority", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "addEventListenerWithSceneGraphPriority error! need 2 args: EventListener listener, Node target");
@@ -142,6 +151,128 @@ inline void Lua_Register_cc(lua_State* const& L)
 		cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(std::get<0>(t));
 		return 0;
 	});
+
+
+
+
+	Lua_NewFunc(L, "addImage", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "addImage error! need 1 args: string filepath");
+		var o = cocos2d::Director::getInstance()->getTextureCache()->addImage(std::get<0>(t));
+		return Lua_Push(L, o);
+	});
+
+
+
+
+	Lua_NewFunc(L, "addSpriteFramesWithFile", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			cocos2d::SpriteFrameCache::getInstance()->addSpriteFramesWithFile(std::get<0>(t));
+			break;
+		}
+		case 2:
+		{
+			if (lua_isstring(L, 2))
+			{
+				var t = Lua_ToTuple<std::string, std::string>(L);
+				cocos2d::SpriteFrameCache::getInstance()->addSpriteFramesWithFile(std::get<0>(t), std::get<1>(t));
+			}
+			else
+			{
+				var t = Lua_ToTuple<std::string, cocos2d::Texture2D*>(L);
+				cocos2d::SpriteFrameCache::getInstance()->addSpriteFramesWithFile(std::get<0>(t), std::get<1>(t));
+			}
+			break;
+		}
+		default:
+			return luaL_error(L, "%s", "addSpriteFramesWithFile error! need 1 ~ 2 args: string plist, string textureFileName / Texture2D texture");
+		}
+		return 0;
+	});
+
+
+	Lua_NewFunc(L, "addSpriteFramesWithFileContent", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string, cocos2d::Texture2D*>(L, "addSpriteFramesWithFileContent error! need 2 args: string plist_content, Texture2D texture");
+		cocos2d::SpriteFrameCache::getInstance()->addSpriteFramesWithFileContent(std::get<0>(t), std::get<1>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "addSpriteFrame", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::SpriteFrame*, std::string>(L, "addSpriteFrame error! need 2 args: SpriteFrame frame, string frameName");
+		cocos2d::SpriteFrameCache::getInstance()->addSpriteFrame(std::get<0>(t), std::get<1>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "isSpriteFramesWithFileLoaded", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "isSpriteFramesWithFileLoaded error! need 1 args: string plist");
+		var r = cocos2d::SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "removeSpriteFrames", [](lua_State* L)
+	{
+		cocos2d::SpriteFrameCache::getInstance()->removeSpriteFrames();
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeUnusedSpriteFrames", [](lua_State* L)
+	{
+		cocos2d::SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeSpriteFrameByName", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "removeSpriteFrameByName error! need 1 args: string name");
+		cocos2d::SpriteFrameCache::getInstance()->removeSpriteFrameByName(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeSpriteFramesFromFile", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "removeSpriteFramesFromFile error! need 1 args: string plist");
+		cocos2d::SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeSpriteFramesFromFileContent", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "removeSpriteFramesFromFileContent error! need 1 args: string plist_content");
+		cocos2d::SpriteFrameCache::getInstance()->removeSpriteFramesFromFileContent(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeSpriteFramesFromTexture", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Texture2D*>(L, "removeSpriteFramesFromTexture error! need 1 args: Texture2D texture");
+		cocos2d::SpriteFrameCache::getInstance()->removeSpriteFramesFromTexture(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "getSpriteFrameByName", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "getSpriteFrameByName error! need 1 args: string name");
+		var r = cocos2d::SpriteFrameCache::getInstance()->getSpriteFrameByName(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "reloadTexture", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "reloadTexture error! need 1 args: string plist");
+		var r = cocos2d::SpriteFrameCache::getInstance()->reloadTexture(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+
 
 
 	lua_pushstring(L, "TextHAlignment");
@@ -175,9 +306,8 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_Sprite(L);
 	Lua_Register_Label(L);
 	Lua_Register_ScrollViews(L);
-	//Lua_Register_SpriteFrame(L);							
+	Lua_Register_SpriteFrame(L);
 	Lua_Register_Texture(L);
-	Lua_Register_TextureCache(L);
 	Lua_Register_Actions(L);
 	// .....
 	Lua_Register_uiWidget(L);

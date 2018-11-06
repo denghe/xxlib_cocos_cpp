@@ -26,9 +26,9 @@ inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
 #include "lua_cc_event.hpp"
 #include "lua_cc_eventlisteners.hpp"
 #include "lua_cc_layer.hpp"
+#include "lua_cc_spriteframe.hpp"
 #include "lua_cc_sprite.hpp"
 #include "lua_cc_scrollview.hpp"
-#include "lua_cc_texturecache.hpp"
 #include "lua_cc_texture.hpp"
 
 #include "lua_cc_uiwidget.hpp"
