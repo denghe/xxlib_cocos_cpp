@@ -33,6 +33,7 @@ inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
 
 #include "lua_cc_uiwidget.hpp"
 #include "lua_cc_uibutton.hpp"
+#include "lua_cc_uieditbox.hpp"
 #include "lua_cc_uiimageview.hpp"
 #include "lua_cc.hpp"
 

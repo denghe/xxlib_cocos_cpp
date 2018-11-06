@@ -389,6 +389,11 @@ struct TypeNames<cocos2d::ui::Widget*>
 	inline static const char* value = "UIWidget";
 };
 template<>
+struct TypeNames<cocos2d::ui::EditBox*>
+{
+	inline static const char* value = "EditBox";
+};
+template<>
 struct TypeNames<cocos2d::ui::Button*>
 {
 	inline static const char* value = "UIButton";
@@ -432,6 +437,21 @@ template<>
 struct TypeNames<cocos2d::ui::Widget::BrightStyle>
 {
 	inline static const char* value = "BrightStyle";
+};
+template<>
+struct TypeNames<cocos2d::ui::EditBox::InputMode>
+{
+	inline static const char* value = "InputMode";
+};
+template<>
+struct TypeNames<cocos2d::ui::EditBox::InputFlag>
+{
+	inline static const char* value = "InputFlag";
+};
+template<>
+struct TypeNames<cocos2d::ui::EditBox::KeyboardReturnType>
+{
+	inline static const char* value = "KeyboardReturnType";
 };
 
 // todo: more

@@ -207,6 +207,7 @@
     <ClInclude Include="..\Classes\lua_cc_texture.hpp" />
     <ClInclude Include="..\Classes\lua_cc_texturecache.hpp" />
     <ClInclude Include="..\Classes\lua_cc_touch.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_uieditbox.hpp" />
     <ClInclude Include="..\Classes\lua_cc_uiimageview.hpp" />
     <ClInclude Include="..\Classes\lua_cc_uiwidget.hpp" />
     <ClInclude Include="..\Classes\lua_func.hpp" />
