@@ -7,8 +7,8 @@ this.Open = function()
 	assert(not this.opened)	-- 流程检查
 	assert(this.autoCloseDelayFrames)	-- 参数检查
 
-	-- 创建一个精灵 by 文件名, 放入 scene. 指定坐标, 停靠点
-	local sprite = cc.Sprite.CreateWithFOPA("hi.png", gScene, 450, 300, 0, 0);
+	-- 创建一个精灵 by 文件名, 放入 scene. 指定坐标, 停靠点, 放大系数
+	local sprite = cc.Sprite.CreateEx("hi.png", gScene, 450, 300, 0, 0, 1, 1.5);
 
 	-- 创建单个点击监听器
 	local listener = cc.EventListenerTouchOneByOne.create()
@@ -25,8 +25,6 @@ this.Open = function()
 
 	-- 创建动画播放协程. autoCloseDelayFrames 帧后 Close()
 	gCoros_Push(function()
-		sprite:setScaleXY(1, 1.5)
-		sprite:setAnchorPoint(0, 0)
 		for i = 1, this.autoCloseDelayFrames do
 			yield()
 			sprite:setRotation(i)

@@ -144,7 +144,20 @@ inline void Lua_Register_cc(lua_State* const& L)
 	});
 
 
+	lua_pushstring(L, "TextHAlignment");
+	lua_createtable(L, 3, 0);
+	lua_pushstring(L, "LEFT");	lua_pushinteger(L, (int)cocos2d::TextHAlignment::LEFT);	lua_rawset(L, -3);
+	lua_pushstring(L, "CENTER");	lua_pushinteger(L, (int)cocos2d::TextHAlignment::CENTER);	lua_rawset(L, -3);
+	lua_pushstring(L, "RIGHT");	lua_pushinteger(L, (int)cocos2d::TextHAlignment::RIGHT);	lua_rawset(L, -3);
+	lua_rawset(L, -3);
 
+
+	lua_pushstring(L, "TextHAlignment");
+	lua_createtable(L, 3, 0);
+	lua_pushstring(L, "TOP");	lua_pushinteger(L, (int)cocos2d::TextVAlignment::TOP);	lua_rawset(L, -3);
+	lua_pushstring(L, "CENTER");	lua_pushinteger(L, (int)cocos2d::TextVAlignment::CENTER);	lua_rawset(L, -3);
+	lua_pushstring(L, "BOTTOM");	lua_pushinteger(L, (int)cocos2d::TextVAlignment::BOTTOM);	lua_rawset(L, -3);
+	lua_rawset(L, -3);
 
 
 

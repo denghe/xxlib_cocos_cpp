@@ -60,6 +60,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 		default:
 			return luaL_error(L, "create Node error! need 0 ~ 1 args: string imageFileName");
 		}
+		if (!o) return 0;
 		return Lua_Pushs(L, o);
 	});
 
@@ -67,6 +68,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	{
 		var t = Lua_ToTuple<cocos2d::SpriteFrame*>(L, "createWithSpriteFrame error! need 1 args: spriteFrame");
 		var o = cocos2d::Sprite::createWithSpriteFrame(std::get<0>(t));
+		if (!o) return 0;
 		return Lua_Pushs(L, o);
 	});
 
@@ -74,6 +76,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 	{
 		var t = Lua_ToTuple<std::string>(L, "createWithSpriteFrameName error! need 1 args: sprite frame name");
 		var o = cocos2d::Sprite::createWithSpriteFrameName(std::get<0>(t));
+		if (!o) return 0;
 		return Lua_Pushs(L, o);
 	});
 
@@ -104,6 +107,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 		default:
 			return luaL_error(L, "create Node error! need 1, 5, 6 args: Texture2D texture, float rectX, rectY, rectW, rectH, bool rotated = false");
 		}
+		if (!o) return 0;
 		return Lua_Pushs(L, o);
 	});
 
@@ -259,18 +263,72 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 
 	// 增加一组易于使用的函数. 大写开头. 和 cocos 本体函数以示区别
 
-	Lua_NewFunc(L, "Create_FileName_Owner_Positon_Anchor", [](lua_State* L)
+	Lua_NewFunc(L, "CreateEx", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<std::string, cocos2d::Node*, float, float, float, float>
-			(L, "Create_FileName_Owner_Positon_Anchor error! need 6 args: owner, fileName, px, py, ax, ay");
-
-		var o = cocos2d::Sprite::create(std::get<0>(t));
+		cocos2d::Sprite* o = nullptr;
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			o = cocos2d::Sprite::create(std::get<0>(t));
+			break;
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, cocos2d::Node*>(L);
+			o = cocos2d::Sprite::create(std::get<0>(t));
+			if (!o) break;
+			std::get<1>(t)->addChild(o);
+			break;
+		}
+		case 4:
+		{
+			var t = Lua_ToTuple<std::string, cocos2d::Node*, float, float>(L);
+			o = cocos2d::Sprite::create(std::get<0>(t));
+			if (!o) break;
+			std::get<1>(t)->addChild(o);
+			o->setPosition(std::get<2>(t), std::get<3>(t));
+			break;
+		}
+		case 6:
+		{
+			var t = Lua_ToTuple<std::string, cocos2d::Node*, float, float, float, float>(L);
+			o = cocos2d::Sprite::create(std::get<0>(t));
+			if (!o) break;
+			std::get<1>(t)->addChild(o);
+			o->setPosition(std::get<2>(t), std::get<3>(t));
+			o->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });
+			break;
+		}
+		case 7:
+		{
+			var t = Lua_ToTuple<std::string, cocos2d::Node*, float, float, float, float, float>(L);
+			o = cocos2d::Sprite::create(std::get<0>(t));
+			if (!o) break;
+			std::get<1>(t)->addChild(o);
+			o->setPosition(std::get<2>(t), std::get<3>(t));
+			o->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });
+			o->setScale(std::get<6>(t));
+			break;
+		}
+		case 8:
+		{
+			var t = Lua_ToTuple<std::string, cocos2d::Node*, float, float, float, float, float, float>(L);
+			o = cocos2d::Sprite::create(std::get<0>(t));
+			if (!o) break;
+			std::get<1>(t)->addChild(o);
+			o->setPosition(std::get<2>(t), std::get<3>(t));
+			o->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });
+			o->setScale(std::get<6>(t), std::get<7>(t));
+			break;
+		}
+		default:
+			return luaL_error(L,"%s", "Create_FileName_Owner_Positon_Anchor_Scale error! need 1 ~ 8 args: string fileName, Node owner,float px, py, ax, ay, sx, sy");
+		}
 		if (!o) return 0;
-		Lua_Pushs(L, o);
-		std::get<1>(t)->addChild(o);
-		o->setPosition(std::get<2>(t), std::get<3>(t));
-		o->setAnchorPoint({ std::get<4>(t), std::get<5>(t) });
-		return 1;
+		return Lua_Pushs(L, o);
 	});
 
 	lua_pop(L, 1);
