@@ -364,6 +364,21 @@ struct TypeNames<cocos2d::TextVAlignment>
 {
 	inline static const char* value = "TextVAlignment";
 };
+template<>
+struct TypeNames<cocos2d::LabelEffect>
+{
+	inline static const char* value = "LabelEffect";
+};
+template<>
+struct TypeNames<cocos2d::Label::Overflow>
+{
+	inline static const char* value = "Overflow";
+};
+template<>
+struct TypeNames<cocos2d::Label::LabelType>
+{
+	inline static const char* value = "LabelType";
+};
 // todo: more
 
 
