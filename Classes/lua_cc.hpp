@@ -88,32 +88,6 @@ inline void Lua_Register_cc(lua_State* const& L)
 		return 0;
 	});
 
-
-
-	Lua_NewFunc(L, "getTargetPlatform", [](lua_State* L)
-	{
-		var r = cocos2d::Application::getInstance()->getTargetPlatform();
-		return Lua_Pushs(L, r);
-	});
-
-	lua_pushstring(L, TypeNames<cocos2d::ApplicationProtocol::Platform>::value);
-	lua_createtable(L, 11, 0);
-	lua_pushstring(L, "OS_WINDOWS");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WINDOWS);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_LINUX");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_LINUX);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_MAC");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_MAC);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_ANDROID");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_ANDROID);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_IPHONE");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_IPHONE);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_IPAD");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_IPAD);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_BLACKBERRY");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_BLACKBERRY);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_NACL");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_NACL);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_EMSCRIPTEN");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_EMSCRIPTEN);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_TIZEN");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_TIZEN);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_WINRT");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WINRT);	lua_rawset(L, -3);
-	lua_pushstring(L, "OS_WP8");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WP8);	lua_rawset(L, -3);
-	lua_rawset(L, -3);
-
-
-
 	Lua_NewFunc(L, "scene", [](lua_State* L)
 	{
 		return Lua_Pushs(L, gScene);
@@ -157,9 +131,25 @@ inline void Lua_Register_cc(lua_State* const& L)
 		return Lua_Pushs(L, r);
 	});
 
-	// getOpenGLView setOpenGLView
+	// 暂不实现 getOpenGLView setOpenGLView. 直接在这封一些常用函数
 
-	// 不映射 getTextureCache. 它的函数在下面
+	Lua_NewFunc(L, "setDesignResolutionSize", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<float, float, ResolutionPolicy>(L, "setDesignResolutionSize error! need 3 args: float width, height, ResolutionPolicy resolutionPolicy");
+		cocos2d::Director::getInstance()->getOpenGLView()->setDesignResolutionSize(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+		return 0;
+	});
+
+	lua_pushstring(L, TypeNames<ResolutionPolicy>::value);
+	lua_createtable(L, 11, 0);
+	lua_pushstring(L, "EXACT_FIT");	lua_pushinteger(L, (int)ResolutionPolicy::EXACT_FIT);	lua_rawset(L, -3);
+	lua_pushstring(L, "NO_BORDER");	lua_pushinteger(L, (int)ResolutionPolicy::NO_BORDER);	lua_rawset(L, -3);
+	lua_pushstring(L, "SHOW_ALL");	lua_pushinteger(L, (int)ResolutionPolicy::SHOW_ALL);	lua_rawset(L, -3);
+	lua_pushstring(L, "FIXED_HEIGHT");	lua_pushinteger(L, (int)ResolutionPolicy::FIXED_HEIGHT);	lua_rawset(L, -3);
+	lua_pushstring(L, "FIXED_WIDTH");	lua_pushinteger(L, (int)ResolutionPolicy::FIXED_WIDTH);	lua_rawset(L, -3);
+	lua_pushstring(L, "UNKNOWN");	lua_pushinteger(L, (int)ResolutionPolicy::UNKNOWN);	lua_rawset(L, -3);
+	lua_rawset(L, -3);
+
 
 	Lua_NewFunc(L, "isNextDeltaTimeZero", [](lua_State* L)
 	{
@@ -426,6 +416,35 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 
 	/**************************************************************************************************/
+	// Application
+	/**************************************************************************************************/
+
+
+	Lua_NewFunc(L, "getTargetPlatform", [](lua_State* L)
+	{
+		var r = cocos2d::Application::getInstance()->getTargetPlatform();
+		return Lua_Pushs(L, r);
+	});
+
+	lua_pushstring(L, TypeNames<cocos2d::ApplicationProtocol::Platform>::value);
+	lua_createtable(L, 11, 0);
+	lua_pushstring(L, "OS_WINDOWS");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WINDOWS);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_LINUX");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_LINUX);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_MAC");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_MAC);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_ANDROID");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_ANDROID);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_IPHONE");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_IPHONE);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_IPAD");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_IPAD);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_BLACKBERRY");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_BLACKBERRY);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_NACL");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_NACL);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_EMSCRIPTEN");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_EMSCRIPTEN);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_TIZEN");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_TIZEN);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_WINRT");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WINRT);	lua_rawset(L, -3);
+	lua_pushstring(L, "OS_WP8");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WP8);	lua_rawset(L, -3);
+	lua_rawset(L, -3);
+
+
+
+	/**************************************************************************************************/
 	// EventDispacher
 	/**************************************************************************************************/
 
@@ -586,7 +605,6 @@ inline void Lua_Register_cc(lua_State* const& L)
 	lua_rawset(L, -3);
 
 
-
 	/**************************************************************************************************/
 	// FileUtils
 	/**************************************************************************************************/
@@ -649,10 +667,60 @@ inline void Lua_Register_cc(lua_State* const& L)
 		}
 	});
 
-	Lua_NewFunc(L, "setPopupNotify", [](lua_State* L)
+	Lua_NewFunc(L, "getFileDataFromZip", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<bool>(L, "setPopupNotify error! need 1 args: bool");
-		cocos2d::FileUtils::getInstance()->setPopupNotify(std::get<0>(t));
+		var t = Lua_ToTuple<std::string, std::string>(L, "getFileDataFromZip error! need 2 args: string zipFilePath, filename");
+		ssize_t size = 0;
+		var r = cocos2d::FileUtils::getInstance()->getFileDataFromZip(std::get<0>(t), std::get<1>(t), &size);
+		var d = new cocos2d::Data();
+		d->fastSet(r, size);
+		return Lua_Pushs(L, d);
+	});
+
+	Lua_NewFunc(L, "fullPathForFilename", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "fullPathForFilename error! need 1 args: string filename");
+		cocos2d::FileUtils::getInstance()->fullPathForFilename(std::get<0>(t));
+		return 0;
+	});
+
+	// 不实现 loadFilenameLookupDictionaryFromFile setFilenameLookupDictionary
+
+	Lua_NewFunc(L, "fullPathFromRelativeFile", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string, std::string>(L, "fullPathFromRelativeFile error! need 2 args: string filename, relativeFile");
+		var r = cocos2d::FileUtils::getInstance()->fullPathFromRelativeFile(std::get<0>(t), std::get<1>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	// 不实现 setSearchResolutionsOrder, addSearchResolutionsOrder getSearchResolutionsOrder
+
+	Lua_NewFunc(L, "setSearchPaths", [](lua_State* L)
+	{
+		gStrings.clear();
+		var numArgs = lua_gettop(L);
+		if (numArgs)
+		{
+			for (int i = 1; i <= numArgs; ++i)
+			{
+				gStrings.emplace_back();
+				Lua_Get(gStrings.back(), L, i);
+			}
+		}
+		cocos2d::FileUtils::getInstance()->setSearchPaths(gStrings);
+		return 0;
+	});
+
+	Lua_NewFunc(L, "getDefaultResourceRootPath", [](lua_State* L)
+	{
+		var r = cocos2d::FileUtils::getInstance()->getDefaultResourceRootPath();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "setDefaultResourceRootPath", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "setDefaultResourceRootPath error! need 1 args: string path");
+		cocos2d::FileUtils::getInstance()->setDefaultResourceRootPath(std::get<0>(t));
 		return 0;
 	});
 
@@ -663,13 +731,375 @@ inline void Lua_Register_cc(lua_State* const& L)
 		return 0;
 	});
 
+	Lua_NewFunc(L, "getSearchPaths", [](lua_State* L)
+	{
+		var r = cocos2d::FileUtils::getInstance()->getSearchPaths();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getOriginalSearchPaths", [](lua_State* L)
+	{
+		var r = cocos2d::FileUtils::getInstance()->getOriginalSearchPaths();
+		return Lua_Pushs(L, r);
+	});
+
 	Lua_NewFunc(L, "getWritablePath", [](lua_State* L)
 	{
 		var r = cocos2d::FileUtils::getInstance()->getWritablePath();
 		return Lua_Pushs(L, r);
 	});
 
-	// todo
+	Lua_NewFunc(L, "setWritablePath", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string, bool>(L, "setWritablePath error! need 2 args: string writablePath");
+		cocos2d::FileUtils::getInstance()->setWritablePath(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "setPopupNotify", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<bool>(L, "setPopupNotify error! need 1 args: bool notify");
+		cocos2d::FileUtils::getInstance()->setPopupNotify(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "isPopupNotify", [](lua_State* L)
+	{
+		var r = cocos2d::FileUtils::getInstance()->isPopupNotify();
+		return Lua_Pushs(L, r);
+	});
+
+	// 不实现 getValueMapFromFile getValueMapFromData writeToFile
+
+	Lua_NewFunc(L, "writeStringToFile", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string, std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->writeStringToFile(std::get<0>(t), std::get<1>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->writeStringToFile(std::get<0>(t), std::get<1>(t), [f = std::move(std::get<2>(t))](bool successful)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, successful);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "writeStringToFile error! need 2 ~ 3 args: string dataStr, string fullPath, function<void(bool)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "writeDataToFile", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<cocos2d::Data*, std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->writeDataToFile(*std::get<0>(t), std::get<1>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<cocos2d::Data*, std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->writeDataToFile(std::move(*std::get<0>(t)), std::get<1>(t), [f = std::move(std::get<2>(t))](bool successful)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, successful);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "writeDataToFile error! need 2 ~ 3 args: Data data, string fullPath, function<void(bool)> callback");
+		}
+	});
+
+	// 不实现 writeValueMapToFile writeValueVectorToFile writeValueVectorToFile getSuitableFOpen getValueVectorFromFile
+
+	Lua_NewFunc(L, "isFileExist", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->isFileExist(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->isFileExist(std::get<0>(t), [f = std::move(std::get<1>(t))](bool exists)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, exists);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "isFileExist error! need 1 ~ 2 args: string filename, function<void(bool)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "getFileExtension", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "getFileExtension error! need 1 args: string filePath");
+		var r = cocos2d::FileUtils::getInstance()->getFileExtension(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "isAbsolutePath", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "isAbsolutePath error! need 1 args: string path");
+		var r = cocos2d::FileUtils::getInstance()->isAbsolutePath(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "isDirectoryExist", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->isDirectoryExist(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->isDirectoryExist(std::get<0>(t), [f = std::move(std::get<1>(t))](bool exists)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, exists);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "isDirectoryExist error! need 1 ~ 2 args: string dirPath, function<void(bool)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "createDirectory", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->createDirectory(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->createDirectory(std::get<0>(t), [f = std::move(std::get<1>(t))](bool successfully)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, successfully);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "createDirectory error! need 1 ~ 2 args: string dirPath, function<void(bool)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "removeDirectory", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->removeDirectory(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->removeDirectory(std::get<0>(t), [f = std::move(std::get<1>(t))](bool successfully)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, successfully);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "removeDirectory error! need 1 ~ 2 args: string dirPath, function<void(bool)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "removeFile", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->removeFile(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->removeFile(std::get<0>(t), [f = std::move(std::get<1>(t))](bool successfully)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, successfully);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "removeFile error! need 1 ~ 2 args: string filepath, function<void(bool)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "renameFile", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string, std::string, std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->renameFile(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, std::string, std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->renameFile(std::get<0>(t), std::get<1>(t), std::get<2>(t), [f = std::move(std::get<3>(t))](bool successfully)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, successfully);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "renameFile error! need 3 ~ 4 args: string path, oldname, name, function<void(bool)> callback");
+		}
+	});
+
+	// 不实现 renameFile( string string func )
+
+	Lua_NewFunc(L, "getFileSize", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->getFileSize(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->getFileSize(std::get<0>(t), [f = std::move(std::get<1>(t))](bool successfully)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, successfully);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "getFileSize error! need 1 ~ 2 args: string filepath, function<void(long)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "listFiles", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->listFiles(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->listFilesAsync(std::get<0>(t), [f = std::move(std::get<1>(t))](std::vector<std::string> fs)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, fs);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "listFiles error! need 1 ~ 2 args: string dirPath, function<void(std::vector<std::string>)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "listFilesRecursively", [](lua_State* L)
+	{
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			gStrings.clear();
+			cocos2d::FileUtils::getInstance()->listFilesRecursively(std::get<0>(t), &gStrings);
+			return Lua_Pushs(L, gStrings);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->listFilesRecursivelyAsync(std::get<0>(t), [f = std::move(std::get<1>(t))](std::vector<std::string> fs)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, fs);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "listFilesRecursively error! need 1 ~ 2 args: string dirPath, function<void(std::vector<std::string>)> callback");
+		}
+	});
+
+	Lua_NewFunc(L, "getFullPathCache", [](lua_State* L)
+	{
+		var r = cocos2d::FileUtils::getInstance()->getFullPathCache();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getNewFilename", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "getNewFilename error! need 1 args: string filename");
+		var r = cocos2d::FileUtils::getInstance()->getNewFilename(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
 
 
 	/**************************************************************************************************/
@@ -892,15 +1322,104 @@ inline void Lua_Register_cc(lua_State* const& L)
 	// TextureCache
 	/**************************************************************************************************/
 
-
 	Lua_NewFunc(L, "addImage", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<std::string>(L, "addImage error! need 1 args: string filepath");
-		var o = cocos2d::Director::getInstance()->getTextureCache()->addImage(std::get<0>(t));
-		return Lua_Pushs(L, o);
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::Director::getInstance()->getTextureCache()->addImage(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::Director::getInstance()->getTextureCache()->addImageAsync(std::get<0>(t), [f = std::move(std::get<1>(t))](cocos2d::Texture2D* t2d)
+			{
+				Lua_PCall(gLua, f, t2d);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "addImage error! need 1 ~ 2 args: string filepath, function<void(Texture2D*)> callback");
+		}
 	});
 
-	// todo
+	Lua_NewFunc(L, "unbindImageAsync", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "unbindImageAsync error! need 1 args: string filepath");
+		cocos2d::Director::getInstance()->getTextureCache()->unbindImageAsync(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "unbindAllImageAsync", [](lua_State* L)
+	{
+		cocos2d::Director::getInstance()->getTextureCache()->unbindAllImageAsync();
+		return 0;
+	});
+
+	Lua_NewFunc(L, "getTextureForKey", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "getTextureForKey error! need 1 args: string key");
+		var r = cocos2d::Director::getInstance()->getTextureCache()->getTextureForKey(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "reloadTexture", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "reloadTexture error! need 1 args: string fileName");
+		var r = cocos2d::Director::getInstance()->getTextureCache()->reloadTexture(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "removeAllTextures", [](lua_State* L)
+	{
+		cocos2d::Director::getInstance()->getTextureCache()->removeAllTextures();
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeUnusedTextures", [](lua_State* L)
+	{
+		cocos2d::Director::getInstance()->getTextureCache()->removeUnusedTextures();
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeTexture", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Texture2D*>(L, "removeTexture error! need 1 args: Texture2D texture");
+		cocos2d::Director::getInstance()->getTextureCache()->removeTexture(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "removeTextureForKey", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "removeTextureForKey error! need 1 args: string fileName");
+		cocos2d::Director::getInstance()->getTextureCache()->removeTextureForKey(std::get<0>(t));
+		return 0;
+	});
+
+	Lua_NewFunc(L, "getCachedTextureInfo", [](lua_State* L)
+	{
+		var r = cocos2d::Director::getInstance()->getTextureCache()->getCachedTextureInfo();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getTextureFilePath", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::Texture2D*>(L, "getTextureFilePath error! need 1 args: Texture2D texture");
+		var r = cocos2d::Director::getInstance()->getTextureCache()->getTextureFilePath(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "renameTextureWithKey", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string, std::string>(L, "renameTextureWithKey error! need 1 args: string srcName, dstName");
+		cocos2d::Director::getInstance()->getTextureCache()->renameTextureWithKey(std::get<0>(t), std::get<1>(t));
+		return 0;
+	});
+
 
 
 	/**************************************************************************************************/
@@ -1014,6 +1533,22 @@ inline void Lua_Register_cc(lua_State* const& L)
 		var r = cocos2d::SpriteFrameCache::getInstance()->reloadTexture(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
+
+
+
+
+	/**************************************************************************************************/
+	// AnimationCache
+	/**************************************************************************************************/
+
+	// todo
+
+
+	/**************************************************************************************************/
+	// Audio
+	/**************************************************************************************************/
+
+	// todo
 
 
 	/**************************************************************************************************/

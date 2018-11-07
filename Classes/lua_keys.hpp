@@ -399,6 +399,16 @@ struct TypeNames<cocos2d::ApplicationProtocol::Platform>
 {
 	inline static const char* value = "Platform";
 };
+template<>
+struct TypeNames<ResolutionPolicy>
+{
+	inline static const char* value = "ResolutionPolicy";
+};
+//template<>
+//struct TypeNames<cocos2d::FileUtils::Status>
+//{
+//	inline static const char* value = "Status";
+//};
 
 // todo: more
 

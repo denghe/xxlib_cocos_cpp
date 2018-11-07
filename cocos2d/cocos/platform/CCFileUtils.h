@@ -843,7 +843,7 @@ public:
     virtual void listFilesRecursivelyAsync(const std::string& dirPath, std::function<void(std::vector<std::string>)> callback) const;
 
     /** Returns the full path cache. */
-    const std::unordered_map<std::string, std::string> getFullPathCache() const { return _fullPathCache; }
+    std::unordered_map<std::string, std::string> const& getFullPathCache() const { return _fullPathCache; }	// xx
 
     /**
      *  Gets the new filename from the filename lookup dictionary.

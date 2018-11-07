@@ -53,14 +53,24 @@ int Lua_Push(lua_State* const& L, T const& v)
 		lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
 		lua_setmetatable(L, -2);									// ..., &o
 	}
-	else if constexpr (std::is_same_v<T, cocos2d::Vector<cocos2d::Node*>>)
+	else if constexpr (std::is_same_v<T, cocos2d::Vector<cocos2d::Node*>>
+					|| std::is_same_v<T, std::vector<std::string>>)
 	{
 		lua_createtable(L, v.size(), 0);
 		int i = 0;
-		for (var node : v)
+		for (var o : v)
 		{
-			Lua_Push(L, node);
+			Lua_Push(L, o);
 			lua_rawseti(L, -2, ++i);
+		}
+	}
+	else if constexpr (std::is_same_v<T, std::unordered_map<std::string, std::string>>)
+	{
+		lua_createtable(L, v.size(), 0);
+		for (var o : v)
+		{
+			Lua_Pushs(L, o.first, o.second);
+			lua_rawset(L, -3);
 		}
 	}
 	return 1;
