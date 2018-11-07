@@ -199,10 +199,6 @@ gStates_WaitDisappear = function(state)
 end
 
 
--- 指向当前场景
-gScene = cc.scene()
-
-
 -- 域名解析. 返回 { ip list }. 长度为 0 意味着解析失败或超时
 -- 适合在协程环境使用
 GetIPList = function(domain, timeoutSec)
@@ -339,10 +335,14 @@ end)
 ----------------------------------------------------------------------
 
 -- 初始化显示相关
-cc.createSetOpenGLView("cocos_cpp_lua", 640, 360)
+cc.createSetOpenGLView("cocos_cpp_lua", 1280, 720)
 cc.setDesignResolutionSize(1280, 720, cc.ResolutionPolicy.SHOW_ALL)
 cc.setDisplayStats(true)
-cc.setAnimationInterval(1 / 60)
+cc.setAnimationInterval(1 / 30)
+gScene = cc.Scene.create()
+cc.runWithScene(gScene)
+gX, gY, gW, gH = cc.getSafeAreaRect()
+print( gX, gY, gW, gH )
 
 
 

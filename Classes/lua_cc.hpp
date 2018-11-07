@@ -86,11 +86,6 @@ inline void Lua_Register_cc(lua_State* const& L)
 		return 0;
 	});
 
-	Lua_NewFunc(L, "scene", [](lua_State* L)
-	{
-		return Lua_Pushs(L, gScene);
-	});
-
 	Lua_NewFunc(L, "getRunningScene", [](lua_State* L)
 	{
 		var r = cocos2d::Director::getInstance()->getRunningScene();
@@ -106,8 +101,8 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_NewFunc(L, "setAnimationInterval", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<float>(L, "setAnimationInterval error! need 1 args: float interval. FPS = 1/interval");
-		var r = cocos2d::Director::getInstance()->getAnimationInterval();
-		return Lua_Pushs(L, r);
+		cocos2d::Director::getInstance()->setAnimationInterval(std::get<0>(t));
+		return 0;
 	});
 
 	Lua_NewFunc(L, "isDisplayStats", [](lua_State* L)
@@ -1559,11 +1554,6 @@ inline void Lua_Register_cc(lua_State* const& L)
 	// todo
 
 
-	/**************************************************************************************************/
-	// Audio
-	/**************************************************************************************************/
-
-	// todo
 
 
 	/**************************************************************************************************/
@@ -1629,4 +1619,4 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	lua_pop(L, 1);													//
 	assert(lua_gettop(L) == 0);
-	}
+}

@@ -36,7 +36,6 @@
 inline xx::MemPool* mp = nullptr;
 inline xx::UvLoop* uv = nullptr;
 inline lua_State* gLua = nullptr;
-inline cocos2d::Scene* gScene = nullptr;
 
 inline std::function<void()> enterBackground;
 inline std::function<void()> enterForeground;

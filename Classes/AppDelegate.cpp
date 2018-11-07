@@ -91,9 +91,6 @@ void InitGlobals(bool first)
 	uv = mp->MPCreate<xx::UvLoop>();
 	uv->InitRpcTimeoutManager();
 
-	gScene = cocos2d::Scene::create();
-	cocos2d::Director::getInstance()->runWithScene(gScene);
-
 	int r = Lua_Init();
 	assert(!r);
 }

@@ -11,7 +11,7 @@ inline const char* const LuaKey_Callbacks = "Callbacks";
 inline const char* const LuaKey_FrameUpdateFunc = "FrameUpdateFunc";
 
 inline const char* const LuaKey_cc = "cc";
-inline const char* const LuaKey_ccui = "ccui";
+inline const char* const LuaKey_cca = "cca";
 
 
 struct Lua_BBuffer;
@@ -404,11 +404,11 @@ struct TypeNames<ResolutionPolicy>
 {
 	inline static const char* value = "ResolutionPolicy";
 };
-//template<>
-//struct TypeNames<cocos2d::FileUtils::Status>
-//{
-//	inline static const char* value = "Status";
-//};
+template<>
+struct TypeNames<cocos2d::experimental::AudioEngine::AudioState>
+{
+	inline static const char* value = "AudioState";
+};
 
 // todo: more
 

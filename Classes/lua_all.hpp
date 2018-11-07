@@ -46,5 +46,7 @@ inline std::vector<std::string> gStrings;
 #include "lua_cc_uiimageview.hpp"
 #include "lua_cc.hpp"
 
+#include "lua_cca.hpp"
+
 #include "lua_init.hpp"
 //...

@@ -81,6 +81,9 @@ inline int Lua_Main(lua_State* L)
 	// 加载 cc.* 对象 & 函数映射
 	Lua_Register_cc(L);
 
+	// 加载 cca.* 对象 & 函数映射( audio )
+	Lua_Register_cca(L);
+
 	// 执行 main.lua
 	if (int r = luaL_dostring(L, "require \"main.lua\""))			//
 	{
