@@ -33,12 +33,6 @@
 #include "lua.hpp"
 #include "xx_uv.h"
 
-inline const std::string projectName = "cccpp1";
-inline cocos2d::Size designResolutionSize = cocos2d::Size(1280, 720);
-inline cocos2d::Size visibleSize;
-inline cocos2d::Vec2 origin;
-inline cocos2d::Director* director = nullptr;
-
 inline xx::MemPool* mp = nullptr;
 inline xx::UvLoop* uv = nullptr;
 inline lua_State* gLua = nullptr;

@@ -138,31 +138,6 @@ void AppDelegate::initGLContextAttrs()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-	// initialize director
-	director = cocos2d::Director::getInstance();
-	auto glview = director->getOpenGLView();
-	if (!glview) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-		glview = cocos2d::GLViewImpl::createWithRect(projectName, cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
-#else
-		glview = cocos2d::GLViewImpl::create(projectName);
-#endif
-		director->setOpenGLView(glview);
-	}
-	glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::SHOW_ALL);
-
-	// turn on display FPS
-	director->setDisplayStats(true);
-
-	// set FPS. the default value is 1.0/60 if you don't call this
-	director->setAnimationInterval(1.0f / 60);
-
-	// 可视区域尺寸
-	visibleSize = director->getVisibleSize();
-
-	// 原点坐标( 有些软按键设备原点就不是 0,0 )
-	origin = director->getVisibleOrigin();
-
 	// 重启完成后重置运行时环境
 	cocos2d::Director::getInstance()->restartCallback = [this]
 	{

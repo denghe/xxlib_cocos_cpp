@@ -291,9 +291,9 @@ BBToObject = function(bb)
 end
 
 
-local bb = BBuffer.Create()
 -- 发送请求. 直接返回结果. 返回空为超时或断开
 -- 适合在协程环境使用
+local bb = BBuffer.Create()
 SendRequest = function(c, p)
 	local null = null
 	bb:Clear()
@@ -309,8 +309,8 @@ SendRequest = function(c, p)
 end
 
 
-local co = coroutine_create(function() while true do yield() end end)
 -- 注册每帧执行函数
+local co = coroutine_create(function() while true do yield() end end)
 cc.mainLoopCallback(function()
 	-- 隐藏执行 uv.Run(Once)
 
@@ -333,9 +333,18 @@ cc.mainLoopCallback(function()
 	gFrameNumber = gFrameNumber + 1
 end)
 
+
 ----------------------------------------------------------------------
 -- 用户代码区
 ----------------------------------------------------------------------
+
+-- 初始化显示相关
+cc.createSetOpenGLView("cocos_cpp_lua", 640, 360)
+cc.setDesignResolutionSize(1280, 720, cc.ResolutionPolicy.SHOW_ALL)
+cc.setDisplayStats(true)
+cc.setAnimationInterval(1 / 60)
+
+
 
 
 -- 模拟加载一个状态. 3 秒后状态关闭. 再次打开它. 3 次后重启动程序
@@ -396,7 +405,6 @@ end)
 
 
 
-print(cc.getTargetPlatform())
 
 
 --[[

@@ -81,10 +81,8 @@ inline void Lua_Register_cc(lua_State* const& L)
 	// 创建 重启游戏 函数
 	Lua_NewFunc(L, "restart", [](lua_State* L)
 	{
-		cocos2d::Director::getInstance()->mainLoopCallback = []
-		{
-			cocos2d::Director::getInstance()->restart();	// 下帧重启
-		};
+		cocos2d::Director::getInstance()->restart();
+		cocos2d::Director::getInstance()->mainLoopCallback = nullptr;
 		return 0;
 	});
 
@@ -120,7 +118,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	Lua_NewFunc(L, "setDisplayStats", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float>(L, "setDisplayStats error! need 1 args: bool displayStats");
+		var t = Lua_ToTuple<bool>(L, "setDisplayStats error! need 1 args: bool displayStats");
 		cocos2d::Director::getInstance()->setDisplayStats(std::get<0>(t));
 		return 0;
 	});
@@ -132,6 +130,23 @@ inline void Lua_Register_cc(lua_State* const& L)
 	});
 
 	// 暂不实现 getOpenGLView setOpenGLView. 直接在这封一些常用函数
+
+	Lua_NewFunc(L, "createSetOpenGLView", [](lua_State* L)
+	{
+		var glview = cocos2d::Director::getInstance()->getOpenGLView();
+		if (!glview)
+		{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+			var t = Lua_ToTuple<std::string, float, float>(L, "createGLView error! need 3 args: string projectName, float width, height");
+			glview = cocos2d::GLViewImpl::createWithRect(std::get<0>(t), cocos2d::Rect(0, 0, std::get<1>(t), std::get<2>(t)));
+#else
+			var t = Lua_ToTuple<std::string>(L, "createGLView error! need 1 args: string projectName");
+			glview = cocos2d::GLViewImpl::create(std::get<0>(t));
+#endif
+			cocos2d::Director::getInstance()->setOpenGLView(glview);
+		}
+		return 0;
+		});
 
 	Lua_NewFunc(L, "setDesignResolutionSize", [](lua_State* L)
 	{
@@ -411,7 +426,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_NewFunc(L, "isValid", [](lua_State* L)
 	{
 		var r = cocos2d::Director::getInstance()->isValid();
-		return Lua_Pushs(L,r);
+		return Lua_Pushs(L, r);
 	});
 
 
@@ -1614,4 +1629,4 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	lua_pop(L, 1);													//
 	assert(lua_gettop(L) == 0);
-}
+	}
