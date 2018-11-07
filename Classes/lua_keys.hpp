@@ -70,6 +70,11 @@ struct TypeNames<Lua_Func>
 
 
 template<>
+struct TypeNames<cocos2d::Data*>
+{
+	inline static const char* value = "Data";
+};
+template<>
 struct TypeNames<cocos2d::Ref*>
 {
 	inline static const char* value = "Ref";

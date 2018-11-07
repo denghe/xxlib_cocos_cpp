@@ -599,17 +599,54 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	Lua_NewFunc(L, "getStringFromFile", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<std::string>(L, "getStringFromFile error! need 1 args: string filename");
-		var r = cocos2d::FileUtils::getInstance()->getStringFromFile(std::get<0>(t));
-		return Lua_Pushs(L, r);
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->getStringFromFile(std::get<0>(t));
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->getStringFromFile(std::get<0>(t), [f = std::move(std::get<1>(t))](std::string str)
+			{
+				Lua_PCall(gLua, f, str);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "getStringFromFile error! need 1 ~ 2 args: string filename, function<void(string)> callback");
+		}
 	});
 
 	Lua_NewFunc(L, "getDataFromFile", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<std::string>(L, "getDataFromFile error! need 1 args: string filename");
-		var r = cocos2d::FileUtils::getInstance()->getDataFromFile(std::get<0>(t));
-		// todo: 转为 BBuffer
-		return Lua_Pushs(L, r);
+		var numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			var t = Lua_ToTuple<std::string>(L);
+			var r = cocos2d::FileUtils::getInstance()->getDataFromFile(std::get<0>(t));
+			var data = new cocos2d::Data(std::move(r));
+			return Lua_Pushs(L, data);
+		}
+		case 2:
+		{
+			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->getDataFromFile(std::get<0>(t), [f = std::move(std::get<1>(t))](cocos2d::Data data)
+			{
+				var d = new cocos2d::Data(std::move(data));
+				Lua_PCall(gLua, f, d);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "getDataFromFile error! need 1 ~ 2 args: string filename, function<void(Data)> callback");
+		}
 	});
 
 	Lua_NewFunc(L, "setPopupNotify", [](lua_State* L)
@@ -777,33 +814,20 @@ inline void Lua_Register_cc(lua_State* const& L)
 		case 1:
 		{
 			var t = Lua_ToTuple<const char*>(L);
-			var data = cocos2d::UserDefault::getInstance()->getDataForKey(std::get<0>(t));
-			Lua_BBuffer::Create(L);
-			if (data.getSize())
-			{
-				var bb = *(Lua_BBuffer**)lua_touserdata(L, -1);
-				bb->WriteBuf((const char*)data.getBytes(), data.getSize());
-			}
-			return 1;
+			var r = cocos2d::UserDefault::getInstance()->getDataForKey(std::get<0>(t));
+			var data = new cocos2d::Data(std::move(r));
+			return Lua_Pushs(L, data);
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<const char*, xx::BBuffer*>(L);
-			cocos2d::Data a;
-			a.fastSet((unsigned char*)std::get<1>(t)->buf, std::get<1>(t)->dataLen);
-			var data = cocos2d::UserDefault::getInstance()->getDataForKey(std::get<0>(t), a);
-			a.fastSet(nullptr, 0);
-			Lua_BBuffer::Create(L);
-			if (data.getSize())
-			{
-				var bb = *(Lua_BBuffer**)lua_touserdata(L, -1);
-				bb->WriteBuf((const char*)data.getBytes(), data.getSize());
-			}
-			return 1;
+			var t = Lua_ToTuple<const char*, cocos2d::Data*>(L);
+			var r = cocos2d::UserDefault::getInstance()->getDataForKey(std::get<0>(t), *std::get<1>(t));
+			var data = new cocos2d::Data(std::move(r));
+			return Lua_Pushs(L, data);
 		}
 		default:
 		{
-			return luaL_error(L, "%s", "getDataForKey error! need 1 ~ 2 args: string key, BBuffer defaultValue");
+			return luaL_error(L, "%s", "getDataForKey error! need 1 ~ 2 args: string key, Data defaultValue");
 		}
 		}
 	});
@@ -845,11 +869,8 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	Lua_NewFunc(L, "setDataForKey", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<char const*, xx::BBuffer*>(L, "setDataForKey error! need 2 args: string key, BBuffer data");
-		cocos2d::Data a;
-		a.fastSet((unsigned char*)std::get<1>(t)->buf, std::get<1>(t)->dataLen);
-		cocos2d::UserDefault::getInstance()->setDataForKey(std::get<0>(t), a);
-		a.fastSet(nullptr, 0);
+		var t = Lua_ToTuple<char const*, cocos2d::Data*>(L, "setDataForKey error! need 2 args: string key, Data data");
+		cocos2d::UserDefault::getInstance()->setDataForKey(std::get<0>(t), *std::get<1>(t));
 		return 0;
 	});
 
@@ -1001,6 +1022,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 
 	// 创建 cc.Xxxxxx 元表及函数									// cc
+	Lua_Register_Data(L);
 	Lua_Register_Ref(L);
 	Lua_Register_Node(L);
 	Lua_Register_Scene(L);

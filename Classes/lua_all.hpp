@@ -24,6 +24,7 @@ inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
 #include "lua_xx_uvtcpclient.hpp"
 #include "lua_xx.hpp"
 
+#include "lua_cc_data.hpp"
 #include "lua_cc_ref.hpp"
 #include "lua_cc_actions.hpp"
 #include "lua_cc_node.hpp"

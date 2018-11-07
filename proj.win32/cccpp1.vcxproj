@@ -194,6 +194,7 @@
     <ClInclude Include="..\Classes\lua_all.hpp" />
     <ClInclude Include="..\Classes\lua_cc.hpp" />
     <ClInclude Include="..\Classes\lua_cc_actions.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_data.hpp" />
     <ClInclude Include="..\Classes\lua_cc_label.hpp" />
     <ClInclude Include="..\Classes\lua_cc_scrollview.hpp" />
     <ClInclude Include="..\Classes\lua_cc_spriteframe.hpp" />
