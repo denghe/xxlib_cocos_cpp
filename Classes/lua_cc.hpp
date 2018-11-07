@@ -591,6 +591,27 @@ inline void Lua_Register_cc(lua_State* const& L)
 	// FileUtils
 	/**************************************************************************************************/
 
+	Lua_NewFunc(L, "purgeCachedEntries", [](lua_State* L)
+	{
+		cocos2d::FileUtils::getInstance()->purgeCachedEntries();
+		return 0;
+	});
+
+	Lua_NewFunc(L, "getStringFromFile", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "getStringFromFile error! need 1 args: string filename");
+		var r = cocos2d::FileUtils::getInstance()->getStringFromFile(std::get<0>(t));
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getDataFromFile", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<std::string>(L, "getDataFromFile error! need 1 args: string filename");
+		var r = cocos2d::FileUtils::getInstance()->getDataFromFile(std::get<0>(t));
+		// todo: 转为 BBuffer
+		return Lua_Pushs(L, r);
+	});
+
 	Lua_NewFunc(L, "setPopupNotify", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<bool>(L, "setPopupNotify error! need 1 args: bool");
