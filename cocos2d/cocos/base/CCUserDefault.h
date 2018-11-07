@@ -77,7 +77,7 @@ public:
      * @return Integer value of the key.
      * @js NA
      */
-    int     getIntegerForKey(const char* key);
+	long long     getIntegerForKey(const char* key);	// xx
     
     /**
      * Get bool value by key, if the key doesn't exist, will return passed default value.
@@ -86,7 +86,7 @@ public:
      * @return Integer value of the key.
      * @js NA
      */
-    virtual int getIntegerForKey(const char* key, int defaultValue);
+    virtual long long getIntegerForKey(const char* key, long long defaultValue);	// xx
     
     /**
      * Get float value by key, if the key doesn't exist, will return 0.0.
@@ -171,7 +171,7 @@ public:
      * @param value A integer value to set to the key.
      * @js NA
      */
-    virtual void setIntegerForKey(const char* key, int value);
+    virtual void setIntegerForKey(const char* key, long long value);	// xx
     /**
      * Set float value by key.
      * @param key The key to set.

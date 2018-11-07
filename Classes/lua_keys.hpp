@@ -379,6 +379,22 @@ struct TypeNames<cocos2d::Label::LabelType>
 {
 	inline static const char* value = "LabelType";
 };
+template<>
+struct TypeNames<cocos2d::Director::Projection>
+{
+	inline static const char* value = "Projection";
+};
+template<>
+struct TypeNames<cocos2d::EventListener::Type>
+{
+	inline static const char* value = "EventListenerType";
+};
+template<>
+struct TypeNames<cocos2d::ApplicationProtocol::Platform>
+{
+	inline static const char* value = "Platform";
+};
+
 // todo: more
 
 

@@ -17,6 +17,13 @@ inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
 #include "lua_new_xxx.hpp"
 #include "lua_to_xxx.hpp"
 
+#include "lua_xx_mempool.hpp"
+#include "lua_xx_object.hpp"
+#include "lua_xx_bbuffer.hpp"
+#include "lua_xx_uvloop.hpp"
+#include "lua_xx_uvtcpclient.hpp"
+#include "lua_xx.hpp"
+
 #include "lua_cc_ref.hpp"
 #include "lua_cc_actions.hpp"
 #include "lua_cc_node.hpp"
@@ -36,13 +43,6 @@ inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
 #include "lua_cc_uieditbox.hpp"
 #include "lua_cc_uiimageview.hpp"
 #include "lua_cc.hpp"
-
-#include "lua_xx_mempool.hpp"
-#include "lua_xx_object.hpp"
-#include "lua_xx_bbuffer.hpp"
-#include "lua_xx_uvloop.hpp"
-#include "lua_xx_uvtcpclient.hpp"
-#include "lua_xx.hpp"
 
 #include "lua_init.hpp"
 //...
