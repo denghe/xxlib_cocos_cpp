@@ -50,6 +50,13 @@ inline void Lua_Register_AssetsManagerEx(lua_State* const& L)
 
 
 
+
+
+
+
+
+
+
 	Lua_NewMT(L, TypeNames<cocos2d::extension::AssetsManagerEx*>::value, TypeNames<cocos2d::Ref*>::value);
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
