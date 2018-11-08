@@ -51,5 +51,7 @@ inline std::vector<std::string> gStrings;
 
 #include "lua_cca.hpp"
 
+#include "lua_spine.hpp"
+
 #include "lua_init.hpp"
 //...

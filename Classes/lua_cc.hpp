@@ -1618,9 +1618,6 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	// .....
 
-
-
-
 	lua_pop(L, 1);													//
 	assert(lua_gettop(L) == 0);
 }

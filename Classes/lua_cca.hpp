@@ -2,14 +2,10 @@
 
 inline void Lua_Register_cca(lua_State* const& L)
 {
-	// 创建全局 cc 基表
 	lua_createtable(L, 0, 100);										// cca
 	lua_pushvalue(L, -1);											// cca, cca
 	lua_setglobal(L, LuaKey_cca);									// cca
 
-	/**************************************************************************************************/
-	// Audio
-	/**************************************************************************************************/
 
 	Lua_NewFunc(L, "play2d", [](lua_State* L)
 	{

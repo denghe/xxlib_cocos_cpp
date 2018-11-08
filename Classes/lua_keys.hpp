@@ -11,6 +11,7 @@ inline const char* const LuaKey_Callbacks = "AllCallbacks";
 
 inline const char* const LuaKey_cc = "cc";
 inline const char* const LuaKey_cca = "cca";
+inline const char* const LuaKey_spine = "spine";
 
 
 struct Lua_BBuffer;
@@ -557,6 +558,79 @@ template<>
 struct TypeNames<cocos2d::ui::Layout::BackGroundColorType>
 {
 	inline static const char* value = "BackGroundColorType";
+};
+
+// todo: more
+
+template<>
+struct TypeNames<spine::SkeletonAnimation*>
+{
+	inline static const char* value = "SkeletonAnimation";
+};
+template<>
+struct TypeNames<spine::SkeletonRenderer*>
+{
+	inline static const char* value = "SkeletonRenderer";
+};
+//template<>
+//struct TypeNames<spVertexEffect*>
+//{
+//	inline static const char* value = "spVertexEffect";
+//};
+template<>
+struct TypeNames<spSkeleton*>
+{
+	inline static const char* value = "spSkeleton";
+};
+template<>
+struct TypeNames<spBone*>
+{
+	inline static const char* value = "spBone";
+};
+template<>
+struct TypeNames<spSlot*>
+{
+	inline static const char* value = "spSlot";
+};
+template<>
+struct TypeNames<spAttachment*>
+{
+	inline static const char* value = "spAttachment";
+};
+template<>
+struct TypeNames<spSkeletonData*>
+{
+	inline static const char* value = "spSkeletonData";
+};
+template<>
+struct TypeNames<spAnimationStateData*>
+{
+	inline static const char* value = "spAnimationStateData";
+};
+template<>
+struct TypeNames<spTrackEntry*>
+{
+	inline static const char* value = "spTrackEntry";
+};
+template<>
+struct TypeNames<spEvent*>
+{
+	inline static const char* value = "spEvent";
+};
+template<>
+struct TypeNames<spAtlas*>
+{
+	inline static const char* value = "spAtlas";
+};
+template<>
+struct TypeNames<spAnimation*>
+{
+	inline static const char* value = "spAnimation";
+};
+template<>
+struct TypeNames<spAnimationState*>
+{
+	inline static const char* value = "spAnimationState";
 };
 
 // todo: more
