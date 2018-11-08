@@ -58,7 +58,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 			break;
 		}
 		default:
-			return luaL_error(L, "create Node error! need 0 ~ 1 args: string imageFileName");
+			return luaL_error(L, "create Sprite error! need 0 ~ 1 args: string imageFileName");
 		}
 		if (!o) return 0;
 		return Lua_Pushs(L, o);

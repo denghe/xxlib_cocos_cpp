@@ -479,6 +479,16 @@ struct TypeNames<cocos2d::ui::ImageView*>
 	inline static const char* value = "ImageView";
 };
 template<>
+struct TypeNames<cocos2d::ui::Layout*>
+{
+	inline static const char* value = "Layout";
+};
+template<>
+struct TypeNames<cocos2d::ui::LoadingBar*>
+{
+	inline static const char* value = "LoadingBar";
+};
+template<>
 struct TypeNames<cocos2d::ui::Scale9Sprite*>
 {
 	inline static const char* value = "Scale9Sprite";
@@ -527,6 +537,26 @@ template<>
 struct TypeNames<cocos2d::ui::EditBox::KeyboardReturnType>
 {
 	inline static const char* value = "KeyboardReturnType";
+};
+template<>
+struct TypeNames<cocos2d::ui::LoadingBar::Direction>
+{
+	inline static const char* value = "LoadingBarDirection";
+};
+template<>
+struct TypeNames<cocos2d::ui::Layout::ClippingType>
+{
+	inline static const char* value = "ClippingType";
+};
+template<>
+struct TypeNames<cocos2d::ui::Layout::Type>
+{
+	inline static const char* value = "LayoutType";
+};
+template<>
+struct TypeNames<cocos2d::ui::Layout::BackGroundColorType>
+{
+	inline static const char* value = "BackGroundColorType";
 };
 
 // todo: more

@@ -98,8 +98,6 @@ function DumpPackage(t)
 end
 
 
--- 全局帧数
-gFrameNumber = 0
 
 -- 全局协程池( 乱序 )
 gCoros = List_Create()
@@ -305,10 +303,28 @@ SendRequest = function(c, p)
 end
 
 
+-- 用于注册更新函数. 直接往里面放函数或移除. 每帧将逻辑无序遍历执行.
+gUpdates = {}
+
+-- 执行所有 update 函数
+gUpdates_Exec = function()
+	local t = gUpdates
+	for k, f in pairs(t) do
+		f()
+	end
+end
+
+
+-- 全局帧数
+gFrameNumber = 0
+
 -- 注册每帧执行函数
 local co = coroutine_create(function() while true do yield() end end)
 cc.mainLoopCallback(function()
 	-- 隐藏执行 uv.Run(Once)
+
+	-- 执行 gUpdates 里的所有函数
+	gUpdates_Exec()
 
 	-- 执行 gCoros 里的所有协程
 	local t = gCoros
@@ -334,6 +350,93 @@ end)
 -- 用户代码区
 ----------------------------------------------------------------------
 
+
+-- 公用网络层
+gNet = xx.UvTcpClient.Create()
+
+-- 推送的多播处理函数集 key: proto, val: { func(serial, pkg)... }
+gNetHandlers = {}
+
+-- 注册网络包处理函数
+gNetHandlers_Register = function(pkgProto, key, func)
+	local t = gNetHandlers[pkgProto]
+	if t == nil then
+		t = {}
+		gNetHandlers[pkgProto] = t
+	end
+	if t[key] ~= nil then
+		print("warning: gNetEvents_Register: pkgProto = "..pkgProto.typeName..", key = "..key.." exists.")
+	else
+		t[key] = func
+	end
+end
+
+-- 反注册网络包处理函数
+gNetHandlers_Unregister = function(pkgProto, key)
+	local t = gNetHandlers[pkgProto]
+	if t == nil then
+		print("warning: gNetHandlers_Unregister: pkgProto = "..pkgProto.typeName.." can't find any handler!!")
+	else
+		if t[key] == nil then
+			print("warning: gNetHandlers_Unregister: pkgProto = "..pkgProto.typeName..", key = "..key.." does not exists!!")
+		else
+			t[key] = nil
+		end
+	end
+end
+
+-- 发送推送包
+gNet_Send = function(pkg)
+	local bb = BBuffer.Create()
+	bb:WriteRoot(pkg)
+	return gNet:Send(bb)
+end
+
+-- 发送请求包. 如果不传入 cb, 则会阻塞等待网络返回数据并 return. 如果传入 cb, 则会在超时或收到返回数据时触发执行 cb
+-- 适合在 coro 环境使用( 如果不传入 cb )
+gNet_SendRequest = function(pkg, cb)
+	local bb = BBuffer.Create()
+	bb:WriteRoot(pkg)
+	if cb ~= nil then
+		return gNet:SendRequest(bb, cb)
+	else
+		local yield = coroutine.yield
+		local t = { [1] = null }
+		gNet:SendRequest(bb, function(pkg)
+			t[1] = pkg
+		end)
+		while t[1] == null do
+			yield()
+		end
+		return t[1]
+	end
+end
+
+-- 发送应答包
+gNet_SendResponse = function(pkg, serial)
+	local bb = BBuffer.Create()
+	bb:WriteRoot(pkg)
+	return gNet:SendResponse(bb, serial)
+end
+
+-- 设置默认的推送处理回调
+gNet:OnReceivePackage(function(pkg)
+	if pkg == nil then
+		return
+	end
+	local t = gNetHandlers[pkg.__proto]
+	if t == nil then
+		print("warning: gNet:OnReceivePackage: typeName = "..pkg.__proto.typeName..", typeId = "..pkg.__proto.typeId.." can't find any handler!!")
+	else
+		for _, f in pairs(t) do
+			f(pkg)
+		end
+	end
+end)
+
+
+
+
 -- 初始化显示相关
 cc.createSetOpenGLView("cocos_cpp_lua", 1280, 720)
 cc.setDesignResolutionSize(1280, 720, cc.ResolutionPolicy.SHOW_ALL)
@@ -344,9 +447,26 @@ cc.runWithScene(gScene)
 gX, gY, gW, gH = cc.getSafeAreaRect()
 print( gX, gY, gW, gH )
 
+ -- avoid memory leak
+ collectgarbage("setpause", 100)
+ collectgarbage("setstepmul", 5000)
+
+-- 加载全局设置 gSettings
+require "app/Common/Def.lua"
+require "app/Common/PKG_class.lua"
+require "app/Common/GameInfoManager.lua"
+
+sGameManager.Init()
+
+go(require "logic.lua")
 
 
 
+
+
+
+
+--[[
 -- 模拟加载一个状态. 3 秒后状态关闭. 再次打开它. 3 次后重启动程序
 local panel = require "panel.lua"
 panel.autoCloseDelayFrames = 180
@@ -403,11 +523,6 @@ go(function()
 end)
 
 
-
-
-
-
---[[
 
 -- 测试网络层2
 go(function()
