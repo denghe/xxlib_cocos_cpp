@@ -304,6 +304,11 @@ struct TypeNames<cocos2d::EventListenerKeyboard*>
 	inline static const char* value = "EventListenerKeyboard";
 };
 template<>
+struct TypeNames<cocos2d::extension::EventListenerAssetsManagerEx*>
+{
+	inline static const char* value = "EventListenerAssetsManagerEx";
+};
+template<>
 struct TypeNames<cocos2d::Node*>
 {
 	inline static const char* value = "Node";
@@ -426,7 +431,7 @@ struct TypeNames<cocos2d::EventKeyboard::KeyCode>
 template<>
 struct TypeNames<cocos2d::extension::AssetsManagerEx::State>
 {
-	inline static const char* value = "AMState";
+	inline static const char* value = "State";
 };
 template<>
 struct TypeNames<cocos2d::extension::Manifest*>
@@ -437,6 +442,11 @@ template<>
 struct TypeNames<cocos2d::extension::Manifest const*>
 {
 	inline static const char* value = "Manifest";
+};
+template<>
+struct TypeNames<cocos2d::extension::EventAssetsManagerEx::EventCode>
+{
+	inline static const char* value = "EventCode";
 };
 
 // todo: more

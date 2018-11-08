@@ -343,3 +343,64 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 
 	lua_pop(L, 1);
 }
+
+
+
+
+
+
+inline void Lua_Register_EventListenerAssetsManagerEx(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::extension::EventListenerAssetsManagerEx*>::value, TypeNames<cocos2d::EventListener*>::value);
+
+	Lua_NewFunc(L, "new", [](lua_State* L)
+	{
+		var o = new (std::nothrow) cocos2d::extension::EventListenerAssetsManagerEx();
+		if (!o) return 0;
+		return Lua_Push(L, o);
+	});
+
+	Lua_NewFunc(L, "init", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventListenerAssetsManagerEx*, cocos2d::extension::AssetsManagerEx*, Lua_Func>(L, "init error! need 3 args: self, AssetsManagerEx am, function<void(EventAssetsManagerEx*)>& callback");
+		std::get<0>(t)->init(std::get<1>(t), [f = std::move(std::get<2>(t))](cocos2d::extension::EventAssetsManagerEx* e)
+		{
+			assert(!lua_gettop(gLua));
+			Lua_PCall(gLua, f, e);
+			lua_settop(gLua, 0);
+		});
+		return 0;
+	});
+
+	Lua_NewFunc(L, "create", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::AssetsManagerEx*, Lua_Func>(L, "create EventListenerAssetsManagerEx error! need 3 args: self, AssetsManagerEx am, function<void(EventAssetsManagerEx*)>& callback");
+		var o = cocos2d::extension::EventListenerAssetsManagerEx::create(std::get<0>(t), [f = std::move(std::get<1>(t))](cocos2d::extension::EventAssetsManagerEx* e)
+		{
+			assert(!lua_gettop(gLua));
+			Lua_PCall(gLua, f, e);
+			lua_settop(gLua, 0);
+		});
+		if (!o) return 0;
+		return Lua_Push(L, o);
+	});
+
+	lua_pop(L, 1);
+
+
+	lua_pushstring(L, TypeNames<cocos2d::extension::EventAssetsManagerEx::EventCode>::value);
+	lua_createtable(L, 1, 0);
+	lua_pushstring(L, "ERROR_NO_LOCAL_MANIFEST");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);	lua_rawset(L, -3);
+	lua_pushstring(L, "ERROR_DOWNLOAD_MANIFEST");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST);	lua_rawset(L, -3);
+	lua_pushstring(L, "ERROR_PARSE_MANIFEST");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST);	lua_rawset(L, -3);
+	lua_pushstring(L, "NEW_VERSION_FOUND");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::NEW_VERSION_FOUND);	lua_rawset(L, -3);
+	lua_pushstring(L, "ALREADY_UP_TO_DATE");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE);	lua_rawset(L, -3);
+	lua_pushstring(L, "UPDATE_PROGRESSION");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION);	lua_rawset(L, -3);
+	lua_pushstring(L, "ASSET_UPDATED");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::ASSET_UPDATED);	lua_rawset(L, -3);
+	lua_pushstring(L, "ERROR_UPDATING");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::ERROR_UPDATING);	lua_rawset(L, -3);
+	lua_pushstring(L, "UPDATE_FINISHED");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::UPDATE_FINISHED);	lua_rawset(L, -3);
+	lua_pushstring(L, "UPDATE_FAILED");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::UPDATE_FAILED);	lua_rawset(L, -3);
+	lua_pushstring(L, "ERROR_DECOMPRESS");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS);	lua_rawset(L, -3);
+	lua_rawset(L, -3);
+
+}
