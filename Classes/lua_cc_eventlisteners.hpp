@@ -351,6 +351,70 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 
 inline void Lua_Register_EventListenerAssetsManagerEx(lua_State* const& L)
 {
+	Lua_NewMT(L, TypeNames<cocos2d::extension::EventAssetsManagerEx*>::value, TypeNames<cocos2d::Ref*>::value);
+
+	Lua_NewFunc(L, "getEventCode", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getEventCode error! need 1 args: self");
+		var r = std::get<0>(t)->getEventCode();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getCURLECode", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getCURLECode error! need 1 args: self");
+		var r = std::get<0>(t)->getCURLECode();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getCURLMCode", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getCURLMCode error! need 1 args: self");
+		var r = std::get<0>(t)->getCURLMCode();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getMessage", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getMessage error! need 1 args: self");
+		var r = std::get<0>(t)->getMessage();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getAssetId", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getAssetId error! need 1 args: self");
+		var r = std::get<0>(t)->getAssetId();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getAssetsManagerEx", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getAssetsManagerEx error! need 1 args: self");
+		var r = std::get<0>(t)->getAssetsManagerEx();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getPercent", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getPercent error! need 1 args: self");
+		var r = std::get<0>(t)->getPercent();
+		return Lua_Pushs(L, r);
+	});
+
+	Lua_NewFunc(L, "getPercentByFile", [](lua_State* L)
+	{
+		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getPercentByFile error! need 1 args: self");
+		var r = std::get<0>(t)->getPercentByFile();
+		return Lua_Pushs(L, r);
+	});
+
+	lua_pop(L, 1);
+
+
+
+
+
 	Lua_NewMT(L, TypeNames<cocos2d::extension::EventListenerAssetsManagerEx*>::value, TypeNames<cocos2d::EventListener*>::value);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)

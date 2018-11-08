@@ -448,6 +448,11 @@ struct TypeNames<cocos2d::extension::EventAssetsManagerEx::EventCode>
 {
 	inline static const char* value = "EventCode";
 };
+template<>
+struct TypeNames<cocos2d::extension::EventAssetsManagerEx*>
+{
+	inline static const char* value = "EventAssetsManagerEx";
+};
 
 // todo: more
 
