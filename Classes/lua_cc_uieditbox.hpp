@@ -460,7 +460,7 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	lua_pop(L, 1);
 
-	lua_pushstring(L, "InputMode");
+	lua_pushstring(L, TypeNames<cocos2d::ui::EditBox::InputMode>::value);
 	lua_createtable(L, 7, 0);
 	lua_pushstring(L, "ANY");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::InputMode::ANY);	lua_rawset(L, -3);
 	lua_pushstring(L, "EMAIL_ADDRESS");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::InputMode::EMAIL_ADDRESS);	lua_rawset(L, -3);
@@ -471,7 +471,7 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 	lua_pushstring(L, "SINGLE_LINE");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::InputMode::SINGLE_LINE);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "InputFlag");
+	lua_pushstring(L, TypeNames<cocos2d::ui::EditBox::InputFlag>::value);
 	lua_createtable(L, 6, 0);
 	lua_pushstring(L, "PASSWORD");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::InputFlag::PASSWORD);	lua_rawset(L, -3);
 	lua_pushstring(L, "SENSITIVE");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::InputFlag::SENSITIVE);	lua_rawset(L, -3);
@@ -481,8 +481,8 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 	lua_pushstring(L, "LOWERCASE_ALL_CHARACTERS");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::InputFlag::LOWERCASE_ALL_CHARACTERS);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "KeyboardReturnType");
-	lua_createtable(L, 7, 0);
+	lua_pushstring(L, TypeNames<cocos2d::ui::EditBox::KeyboardReturnType>::value);
+	lua_createtable(L, 6, 0);
 	lua_pushstring(L, "DEFAULT");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);	lua_rawset(L, -3);
 	lua_pushstring(L, "DONE");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::KeyboardReturnType::DONE);	lua_rawset(L, -3);
 	lua_pushstring(L, "SEND");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::KeyboardReturnType::SEND);	lua_rawset(L, -3);

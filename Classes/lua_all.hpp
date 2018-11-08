@@ -27,6 +27,7 @@ inline std::vector<std::string> gStrings;
 
 #include "lua_cc_data.hpp"
 #include "lua_cc_ref.hpp"
+#include "lua_cc_assetsmanagerex.hpp"
 #include "lua_cc_actions.hpp"
 #include "lua_cc_node.hpp"
 #include "lua_cc_label.hpp"

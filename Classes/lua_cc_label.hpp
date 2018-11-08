@@ -578,7 +578,7 @@ inline void Lua_Register_Label(lua_State* const& L)
 
 	lua_pop(L, 1);
 
-	lua_pushstring(L, "Overflow");
+	lua_pushstring(L, TypeNames<cocos2d::Label::Overflow>::value);
 	lua_createtable(L, 4, 0);
 	lua_pushstring(L, "NONE");	lua_pushinteger(L, (int)cocos2d::Label::Overflow::NONE);	lua_rawset(L, -3);
 	lua_pushstring(L, "CLAMP");	lua_pushinteger(L, (int)cocos2d::Label::Overflow::CLAMP);	lua_rawset(L, -3);
@@ -586,7 +586,7 @@ inline void Lua_Register_Label(lua_State* const& L)
 	lua_pushstring(L, "RESIZE_HEIGHT");	lua_pushinteger(L, (int)cocos2d::Label::Overflow::RESIZE_HEIGHT);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "LabelType");
+	lua_pushstring(L, TypeNames<cocos2d::Label::LabelType>::value);
 	lua_createtable(L, 4, 0);
 	lua_pushstring(L, "TTF");	lua_pushinteger(L, (int)cocos2d::Label::LabelType::TTF);	lua_rawset(L, -3);
 	lua_pushstring(L, "BMFONT");	lua_pushinteger(L, (int)cocos2d::Label::LabelType::BMFONT);	lua_rawset(L, -3);
@@ -594,7 +594,7 @@ inline void Lua_Register_Label(lua_State* const& L)
 	lua_pushstring(L, "STRING_TEXTURE");	lua_pushinteger(L, (int)cocos2d::Label::LabelType::STRING_TEXTURE);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "LabelEffect");
+	lua_pushstring(L, TypeNames<cocos2d::LabelEffect>::value);
 	lua_createtable(L, 9, 0);
 	lua_pushstring(L, "NORMAL");	lua_pushinteger(L, (int)cocos2d::LabelEffect::NORMAL);	lua_rawset(L, -3);
 	lua_pushstring(L, "OUTLINE");	lua_pushinteger(L, (int)cocos2d::LabelEffect::OUTLINE);	lua_rawset(L, -3);

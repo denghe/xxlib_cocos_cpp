@@ -516,7 +516,7 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 	lua_pop(L, 1);
 
 
-	lua_pushstring(L, "FocusDirection");
+	lua_pushstring(L, TypeNames<cocos2d::ui::Widget::FocusDirection>::value);
 	lua_createtable(L, 4, 0);
 	lua_pushstring(L, "LEFT");	lua_pushinteger(L, (int)cocos2d::ui::Widget::FocusDirection::LEFT);	lua_rawset(L, -3);
 	lua_pushstring(L, "RIGHT");	lua_pushinteger(L, (int)cocos2d::ui::Widget::FocusDirection::RIGHT);	lua_rawset(L, -3);
@@ -524,19 +524,19 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 	lua_pushstring(L, "DOWN");	lua_pushinteger(L, (int)cocos2d::ui::Widget::FocusDirection::DOWN);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "PositionType");
+	lua_pushstring(L, TypeNames<cocos2d::ui::Widget::PositionType>::value);
 	lua_createtable(L, 2, 0);
 	lua_pushstring(L, "ABSOLUTE");	lua_pushinteger(L, (int)cocos2d::ui::Widget::PositionType::ABSOLUTE);	lua_rawset(L, -3);
 	lua_pushstring(L, "PERCENT");	lua_pushinteger(L, (int)cocos2d::ui::Widget::PositionType::PERCENT);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "SizeType");
+	lua_pushstring(L, TypeNames<cocos2d::ui::Widget::SizeType>::value);
 	lua_createtable(L, 2, 0);
 	lua_pushstring(L, "ABSOLUTE");	lua_pushinteger(L, (int)cocos2d::ui::Widget::SizeType::ABSOLUTE);	lua_rawset(L, -3);
 	lua_pushstring(L, "PERCENT");	lua_pushinteger(L, (int)cocos2d::ui::Widget::SizeType::PERCENT);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "TouchEventType");
+	lua_pushstring(L, TypeNames<cocos2d::ui::Widget::TouchEventType>::value);
 	lua_createtable(L, 4, 0);
 	lua_pushstring(L, "BEGAN");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TouchEventType::BEGAN);	lua_rawset(L, -3);
 	lua_pushstring(L, "MOVED");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TouchEventType::MOVED);	lua_rawset(L, -3);
@@ -544,13 +544,13 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 	lua_pushstring(L, "CANCELED");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TouchEventType::CANCELED);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "TextureResType");
+	lua_pushstring(L, TypeNames<cocos2d::ui::Widget::TextureResType>::value);
 	lua_createtable(L, 2, 0);
 	lua_pushstring(L, "LOCAL");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TextureResType::LOCAL);	lua_rawset(L, -3);
 	lua_pushstring(L, "PLIST");	lua_pushinteger(L, (int)cocos2d::ui::Widget::TextureResType::PLIST);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "BrightStyle");
+	lua_pushstring(L, TypeNames<cocos2d::ui::Widget::BrightStyle>::value);
 	lua_createtable(L, 3, 0);
 	lua_pushstring(L, "NONE");	lua_pushinteger(L, (int)cocos2d::ui::Widget::BrightStyle::NONE);	lua_rawset(L, -3);
 	lua_pushstring(L, "NORMAL");	lua_pushinteger(L, (int)cocos2d::ui::Widget::BrightStyle::NORMAL);	lua_rawset(L, -3);

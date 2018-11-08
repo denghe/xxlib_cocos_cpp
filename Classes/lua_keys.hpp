@@ -80,6 +80,11 @@ struct TypeNames<cocos2d::Ref*>
 	inline static const char* value = "Ref";
 };
 template<>
+struct TypeNames<cocos2d::extension::AssetsManagerEx*>
+{
+	inline static const char* value = "AssetsManagerEx";
+};
+template<>
 struct TypeNames<cocos2d::Action*>
 {
 	inline static const char* value = "Action";
@@ -409,6 +414,26 @@ struct TypeNames<cocos2d::experimental::AudioEngine::AudioState>
 {
 	inline static const char* value = "AudioState";
 };
+template<>
+struct TypeNames<cocos2d::Event::Type>
+{
+	inline static const char* value = "EventType";
+};
+template<>
+struct TypeNames<cocos2d::EventKeyboard::KeyCode>
+{
+	inline static const char* value = "KeyCode";
+};
+template<>
+struct TypeNames<cocos2d::extension::AssetsManagerEx::State>
+{
+	inline static const char* value = "AMState";
+};
+template<>
+struct TypeNames<cocos2d::extension::Manifest*>
+{
+	inline static const char* value = "Manifest";
+};
 
 // todo: more
 
@@ -417,7 +442,7 @@ struct TypeNames<cocos2d::experimental::AudioEngine::AudioState>
 template<>
 struct TypeNames<cocos2d::ui::Widget*>
 {
-	inline static const char* value = "UIWidget";
+	inline static const char* value = "Widget";
 };
 template<>
 struct TypeNames<cocos2d::ui::EditBox*>
@@ -427,7 +452,7 @@ struct TypeNames<cocos2d::ui::EditBox*>
 template<>
 struct TypeNames<cocos2d::ui::Button*>
 {
-	inline static const char* value = "UIButton";
+	inline static const char* value = "Button";
 };
 template<>
 struct TypeNames<cocos2d::ui::ImageView*>

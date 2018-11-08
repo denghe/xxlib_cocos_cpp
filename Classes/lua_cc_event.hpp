@@ -20,7 +20,7 @@ inline void Lua_Register_Event(lua_State* const& L)
 
 	lua_pop(L, 1);
 
-	lua_pushstring(L, "EventType");
+	lua_pushstring(L, TypeNames<cocos2d::Event::Type>::value);
 	lua_createtable(L, 7, 0);
 	lua_pushstring(L, "TOUCH");	lua_pushinteger(L, (int)cocos2d::Event::Type::TOUCH);	lua_rawset(L, -3);
 	lua_pushstring(L, "KEYBOARD");	lua_pushinteger(L, (int)cocos2d::Event::Type::KEYBOARD);	lua_rawset(L, -3);
@@ -31,7 +31,7 @@ inline void Lua_Register_Event(lua_State* const& L)
 	lua_pushstring(L, "CUSTOM");	lua_pushinteger(L, (int)cocos2d::Event::Type::CUSTOM);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "KeyCode");
+	lua_pushstring(L, TypeNames<cocos2d::EventKeyboard::KeyCode>::value);
 	lua_createtable(L, 166, 0);
 	lua_pushstring(L, "KEY_NONE"); lua_pushinteger(L, (int)cocos2d::EventKeyboard::KeyCode::KEY_NONE);	lua_rawset(L, -3);
 	lua_pushstring(L, "KEY_PAUSE"); lua_pushinteger(L, (int)cocos2d::EventKeyboard::KeyCode::KEY_PAUSE);	lua_rawset(L, -3);

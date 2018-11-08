@@ -151,7 +151,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	});
 
 	lua_pushstring(L, TypeNames<ResolutionPolicy>::value);
-	lua_createtable(L, 11, 0);
+	lua_createtable(L, 6, 0);
 	lua_pushstring(L, "EXACT_FIT");	lua_pushinteger(L, (int)ResolutionPolicy::EXACT_FIT);	lua_rawset(L, -3);
 	lua_pushstring(L, "NO_BORDER");	lua_pushinteger(L, (int)ResolutionPolicy::NO_BORDER);	lua_rawset(L, -3);
 	lua_pushstring(L, "SHOW_ALL");	lua_pushinteger(L, (int)ResolutionPolicy::SHOW_ALL);	lua_rawset(L, -3);
@@ -437,7 +437,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	});
 
 	lua_pushstring(L, TypeNames<cocos2d::ApplicationProtocol::Platform>::value);
-	lua_createtable(L, 11, 0);
+	lua_createtable(L, 12, 0);
 	lua_pushstring(L, "OS_WINDOWS");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WINDOWS);	lua_rawset(L, -3);
 	lua_pushstring(L, "OS_LINUX");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_LINUX);	lua_rawset(L, -3);
 	lua_pushstring(L, "OS_MAC");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_MAC);	lua_rawset(L, -3);
@@ -1564,6 +1564,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	// 创建 cc.Xxxxxx 元表及函数									// cc
 	Lua_Register_Data(L);
 	Lua_Register_Ref(L);
+	Lua_Register_AssetsManagerEx(L);
 	Lua_Register_Node(L);
 	Lua_Register_Scene(L);
 	Lua_Register_Touch(L);
@@ -1590,7 +1591,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	// cocos2d some enums
 	/**************************************************************************************************/
 
-	lua_pushstring(L, "Projection");
+	lua_pushstring(L, TypeNames<cocos2d::Director::Projection>::value);
 	lua_createtable(L, 4, 0);
 	lua_pushstring(L, "_2D");	lua_pushinteger(L, (int)cocos2d::Director::Projection::_2D);	lua_rawset(L, -3);
 	lua_pushstring(L, "_3D");	lua_pushinteger(L, (int)cocos2d::Director::Projection::_3D);	lua_rawset(L, -3);
@@ -1598,14 +1599,14 @@ inline void Lua_Register_cc(lua_State* const& L)
 	lua_pushstring(L, "DEFAULT");	lua_pushinteger(L, (int)cocos2d::Director::Projection::DEFAULT);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "TextHAlignment");
+	lua_pushstring(L, TypeNames<cocos2d::TextHAlignment>::value);
 	lua_createtable(L, 3, 0);
 	lua_pushstring(L, "LEFT");	lua_pushinteger(L, (int)cocos2d::TextHAlignment::LEFT);	lua_rawset(L, -3);
 	lua_pushstring(L, "CENTER");	lua_pushinteger(L, (int)cocos2d::TextHAlignment::CENTER);	lua_rawset(L, -3);
 	lua_pushstring(L, "RIGHT");	lua_pushinteger(L, (int)cocos2d::TextHAlignment::RIGHT);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
-	lua_pushstring(L, "TextHAlignment");
+	lua_pushstring(L, TypeNames<cocos2d::TextVAlignment>::value);
 	lua_createtable(L, 3, 0);
 	lua_pushstring(L, "TOP");	lua_pushinteger(L, (int)cocos2d::TextVAlignment::TOP);	lua_rawset(L, -3);
 	lua_pushstring(L, "CENTER");	lua_pushinteger(L, (int)cocos2d::TextVAlignment::CENTER);	lua_rawset(L, -3);

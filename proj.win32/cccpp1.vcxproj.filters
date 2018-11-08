@@ -419,6 +419,9 @@
     <ClInclude Include="..\Classes\lua_cca.hpp">
       <Filter>lua_binds</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_assetsmanagerex.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\xxlib\lua.natvis">
