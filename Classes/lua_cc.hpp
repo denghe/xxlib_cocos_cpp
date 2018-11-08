@@ -1583,6 +1583,8 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_uiWidget(L);
 	Lua_Register_uiButton(L);
 	Lua_Register_uiImageView(L);
+	Lua_Register_uiLayout(L);
+	Lua_Register_uiLoadingBar(L);
 	Lua_Register_uiEditBox(L);
 	// .....
 

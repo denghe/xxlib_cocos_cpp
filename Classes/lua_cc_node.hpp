@@ -776,7 +776,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "setTag", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, bool>(L, "setTag error! need 2 args: self, int tag");
+		var t = Lua_ToTuple<cocos2d::Node*, int>(L, "setTag error! need 2 args: self, int tag");
 		std::get<0>(t)->setTag(std::get<1>(t));
 		return 0;
 	});
