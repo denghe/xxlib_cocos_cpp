@@ -7,8 +7,7 @@ inline const char* const LuaKey_Object = "Object";
 inline const char* const LuaKey_MemPool = "MemPool";
 inline const char* const LuaKey_UvLoop = "UvLoop";
 
-inline const char* const LuaKey_Callbacks = "Callbacks";
-inline const char* const LuaKey_FrameUpdateFunc = "FrameUpdateFunc";
+inline const char* const LuaKey_Callbacks = "AllCallbacks";
 
 inline const char* const LuaKey_cc = "cc";
 inline const char* const LuaKey_cca = "cca";
@@ -431,6 +430,11 @@ struct TypeNames<cocos2d::extension::AssetsManagerEx::State>
 };
 template<>
 struct TypeNames<cocos2d::extension::Manifest*>
+{
+	inline static const char* value = "Manifest";
+};
+template<>
+struct TypeNames<cocos2d::extension::Manifest const*>
 {
 	inline static const char* value = "Manifest";
 };
