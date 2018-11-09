@@ -65,7 +65,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 			return luaL_error(L, "create Sequence error! need 1+ args: FiniteTimeAction*...");
 		}
 
-		gActions.clear();
+		assert(!gActions.size());
 		for (int i = 1; i <= numArgs; ++i)
 		{
 			cocos2d::FiniteTimeAction* a = nullptr;
@@ -73,6 +73,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 			gActions.pushBack(a);
 		}
 		var o = cocos2d::Sequence::create(gActions);
+		gActions.clear();
 		if (!o) return 0;
 		return Lua_Push(L, o);
 	});
@@ -132,7 +133,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 			return luaL_error(L, "create Spawn error! need 1+ args: FiniteTimeAction*...");
 		}
 
-		gActions.clear();
+		assert(!gActions.size());
 		for (int i = 1; i <= numArgs; ++i)
 		{
 			cocos2d::FiniteTimeAction* a = nullptr;
@@ -140,6 +141,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 			gActions.pushBack(a);
 		}
 		var o = cocos2d::Spawn::create(gActions);
+		gActions.clear();
 		if (!o) return 0;
 		return Lua_Push(L, o);
 
