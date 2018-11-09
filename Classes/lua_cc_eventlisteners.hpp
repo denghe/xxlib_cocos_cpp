@@ -305,13 +305,13 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 
 	Lua_NewFunc(L, "onKeyPressed", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyPressed error! need 2 args: self, func/null");
+		var t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyPressed error! need 2 args: self, func<KeyCode, Event>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onKeyPressed = [f = std::move(std::get<1>(t))](cocos2d::EventKeyboard::KeyCode kc, cocos2d::Event* e)
 			{
 				assert(!lua_gettop(gLua));
-				Lua_PCall(gLua, f, e, kc);
+				Lua_PCall(gLua, f, kc, e);
 				lua_settop(gLua, 0);
 			};
 		}
@@ -324,13 +324,13 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 
 	Lua_NewFunc(L, "onKeyReleased", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyReleased error! need 2 args: self, func/null");
+		var t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyReleased error! need 2 args: self, func<KeyCode, Event>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onKeyReleased = [f = std::move(std::get<1>(t))](cocos2d::EventKeyboard::KeyCode kc, cocos2d::Event* e)
 			{
 				assert(!lua_gettop(gLua));
-				Lua_PCall(gLua, f, e, kc);
+				Lua_PCall(gLua, f, kc, e);
 				lua_settop(gLua, 0);
 			};
 		}

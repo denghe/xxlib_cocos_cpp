@@ -272,6 +272,56 @@ end
 
 
 
+
+-- 用于注册更新函数. 直接往里面放函数或移除. 每帧将逻辑无序遍历执行.
+gUpdates = {}
+
+-- 执行所有 update 函数
+gUpdates_Exec = function()
+	local t = gUpdates
+	for k, f in pairs(t) do
+		f()
+	end
+end
+
+
+
+
+-- 公用网络层
+gNet = xx.UvTcpClient.Create()
+
+-- 推送的多播处理函数集 key: proto, val: { func(serial, pkg)... }
+gNetHandlers = {}
+
+-- 注册网络包处理函数
+gNetHandlers_Register = function(pkgProto, key, func)
+	local t = gNetHandlers[pkgProto]
+	if t == nil then
+		t = {}
+		gNetHandlers[pkgProto] = t
+	end
+	if t[key] ~= nil then
+		print("warning: gNetEvents_Register: pkgProto = "..pkgProto.typeName..", key = "..key.." exists.")
+	else
+		t[key] = func
+	end
+end
+
+-- 反注册网络包处理函数
+gNetHandlers_Unregister = function(pkgProto, key)
+	local t = gNetHandlers[pkgProto]
+	if t == nil then
+		print("warning: gNetHandlers_Unregister: pkgProto = "..pkgProto.typeName.." can't find any handler!!")
+	else
+		if t[key] == nil then
+			print("warning: gNetHandlers_Unregister: pkgProto = "..pkgProto.typeName..", key = "..key.." does not exists!!")
+		else
+			t[key] = nil
+		end
+	end
+end
+
+
 -- 网络解包并返回. 失败返回 nil
 BBToObject = function(bb)
 	if bb ~= nil then
@@ -285,34 +335,57 @@ BBToObject = function(bb)
 end
 
 
--- 发送请求. 直接返回结果. 返回空为超时或断开
--- 适合在协程环境使用
+-- 发送推送包
 local bb = BBuffer.Create()
-SendRequest = function(c, p)
-	local null = null
+gNet_Send = function(pkg)
 	bb:Clear()
-	bb:WriteRoot(p)
-	local t = { null }
-	c:SendRequest(bb, function(b)
-		t[1] = BBToObject(b)
-	end, 5)
-	while t[1] == null do
-		yield()
-	end
-	return t[1]
+	bb:WriteRoot(pkg)
+	return gNet:Send(bb)
 end
 
-
--- 用于注册更新函数. 直接往里面放函数或移除. 每帧将逻辑无序遍历执行.
-gUpdates = {}
-
--- 执行所有 update 函数
-gUpdates_Exec = function()
-	local t = gUpdates
-	for k, f in pairs(t) do
-		f()
+-- 发送请求包. 如果不传入 cb, 则会阻塞等待网络返回数据并 return. 如果传入 cb, 则会在超时或收到返回数据时触发执行 cb
+-- 适合在 coro 环境使用( 如果不传入 cb )
+gNet_SendRequest = function(pkg, cb)
+	bb:Clear()
+	bb:WriteRoot(pkg)
+	if cb ~= nil then
+		return gNet:SendRequest(bb, cb)
+	else
+		local yield = coroutine.yield
+		local t = { [1] = null }
+		gNet:SendRequest(bb, function(pkg)
+			t[1] = pkg
+		end)
+		while t[1] == null do
+			yield()
+		end
+		return BBToObject(t[1])
 	end
 end
+
+-- 发送应答包
+gNet_SendResponse = function(pkg, serial)
+	bb:Clear()
+	bb:WriteRoot(pkg)
+	return gNet:SendResponse(bb, serial)
+end
+
+-- 设置默认的推送处理回调
+gNet:OnReceivePackage(function(bb)
+	local pkg = BBToObject(bb)
+	if pkg == nil then
+		return
+	end
+	local t = gNetHandlers[pkg.__proto]
+	if t == nil then
+		print("warning: gNet:OnReceivePackage: typeName = "..pkg.__proto.typeName..", typeId = "..pkg.__proto.typeId.." can't find any handler!!")
+	else
+		for _, f in pairs(t) do
+			f(pkg)
+		end
+	end
+end)
+
 
 
 -- 全局帧数
@@ -351,91 +424,6 @@ end)
 ----------------------------------------------------------------------
 
 
--- 公用网络层
-gNet = xx.UvTcpClient.Create()
-
--- 推送的多播处理函数集 key: proto, val: { func(serial, pkg)... }
-gNetHandlers = {}
-
--- 注册网络包处理函数
-gNetHandlers_Register = function(pkgProto, key, func)
-	local t = gNetHandlers[pkgProto]
-	if t == nil then
-		t = {}
-		gNetHandlers[pkgProto] = t
-	end
-	if t[key] ~= nil then
-		print("warning: gNetEvents_Register: pkgProto = "..pkgProto.typeName..", key = "..key.." exists.")
-	else
-		t[key] = func
-	end
-end
-
--- 反注册网络包处理函数
-gNetHandlers_Unregister = function(pkgProto, key)
-	local t = gNetHandlers[pkgProto]
-	if t == nil then
-		print("warning: gNetHandlers_Unregister: pkgProto = "..pkgProto.typeName.." can't find any handler!!")
-	else
-		if t[key] == nil then
-			print("warning: gNetHandlers_Unregister: pkgProto = "..pkgProto.typeName..", key = "..key.." does not exists!!")
-		else
-			t[key] = nil
-		end
-	end
-end
-
--- 发送推送包
-gNet_Send = function(pkg)
-	local bb = BBuffer.Create()
-	bb:WriteRoot(pkg)
-	return gNet:Send(bb)
-end
-
--- 发送请求包. 如果不传入 cb, 则会阻塞等待网络返回数据并 return. 如果传入 cb, 则会在超时或收到返回数据时触发执行 cb
--- 适合在 coro 环境使用( 如果不传入 cb )
-gNet_SendRequest = function(pkg, cb)
-	local bb = BBuffer.Create()
-	bb:WriteRoot(pkg)
-	if cb ~= nil then
-		return gNet:SendRequest(bb, cb)
-	else
-		local yield = coroutine.yield
-		local t = { [1] = null }
-		gNet:SendRequest(bb, function(pkg)
-			t[1] = pkg
-		end)
-		while t[1] == null do
-			yield()
-		end
-		return BBToObject(t[1])
-	end
-end
-
--- 发送应答包
-gNet_SendResponse = function(pkg, serial)
-	local bb = BBuffer.Create()
-	bb:WriteRoot(pkg)
-	return gNet:SendResponse(bb, serial)
-end
-
--- 设置默认的推送处理回调
-gNet:OnReceivePackage(function(bb)
-	local pkg = BBToObject(bb)
-	if pkg == nil then
-		return
-	end
-	local t = gNetHandlers[pkg.__proto]
-	if t == nil then
-		print("warning: gNet:OnReceivePackage: typeName = "..pkg.__proto.typeName..", typeId = "..pkg.__proto.typeId.." can't find any handler!!")
-	else
-		for _, f in pairs(t) do
-			f(pkg)
-		end
-	end
-end)
-
-
 
 
 -- 初始化显示相关
@@ -445,13 +433,139 @@ cc.setDisplayStats(true)
 cc.setAnimationInterval(1 / 60)
 gScene = cc.Scene.create()
 cc.runWithScene(gScene)
+
+-- 9 点定位相关变量初始化
+--[[
+789
+456
+123
+]]
 gX, gY, gW, gH = cc.getSafeAreaRect()
-print( gX, gY, gW, gH )
+gWh = gW/2
+gHh = gH/2
+gX1 = gX
+gY1 = gY
+gX2 = gX + gWh
+gY2 = gY
+gX3 = gX + gW
+gY3 = gY
+gX4 = gX
+gY4 = gY + gHh
+gX5 = gX + gWh
+gY5 = gY + gHh
+gX6 = gX + gW
+gY6 = gY + gHh
+gX7 = gX
+gY7 = gY + gH
+gX8 = gX + gWh
+gY8 = gY + gH
+gX9 = gX + gW
+gY9 = gY + gH
 
- -- avoid memory leak
- collectgarbage("setpause", 100)
- collectgarbage("setstepmul", 5000)
 
+-- avoid memory leak
+collectgarbage("setpause", 100)
+collectgarbage("setstepmul", 5000)
+
+
+-- 测试按键
+
+gKeyCodes = {}
+gTouchs = {}
+
+local ELK = cc.EventListenerKeyboard.create()
+ELK:onKeyPressed(function(kc, e)
+	gKeyCodes[kc] = true
+end)
+ELK:onKeyReleased(function(kc, e)
+	gKeyCodes[kc] = false
+end)
+cc.addEventListenerWithFixedPriority(ELK, -1)
+
+
+local ELT = cc.EventListenerTouchOneByOne.create()
+local addTouch = function(t, e)
+	gTouchs[t:getID()] = t
+	return true
+end
+local removeTouch = function(t, e)
+	gTouchs[t:getID()] = nil
+end
+ELT:onTouchBegan(addTouch)
+ELT:onTouchEnded(removeTouch)
+ELT:onTouchCancelled(removeTouch)
+cc.addEventListenerWithFixedPriority(ELT, -1)
+--[[
+]]
+
+go(function()
+	local imgBody = cc.addImage("hi.png")
+	local imgBullet = cc.addImage("btn.png")
+	imgBody:retain()
+	imgBullet:retain()
+
+	local bullets = List_Create()
+	Bullet_Create = function(x, y)
+		local bullet = { x, y, #bullets, cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("btn.png", gScene, x, y) }
+		bullets.Add(bullet)
+		bullet.Release = function()
+			bullet[4]:removeFromParent()
+			bullets.SwapRemoveAt(bullet[3])
+		end
+		return bullet
+	end
+
+	local x, y = gX5, gY5
+	local o = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("hi.png", gScene, x, y)
+	local keys = 
+	{
+		cc.KeyCode.KEY_A, 
+		cc.KeyCode.KEY_S, 
+		cc.KeyCode.KEY_D, 
+		cc.KeyCode.KEY_W
+	}
+	local funcs = 
+	{ 
+		function() x = x - 1 end, 
+		function() y = y - 1 end, 
+		function() x = x + 1 end, 
+		function() y = y + 1 end
+	}
+	while true do
+		yield()
+		for i = 1, #keys do
+			if gKeyCodes[keys[i]] then
+				funcs[i]()
+			end
+		end
+		o:setPosition(x, y)
+		for i, t in pairs(gTouchs) do
+			print(i, t:getLocation())
+		end
+		--[[
+		]]
+	end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --[[
 -- 加载全局设置 gSettings
 require "app/Common/Def.lua"
 require "app/Common/PKG_class.lua"
@@ -460,7 +574,7 @@ require "app/Common/GameInfoManager.lua"
 sGameManager.Init()
 
 go(require "logic.lua")
-
+]]
 
 
 
