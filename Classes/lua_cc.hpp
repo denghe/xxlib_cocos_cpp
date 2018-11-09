@@ -24,7 +24,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 				uv->Run(xx::UvRunMode::NoWait);		// 这个需要一直在的
 				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f);
-				lua_settop(gLua, 0);
+				assert(!lua_gettop(gLua));
+				//lua_settop(gLua, 0);
+				//std::cout << ::gFrameNumber++ << std::endl;
 			};
 		}
 		else
@@ -580,7 +582,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	Lua_NewFunc(L, "setEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*, int>(L, "setEnabled error! need 1 args: bool isEnabled");
+		var t = Lua_ToTuple<bool>(L, "setEnabled error! need 1 args: bool isEnabled");
 		cocos2d::Director::getInstance()->getEventDispatcher()->setEnabled(std::get<0>(t));
 		return 0;
 	});
@@ -641,7 +643,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 			var t = Lua_ToTuple<std::string, Lua_Func>(L);
 			cocos2d::FileUtils::getInstance()->getStringFromFile(std::get<0>(t), [f = std::move(std::get<1>(t))](std::string str)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, str);
+				lua_settop(gLua, 0);
 			});
 			return 0;
 		}
@@ -668,7 +672,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 			cocos2d::FileUtils::getInstance()->getDataFromFile(std::get<0>(t), [f = std::move(std::get<1>(t))](cocos2d::Data data)
 			{
 				var d = new cocos2d::Data(std::move(data));
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, d);
+				lua_settop(gLua, 0);
 			});
 			return 0;
 		}
@@ -690,8 +696,8 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_NewFunc(L, "fullPathForFilename", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<std::string>(L, "fullPathForFilename error! need 1 args: string filename");
-		cocos2d::FileUtils::getInstance()->fullPathForFilename(std::get<0>(t));
-		return 0;
+		var r = cocos2d::FileUtils::getInstance()->fullPathForFilename(std::get<0>(t));
+		return Lua_Pushs(L, r);
 	});
 
 	// 不实现 loadFilenameLookupDictionaryFromFile setFilenameLookupDictionary
@@ -1348,7 +1354,9 @@ inline void Lua_Register_cc(lua_State* const& L)
 			var t = Lua_ToTuple<std::string, Lua_Func>(L);
 			cocos2d::Director::getInstance()->getTextureCache()->addImageAsync(std::get<0>(t), [f = std::move(std::get<1>(t))](cocos2d::Texture2D* t2d)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, t2d);
+				lua_settop(gLua, 0);
 			});
 			return 0;
 		}
@@ -1566,6 +1574,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_Ref(L);
 	Lua_Register_AssetsManagerEx(L);
 	Lua_Register_Node(L);
+	Lua_Register_Layer(L);
 	Lua_Register_Scene(L);
 	Lua_Register_Touch(L);
 	Lua_Register_Event(L);

@@ -810,7 +810,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float>(L, "create Place error! need 1 args: x, y");
+		var t = Lua_ToTuple<float, float>(L, "create Place error! need 2 args: x, y");
 		var r = cocos2d::Place::create({ std::get<0>(t), std::get<1>(t) });
 		return Lua_Push(L, r);
 

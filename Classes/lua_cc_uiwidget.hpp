@@ -102,7 +102,9 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 		{
 			std::get<0>(t)->addTouchEventListener([f = std::move(std::get<1>(t))](cocos2d::Ref* ref, cocos2d::ui::Widget::TouchEventType type)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, ref, type);
+				lua_settop(gLua, 0);
 			});
 		}
 		else
@@ -119,7 +121,9 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 		{
 			std::get<0>(t)->addClickEventListener([f = std::move(std::get<1>(t))](cocos2d::Ref* ref)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, ref);
+				lua_settop(gLua, 0);
 			});
 		}
 		else
@@ -136,7 +140,9 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 		{
 			std::get<0>(t)->addCCSEventListener([f = std::move(std::get<1>(t))](cocos2d::Ref* ref, int e)
 			{
+				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, ref, e);
+				lua_settop(gLua, 0);
 			});
 		}
 		else
@@ -246,7 +252,7 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 
 	Lua_NewFunc(L, "getSizeType", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::Widget*, cocos2d::ui::Widget::SizeType>(L, "getSizeType error! need 1 args: self");
+		var t = Lua_ToTuple<cocos2d::ui::Widget*>(L, "getSizeType error! need 1 args: self");
 		var r = std::get<0>(t)->getSizeType();
 		return Lua_Pushs(L, r);
 	});
@@ -437,7 +443,9 @@ inline void Lua_Register_uiWidget(lua_State* const& L)
 		var t = Lua_ToTuple<cocos2d::ui::Widget*, Lua_Func>(L, "onFocusChanged error! need 2 args: self, function<void(Widget*,Widget*)>");
 		std::get<0>(t)->onFocusChanged = [f = std::move(std::get<1>(t))](cocos2d::ui::Widget* from, cocos2d::ui::Widget* to)
 		{
+			assert(!lua_gettop(gLua));
 			Lua_PCall(gLua, f, from, to);
+			lua_settop(gLua, 0);
 		};
 		return 0;
 	});

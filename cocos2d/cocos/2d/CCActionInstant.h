@@ -333,7 +333,7 @@ public:
      * @param func  A callback function need to be executed.
      * @return  An autoreleased CallFunc object.
      */
-    static CallFunc * create(const std::function<void()>& func);
+    static CallFunc * create(std::function<void()>&& func);	// xx
 
     /** Creates the action with the callback
 
@@ -399,7 +399,7 @@ CC_CONSTRUCTOR_ACCESS:
     /** initializes the action with the std::function<void()>
      * @lua NA
      */
-    bool initWithFunction(const std::function<void()>& func);
+    bool initWithFunction(std::function<void()>&& func);	// xx
 
 protected:
     /** Target that will be called */

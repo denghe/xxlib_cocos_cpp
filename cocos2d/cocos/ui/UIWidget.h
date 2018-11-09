@@ -311,7 +311,7 @@ public:
      * Set a callback to touch vent listener.
      *@param callback  The callback in `ccWidgetEventCallback.`
      */
-    void addTouchEventListener(const ccWidgetTouchCallback& callback);
+    void addTouchEventListener(ccWidgetTouchCallback&& callback);	// xx
     
     /**
      * Set a click event handler to the widget.

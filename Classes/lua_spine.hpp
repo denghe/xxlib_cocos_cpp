@@ -8,6 +8,8 @@ inline void Lua_Register_spine(lua_State* const& L)
 
 
 	/*
+
+	sample:
 	
 	skeletonNode = SkeletonAnimation::createWithJsonFile("spine/spineboy-ess.json", "spine/spineboy.atlas", 0.6f);
     skeletonNode->setStartListener( [] (spTrackEntry* entry) {
@@ -327,12 +329,12 @@ inline void Lua_Register_spine(lua_State* const& L)
 			if (lua_isstring(L, 2))
 			{
 				var t = Lua_ToTuple<std::string, std::string>(L);
-				var o = spine::SkeletonAnimation::createWithBinaryFile(std::get<0>(t), std::get<1>(t));
+				o = spine::SkeletonAnimation::createWithBinaryFile(std::get<0>(t), std::get<1>(t));
 			}
 			else
 			{
 				var t = Lua_ToTuple<std::string, spAtlas*>(L);
-				var o = spine::SkeletonAnimation::createWithBinaryFile(std::get<0>(t), std::get<1>(t));
+				o = spine::SkeletonAnimation::createWithBinaryFile(std::get<0>(t), std::get<1>(t));
 			}
 			break;
 		}
@@ -341,12 +343,12 @@ inline void Lua_Register_spine(lua_State* const& L)
 			if (lua_isstring(L, 2))
 			{
 				var t = Lua_ToTuple<std::string, std::string, float>(L);
-				var o = spine::SkeletonAnimation::createWithBinaryFile(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+				o = spine::SkeletonAnimation::createWithBinaryFile(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			}
 			else
 			{
 				var t = Lua_ToTuple<std::string, spAtlas*, float>(L);
-				var o = spine::SkeletonAnimation::createWithBinaryFile(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+				o = spine::SkeletonAnimation::createWithBinaryFile(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			}
 			break;
 		}

@@ -396,21 +396,21 @@ inline void Lua_Register_uiButton(lua_State* const& L)
 
 	Lua_NewFunc(L, "resetNormalRender", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::Button*, float>(L, "resetNormalRender error! need 1 args: self");
+		var t = Lua_ToTuple<cocos2d::ui::Button*>(L, "resetNormalRender error! need 1 args: self");
 		std::get<0>(t)->resetNormalRender();
 		return 0;
 	});
 
 	Lua_NewFunc(L, "resetPressedRender", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::Button*, float>(L, "resetPressedRender error! need 1 args: self");
+		var t = Lua_ToTuple<cocos2d::ui::Button*>(L, "resetPressedRender error! need 1 args: self");
 		std::get<0>(t)->resetPressedRender();
 		return 0;
 	});
 
 	Lua_NewFunc(L, "resetDisabledRender", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::Button*, float>(L, "resetDisabledRender error! need 1 args: self");
+		var t = Lua_ToTuple<cocos2d::ui::Button*>(L, "resetDisabledRender error! need 1 args: self");
 		std::get<0>(t)->resetDisabledRender();
 		return 0;
 	});

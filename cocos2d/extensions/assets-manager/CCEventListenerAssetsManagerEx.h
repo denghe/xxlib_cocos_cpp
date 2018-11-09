@@ -59,7 +59,7 @@ public:
      *  @param eventType The type of the event.
      *  @param callback The callback function when the specified event was emitted.
      */
-    static EventListenerAssetsManagerEx* create(AssetsManagerEx *AssetsManagerEx, const std::function<void(EventAssetsManagerEx*)>& callback);
+    static EventListenerAssetsManagerEx* create(AssetsManagerEx *AssetsManagerEx, std::function<void(EventAssetsManagerEx*)>&& callback);	// xx
     
     /// Overrides
     virtual bool checkAvailable() override;
@@ -70,7 +70,7 @@ CC_CONSTRUCTOR_ACCESS:
     EventListenerAssetsManagerEx();
     
     /** Initializes event with type and callback function */
-    bool init(const AssetsManagerEx *AssetsManagerEx, const std::function<void(EventAssetsManagerEx*)>& callback);
+    bool init(const AssetsManagerEx *AssetsManagerEx, std::function<void(EventAssetsManagerEx*)>&& callback);	// xx
     
 protected:
     static const std::string LISTENER_ID;

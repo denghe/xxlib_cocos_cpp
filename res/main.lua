@@ -126,7 +126,7 @@ end
 
 -- 阻塞 n 秒( 按 60 帧粗算的 )
 -- 适合在协程环境使用
-SleepSec = function(n)
+SleepSecs = function(n)
 	local n = math.floor(n * 60)
 	for _=1, n do
 		yield()
@@ -408,7 +408,7 @@ gNet_SendRequest = function(pkg, cb)
 		while t[1] == null do
 			yield()
 		end
-		return t[1]
+		return BBToObject(t[1])
 	end
 end
 
@@ -420,7 +420,8 @@ gNet_SendResponse = function(pkg, serial)
 end
 
 -- 设置默认的推送处理回调
-gNet:OnReceivePackage(function(pkg)
+gNet:OnReceivePackage(function(bb)
+	local pkg = BBToObject(bb)
 	if pkg == nil then
 		return
 	end

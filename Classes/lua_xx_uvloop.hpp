@@ -16,6 +16,7 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 		{
 			var L = gLua;
 			if (!L) return;
+			assert(!lua_gettop(gLua));
 
 			if (!ips || !ips->dataLen)
 			{
@@ -31,7 +32,9 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 				}
 				Lua_PCall(L, ips->dataLen);
 			}
-		}, std::get<1>(t) * 1000);
+			lua_settop(L, 0);
+		}
+		, std::get<1>(t) * 1000);
 		return 0;
 	});
 
@@ -46,6 +49,7 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 		{
 			var L = gLua;
 			if (!L) return;
+			assert(!lua_gettop(gLua));
 
 			if (!c)
 			{
@@ -55,7 +59,9 @@ inline void Lua_Register_UvLoop(lua_State* const& L)
 			{
 				Lua_PCall(L, f, c);
 			}
-		}, std::get<1>(t) * 1000);
+			lua_settop(L, 0);
+		}
+		, std::get<1>(t) * 1000);
 		return Lua_Push(L, b);
 	});
 

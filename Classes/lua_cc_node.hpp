@@ -197,7 +197,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "removeAllChildren", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, float, float>(L, "removeAllChildren error! need 1 args: self");
+		var t = Lua_ToTuple<cocos2d::Node*>(L, "removeAllChildren error! need 1 args: self");
 		std::get<0>(t)->removeAllChildren();
 		return 0;
 	});

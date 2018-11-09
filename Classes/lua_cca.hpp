@@ -142,7 +142,7 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "setFinishCallback", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int, Lua_Func>(L, "setFinishCallback error! need 1 args: int audioID, function<void(int,const std::string&)>& callback");
+		var t = Lua_ToTuple<int, Lua_Func>(L, "setFinishCallback error! need 2 args: int audioID, function<void(int,const std::string&)>& callback");
 		cocos2d::experimental::AudioEngine::setFinishCallback(std::get<0>(t), [f = std::move(std::get<1>(t))](int audioID, const std::string& fileName)
 		{
 			assert(!lua_gettop(gLua));
