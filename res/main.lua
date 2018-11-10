@@ -482,6 +482,7 @@ ELK:onKeyReleased(function(kc, e)
 end)
 cc.addEventListenerWithFixedPriority(ELK, -1)
 
+-- 测试点击
 
 local ELT = cc.EventListenerTouchOneByOne.create()
 local addTouch = function(t, e)
@@ -495,7 +496,25 @@ ELT:onTouchBegan(addTouch)
 ELT:onTouchEnded(removeTouch)
 ELT:onTouchCancelled(removeTouch)
 cc.addEventListenerWithFixedPriority(ELT, -1)
+
 --[[
+-- 绘制一个 ASDW 控制的 sprite. touch 发生时向其坐标发射 bullet
+local PI_div_180 = 3.14159265358979323846 / 180
+local PI_mul_180 = 3.14159265358979323846 * 180
+local GetAngle = function(fromX, fromY, toX, toY)
+{
+	if (fromX == toX and fromY == toY) return 0;
+	local lenY = toY - fromY;
+	local lenX = toX - fromX;
+	return math.atan(lenY, lenX) / 3.14159265358979323846 * 180;
+}
+local GetPos = function(x, y, a)
+{
+	local angle = -a * 3.14159265358979323846 / 180;
+	local sina = sin(angle);
+	local cosa = cos(angle);
+	return cocos2d::Vec2(v.x*cosa - v.y*sina, v.x*sina + v.y*cosa);
+}
 ]]
 
 go(function()
@@ -542,8 +561,6 @@ go(function()
 		for i, t in pairs(gTouchs) do
 			print(i, t:getLocation())
 		end
-		--[[
-		]]
 	end
 end)
 
