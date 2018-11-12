@@ -16,6 +16,7 @@ List_Create = function()
 	t.Add = function(o)
 		t[#t + 1] = o
 	end
+	-- 通常调用前还有一句: container[#container].idxAtContainer = idx
 	t.SwapRemoveAt = function(idx)
 		local dl = #t
 		assert(idx > 0 and idx <= dl)
@@ -427,40 +428,61 @@ end)
 
 
 -- 初始化显示相关
-cc.createSetOpenGLView("cocos_cpp_lua", 1280, 720)
-cc.setDesignResolutionSize(1280, 720, cc.ResolutionPolicy.SHOW_ALL)
+
+-- 定显示尺寸
+gW = 1280
+gH = 720
+
+-- 创建显示窗口( for desktop os )
+cc.createSetOpenGLView("cocos_cpp_lua", gW, gH)
+
+-- 设置设计尺寸和适配模式( 智能留黑边 )
+cc.setDesignResolutionSize(gW, gH, cc.ResolutionPolicy.SHOW_ALL)
+
+-- 打开 ogl 帧统计信息显示
 cc.setDisplayStats(true)
+
+-- 设置帧数
 cc.setAnimationInterval(1 / 60)
+
+-- 取可用区域坐标宽高
+gX, gY, gW, gH = cc.getSafeAreaRect()
+gW2 = gW/2
+gH2 = gH/2
+
+-- 创建 scene, 将可用区域中心设为 0,0 点
 gScene = cc.Scene.create()
+gScene:setContentSize(0, 0)
+gScene:setPosition(gX + gW2, gY + gH2)
+gScene:setIgnoreAnchorPointForPosition(true)
+
+-- 加载并运行场景
 cc.runWithScene(gScene)
 
--- 9 点定位相关变量初始化
 --[[
-789
-456
-123
+键盘小键盘数字区九点定位相关变量初始化. 5 为 0, 0 点
+7 8 9
+4 5 6
+1 2 3
 ]]
-gX, gY, gW, gH = cc.getSafeAreaRect()
-gWh = gW/2
-gHh = gH/2
-gX1 = gX
-gY1 = gY
-gX2 = gX + gWh
-gY2 = gY
-gX3 = gX + gW
-gY3 = gY
-gX4 = gX
-gY4 = gY + gHh
-gX5 = gX + gWh
-gY5 = gY + gHh
-gX6 = gX + gW
-gY6 = gY + gHh
-gX7 = gX
-gY7 = gY + gH
-gX8 = gX + gWh
-gY8 = gY + gH
-gX9 = gX + gW
-gY9 = gY + gH
+gX1 = -gW
+gY1 = -gH
+gX2 = 0
+gY2 = -gH
+gX3 = gW
+gY3 = -gH
+gX4 = -gX
+gY4 = 0
+gX5 = 0
+gY5 = 0
+gX6 = gW
+gY6 = 0
+gX7 = -gW
+gY7 = gH
+gX8 = 0
+gY8 = gH
+gX9 = gW
+gY9 = gH
 
 
 -- avoid memory leak
@@ -497,45 +519,75 @@ ELT:onTouchEnded(removeTouch)
 ELT:onTouchCancelled(removeTouch)
 cc.addEventListenerWithFixedPriority(ELT, -1)
 
---[[
--- 绘制一个 ASDW 控制的 sprite. touch 发生时向其坐标发射 bullet
-local PI_div_180 = 3.14159265358979323846 / 180
-local PI_mul_180 = 3.14159265358979323846 * 180
-local GetAngle = function(fromX, fromY, toX, toY)
-{
-	if (fromX == toX and fromY == toY) return 0;
-	local lenY = toY - fromY;
-	local lenX = toX - fromX;
-	return math.atan(lenY, lenX) / 3.14159265358979323846 * 180;
-}
-local GetPos = function(x, y, a)
-{
-	local angle = -a * 3.14159265358979323846 / 180;
-	local sina = sin(angle);
-	local cosa = cos(angle);
-	return cocos2d::Vec2(v.x*cosa - v.y*sina, v.x*sina + v.y*cosa);
-}
-]]
 
+local PI_div_180 = 3.14159265358979323846 / 180
+
+local GetAngle = function(x, y)
+	return math.atan(y, x) / PI_div_180
+end
+
+local GetXyIncAngle = function(x, y)
+	local a = math.atan(y, x)
+	return math.cos(a), math.sin(a), a / PI_div_180
+end
+
+local Normalize = function(x, y)
+    local n = x * x + y * y
+    if n == 1 then return x, y end
+    n = math.sqrt(n)
+    if n < 2e-37 then return 0, 0 end
+    n = 1 / n
+    return x * n, y * n
+end
+
+local GetRotatePos = function(x, y, angle)
+	angle = -angle * PI_div_180
+	local sina = math.sin(angle)
+	local cosa = math.cos(angle)
+	return x * cosa - y * sina, x * sina + y * cosa
+end
+
+
+-- 绘制一个 ASDW 控制的 sprite. touch 发生时向其坐标发射 bullet
 go(function()
-	local imgBody = cc.addImage("hi.png")
-	local imgBullet = cc.addImage("btn.png")
+	local imgBody = cc.addImage("man.png")
+	local imgBullet = cc.addImage("bullet.png")
 	imgBody:retain()
 	imgBullet:retain()
 
 	local bullets = List_Create()
-	Bullet_Create = function(x, y)
-		local bullet = { x, y, #bullets, cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("btn.png", gScene, x, y) }
+
+	bullets.Create = function(x, y, incX, incY, a)
+		local bullet = 
+		{
+			0,
+			cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("bullet.png", gScene, x, y), 
+			x, y, 
+			incX, incY
+		}
 		bullets.Add(bullet)
+		bullet[1] = #bullets
+		bullet[2]:setRotation(-a)
 		bullet.Release = function()
-			bullet[4]:removeFromParent()
-			bullets.SwapRemoveAt(bullet[3])
+			bullet[2]:removeFromParent()
+			local idx = bullet[1]
+			bullets[#bullets][1] = idx
+			bullets.SwapRemoveAt(idx)
+		end
+		bullet.Move = function()
+			local x, y = bullet[3] + bullet[5], bullet[4] + bullet[6]
+			if x < -740 or x > 740 or y < -460 or y > 460 then
+				bullet.Release()
+			else
+				bullet[3], bullet[4] = x, y
+				bullet[2]:setPosition(x, y)
+			end
 		end
 		return bullet
 	end
 
-	local x, y = gX5, gY5
-	local o = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("hi.png", gScene, x, y)
+	local x, y = 0, 0
+	local o = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("man.png", gScene, x, y, 0.5, 0.5)
 	local keys = 
 	{
 		cc.KeyCode.KEY_A, 
@@ -552,142 +604,30 @@ go(function()
 	}
 	while true do
 		yield()
+
+		-- move man
 		for i = 1, #keys do
 			if gKeyCodes[keys[i]] then
 				funcs[i]()
 			end
 		end
 		o:setPosition(x, y)
+
+		-- fire
 		for i, t in pairs(gTouchs) do
-			print(i, t:getLocation())
+			local tx, ty = o:convertTouchToNodeSpaceAR(t)
+			local bx, by = 145, 0
+			if tx < 0 then
+				bx = -145
+			end
+			local a = 0
+			tx, ty, a = GetXyIncAngle(tx - bx, ty - by)
+			bullets.Create(x + bx, y + by, tx, ty, a)
+		end
+
+		-- move bullets
+		for i = #bullets, 1, -1 do
+			bullets[i].Move()
 		end
 	end
 end)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- --[[
--- 加载全局设置 gSettings
-require "app/Common/Def.lua"
-require "app/Common/PKG_class.lua"
-require "app/Common/GameInfoManager.lua"
-
-sGameManager.Init()
-
-go(require "logic.lua")
-]]
-
-
-
-
-
-
---[[
--- 模拟加载一个状态. 3 秒后状态关闭. 再次打开它. 3 次后重启动程序
-local panel = require "panel.lua"
-panel.autoCloseDelayFrames = 180
-go(function()
-	for i = 1, 3 do
-		yield()			-- 循环语句后习惯性放一条 yield() 防御式编程
-
-		gStates_Open(panel)				-- 打开面板
-		gStates_WaitDisappear(panel)	-- 等待面板消失( 这个面板会自动关闭 )
-	end
-	cc.restart()		-- 重启
-end)
-
-
-
-
-
-
--- 加载网络包生成物
-require "PKG_class.lua"
-
--- 测试网络层
-go(function()
-
-::LabCreateConn::
-	yield()
-
-	print("try connect.")
-	local c = CreateUvTcpClient("www.baidu.com", 80, 2)
-	if c == nil then
-		--SleepSec(1)
-		goto LabCreateConn
-	end
-	print("connected. SendRequest")
-	local pkg = PKG_Client_Login_Auth.Create()
-	pkg.pkgMD5 = PKG_PkgGenMd5_Value
-	pkg.username = "abc"
-	pkg.password = "123123"
-	local r = SendRequest(c, pkg)
-	if r == nil then
-		print("waiting SendRequest timeout")
-	else
-		print("SendRequest recved: ")
-		DumpPackage(r)
-	end
-
-	print("wait disconnect...")
-	while c:GetState() == 2 do
-		yield()
-	end
-	print("Disconnected.")
-	goto LabCreateConn
-
-end)
-
-
-
--- 测试网络层2
-go(function()
-
-::LabCreateConn::
-	yield()
-
-	print("try connect.")
-	local c = CreateUvTcpClient("127.0.0.1", 10000, 2)
-	if c == nil then
-		--SleepSec(1)
-		goto LabCreateConn
-	end
-	print("connected. SendRequest")
-	local pkg = PKG_Client_Login_Auth.Create()
-	pkg.pkgMD5 = PKG_PkgGenMd5_Value
-	pkg.username = "abc"
-	pkg.password = "123123"
-	local r = SendRequest(c, pkg)
-	if r == nil then
-		print("waiting SendRequest timeout")
-	else
-		print("SendRequest recved: ")
-		DumpPackage(r)
-	end
-
-	print("wait disconnect...")
-	while c:GetState() == 2 do
-		yield()
-	end
-	print("Disconnected.")
-	goto LabCreateConn
-
-end)
-
-]]
