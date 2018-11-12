@@ -200,12 +200,12 @@ bool UserDefault::getBoolForKey(const char* pKey, bool defaultValue)
     return ret;
 }
 
-long long UserDefault::getIntegerForKey(const char* pKey)
+int UserDefault::getIntegerForKey(const char* pKey)
 {
     return getIntegerForKey(pKey, 0);
 }
 
-long long UserDefault::getIntegerForKey(const char* pKey, long long defaultValue)
+int UserDefault::getIntegerForKey(const char* pKey, int defaultValue)
 {
     const char* value = nullptr;
     tinyxml2::XMLElement* rootNode;
@@ -222,7 +222,7 @@ long long UserDefault::getIntegerForKey(const char* pKey, long long defaultValue
 
     if (value)
     {
-        ret = atoll(value);	// xx
+        ret = atoi(value);
     }
 
     if(doc)
@@ -356,7 +356,7 @@ void UserDefault::setBoolForKey(const char* pKey, bool value)
     }
 }
 
-void UserDefault::setIntegerForKey(const char* pKey, long long value)	// xx
+void UserDefault::setIntegerForKey(const char* pKey, int value)
 {
     // check key
     if (! pKey)
@@ -367,7 +367,7 @@ void UserDefault::setIntegerForKey(const char* pKey, long long value)	// xx
     // format the value
     char tmp[50];
     memset(tmp, 0, 50);
-    sprintf(tmp, "%lld", value);
+    sprintf(tmp, "%d", value);
 
     setValueForKey(pKey, tmp);
 }

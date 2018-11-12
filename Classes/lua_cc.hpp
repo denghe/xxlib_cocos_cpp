@@ -1150,7 +1150,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	Lua_NewFunc(L, "getIntegerForKey", [](lua_State* L)
 	{
-		int64_t r = 0;
+		int r = 0;
 		var numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
@@ -1162,13 +1162,13 @@ inline void Lua_Register_cc(lua_State* const& L)
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<const char*, int64_t>(L);
+			var t = Lua_ToTuple<const char*, int>(L);
 			r = cocos2d::UserDefault::getInstance()->getIntegerForKey(std::get<0>(t), std::get<1>(t));
 			break;
 		}
 		default:
 		{
-			return luaL_error(L, "%s", "getIntegerForKey error! need 1 ~ 2 args: string key, int64_t defaultValue");
+			return luaL_error(L, "%s", "getIntegerForKey error! need 1 ~ 2 args: string key, int32 defaultValue");
 		}
 		}
 		return Lua_Pushs(L, r);
@@ -1287,7 +1287,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 
 	Lua_NewFunc(L, "setIntegerForKey", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<char const*, int64_t>(L, "setIntegerForKey error! need 2 args: string key, int64_t value");
+		var t = Lua_ToTuple<char const*, int>(L, "setIntegerForKey error! need 2 args: string key, int32 value");
 		cocos2d::UserDefault::getInstance()->setIntegerForKey(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
