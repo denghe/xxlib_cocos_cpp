@@ -86,7 +86,17 @@ Ref::~Ref()
     if (_referenceCount != 0)
         untrackRef(this);
 #endif
+
+	// xx
+#ifndef NDEBUG
+	ptrs.erase(this);
+#endif
 }
+#ifndef NDEBUG
+size_t Ref::versionNumber = 0;
+std::unordered_map<void*, size_t> Ref::ptrs;
+#endif
+
 
 void Ref::retain()
 {

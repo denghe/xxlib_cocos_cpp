@@ -30,6 +30,9 @@ THE SOFTWARE.
 #include "platform/CCPlatformMacros.h"
 #include "base/ccConfig.h"
 
+// xx
+#include <unordered_map>
+
 #define CC_REF_LEAK_DETECTION 0
 
 /**
@@ -148,6 +151,13 @@ protected:
     unsigned int _referenceCount;
 
     friend class AutoreleasePool;
+
+	// xx
+#ifndef NDEBUG
+public:
+	static size_t versionNumber;
+	static std::unordered_map<void*, size_t> ptrs;
+#endif
 
 #if CC_ENABLE_SCRIPT_BINDING
 public:

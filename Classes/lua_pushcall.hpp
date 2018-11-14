@@ -47,14 +47,26 @@ int Lua_Push(lua_State* const& L, T const& v)
 	}
 	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsRef_v<T>)
 	{
-		// todo: 还需要进一步检测 mt 父子关系, 以及最终指针的 dynamic cast 来进一步判断, 以后上全局内存池方案再说
-		var ph = (T*)lua_newuserdata(L, sizeof(T));					// ..., &o
-		*ph = v;
+		T* p = nullptr;
+#ifndef NDEBUG
+		if constexpr (std::is_pointer_v<T> && std::is_base_of_v<cocos2d::Ref, std::remove_pointer_t<T>>)
+		{
+			p = (T*)lua_newuserdata(L, sizeof(T) + sizeof(size_t));	// ..., &o + versionNumber
+			*(size_t*)(p + 1) = cocos2d::Ref::versionNumber;	// 填充自增版本号
+			cocos2d::Ref::ptrs[(void*)v] = cocos2d::Ref::versionNumber;
+			++cocos2d::Ref::versionNumber;
+		}
+		else
+#endif
+		{
+			p = (T*)lua_newuserdata(L, sizeof(T));					// ..., &o
+		}
+		*p = v;
 		lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
 		lua_setmetatable(L, -2);									// ..., &o
 	}
 	else if constexpr (std::is_same_v<T, cocos2d::Vector<cocos2d::Node*>>
-					|| std::is_same_v<T, std::vector<std::string>>)
+		|| std::is_same_v<T, std::vector<std::string>>)
 	{
 		lua_createtable(L, v.size(), 0);
 		int i = 0;
