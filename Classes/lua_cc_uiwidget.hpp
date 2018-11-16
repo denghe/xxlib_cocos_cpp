@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::ui::Widget*>::value, TypeNames<cocos2d::Node*>::value);
+﻿#pragma once
+
+inline void Lua_Register_uiWidget(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::ui::Widget*>::value, TypeNames<cocos2d::Node*>::value);
 
 	Lua_NewFunc(L, "setEnabled", [](lua_State* L)
 	{
@@ -560,3 +564,4 @@
 	lua_pushstring(L, "NORMAL");	lua_pushinteger(L, (int)cocos2d::ui::Widget::BrightStyle::NORMAL);	lua_rawset(L, -3);
 	lua_pushstring(L, "HIGHLIGHT");	lua_pushinteger(L, (int)cocos2d::ui::Widget::BrightStyle::HIGHLIGHT);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
+}

@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::Label*>::value, TypeNames<cocos2d::Node*>::value);
+﻿#pragma once
+
+inline void Lua_Register_Label(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::Label*>::value, TypeNames<cocos2d::Node*>::value);
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
@@ -603,3 +607,4 @@
 	lua_pushstring(L, "ALL");	lua_pushinteger(L, (int)cocos2d::LabelEffect::ALL);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
 
+}

@@ -1,4 +1,7 @@
-﻿
+﻿#pragma once
+
+inline void Lua_Register_TextureCache(lua_State* const& L)
+{
 	Lua_NewFunc(L, "addImage", [](lua_State* L)
 	{
 		var numArgs = lua_gettop(L);
@@ -98,4 +101,4 @@
 		cocos2d::Director::getInstance()->getTextureCache()->renameTextureWithKey(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
-
+}

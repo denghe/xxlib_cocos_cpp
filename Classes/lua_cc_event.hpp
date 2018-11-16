@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::Event*>::value, TypeNames<cocos2d::Ref*>::value);
+﻿#pragma once
+
+inline void Lua_Register_Event(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::Event*>::value, TypeNames<cocos2d::Ref*>::value);
 
 	Lua_NewFunc(L, "getCurrentTarget", [](lua_State* L)
 	{
@@ -200,3 +204,4 @@
 	lua_pushstring(L, "KEY_ENTER"); lua_pushinteger(L, (int)cocos2d::EventKeyboard::KeyCode::KEY_ENTER);	lua_rawset(L, -3);
 	lua_pushstring(L, "KEY_PLAY"); lua_pushinteger(L, (int)cocos2d::EventKeyboard::KeyCode::KEY_PLAY);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
+}

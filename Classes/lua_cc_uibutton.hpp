@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::ui::Button*>::value, TypeNames<cocos2d::ui::Widget*>::value);
+﻿#pragma once
+
+inline void Lua_Register_uiButton(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::ui::Button*>::value, TypeNames<cocos2d::ui::Widget*>::value);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
@@ -421,3 +425,4 @@
 
 
 	lua_pop(L, 1);
+}

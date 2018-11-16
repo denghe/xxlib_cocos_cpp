@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::Action*>::value, TypeNames<cocos2d::Ref*>::value);
+﻿#pragma once
+
+inline void Lua_Register_Actions(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::Action*>::value, TypeNames<cocos2d::Ref*>::value);
 
 	lua_pop(L, 1);
 
@@ -898,3 +902,4 @@
 	// EaseXXXXXXXXXXXXXXXXXXXXX
 
 	// .......
+}

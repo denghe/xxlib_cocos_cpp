@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::Node*>::value, TypeNames<cocos2d::Ref*>::value);						// cc, Node : Ref
+﻿#pragma once
+
+inline void Lua_Register_Node(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::Node*>::value, TypeNames<cocos2d::Ref*>::value);						// cc, Node : Ref
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
@@ -966,3 +970,4 @@
 	// todo: more
 
 	lua_pop(L, 1);													// cc
+}

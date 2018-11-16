@@ -1,4 +1,7 @@
-﻿
+﻿#pragma once
+
+inline void Lua_Register_Director(lua_State* const& L)
+{
 	// 创建 帧循环事件设置 函数
 	Lua_NewFunc(L, "mainLoopCallback", [](lua_State* L)
 	{
@@ -88,7 +91,7 @@
 			cocos2d::Director::getInstance()->setOpenGLView(glview);
 		}
 		return 0;
-		});
+	});
 
 	Lua_NewFunc(L, "setDesignResolutionSize", [](lua_State* L)
 	{
@@ -393,3 +396,5 @@
 	lua_pushstring(L, "CENTER");	lua_pushinteger(L, (int)cocos2d::TextVAlignment::CENTER);	lua_rawset(L, -3);
 	lua_pushstring(L, "BOTTOM");	lua_pushinteger(L, (int)cocos2d::TextVAlignment::BOTTOM);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
+
+}

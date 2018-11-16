@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::Touch*>::value, TypeNames<cocos2d::Ref*>::value);
+﻿#pragma once
+
+inline void Lua_Register_Touch(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::Touch*>::value, TypeNames<cocos2d::Ref*>::value);
 
 	Lua_NewFunc(L, "getLocation", [](lua_State* L)
 	{
@@ -73,3 +77,4 @@
 	// 不实现 setTouchInfo
 
 	lua_pop(L, 1);
+}

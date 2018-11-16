@@ -1,4 +1,7 @@
-﻿
+﻿#pragma once
+
+inline void Lua_Register_UserDefault(lua_State* const& L)
+{
 	Lua_NewFunc(L, "getBoolForKey", [](lua_State* L)
 	{
 		bool r = false;
@@ -210,3 +213,4 @@
 		return 0;
 	});
 
+}

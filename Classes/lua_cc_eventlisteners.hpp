@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::EventListener*>::value, TypeNames<cocos2d::Ref*>::value);
+﻿#pragma once
+
+inline void Lua_Register_EventListener(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::EventListener*>::value, TypeNames<cocos2d::Ref*>::value);
 
 	Lua_NewFunc(L, "setEnabled", [](lua_State* L)
 	{
@@ -462,3 +466,5 @@ inline void Lua_Register_EventListenerAssetsManagerEx(lua_State* const& L)
 	lua_pushstring(L, "UPDATE_FAILED");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::UPDATE_FAILED);	lua_rawset(L, -3);
 	lua_pushstring(L, "ERROR_DECOMPRESS");	lua_pushinteger(L, (int)cocos2d::extension::EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
+
+}

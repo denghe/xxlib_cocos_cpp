@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::Ref*>::value);					// cc, Ref
+﻿#pragma once
+
+inline void Lua_Register_Ref(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::Ref*>::value);					// cc, Ref
 
 	Lua_NewFunc(L, "retain", [](lua_State* L)
 	{
@@ -29,3 +33,4 @@
 	});
 
 	lua_pop(L, 1);													// cc
+}

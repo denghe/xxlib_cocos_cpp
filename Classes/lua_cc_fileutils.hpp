@@ -1,4 +1,8 @@
-﻿	Lua_NewFunc(L, "purgeCachedEntries", [](lua_State* L)
+﻿#pragma once
+
+inline void Lua_Register_FileUtils(lua_State* const& L)
+{
+	Lua_NewFunc(L, "purgeCachedEntries", [](lua_State* L)
 	{
 		cocos2d::FileUtils::getInstance()->purgeCachedEntries();
 		return 0;
@@ -492,4 +496,4 @@
 		var r = cocos2d::FileUtils::getInstance()->getNewFilename(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
-
+}

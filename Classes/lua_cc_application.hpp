@@ -1,4 +1,7 @@
-﻿
+﻿#pragma once
+
+inline void Lua_Register_Application(lua_State* const& L)
+{
 	// 创建 程序被切到后台事件设置 函数
 	Lua_NewFunc(L, "enterBackground", [](lua_State* L)
 	{
@@ -60,3 +63,5 @@
 	lua_pushstring(L, "OS_WINRT");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WINRT);	lua_rawset(L, -3);
 	lua_pushstring(L, "OS_WP8");	lua_pushinteger(L, (int)cocos2d::ApplicationProtocol::Platform::OS_WP8);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
+
+}

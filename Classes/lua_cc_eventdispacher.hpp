@@ -1,7 +1,7 @@
-﻿	/**************************************************************************************************/
-	// EventDispacher
-	/**************************************************************************************************/
+﻿#pragma once
 
+inline void Lua_Register_EventDispacher(lua_State* const& L)
+{
 	Lua_NewFunc(L, "addEventListenerWithSceneGraphPriority", [](lua_State* L)
 	{
 		var t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "addEventListenerWithSceneGraphPriority error! need 2 args: EventListener listener, Node target");
@@ -157,5 +157,4 @@
 	lua_pushstring(L, "GAME_CONTROLLER");	lua_pushinteger(L, (int)cocos2d::EventListener::Type::GAME_CONTROLLER);	lua_rawset(L, -3);
 	lua_pushstring(L, "CUSTOM");	lua_pushinteger(L, (int)cocos2d::EventListener::Type::CUSTOM);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
-
-
+}

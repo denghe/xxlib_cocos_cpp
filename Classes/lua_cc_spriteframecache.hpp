@@ -1,4 +1,7 @@
-﻿
+﻿#pragma once
+
+inline void Lua_Register_SpriteFrameCache(lua_State* const& L)
+{
 	Lua_NewFunc(L, "addSpriteFramesWithFile", [](lua_State* L)
 	{
 		var numArgs = lua_gettop(L);
@@ -106,4 +109,4 @@
 		return Lua_Pushs(L, r);
 	});
 
-
+}

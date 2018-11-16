@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::SpriteFrame*>::value, TypeNames<cocos2d::Ref*>::value);
+﻿#pragma once
+
+inline void Lua_Register_SpriteFrame(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::SpriteFrame*>::value, TypeNames<cocos2d::Ref*>::value);
 
 	Lua_NewFunc(L, "initWithTexture", [](lua_State* L)
 	{
@@ -256,3 +260,4 @@
 
 
 	lua_pop(L, 1);
+}

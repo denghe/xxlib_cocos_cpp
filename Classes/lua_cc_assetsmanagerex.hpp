@@ -1,4 +1,8 @@
-﻿	Lua_NewMT(L, TypeNames<cocos2d::extension::Manifest*>::value, TypeNames<cocos2d::Ref*>::value);
+﻿#pragma once
+
+inline void Lua_Register_AssetsManagerEx(lua_State* const& L)
+{
+	Lua_NewMT(L, TypeNames<cocos2d::extension::Manifest*>::value, TypeNames<cocos2d::Ref*>::value);
 
 	Lua_NewFunc(L, "isVersionLoaded", [](lua_State* L)
 	{
@@ -171,3 +175,4 @@
 	lua_pushstring(L, "UP_TO_DATE");	lua_pushinteger(L, (int)cocos2d::extension::AssetsManagerEx::State::UP_TO_DATE);	lua_rawset(L, -3);
 	lua_pushstring(L, "FAIL_TO_UPDATE");	lua_pushinteger(L, (int)cocos2d::extension::AssetsManagerEx::State::FAIL_TO_UPDATE);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
+}
