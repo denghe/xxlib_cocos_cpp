@@ -30,7 +30,7 @@
 #include "lua_cc_userdefault.hpp"
 #include "lua_cc_texturecache.hpp"
 #include "lua_cc_spriteframecache.hpp"
-// todo: AnimationCache
+#include "lua_cc_animationcache.hpp"
 
 inline void Lua_Register_cc(lua_State* const& L)
 {
@@ -38,15 +38,6 @@ inline void Lua_Register_cc(lua_State* const& L)
 	lua_createtable(L, 0, 100);										// cc
 	lua_pushvalue(L, -1);											// cc, cc
 	lua_setglobal(L, LuaKey_cc);									// cc
-
-	Lua_Register_Application(L);
-	Lua_Register_Director(L);
-	Lua_Register_EventDispacher(L);
-	Lua_Register_FileUtils(L);
-	Lua_Register_UserDefault(L);
-	Lua_Register_TextureCache(L);
-	Lua_Register_SpriteFrameCache(L);
-	// ... todo: AnimationCache
 
 	Lua_Register_Data(L);
 	Lua_Register_Ref(L);
@@ -68,6 +59,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_Texture(L);
 	Lua_Register_Actions(L);
 	// .....
+
 	Lua_Register_uiWidget(L);
 	Lua_Register_uiButton(L);
 	Lua_Register_uiImageView(L);
@@ -75,6 +67,16 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_uiLoadingBar(L);
 	Lua_Register_uiEditBox(L);
 	// .....
+
+	Lua_Register_Application(L);
+	Lua_Register_Director(L);
+	Lua_Register_EventDispacher(L);
+	Lua_Register_FileUtils(L);
+	Lua_Register_UserDefault(L);
+	Lua_Register_TextureCache(L);
+	Lua_Register_SpriteFrameCache(L);
+	Lua_Register_AnimationCache(L);
+	// ...
 
 	lua_pop(L, 1);
 	assert(lua_gettop(L) == 0);

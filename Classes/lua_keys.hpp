@@ -80,6 +80,11 @@ struct TypeNames<cocos2d::Ref*>
 	inline static const char* value = "Ref";
 };
 template<>
+struct TypeNames<cocos2d::AnimationCache*>
+{
+	inline static const char* value = "AnimationCache";
+};
+template<>
 struct TypeNames<cocos2d::extension::AssetsManagerEx*>
 {
 	inline static const char* value = "AssetsManagerEx";

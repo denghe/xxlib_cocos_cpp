@@ -63,10 +63,8 @@ collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 5000)
 
 
--- 测试按键
-
+-- 按键映射
 gKeyCodes = {}
-gTouchs = {}
 
 local ELK = cc.EventListenerKeyboard.create()
 ELK:onKeyPressed(function(kc, e)
@@ -77,8 +75,9 @@ ELK:onKeyReleased(function(kc, e)
 end)
 cc.addEventListenerWithFixedPriority(ELK, -1)
 
--- 测试点击
 
+-- 点击映射
+gTouchs = {}
 local ELT = cc.EventListenerTouchOneByOne.create()
 local addTouch = function(t, e)
 	gTouchs[t:getID()] = t
@@ -176,3 +175,4 @@ go(function()
 		end
 	end
 end)
+
