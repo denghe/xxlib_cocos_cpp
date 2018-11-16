@@ -11,6 +11,7 @@
 // 用于临时装载从 lua 获取的参数
 inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
 inline std::vector<std::string> gStrings;
+inline cocos2d::Vector<cocos2d::SpriteFrame*> gSpriteFrames;
 
 #include "lua_keys.hpp"
 #include "lua_func.hpp"

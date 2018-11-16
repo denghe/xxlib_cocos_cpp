@@ -80,6 +80,16 @@ struct TypeNames<cocos2d::Ref*>
 	inline static const char* value = "Ref";
 };
 template<>
+struct TypeNames<cocos2d::Animation*>
+{
+	inline static const char* value = "Animation";
+};
+template<>
+struct TypeNames<cocos2d::AnimationFrame*>
+{
+	inline static const char* value = "AnimationFrame";
+};
+template<>
 struct TypeNames<cocos2d::AnimationCache*>
 {
 	inline static const char* value = "AnimationCache";
@@ -113,6 +123,11 @@ template<>
 struct TypeNames<cocos2d::ActionInterval*>
 {
 	inline static const char* value = "ActionInterval";
+};
+template<>
+struct TypeNames<cocos2d::Animate*>
+{
+	inline static const char* value = "Animate";
 };
 template<>
 struct TypeNames<cocos2d::Spawn*>
@@ -320,6 +335,11 @@ struct TypeNames<cocos2d::Node*>
 	inline static const char* value = "Node";
 };
 template<>
+struct TypeNames<cocos2d::experimental::TMXTiledMap*>
+{
+	inline static const char* value = "TMXTiledMap";
+};
+template<>
 struct TypeNames<cocos2d::Scene*>
 {
 	inline static const char* value = "Scene";
@@ -458,6 +478,11 @@ template<>
 struct TypeNames<cocos2d::extension::EventAssetsManagerEx*>
 {
 	inline static const char* value = "EventAssetsManagerEx";
+};
+template<>
+struct TypeNames<cocos2d::Vector<cocos2d::SpriteFrame*>*>
+{
+	inline static const char* value = "SpriteFrames";
 };
 
 // todo: more

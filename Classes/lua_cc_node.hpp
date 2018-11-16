@@ -15,6 +15,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		var o = cocos2d::Node::create();
+		if (!o) return 0;
 		return Lua_Push(L, o);
 	});
 

@@ -65,8 +65,10 @@ int Lua_Push(lua_State* const& L, T const& v)
 		lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
 		lua_setmetatable(L, -2);									// ..., &o
 	}
-	else if constexpr (std::is_same_v<T, cocos2d::Vector<cocos2d::Node*>>
-		|| std::is_same_v<T, std::vector<std::string>>)
+	else if constexpr (
+		std::is_same_v<T, cocos2d::Vector<cocos2d::Node*>>
+		|| std::is_same_v<T, std::vector<std::string>>
+		)
 	{
 		lua_createtable(L, v.size(), 0);
 		int i = 0;

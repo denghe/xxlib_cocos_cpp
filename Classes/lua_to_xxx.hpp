@@ -44,6 +44,28 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		v = std::move(Lua_Func(L, idx));
 		return;
 	}
+	else if constexpr (std::is_same_v<T, cocos2d::Vector<cocos2d::SpriteFrame*>*>)
+	{
+		if (!lua_istable(L, idx)) goto LabError;
+		v = &gSpriteFrames;
+		gSpriteFrames.clear();
+		int i = 1;
+		while (true)
+		{
+			var t = lua_rawgeti(L, idx, i);			// ... t, ..., v
+			if (t == LUA_TNIL)
+			{
+				lua_pop(L, 1);						// ... t, ...
+				return;
+			}
+			cocos2d::SpriteFrame* item = nullptr;
+			Lua_Get(item, L, -1);
+			gSpriteFrames.pushBack(item);
+			lua_pop(L, 1);							// ... t, ...
+			++i;
+		}
+		return;
+	}
 	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsRef_v<T>)
 	{
 		// 还需要进一步检测 mt 父子关系, 以及最终指针的 dynamic cast 来进一步判断, 以后上全局内存池方案再说
@@ -55,7 +77,7 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 			var p = (T*)lua_touserdata(L, idx);
 			var versionNumber = *(size_t*)(p + 1);
 			v = *p;
-			if(cocos2d::Ref::ptrs.find(*p) == cocos2d::Ref::ptrs.cend() || cocos2d::Ref::ptrs[*p] != versionNumber) goto LabError;
+			if (cocos2d::Ref::ptrs.find(*p) == cocos2d::Ref::ptrs.cend() || cocos2d::Ref::ptrs[*p] != versionNumber) goto LabError;
 		}
 		else
 		{
