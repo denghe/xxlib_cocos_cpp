@@ -1,8 +1,4 @@
-﻿#pragma once
-
-inline void Lua_Register_Data(lua_State* const& L)
-{
-	Lua_NewMT(L, TypeNames<cocos2d::Data*>::value);
+﻿	Lua_NewMT(L, TypeNames<cocos2d::Data*>::value);
 
 	Lua_NewFunc(L, "__gc", [](lua_State* L)
 	{
@@ -20,4 +16,3 @@ inline void Lua_Register_Data(lua_State* const& L)
 	});
 
 	lua_pop(L, 1);
-}

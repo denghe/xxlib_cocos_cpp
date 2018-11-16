@@ -1,8 +1,4 @@
-﻿#pragma once
-
-inline void Lua_Register_uiEditBox(lua_State* const& L)
-{
-	Lua_NewMT(L, TypeNames<cocos2d::ui::EditBox*>::value, TypeNames<cocos2d::ui::Widget*>::value);
+﻿	Lua_NewMT(L, TypeNames<cocos2d::ui::EditBox*>::value, TypeNames<cocos2d::ui::Widget*>::value);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
@@ -490,5 +486,3 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 	lua_pushstring(L, "GO");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::KeyboardReturnType::GO);	lua_rawset(L, -3);
 	lua_pushstring(L, "NEXT");	lua_pushinteger(L, (int)cocos2d::ui::EditBox::KeyboardReturnType::NEXT);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
-
-}

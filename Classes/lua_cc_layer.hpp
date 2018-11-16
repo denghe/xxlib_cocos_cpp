@@ -1,8 +1,4 @@
-﻿#pragma once
-
-inline void Lua_Register_Layer(lua_State* const& L)
-{
-	Lua_NewMT(L, TypeNames<cocos2d::Layer*>::value, TypeNames<cocos2d::Node*>::value);
+﻿	Lua_NewMT(L, TypeNames<cocos2d::Layer*>::value, TypeNames<cocos2d::Node*>::value);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
@@ -19,4 +15,3 @@ inline void Lua_Register_Layer(lua_State* const& L)
 	});
 
 	lua_pop(L, 1);
-}

@@ -1,8 +1,4 @@
-﻿#pragma once
-
-inline void Lua_Register_uiLayout(lua_State* const& L)
-{
-	Lua_NewMT(L, TypeNames<cocos2d::ui::Layout*>::value, TypeNames<cocos2d::ui::Widget*>::value);
+﻿	Lua_NewMT(L, TypeNames<cocos2d::ui::Layout*>::value, TypeNames<cocos2d::ui::Widget*>::value);
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
@@ -313,4 +309,3 @@ inline void Lua_Register_uiLayout(lua_State* const& L)
 	lua_pushstring(L, "SOLID");	lua_pushinteger(L, (int)cocos2d::ui::Layout::BackGroundColorType::SOLID);	lua_rawset(L, -3);
 	lua_pushstring(L, "GRADIENT");	lua_pushinteger(L, (int)cocos2d::ui::Layout::BackGroundColorType::GRADIENT);	lua_rawset(L, -3);
 	lua_rawset(L, -3);
-}

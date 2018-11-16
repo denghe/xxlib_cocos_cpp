@@ -194,6 +194,13 @@
     <ClInclude Include="..\Classes\lua_all.hpp" />
     <ClInclude Include="..\Classes\lua_cc.hpp" />
     <ClInclude Include="..\Classes\lua_cca.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_application.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_director.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_eventdispacher.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_fileutils.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_spriteframecache.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_texturecache.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_userdefault.hpp" />
     <ClInclude Include="..\Classes\lua_spine.hpp" />
     <ClInclude Include="..\Classes\lua_cc_actions.hpp" />
     <ClInclude Include="..\Classes\lua_cc_assetsmanagerex.hpp" />
@@ -221,7 +228,6 @@
     <ClInclude Include="..\Classes\lua_new_xxx.hpp" />
     <ClInclude Include="..\Classes\lua_pushcall.hpp" />
     <ClInclude Include="..\Classes\lua_to_xxx.hpp" />
-    <ClInclude Include="..\Classes\lua_init.hpp" />
     <ClInclude Include="..\Classes\lua_xx.hpp" />
     <ClInclude Include="..\Classes\lua_xx_bbuffer.hpp" />
     <ClInclude Include="..\Classes\lua_xx_mempool.hpp" />

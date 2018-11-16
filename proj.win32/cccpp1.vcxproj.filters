@@ -275,9 +275,6 @@
     <ClInclude Include="..\Classes\lua_keys.hpp">
       <Filter>lua_binds</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_init.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\lua_xx.hpp">
       <Filter>lua_binds</Filter>
     </ClInclude>
@@ -429,6 +426,27 @@
       <Filter>lua_binds</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\lua_spine.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_application.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_director.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_eventdispacher.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_fileutils.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_spriteframecache.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_texturecache.hpp">
+      <Filter>lua_binds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\lua_cc_userdefault.hpp">
       <Filter>lua_binds</Filter>
     </ClInclude>
   </ItemGroup>
