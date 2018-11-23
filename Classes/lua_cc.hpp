@@ -15,7 +15,7 @@
 #include "lua_cc_sprite.hpp"
 #include "lua_cc_scrollview.hpp"
 #include "lua_cc_texture.hpp"
-#include "lua_cc_tmxtiledmap.hpp"
+//#include "lua_cc_tmxtiledmap.hpp"
 
 #include "lua_cc_uiwidget.hpp"
 #include "lua_cc_uibutton.hpp"
@@ -59,7 +59,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_SpriteFrame(L);
 	Lua_Register_Texture(L);
 	Lua_Register_Actions(L);
-	Lua_Register_TMXTiledMap(L);
+	//Lua_Register_TMXTiledMap(L);
 	// .....
 
 	Lua_Register_uiWidget(L);

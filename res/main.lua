@@ -66,26 +66,6 @@ collectgarbage("setstepmul", 5000)
 
 
 
-
-
-
-
-
--- test tmx
-go(function()
-	local tmx = cc.TMXTiledMap.create("untitled.tmx")
-	gScene:addChild(tmx)
-	tmx:setScale(0.01)
-	tmx:setPosition(500, 500)
-end)
-
-
-
-
-
-
-
-
 -- 按键映射
 gKeyCodes = {}
 
@@ -118,85 +98,85 @@ cc.addEventListenerWithFixedPriority(ELT, -1)
 
 
 -- 绘制一个 ASDW 控制的 sprite. touch 发生时向其坐标发射 bullet
---go(function()
---	local imgBody = cc.addImage("man.png")
---	local imgBullet = cc.addImage("bullet.png")
---	imgBody:retain()
---	imgBullet:retain()
---
---	local bullets = List_Create()
---
---	bullets.Create = function(x, y, incX, incY, a)
---		local bullet = 
---		{
---			0,
---			cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("bullet.png", gScene, x, y), 
---			x, y, 
---			incX, incY
---		}
---		bullets.Add(bullet)
---		bullet[1] = #bullets
---		bullet[2]:setRotation(-a)
---		bullet.Release = function()
---			bullet[2]:removeFromParent()
---			local idx = bullet[1]
---			bullets[#bullets][1] = idx
---			bullets.SwapRemoveAt(idx)
---		end
---		bullet.Move = function()
---			local x, y = bullet[3] + bullet[5], bullet[4] + bullet[6]
---			if x < -740 or x > 740 or y < -460 or y > 460 then
---				bullet.Release()
---			else
---				bullet[3], bullet[4] = x, y
---				bullet[2]:setPosition(x, y)
---			end
---		end
---		return bullet
---	end
---
---	local x, y = 0, 0
---	local o = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("man.png", gScene, x, y, 0.5, 0.5)
---	local keys = 
---	{
---		cc.KeyCode.KEY_A, 
---		cc.KeyCode.KEY_S, 
---		cc.KeyCode.KEY_D, 
---		cc.KeyCode.KEY_W
---	}
---	local funcs = 
---	{ 
---		function() x = x - 1 end, 
---		function() y = y - 1 end, 
---		function() x = x + 1 end, 
---		function() y = y + 1 end
---	}
---	while true do
---		yield()
---
---		-- move man
---		for i = 1, #keys do
---			if gKeyCodes[keys[i]] then
---				funcs[i]()
---			end
---		end
---		o:setPosition(x, y)
---
---		-- fire
---		for i, t in pairs(gTouchs) do
---			local tx, ty = o:convertTouchToNodeSpaceAR(t)
---			local bx, by = 145, 0
---			if tx < 0 then
---				bx = -145
---			end
---			local a = 0
---			tx, ty, a = GetXyIncAngle(tx - bx, ty - by)
---			bullets.Create(x + bx, y + by, tx, ty, a)
---		end
---
---		-- move bullets
---		for i = #bullets, 1, -1 do
---			bullets[i].Move()
---		end
---	end
---end)
+go(function()
+	local imgBody = cc.addImage("man.png")
+	local imgBullet = cc.addImage("bullet.png")
+	imgBody:retain()
+	imgBullet:retain()
+
+	local bullets = List_Create()
+
+	bullets.Create = function(x, y, incX, incY, a)
+		local bullet = 
+		{
+			0,
+			cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("bullet.png", gScene, x, y), 
+			x, y, 
+			incX, incY
+		}
+		bullets.Add(bullet)
+		bullet[1] = #bullets
+		bullet[2]:setRotation(-a)
+		bullet.Release = function()
+			bullet[2]:removeFromParent()
+			local idx = bullet[1]
+			bullets[#bullets][1] = idx
+			bullets.SwapRemoveAt(idx)
+		end
+		bullet.Move = function()
+			local x, y = bullet[3] + bullet[5], bullet[4] + bullet[6]
+			if x < -740 or x > 740 or y < -460 or y > 460 then
+				bullet.Release()
+			else
+				bullet[3], bullet[4] = x, y
+				bullet[2]:setPosition(x, y)
+			end
+		end
+		return bullet
+	end
+
+	local x, y = 0, 0
+	local o = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("man.png", gScene, x, y, 0.5, 0.5)
+	local keys = 
+	{
+		cc.KeyCode.KEY_A, 
+		cc.KeyCode.KEY_S, 
+		cc.KeyCode.KEY_D, 
+		cc.KeyCode.KEY_W
+	}
+	local funcs = 
+	{ 
+		function() x = x - 1 end, 
+		function() y = y - 1 end, 
+		function() x = x + 1 end, 
+		function() y = y + 1 end
+	}
+	while true do
+		yield()
+
+		-- move man
+		for i = 1, #keys do
+			if gKeyCodes[keys[i]] then
+				funcs[i]()
+			end
+		end
+		o:setPosition(x, y)
+
+		-- fire
+		for i, t in pairs(gTouchs) do
+			local tx, ty = o:convertTouchToNodeSpaceAR(t)
+			local bx, by = 145, 0
+			if tx < 0 then
+				bx = -145
+			end
+			local a = 0
+			tx, ty, a = GetXyIncAngle(tx - bx, ty - by)
+			bullets.Create(x + bx, y + by, tx, ty, a)
+		end
+
+		-- move bullets
+		for i = #bullets, 1, -1 do
+			bullets[i].Move()
+		end
+	end
+end)
