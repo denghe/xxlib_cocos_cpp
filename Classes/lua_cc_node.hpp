@@ -252,7 +252,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "setPositionX", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, float, float>(L, "setPositionX error! need 3 args: self, float x");
+		var t = Lua_ToTuple<cocos2d::Node*, float>(L, "setPositionX error! need 2 args: self, float x");
 		std::get<0>(t)->setPositionX(std::get<1>(t));
 		return 0;
 	});
@@ -265,7 +265,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "setPositionY", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, float, float>(L, "setPositionY error! need 3 args: self, float y");
+		var t = Lua_ToTuple<cocos2d::Node*, float>(L, "setPositionY error! need 2 args: self, float y");
 		std::get<0>(t)->setPositionY(std::get<1>(t));
 		return 0;
 	});
@@ -278,7 +278,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "setPositionZ", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, float, float>(L, "setPositionZ error! need 3 args: self, float z");
+		var t = Lua_ToTuple<cocos2d::Node*, float>(L, "setPositionZ error! need 2 args: self, float z");
 		std::get<0>(t)->setPositionZ(std::get<1>(t));
 		return 0;
 	});
@@ -304,7 +304,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "setSkewX", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, float, float>(L, "setSkewX error! need 3 args: self, float x");
+		var t = Lua_ToTuple<cocos2d::Node*, float>(L, "setSkewX error! need 2 args: self, float x");
 		std::get<0>(t)->setSkewX(std::get<1>(t));
 		return 0;
 	});
@@ -317,7 +317,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 
 	Lua_NewFunc(L, "setSkewY", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Node*, float, float>(L, "setSkewY error! need 3 args: self, float y");
+		var t = Lua_ToTuple<cocos2d::Node*, float>(L, "setSkewY error! need 2 args: self, float y");
 		std::get<0>(t)->setSkewY(std::get<1>(t));
 		return 0;
 	});

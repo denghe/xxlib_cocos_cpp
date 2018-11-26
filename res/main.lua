@@ -127,36 +127,95 @@ local spriteFrameNames =
 -- 预加载
 cc.addSpriteFramesWithFile("symbol.plist")
 
+-- item 部分参数
+local itemWidth = 133
+local itemHeight = 133
+local itemHeight2 = itemHeight / 2
+
+-- 画按钮并设置一个 touch up 的事件处理回调
+local BtnCreate = function(sfName, parent, pX, pY, aX, aY, sX, sY, touchUpFunc)
+	local spr = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale(sfName, parent, pX, pY, aX, aY, sX, sY)
+	local tl = cc.EventListenerTouchOneByOne.create()
+	tl:onTouchBegan(function(touch, event) return spr:containsTouch(touch) end)
+	tl:onTouchEnded(function(touch, event) touchUpFunc(touch) end)
+	cc.addEventListenerWithSceneGraphPriority(tl, spr)
+	return spr
+end
+
+-- 画格子
 local CellCreate = function(container, w, h, x, y)
 	local cn = cc.ClippingNode.create()
-	--cn:setContentSize(w, h)
 	cn:setStencilRect(w, h)
 	cn:setPosition(x, y)
 	container:addChild(cn)
 	return cn
 end
-local ItemCreate = function(cell, itemId)
-	return cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[itemId], cell)
-end
-local ItemMove = function(item)
-	-- todo
-end
 
+-- 画格子里面的元素
+local ItemCreate = function(cell, itemId, x, y)
+	local item = {}
+	item.sprite = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[itemId], cell)
+	item.x = x
+	item.y = y
+	item.UpdatePos = function()
+		item.sprite:setPosition(item.x, item.y)
+	end
+	item.moving = false
+	item.Move = function()
+		go(function()
+			item.moving = true
+			local destY = item.y + itemHeight
+			while item.y <= destY do
+				item.y = item.y + 5	-- todo: 变速
+				item.UpdatePos()
+				yield()
+			end
+			item.moving = false
+		end)
+	end
+	item.UpdatePos()
+	return item
+end
 
 -- 画一个旋转按钮和一个 cell. 点击后开始转动, 2 秒后停止
 go(function()
-	local btnSpin = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("spin_CN.png", gScene, gX3, gY3, 1, 0 )
-
 	local cell = CellCreate(gScene, 133, 133, gX5, gY5)
-	local item = ItemCreate(cell, 1)
-	print(item:getContentSize())
-
-	local btnSpinTouchListener = cc.EventListenerTouchOneByOne.create()
-	btnSpinTouchListener:onTouchBegan(function(touch, event)
-		return btnSpin:containsTouch(touch)
+	local items = {}
+	items[1] = ItemCreate(cell, 1, 0, itemHeight)
+	items[2] = ItemCreate(cell, 2, 0, 0)
+	items[3] = ItemCreate(cell, 3, 0, -itemHeight)
+	items.Move = function()
+		items[1].Move()
+		items[2].Move()
+		items[3].Move()
+	end
+	local btnSpin = BtnCreate("spin_CN.png", gScene, gX3, gY3, 1, 0, 1, 1, function(touch)
+		items.Move()
 	end)
-	btnSpinTouchListener:onTouchEnded(function(touch, event)
-		
-	end)
-	cc.addEventListenerWithSceneGraphPriority(btnSpinTouchListener, btnSpin)
 end)
+
+
+local panel = {}
+panel.opened = false
+panel.Open = function()
+	....
+	panel.opened = true
+	go(function()
+		-....
+		while panel.opened do
+			yield()
+			-- ...
+		end
+	end)
+end
+panel.Close = function()
+	....
+	panel.opened = false
+end
+return panel
+
+xx.lua
+
+
+local p = require "xx.lua"
+SetState(p)

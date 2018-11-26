@@ -288,9 +288,6 @@ end
 
 
 
--- 公用网络层
-gNet = xx.UvTcpClient.Create()
-
 -- 推送的多播处理函数集 key: proto, val: { func(serial, pkg)... }
 gNetHandlers = {}
 
@@ -334,6 +331,11 @@ BBToObject = function(bb)
 		end
 	end
 end
+
+
+-- 公用网络层
+-- todo: 用 CreateUvTcpClient 来创建
+gNet = xx.UvTcpClient.Create()
 
 
 -- 发送推送包
@@ -423,7 +425,6 @@ end
 gFrameNumber = 0
 
 -- 注册每帧执行函数
-local co = coroutine_create(function() while true do yield() end end)
 cc.mainLoopCallback(function()
 	-- 隐藏执行 uv.Run(Once)
 
@@ -448,5 +449,3 @@ cc.mainLoopCallback(function()
 	-- 递增全局帧编号
 	gFrameNumber = gFrameNumber + 1
 end)
-
-
