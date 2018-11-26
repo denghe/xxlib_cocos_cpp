@@ -196,6 +196,7 @@
     <ClInclude Include="..\Classes\lua_cca.hpp" />
     <ClInclude Include="..\Classes\lua_cc_animationcache.hpp" />
     <ClInclude Include="..\Classes\lua_cc_application.hpp" />
+    <ClInclude Include="..\Classes\lua_cc_clippingnode.hpp" />
     <ClInclude Include="..\Classes\lua_cc_director.hpp" />
     <ClInclude Include="..\Classes\lua_cc_eventdispacher.hpp" />
     <ClInclude Include="..\Classes\lua_cc_fileutils.hpp" />

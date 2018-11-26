@@ -23,7 +23,7 @@ gX, gY, gW, gH = cc.getSafeAreaRect()
 gW2 = gW/2
 gH2 = gH/2
 
--- 创建 scene, 将可用区域中心设为 0,0 点
+-- 创建 scene, 将 safe area 中心设为 0,0 点
 gScene = cc.Scene.create()
 gScene:setContentSize(0, 0)
 gScene:setPosition(gX + gW2, gY + gH2)
@@ -38,24 +38,24 @@ cc.runWithScene(gScene)
 4 5 6
 1 2 3
 ]]
-gX1 = -gW
-gY1 = -gH
+gX1 = -gW2
+gX4 = -gW2
+gX7 = -gW2
 gX2 = 0
-gY2 = -gH
-gX3 = gW
-gY3 = -gH
-gX4 = -gX
-gY4 = 0
 gX5 = 0
-gY5 = 0
-gX6 = gW
-gY6 = 0
-gX7 = -gW
-gY7 = gH
 gX8 = 0
-gY8 = gH
-gX9 = gW
-gY9 = gH
+gX3 = gW2
+gX6 = gW2
+gX9 = gW2
+gY1 = -gH2
+gY2 = -gH2
+gY3 = -gH2
+gY4 = 0
+gY5 = 0
+gY6 = 0
+gY7 = gH2
+gY8 = gH2
+gY9 = gH2
 
 
 -- avoid memory leak
@@ -64,119 +64,99 @@ collectgarbage("setstepmul", 5000)
 
 
 
+-- 根据当前网上随便找的一些素材规划一些上下文
+local spriteFrameNames = 
+{
+	symbolNormals = {
+		'SH1-00.png',
+		'SH2-00.png',
+		'SM1-00.png',
+		'SM2-00.png',
+		'SM3-00.png',
+		'SL1-00.png',
+		'SL2-00.png',
+		'SL3-00.png',
+		'SWD-00.png'
+	},
+	symbolBlurs = {
+		'SH1-r.png',
+		'SH2-r.png',
+		'SM1-r.png',
+		'SM2-r.png',
+		'SM3-r.png',
+		'SL1-r.png',
+		'SL2-r.png',
+		'SL3-r.png',
+		'SWD-r.png'
+	},
+	symbolHighlights = {
+		'SH1-00.png',
+		'SH2-00.png',
+		'SM1-00.png',
+		'SM2-00.png',
+		'SM3-00.png',
+		'SL1-00.png',
+		'SL2-00.png',
+		'SL3-00.png',
+		'SWD-00.png'
+	},
+	symbolGrays = {
+		'SH1-b.png',
+		'SH2-b.png',
+		'SM1-b.png',
+		'SM2-b.png',
+		'SM3-b.png',
+		'SL1-b.png',
+		'SL2-b.png',
+		'SL3-b.png',
+		'SWD-b.png'
+	},
+	symbolAlphas = {
+		'H1.png',
+		'H2.png',
+		'M1.png',
+		'M2.png',
+		'M3.png',
+		'L1.png',
+		'L2.png',
+		'L3.png',
+		'WILD.png'
+	}
+}
 
+-- 预加载
+cc.addSpriteFramesWithFile("symbol.plist")
 
--- 按键映射
-gKeyCodes = {}
-
-local ELK = cc.EventListenerKeyboard.create()
-ELK:onKeyPressed(function(kc, e)
-	gKeyCodes[kc] = true
-end)
-ELK:onKeyReleased(function(kc, e)
-	gKeyCodes[kc] = false
-end)
-cc.addEventListenerWithFixedPriority(ELK, -1)
-
-
--- 点击映射
-gTouchs = {}
-local ELT = cc.EventListenerTouchOneByOne.create()
-local addTouch = function(t, e)
-	gTouchs[t:getID()] = t
-	return true
+local CellCreate = function(container, w, h, x, y)
+	local cn = cc.ClippingNode.create()
+	--cn:setContentSize(w, h)
+	cn:setStencilRect(w, h)
+	cn:setPosition(x, y)
+	container:addChild(cn)
+	return cn
 end
-local removeTouch = function(t, e)
-	gTouchs[t:getID()] = nil
+local ItemCreate = function(cell, itemId)
+	return cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[itemId], cell)
 end
-ELT:onTouchBegan(addTouch)
-ELT:onTouchEnded(removeTouch)
-ELT:onTouchCancelled(removeTouch)
-cc.addEventListenerWithFixedPriority(ELT, -1)
+local ItemMove = function(item)
+	-- todo
+end
 
 
-
-
--- 绘制一个 ASDW 控制的 sprite. touch 发生时向其坐标发射 bullet
+-- 画一个旋转按钮和一个 cell. 点击后开始转动, 2 秒后停止
 go(function()
-	local imgBody = cc.addImage("man.png")
-	local imgBullet = cc.addImage("bullet.png")
-	imgBody:retain()
-	imgBullet:retain()
+	local btnSpin = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("spin_CN.png", gScene, gX3, gY3, 1, 0 )
 
-	local bullets = List_Create()
+	local cell = CellCreate(gScene, 133, 133, gX5, gY5)
+	local item = ItemCreate(cell, 1)
+	print(item:getContentSize())
 
-	bullets.Create = function(x, y, incX, incY, a)
-		local bullet = 
-		{
-			0,
-			cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("bullet.png", gScene, x, y), 
-			x, y, 
-			incX, incY
-		}
-		bullets.Add(bullet)
-		bullet[1] = #bullets
-		bullet[2]:setRotation(-a)
-		bullet.Release = function()
-			bullet[2]:removeFromParent()
-			local idx = bullet[1]
-			bullets[#bullets][1] = idx
-			bullets.SwapRemoveAt(idx)
-		end
-		bullet.Move = function()
-			local x, y = bullet[3] + bullet[5], bullet[4] + bullet[6]
-			if x < -740 or x > 740 or y < -460 or y > 460 then
-				bullet.Release()
-			else
-				bullet[3], bullet[4] = x, y
-				bullet[2]:setPosition(x, y)
-			end
-		end
-		return bullet
-	end
-
-	local x, y = 0, 0
-	local o = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale("man.png", gScene, x, y, 0.5, 0.5)
-	local keys = 
-	{
-		cc.KeyCode.KEY_A, 
-		cc.KeyCode.KEY_S, 
-		cc.KeyCode.KEY_D, 
-		cc.KeyCode.KEY_W
-	}
-	local funcs = 
-	{ 
-		function() x = x - 1 end, 
-		function() y = y - 1 end, 
-		function() x = x + 1 end, 
-		function() y = y + 1 end
-	}
-	while true do
-		yield()
-
-		-- move man
-		for i = 1, #keys do
-			if gKeyCodes[keys[i]] then
-				funcs[i]()
-			end
-		end
-		o:setPosition(x, y)
-
-		-- fire
-		for i, t in pairs(gTouchs) do
-			local tx, ty = o:convertTouchToNodeSpaceAR(t)
-			local bx, by = 145, 0
-			if tx < 0 then
-				bx = -145
-			end
-			local a = 0
-			tx, ty, a = GetXyIncAngle(tx - bx, ty - by)
-			bullets.Create(x + bx, y + by, tx, ty, a)
-		end
-
-		-- move bullets
-		for i = #bullets, 1, -1 do
-			bullets[i].Move()
-		end
-	end
+	local btnSpinTouchListener = cc.EventListenerTouchOneByOne.create()
+	btnSpinTouchListener:onTouchBegan(function(touch, event)
+		return btnSpin:containsTouch(touch)
+	end)
+	btnSpinTouchListener:onTouchEnded(function(touch, event)
+		
+	end)
+	cc.addEventListenerWithSceneGraphPriority(btnSpinTouchListener, btnSpin)
 end)

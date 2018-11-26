@@ -335,6 +335,11 @@ struct TypeNames<cocos2d::Node*>
 	inline static const char* value = "Node";
 };
 template<>
+struct TypeNames<cocos2d::ClippingNode*>
+{
+	inline static const char* value = "ClippingNode";
+};
+template<>
 struct TypeNames<cocos2d::experimental::TMXTiledMap*>
 {
 	inline static const char* value = "TMXTiledMap";

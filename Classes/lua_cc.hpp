@@ -13,6 +13,7 @@
 #include "lua_cc_layer.hpp"
 #include "lua_cc_spriteframe.hpp"
 #include "lua_cc_sprite.hpp"
+#include "lua_cc_clippingnode.hpp"
 #include "lua_cc_scrollview.hpp"
 #include "lua_cc_texture.hpp"
 //#include "lua_cc_tmxtiledmap.hpp"
@@ -54,6 +55,7 @@ inline void Lua_Register_cc(lua_State* const& L)
 	Lua_Register_EventListenerKeyboard(L);
 	Lua_Register_EventListenerAssetsManagerEx(L);
 	Lua_Register_Sprite(L);
+	Lua_Register_ClippingNode(L);
 	Lua_Register_Label(L);
 	Lua_Register_ScrollViews(L);
 	Lua_Register_SpriteFrame(L);
