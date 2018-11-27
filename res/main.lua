@@ -131,6 +131,7 @@ cc.addSpriteFramesWithFile("symbol.plist")
 local itemWidth = 133
 local itemHeight = 133
 local itemHeight2 = itemHeight / 2
+local numSymbols = #spriteFrameNames.symbolNormals
 
 -- 画按钮并设置一个 touch up 的事件处理回调
 local BtnCreate = function(sfName, parent, pX, pY, aX, aY, sX, sY, touchUpFunc)
@@ -151,32 +152,91 @@ local CellCreate = function(container, w, h, x, y)
 	return cn
 end
 
--- 画格子里面的元素
-local ItemCreate = function(cell, itemId, x, y)
+-- 需求分析:
+-- 队列看上去是一个固定序列( 看上去就是 sfName 数组顺序 ), 从上往下依次出现, 最终要停在哪张是通过滚动起始索引和距离来决定的, 无视当前图
+-- 格子里应该至少有 2 个 sprite 复用. 映射到队列中. 根据位置和速度来决定使用清晰还是模糊的图. 以及显示坐标.
+-- 队列具有下列操作函数:
+-- SetResult(int symbolId): 在队列当前位置插入一张用于展示先前结果的图, 当移到看不到时, 从队列中移除
+-- SetPosition(int symbolId): 重建队列, 且改变队列当前指向. SetResult 的内容做相应的移动.
+-- Spin(int steps): 开始滚动. 传入滚多少格. 视角表现为通过 SetPos 设的那张图将以模糊态进入视野并持续模糊 steps - 2 后, 最后两张清晰, 最后一张弹一下. 
+-- Stop(int symbolId): 逻辑上令滚动立即停止, 模糊的继续滚, 2张的继续 在其位置的下一张, 插入 symbolId 图, 带出清晰的 symbolId 图
+-- SpinOnce(): 只转1格, 展示 SetPos 的结果出来.
+
+-- 画一下各张图看看顺序. 看上去有 9 个符号. 每个 133 像素高度.
+for i = 1, numSymbols do
+	cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[i], gScene, gX4 + i * 133, gY4, 1, 0.5)
+end
+
+-- 考虑使用 float 下标, 与 symbol 对应. * 133 后与显示 offset 相对应, 滚动就是 + 0.225. 大于 9 时 -= 9. 小于 0 时 += 9
+-- 需要显示 Result 时，sprite 显示映射受其影响. 
+
+-- 构造一个 item 结构体并返回
+local ItemCreate = function(cell, symbolId)
 	local item = {}
-	item.sprite = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[itemId], cell)
-	item.x = x
-	item.y = y
-	item.UpdatePos = function()
-		item.sprite:setPosition(item.x, item.y)
+	item.positon = 9	-- 当前位置
+	item.result = 1		-- 结果展示
+	item.state = 0		-- 0: stoped   1: move   2: bounce
+
+	item.SetResult = function(symbolId)
+		item.result = symbolId
 	end
-	item.moving = false
-	item.Move = function()
+
+	item.SetPosition = function(symbolId)
+		item.positon = symbolId
+	end
+
+	item.SpinCore = function(step)
+		item.sum = item.sum + step
+		item.position = item.position + step
+		if item.position < 0 then
+			item.position = item.position + numSymbols
+		end
+		if item.position > numSymbols then
+			item.position = item.position - numSymbols
+		end
+		item.Update()
+	end
+
+	item.Spin = function(times, step)
+		assert(item.state == 0)
+		step = step or -2/9	-- 不传默认向下滚
+		assert(step <= numSymbols or step >= -numSymbols)
 		go(function()
-			item.moving = true
-			local destY = item.y + itemHeight
-			while item.y <= destY do
-				item.y = item.y + 5	-- todo: 变速
-				item.UpdatePos()
+			item.state = 1
+			item.sum = 0
+			while true do
+				-- todo: check stop click
+				item.SpinCore(step)
 				yield()
+				if math.abs(item.sum) > times then
+					break
+				end
 			end
+			item.state = 2
+
+			-- todo: 模拟弹性效果
 			item.moving = false
 		end)
 	end
-	item.UpdatePos()
+
+	item.Stop = function(symbolId)
+	end
+
+	item.SpinOnce = function()
+	end
+
+	item.sprite1 = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[symbolId], cell)
+	item.sprite2 = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[symbolId], cell)
+	item.Update = function()
+		-- todo: 根据当前状态和 offset, 使用 sprite1 & 2 在相应坐标显示相应图片
+		--item.sprite1:setPosition()
+		--item.sprite2:setPosition()  setSpriteFrame
+	end
+	item.Update()
 	return item
 end
 
+--[[
 -- 画一个旋转按钮和一个 cell. 点击后开始转动, 2 秒后停止
 go(function()
 	local cell = CellCreate(gScene, 133, 133, gX5, gY5)
@@ -193,29 +253,4 @@ go(function()
 		items.Move()
 	end)
 end)
-
-
-local panel = {}
-panel.opened = false
-panel.Open = function()
-	....
-	panel.opened = true
-	go(function()
-		-....
-		while panel.opened do
-			yield()
-			-- ...
-		end
-	end)
-end
-panel.Close = function()
-	....
-	panel.opened = false
-end
-return panel
-
-xx.lua
-
-
-local p = require "xx.lua"
-SetState(p)
+]]
