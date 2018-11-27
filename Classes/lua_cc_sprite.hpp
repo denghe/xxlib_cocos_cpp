@@ -119,7 +119,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 		{
 		case 2:
 		{
-			if (lua_isstring(L, 1))
+			if (lua_isstring(L, 2))
 			{
 				var t = Lua_ToTuple<cocos2d::Sprite*, std::string>(L);
 				std::get<0>(t)->setSpriteFrame(std::get<1>(t));
