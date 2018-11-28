@@ -16,7 +16,7 @@ cc.setDesignResolutionSize(gW, gH, cc.ResolutionPolicy.SHOW_ALL)
 cc.setDisplayStats(true)
 
 -- 设置帧数
-cc.setAnimationInterval(1 / 5)
+cc.setAnimationInterval(1 / 60)
 
 -- 取可用区域坐标宽高
 gX, gY, gW, gH = cc.getSafeAreaRect()
@@ -297,8 +297,8 @@ local ItemCreate = function(cell)
 		end
 	end
 
-	item.sprite1 = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[1], cell)
-	item.sprite2 = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[1], cell)
+	item.sprite1 = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[item.lastSymbolId], cell)
+	item.sprite2 = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[item.lastSymbolId], cell)
 	return item
 end
 
