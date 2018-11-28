@@ -103,19 +103,29 @@ end
 -- 全局协程池( 乱序 )
 gCoros = List_Create()
 
--- 压入一个可以是协程的函数. 有参数就跟在后面. 有延迟执行的效果.
+-- 压入一个协程函数. 有参数就跟在后面. 有延迟执行的效果
 gCoros_Push = function(func, ...)
 	--print("push")
 	local args = {...}
+	local co = nil
 	if #args == 0 then
-		gCoros.Add(coroutine_create(func))
+		co = coroutine_create(func)
 	else
-		gCoros.Add(coroutine_create(function() func(table_unpack(args)) end))
+		co = coroutine_create(function() func(table_unpack(args)) end)
 	end
+	gCoros.Add(co)
+	return co
 end
 
 -- for easy use
 go = gCoros_Push
+
+-- 压入一个协程函数时立即执行一次
+gorun = function(func, ...)
+	local co = go(func, ...)
+	resume(co)
+	return co
+end
 
 -- 阻塞 n 帧
 -- 适合在协程环境使用
