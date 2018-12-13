@@ -429,7 +429,7 @@ inline void Lua_Register_Node(lua_State* const& L)
 			break;
 		}
 		default:
-			return luaL_error(L, "setScale error! need 2 ~ 5 args: self, float angle / angleX, float angleY, float angleZ, float W");
+			return luaL_error(L, "setRotation error! need 2 ~ 5 args: self, float angle / angleX, float angleY, float angleZ, float W");
 		}
 		return 0;
 	});

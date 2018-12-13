@@ -105,7 +105,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 			break;
 		}
 		default:
-			return luaL_error(L, "create Node error! need 1, 5, 6 args: Texture2D texture, float rectX, rectY, rectW, rectH, bool rotated = false");
+			return luaL_error(L, "createWithTexture error! need 1, 5, 6 args: Texture2D texture, float rectX, rectY, rectW, rectH, bool rotated = false");
 		}
 		if (!o) return 0;
 		return Lua_Pushs(L, o);
@@ -242,7 +242,7 @@ inline void Lua_Register_Sprite(lua_State* const& L)
 
 	Lua_NewFunc(L, "setBlendFunc", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::ImageView*, GLenum, GLenum>(L, "setBlendFunc error! need 3 args: self, GLenum src, dst");
+		var t = Lua_ToTuple<cocos2d::Sprite*, GLenum, GLenum>(L, "setBlendFunc error! need 3 args: self, GLenum src, dst");
 		std::get<0>(t)->setBlendFunc({ std::get<1>(t), std::get<2>(t) });
 		return 0;
 	});

@@ -1,5 +1,9 @@
 ﻿require "libs.lua"
 
+-- avoid memory leak
+collectgarbage("setpause", 100)
+collectgarbage("setstepmul", 5000)
+
 -- 初始化显示相关
 
 -- 定显示尺寸
@@ -58,260 +62,336 @@ gY8 = gH2
 gY9 = gH2
 
 
--- avoid memory leak
-collectgarbage("setpause", 100)
-collectgarbage("setstepmul", 5000)
 
-
-
--- 根据当前网上随便找的一些素材规划一些上下文
-local spriteFrameNames = 
+local frameNames =
 {
-	symbolNormals = {
-		'SH1-00.png',
-		'SH2-00.png',
-		'SM1-00.png',
-		'SM2-00.png',
-		'SM3-00.png',
-		'SL1-00.png',
-		'SL2-00.png',
-		'SL3-00.png',
-		'SWD-00.png'
-	},
-	symbolBlurs = {
-		'SH1-r.png',
-		'SH2-r.png',
-		'SM1-r.png',
-		'SM2-r.png',
-		'SM3-r.png',
-		'SL1-r.png',
-		'SL2-r.png',
-		'SL3-r.png',
-		'SWD-r.png'
-	},
-	symbolHighlights = {
-		'SH1-00.png',
-		'SH2-00.png',
-		'SM1-00.png',
-		'SM2-00.png',
-		'SM3-00.png',
-		'SL1-00.png',
-		'SL2-00.png',
-		'SL3-00.png',
-		'SWD-00.png'
-	},
-	symbolGrays = {
-		'SH1-b.png',
-		'SH2-b.png',
-		'SM1-b.png',
-		'SM2-b.png',
-		'SM3-b.png',
-		'SL1-b.png',
-		'SL2-b.png',
-		'SL3-b.png',
-		'SWD-b.png'
-	},
-	symbolAlphas = {
-		'H1.png',
-		'H2.png',
-		'M1.png',
-		'M2.png',
-		'M3.png',
-		'L1.png',
-		'L2.png',
-		'L3.png',
-		'WILD.png'
-	}
+	'interface_l.png',
+	'interface_r.png',
+	'reelpay.png',
+	'reelshadow.png',
+	'wheelpay.png',
+	'window.png',
+	'windowdark.png',
+	'windowlamp.png',
 }
 
--- 预加载
-cc.addSpriteFramesWithFile("symbol.plist")
 
--- item 部分参数
-local itemWidth = 133
-local itemHeight = 133
-local itemHeight2 = itemHeight / 2
-local numSymbols = #spriteFrameNames.symbolNormals
+local ThemeHuca = {}
 
--- 画按钮并设置一个 touch up 的事件处理回调
-local BtnCreate = function(sfName, parent, pX, pY, aX, aY, sX, sY, touchUpFunc)
-	local spr = cc.Sprite.Create_FileName_Owner_Positon_Anchor_Scale(sfName, parent, pX, pY, aX, aY, sX, sY)
-	local tl = cc.EventListenerTouchOneByOne.create()
-	tl:onTouchBegan(function(touch, event) return spr:containsTouch(touch) end)
-	tl:onTouchEnded(function(touch, event) touchUpFunc(touch) end)
-	cc.addEventListenerWithSceneGraphPriority(tl, spr)
-	return spr
-end
+ThemeHuca.BonusGameState =
+{
+    Idle = 0 ,
+    Rolling = 1,
+    Show = 2,
+    Leaving = 3
+}
 
--- 画格子
-local CellCreate = function(container, w, h, x, y)
-	local cn = cc.ClippingNode.create()
-	cn:setStencilRect(w, h)
-	cn:setPosition(x, y)
-	container:addChild(cn)
-	return cn
-end
+ThemeHuca.BonusGameMode =
+{
+    Manual = 0,
+    Auto = 1
+}
 
--- 需求分析:
--- 队列看上去是一个固定序列( 看上去就是 sfName 数组顺序 ), 从上往下依次出现, 最终要停在哪张是通过滚动起始索引和距离来决定的, 无视当前图
--- 格子里应该至少有 2 个 sprite 复用. 映射到队列中. 根据位置和速度来决定使用清晰还是模糊的图. 以及显示坐标.
+ThemeHuca.BonusCellNum = 4
 
--- 画一下各张图看看顺序. 看上去有 9 个符号. 每个 133 像素高度.
-for i = 1, numSymbols do
-	cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[i], gScene, gX4 + 40 + i * 133, gY4 + 266, 1, 0.5)
-end
+ThemeHuca.BonusWheelCellNum = 14
 
--- 构造一个 item 结构体并返回
-local ItemCreate = function(cell)
-	local item =
-	{
-		pos = 0					-- 当前位置( Spin 时指定 ). fmod, 取整 + 1 后即为 symbolId. 显示时根据小数部分来计算前后两张的 offset
-		, startPos = 0			-- 开始滚动的位置( Spin 时指定 ). 显示时如果判断 pos 值取整后 == startPos, 则用 lastSymbolId 来作为显示用图
-		, endPos = 1			-- 结束滚动的位置( Spin 时指定 )
-		, lastSymbolId = 1		-- 上次的结果, 用于展示
-		, state = 0				-- 0: stoped   1: move   2: bounce ( Spin 时修改, 停止后为 0 )
-	}
+ThemeHuca.BonusGameImgPath = ''
 
-	-- 设置最后停的位置( 初始显示后第1次会用到, 修改静态展示图 )
-	item.SetLastSymbol = function(symbolId)
-		item.lastSymbolId = symbolId
-		item.Update()
-	end
+ThemeHuca.Ratio = 640/768
 
-	-- 开始滚动. 设置从多少滚动到多少.
-	item.Spin = function(startPos, endPos, step)
-		-- 参数检查与准备
-		assert(item.state == 0)
-		assert(startPos < endPos)
-		step = step or 2 / 9
-		item.pos = startPos
-		item.startPos = startPos
-		item.endPos = endPos
+ThemeHuca.BonusSymbolNormal = {
+    ThemeHuca.BonusGameImgPath ..'reelsymbol1.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol2.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol3.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol4.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol5.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol6.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol7.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol8.png'
+}
 
-		-- 启动协程并立即执行一次
-		gorun(function()
-			-- 开始滚动
-			item.state = 1
-			while true do
-				-- 滚一小段距离
-				item.pos = item.pos + step
-				item.Update()
-				yield()
+ThemeHuca.BonusSymbolBlur ={
+    ThemeHuca.BonusGameImgPath ..'reelsymbol1_r.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol2_r.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol3_r.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol4_r.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol5_r.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol6_r.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol7_r.png',
+    ThemeHuca.BonusGameImgPath ..'reelsymbol8_r.png'
+}
 
-				-- 如果滚到超出了范围就跳出
-				if item.pos > item.endPos then
-					break
-				end
-			end
+cc.addSpriteFramesWithFile("bg_ui.plist")
+cc.addSpriteFramesWithFile("bg_effect_0.plist")
+cc.addSpriteFramesWithFile("bg_effect_1.plist")
+cc.addSpriteFramesWithFile("bg_effect_2.plist")
+cc.addSpriteFramesWithFile("vip_wheel_pack.plist")
 
-			-- 开始播放弹性效果. 先减速继续移点点, 弹回高点, 再用2帧跌落静止
-			item.state = 2
-
-			item.pos = item.pos + step / 2
-			item.Update()
-			yield()
-
-			item.pos =  item.pos - step
-			item.Update()
-			yield()
-
-			item.pos =  item.pos - step
-			item.Update()
-			yield()
-
-			item.pos =  item.pos + (item.endPos - item.pos) / 2
-			item.Update()
-			yield()
-
-			item.pos = item.endPos
-			item.Update()
-			yield()
-
-			-- 停止
-			item.lastSymbolId = math.fmod(item.endPos, numSymbols) + 1
-			item.state = 0
-		end)
-	end
-
-	-- 试着停止滚动( 并非马上停下来 )
-	item.Stop = function()
-		if item.state ~= 1 then return end
-		-- 缩减 item.endPos 的值, 令其刚好大于 pos 且最终 symbolId 不变, 以实现速度停止
-		local m = math.floor(item.pos / numSymbols)
-		local offset = math.fmod(item.endPos, numSymbols)
-		item.endPos = numSymbols * m + offset
-	end
-
-	item.Update = function()
-		if item.state == 0 then
-			item.sprite1:setSpriteFrame(spriteFrameNames.symbolNormals[item.lastSymbolId])
-			item.sprite1:setPosition(0, 0)
-			item.sprite2:setVisible(false)
-		else
-			item.sprite2:setVisible(true)
-
-			local offset = math.fmod(item.pos, numSymbols)
-			local floor_offset = math.floor(offset)
-
-			local symbolId_1 = floor_offset + 1
-			local symbolId_2 = symbolId_1 + 1
-			if symbolId_2 > numSymbols then
-				symbolId_2 = 1
-			end
-
-			local blur1 = nil
-			local blur2 = nil
-
-			if item.pos - item.startPos < 1 then
-				symbolId_1 = item.lastSymbolId
-				blur1 = false
-				blur2 = true
-			else
-				blur1 = true
-				blur2 = true
-			end
-
-			if item.endPos - item.pos < 2 then
-				blur2 = false
-			end
-
-			if item.endPos - item.pos < 1 then
-				blur1 = false
-			end
-
-			if blur1 then
-				item.sprite1:setSpriteFrame(spriteFrameNames.symbolBlurs[symbolId_1])
-			else
-				item.sprite1:setSpriteFrame(spriteFrameNames.symbolNormals[symbolId_1])
-			end
-
-			if blur2 then
-				item.sprite2:setSpriteFrame(spriteFrameNames.symbolBlurs[symbolId_2])
-			else
-				item.sprite2:setSpriteFrame(spriteFrameNames.symbolNormals[symbolId_2])
-			end
-
-			local digit = offset - floor_offset
-			item.sprite1:setPosition(0, -133 * digit)
-			item.sprite2:setPosition(0, 134 - 133 * digit)
-		end
-	end
-
-	item.sprite1 = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[item.lastSymbolId], cell)
-	item.sprite2 = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(spriteFrameNames.symbolNormals[item.lastSymbolId], cell)
-	return item
-end
-
-
--- 画一个旋转按钮和一个 cell. 点击后开始转动
+--[[
 go(function()
-	local cell = CellCreate(gScene, 133, 133, gX5, gY5)
-	local item = ItemCreate(cell)
-	item.SetLastSymbol(3)
-	local btnSpin = BtnCreate("spin_CN.png", gScene, gX3, gY3, 1, 0, 1, 1, function(touch)
-		--local startPos = math.random(1, numSymbols) - 1
-		--local endPos = startPos + math.random(1, 30)
-		--item.Spin(startPos, endPos)
-		item.Spin(item.lastSymbolId, item.lastSymbolId + 4)
-	end)
+	local fn = frameNames[1]
+	local title = cc.Label.createWithSystemFont(fn, "", 32)
+	gScene:addChild(title)
+	title:setPosition(gX8, gY8)
+	title:setAnchorPoint(0.5, 1)
+	local sprite = cc.Sprite.Create_SpriteFrameName_Owner_Positon_Anchor_Scale(fn, gScene, gX5, gY5)
+	SleepSecs(3)
+	for i = 2, #frameNames do
+		fn = frameNames[i]
+		title:setString(fn)
+		sprite:setSpriteFrame(fn)
+		SleepSecs(3)
+	end
+end)
+]]
+
+
+
+local this = {}
+this._TAG = 'ThemeHuca.BonusGameLayer'
+this._wheel = nil
+this._wheelDark = nil
+this._wheelLampList = nil
+this._windowWheel = nil
+this._spinCellList = nil
+
+this._wheelAngleInterval = -1.2
+this._wheelSpeedInit = 720.0
+this._wheelAccelerateTime = 2
+this._wheelSpeedAccelerate = 180
+this._wheelAccelerateRound = 1
+this._wheelAccelerate = 0
+this._anticipationAngle = 0
+this._anticipationSpeed = 75
+this._wheelSlow = false
+this._wheelSlower = false
+this._wheelSpeed = 0
+this._wheelIndex = 0
+
+this._wheelLampRunInterval = 0.25
+this._wheelLampRunIndex = 0
+this._wheelLampRunTime = 0.0
+
+this._wheelLampBlinkInterval = 0.4
+this._wheelLampBlinkTime = 0
+this._wheelLampEvenShow = true
+
+this._wheelPayPosX = nil
+this._wheelPayPosYList = nil
+this._wheelPayWin = nil
+this._reelPayWin = nil
+this._reelWin = nil
+this._symbolLineWin = nil
+this._symbolLineDark = nil
+this._symbolWindowWin = nil
+this._windowWin = nil
+this._windowWinOpacity = 200
+this._reelPayWinPosXList = nil
+this._symbolLineDarkPosXList = nil
+
+this._bonusGameResult = nil
+this._bonusTotalWin = nil
+this._bonusGameIndex = 0
+this._bonusSpinIndex = 0
+
+this._reelResult = nil
+this._scatterWin = 0
+this._lineWin = 0
+
+this._lastWheelIndex = -1
+this._reelSpinEffectId = nil
+this._distanceX = 55
+this._distanceY = -2
+
+this._bonusTextLabel = nil
+
+this.speedUp = false
+this.speedUpInReel = false
+
+this.gameIndexLabel = nil
+this.gameIndex = nil
+
+this._wheelStopEffectFinished = false
+this._readyToExit = false
+this.state = ThemeHuca.BonusGameState.Idle
+this.mode = ThemeHuca.BonusGameMode.Auto
+    
+
+local centerX = 0
+local centerY = 0
+
+this._wheelPayPosX = centerX +463
+this._wheelPayPosYList = {centerY +219,centerY +166,centerY +113,centerY +60,centerY  +7,centerY -46,centerY -99,centerY -152}
+
+this._reelPayWinPosXList = {centerX +51, centerX +146, centerX +241}
+this._symbolLineDarkPosXList = {centerX -240,centerX -148.5,centerX -56,centerX +36}
+
+local background = cc.Sprite.create(ThemeHuca.BonusGameImgPath .. 'bg_background.png')
+background:setPosition(centerX, centerY)
+background:setScale(gW/1136, gH/640)
+background:setName('bg_background')
+gScene:addChild(background, 0)
+
+local root = cc.Node.create()
+gScene:addChild(root)
+root:setPosition(centerX - 100, centerY - 20)
+
+local bgHole = cc.Sprite.create(ThemeHuca.BonusGameImgPath .. 'background_b.png')
+bgHole:setPosition((centerX-101)*ThemeHuca.Ratio + this._distanceX, (centerY+65)*ThemeHuca.Ratio + this._distanceY)
+root:addChild(bgHole, 0)
+
+local interfaceL = cc.Sprite.createWithSpriteFrameName('interface_l.png')
+interfaceL:setPosition((centerX-101)*ThemeHuca.Ratio + this._distanceX, (centerY+65) * ThemeHuca.Ratio + this._distanceY)
+root:addChild(interfaceL, 1)
+
+local interfaceR = cc.Sprite.createWithSpriteFrameName('interface_r.png')
+interfaceR:setPosition((centerX+390) * ThemeHuca.Ratio + this._distanceX, (centerY+58) * ThemeHuca.Ratio + this._distanceY)
+root:addChild(interfaceR, 1)
+
+this.gameIndexLabel = cc.Sprite.create(ThemeHuca.BonusGameImgPath .. 'BONUS_TIMES.png')
+this.gameIndexLabel:setPosition((centerX-101 + 450 + 5)*ThemeHuca.Ratio + this._distanceX, (centerY+65 + 290 + 20 + 15)*ThemeHuca.Ratio + this._distanceY)
+this.gameIndex = cc.Label.createWithBMFont(ThemeHuca.BonusGameImgPath..'BONUS_TIMES_Font.fnt', '', 0)
+this.gameIndex:setPosition((centerX-101 + 20 + 550 + 100 + 5 )*ThemeHuca.Ratio + this._distanceX, (centerY+65 + 298 + 20 + 15)*ThemeHuca.Ratio + this._distanceY)
+root:addChild(this.gameIndexLabel, 1)
+root:addChild(this.gameIndex, 1)
+
+this._wheelLampList = {}
+local lampPos = {{centerX - 459,centerY + 49},{ centerX - 422, centerY + 213},{ centerX - 330,  centerY + 338},{ centerX - 187, centerY + 410},{ centerX - 22, centerY + 413},{ centerX + 122, centerY + 346},{ centerX + 222 , centerY + 223},{ centerX + 256, centerY + 71},{ centerX + 225, centerY - 88},{ centerX + 133, centerY - 210},{ centerX - 11, centerY - 289},{ centerX - 172, centerY - 296},{ centerX - 319, centerY - 224},{ centerX - 421, centerY - 95}}
+for i = 1, 14 do
+    this._wheelLampList[i] = cc.Sprite.createWithSpriteFrameName('weelamp.png')
+    this._wheelLampList[i]:setPosition(lampPos[i][1]*ThemeHuca.Ratio + this._distanceX, lampPos[i][2] * ThemeHuca.Ratio + this._distanceY)
+    this._wheelLampList[i]:setVisible(false)
+    root:addChild(this._wheelLampList[i], 1)
+end
+print('@debug bonuGameLayer complete1')
+this._reelPayWin = cc.Sprite.createWithSpriteFrameName('reelpaywin.png')
+this._reelPayWin:setBlendFunc(1, 1)
+this._reelPayWin:setPosition(this._reelPayWinPosXList[1] * ThemeHuca.Ratio + this._distanceX , 494 *ThemeHuca.Ratio + this._distanceY)
+this._reelPayWin:setVisible(false)
+root:addChild(this._reelPayWin, 1)
+
+local reelPay = cc.Sprite.createWithSpriteFrameName('reelpay.png')
+reelPay:setPosition((centerX -102) * ThemeHuca.Ratio + this._distanceX , (centerY + 173) * ThemeHuca.Ratio + this._distanceY)
+root:addChild(reelPay, 1)
+
+local reelShadow = cc.Sprite.createWithSpriteFrameName('reelshadow.png')
+reelShadow:setPosition( (centerX - 102)* ThemeHuca.Ratio + this._distanceX ,  (centerY + 64) * ThemeHuca.Ratio + this._distanceY)
+root:addChild(reelShadow, 2)
+
+local window = cc.Sprite.createWithSpriteFrameName('window.png')
+window:setPosition((centerX + 213 )* ThemeHuca.Ratio + this._distanceX , (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+root:addChild(window, 2)
+
+local windowLamp = cc.Sprite.createWithSpriteFrameName('windowlamp.png')
+windowLamp:setPosition((centerX + 218) * ThemeHuca.Ratio + this._distanceX , (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+root:addChild(windowLamp, 2)
+
+print('@debug bonuGameLayer complete2')
+local wheelPayStencil = cc.Sprite.createWithSpriteFrameName('showarea-2.png')
+wheelPayStencil:setPosition((centerX + 394)* ThemeHuca.Ratio + this._distanceX , (centerY + 49)* ThemeHuca.Ratio + this._distanceY)
+local wheelPayClipper = cc.ClippingNode.create(wheelPayStencil)
+wheelPayClipper:setAlphaThreshold(0.1)
+this._wheelPayWin = cc.Sprite.createWithSpriteFrameName('wheelpaywin.png')
+this._wheelPayWin:setBlendFunc(1, 1)
+this._wheelPayWin:setPosition(this._wheelPayPosX * ThemeHuca.Ratio + this._distanceX , this._wheelPayPosYList[1] * ThemeHuca.Ratio + this._distanceY)
+this._wheelPayWin:setVisible(false)
+wheelPayClipper:addChild(this._wheelPayWin)
+root:addChild(wheelPayClipper, 1)
+
+local wheelPay = cc.Sprite.createWithSpriteFrameName('wheelpay.png')
+wheelPay:setPosition((centerX + 421)* ThemeHuca.Ratio + this._distanceX, (centerY + 29)* ThemeHuca.Ratio + this._distanceY)
+root:addChild(wheelPay, 1)
+print('@debug bonuGameLayer complete3')
+
+local wheelSymbolIndex = math.floor(math.random() * ThemeHuca.BonusWheelCellNum)
+local initRotation = (-360/ThemeHuca.BonusWheelCellNum * wheelSymbolIndex + this._wheelAngleInterval + 360)%360
+print('@debug rotation : ' .. initRotation)
+this._wheel = cc.Sprite.createWithSpriteFrameName('wheel.png')
+this._wheel:setPosition((centerX -101)* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+this._wheel:setRotation(initRotation)
+root:addChild(this._wheel, 0)
+
+this._wheelDark  = cc.Sprite.createWithSpriteFrameName('wheeldark.png')
+this._wheelDark:setPosition((centerX -101)* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+this._wheelDark:setVisible(false)
+root:addChild(this._wheelDark, 0)
+
+local windowWheelStencil = cc.Sprite.createWithSpriteFrameName('showarea-1.png')
+windowWheelStencil:setPosition((centerX + 212 )* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio+ this._distanceY)
+local windowWheelClipper = cc.ClippingNode.create(windowWheelStencil)
+windowWheelClipper:setAlphaThreshold(0.1)
+this._windowWheel = cc.Sprite.createWithSpriteFrameName('windowheel.png')
+this._windowWheel:setPosition((centerX -263.5)* ThemeHuca.Ratio + this._distanceX , (centerY +  61)* ThemeHuca.Ratio +this._distanceY)
+this._windowWheel:setRotation(initRotation)
+windowWheelClipper:addChild(this._windowWheel)
+this._windowDark = cc.Sprite.createWithSpriteFrameName('windowdark.png')
+this._windowDark:setPosition((centerX + 212)* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+this._windowDark:setVisible(false)
+windowWheelClipper:addChild(this._windowDark)
+this._windowWin = cc.Sprite.createWithSpriteFrameName('windowin.png')
+this._windowWin:setBlendFunc(1, 1)
+this._windowWin:setPosition((centerX + 212)* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+this._windowWin:setOpacity(this._windowWinOpacity)
+this._windowWin:setVisible(false)
+windowWheelClipper:addChild(this._windowWin)
+root:addChild(windowWheelClipper, 1)
+print('@debug bonuGameLayer complete4')
+
+this._spinCellList = {}
+local cellXList = { (centerX -240)* ThemeHuca.Ratio, (centerX -148)* ThemeHuca.Ratio , (centerX -56)* ThemeHuca.Ratio, (centerX + 36)* ThemeHuca.Ratio}
+local cellY = (centerY + 64) * ThemeHuca.Ratio
+local reelSize = { 72, 140 * ThemeHuca.Ratio }
+local cellSize = { 72, 76 }
+for i = 1, ThemeHuca.BonusCellNum do
+	local spr = cc.Sprite.create(ThemeHuca.BonusSymbolNormal[i])
+    spr:setPosition(cellXList[i] + this._distanceX, cellY + this._distanceY)
+    this._spinCellList[i] = spr
+    root:addChild(this._spinCellList[i] , 1)
+end
+print('@debug bonuGameLayer complete4-1')
+
+this._symbolLineDark = {}
+for i = 1 , ThemeHuca.BonusCellNum do
+    this._symbolLineDark[i] = cc.Sprite.createWithSpriteFrameName('reeldark.png')
+    this._symbolLineDark[i]:setPosition(this._symbolLineDarkPosXList[i] * ThemeHuca.Ratio + this._distanceX , (centerY +  64) * ThemeHuca.Ratio + this._distanceY)
+    this._symbolLineDark[i]:setVisible(false)
+    root:addChild(this._symbolLineDark[i], 1)
+end
+print('@debug bonuGameLayer complete5')
+
+this._reelWin = cc.Sprite.createWithSpriteFrameName('reelwin-a.png')
+this._reelWin:setBlendFunc(1, 1)
+this._reelWin:setPosition((centerX - 101)* ThemeHuca.Ratio + this._distanceX, (centerY + 64)* ThemeHuca.Ratio + this._distanceY)
+this._reelWin:setVisible(false)
+root:addChild(this._reelWin, 2)
+
+local symbolLineWinPosX = {centerX -241, centerX -149, centerX -57, centerX+ 35}
+this._symbolLineWin = {}
+for i = 1, ThemeHuca.BonusCellNum do
+    this._symbolLineWin[i] = cc.Sprite.createWithSpriteFrameName('reelwin-b.png')
+    this._symbolLineWin[i]:setBlendFunc(1, 1)
+    this._symbolLineWin[i]:setPosition(symbolLineWinPosX[i] * ThemeHuca.Ratio + this._distanceX, (centerY + 65) * ThemeHuca.Ratio + this._distanceY)
+    this._symbolLineWin[i]:setVisible(false)
+    root:addChild(this._symbolLineWin[i], 2)
+end
+
+this._symbolWindowWin = {}
+for i =1 , ThemeHuca.BonusCellNum do
+    this._symbolWindowWin[i] = cc.Sprite.createWithSpriteFrameName('reelwin-c.png')
+    this._symbolWindowWin[i]:setBlendFunc(1, 1)
+    this._symbolWindowWin[i]:setPosition(symbolLineWinPosX[i] * ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+    this._symbolWindowWin[i]:setOpacity(this._windowWinOpacity)
+    this._symbolWindowWin[i]:setVisible(false)
+    root:addChild(this._symbolWindowWin[i], 2)
+end
+print("end")
+
+go(function()
+	while true do
+		initRotation = initRotation - this._wheelAngleInterval
+		this._wheel:setRotation(initRotation)
+		this._windowWheel:setRotation(initRotation)
+		yield()
+	end
 end)

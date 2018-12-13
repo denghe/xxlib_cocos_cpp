@@ -1,0 +1,55 @@
+
+BonusGame.png
+size: 2014,590
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bonus
+  rotate: false
+  xy: 2, 10
+  size: 693, 192
+  orig: 700, 200
+  offset: 7, 3
+  index: -1
+fangshe_00005
+  rotate: false
+  xy: 1337, 10
+  size: 324, 192
+  orig: 341, 192
+  offset: 9, 0
+  index: -1
+game
+  rotate: false
+  xy: 697, 2
+  size: 638, 200
+  orig: 700, 200
+  offset: 28, 0
+  index: -1
+lizi_00005
+  rotate: false
+  xy: 1370, 204
+  size: 642, 384
+  orig: 682, 384
+  offset: 6, 0
+  index: -1
+shandian_00005
+  rotate: false
+  xy: 1663, 76
+  size: 317, 126
+  orig: 341, 192
+  offset: 12, 38
+  index: -1
+shanguang_00005
+  rotate: false
+  xy: 2, 204
+  size: 682, 384
+  orig: 682, 384
+  offset: 0, 0
+  index: -1
+yuan_00001
+  rotate: false
+  xy: 686, 204
+  size: 682, 384
+  orig: 682, 384
+  offset: 0, 0
+  index: -1
