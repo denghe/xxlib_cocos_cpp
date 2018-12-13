@@ -218,46 +218,42 @@ this.state = ThemeHuca.BonusGameState.Idle
 this.mode = ThemeHuca.BonusGameMode.Auto
     
 
-local centerX = 0
-local centerY = 0
+this._wheelPayPosX = 463
+this._wheelPayPosYList = {219, 166, 113, 60, 7, -46, -99, -152}
 
-this._wheelPayPosX = centerX +463
-this._wheelPayPosYList = {centerY +219,centerY +166,centerY +113,centerY +60,centerY  +7,centerY -46,centerY -99,centerY -152}
-
-this._reelPayWinPosXList = {centerX +51, centerX +146, centerX +241}
-this._symbolLineDarkPosXList = {centerX -240,centerX -148.5,centerX -56,centerX +36}
+this._reelPayWinPosXList = {51, 146, 241}
+this._symbolLineDarkPosXList = {-240, -148.5, -56, 36}
 
 local background = cc.Sprite.create(ThemeHuca.BonusGameImgPath .. 'bg_background.png')
-background:setPosition(centerX, centerY)
 background:setScale(gW/1136, gH/640)
 background:setName('bg_background')
 gScene:addChild(background, 0)
 
 local root = cc.Node.create()
 gScene:addChild(root)
-root:setPosition(centerX - 100, centerY - 20)
+root:setPosition(-100, -50)	-- 令图像大体上放置在屏的正中间
 
 local bgHole = cc.Sprite.create(ThemeHuca.BonusGameImgPath .. 'background_b.png')
-bgHole:setPosition((centerX-101)*ThemeHuca.Ratio + this._distanceX, (centerY+65)*ThemeHuca.Ratio + this._distanceY)
+bgHole:setPosition(-101 * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio + this._distanceY)
 root:addChild(bgHole, 0)
 
 local interfaceL = cc.Sprite.createWithSpriteFrameName('interface_l.png')
-interfaceL:setPosition((centerX-101)*ThemeHuca.Ratio + this._distanceX, (centerY+65) * ThemeHuca.Ratio + this._distanceY)
+interfaceL:setPosition(-101 * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio + this._distanceY)
 root:addChild(interfaceL, 1)
 
 local interfaceR = cc.Sprite.createWithSpriteFrameName('interface_r.png')
-interfaceR:setPosition((centerX+390) * ThemeHuca.Ratio + this._distanceX, (centerY+58) * ThemeHuca.Ratio + this._distanceY)
+interfaceR:setPosition(390 * ThemeHuca.Ratio + this._distanceX, 58 * ThemeHuca.Ratio + this._distanceY)
 root:addChild(interfaceR, 1)
 
 this.gameIndexLabel = cc.Sprite.create(ThemeHuca.BonusGameImgPath .. 'BONUS_TIMES.png')
-this.gameIndexLabel:setPosition((centerX-101 + 450 + 5)*ThemeHuca.Ratio + this._distanceX, (centerY+65 + 290 + 20 + 15)*ThemeHuca.Ratio + this._distanceY)
+this.gameIndexLabel:setPosition((-101 + 450 + 5) * ThemeHuca.Ratio + this._distanceX, (65 + 290 + 20 + 15) * ThemeHuca.Ratio + this._distanceY)
 this.gameIndex = cc.Label.createWithBMFont(ThemeHuca.BonusGameImgPath..'BONUS_TIMES_Font.fnt', '', 0)
-this.gameIndex:setPosition((centerX-101 + 20 + 550 + 100 + 5 )*ThemeHuca.Ratio + this._distanceX, (centerY+65 + 298 + 20 + 15)*ThemeHuca.Ratio + this._distanceY)
+this.gameIndex:setPosition((-101 + 20 + 550 + 100 + 5) * ThemeHuca.Ratio + this._distanceX, (65 + 298 + 20 + 15) * ThemeHuca.Ratio + this._distanceY)
 root:addChild(this.gameIndexLabel, 1)
 root:addChild(this.gameIndex, 1)
 
 this._wheelLampList = {}
-local lampPos = {{centerX - 459,centerY + 49},{ centerX - 422, centerY + 213},{ centerX - 330,  centerY + 338},{ centerX - 187, centerY + 410},{ centerX - 22, centerY + 413},{ centerX + 122, centerY + 346},{ centerX + 222 , centerY + 223},{ centerX + 256, centerY + 71},{ centerX + 225, centerY - 88},{ centerX + 133, centerY - 210},{ centerX - 11, centerY - 289},{ centerX - 172, centerY - 296},{ centerX - 319, centerY - 224},{ centerX - 421, centerY - 95}}
+local lampPos = {{-459, 49},{-422, 213},{-330,  338},{-187, 410},{-22, 413},{122, 346},{222, 223},{256, 71},{225, 88},{133, 210},{-11, 289},{-172, 296},{-319, 224},{-421, 95}}
 for i = 1, 14 do
     this._wheelLampList[i] = cc.Sprite.createWithSpriteFrameName('weelamp.png')
     this._wheelLampList[i]:setPosition(lampPos[i][1]*ThemeHuca.Ratio + this._distanceX, lampPos[i][2] * ThemeHuca.Ratio + this._distanceY)
@@ -272,24 +268,24 @@ this._reelPayWin:setVisible(false)
 root:addChild(this._reelPayWin, 1)
 
 local reelPay = cc.Sprite.createWithSpriteFrameName('reelpay.png')
-reelPay:setPosition((centerX -102) * ThemeHuca.Ratio + this._distanceX , (centerY + 173) * ThemeHuca.Ratio + this._distanceY)
+reelPay:setPosition(-102 * ThemeHuca.Ratio + this._distanceX , 173 * ThemeHuca.Ratio + this._distanceY)
 root:addChild(reelPay, 1)
 
 local reelShadow = cc.Sprite.createWithSpriteFrameName('reelshadow.png')
-reelShadow:setPosition( (centerX - 102)* ThemeHuca.Ratio + this._distanceX ,  (centerY + 64) * ThemeHuca.Ratio + this._distanceY)
+reelShadow:setPosition(-102 * ThemeHuca.Ratio + this._distanceX ,  64 * ThemeHuca.Ratio + this._distanceY)
 root:addChild(reelShadow, 2)
 
 local window = cc.Sprite.createWithSpriteFrameName('window.png')
-window:setPosition((centerX + 213 )* ThemeHuca.Ratio + this._distanceX , (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+window:setPosition(213 * ThemeHuca.Ratio + this._distanceX , 65 * ThemeHuca.Ratio + this._distanceY)
 root:addChild(window, 2)
 
 local windowLamp = cc.Sprite.createWithSpriteFrameName('windowlamp.png')
-windowLamp:setPosition((centerX + 218) * ThemeHuca.Ratio + this._distanceX , (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+windowLamp:setPosition(218 * ThemeHuca.Ratio + this._distanceX , 65 * ThemeHuca.Ratio + this._distanceY)
 root:addChild(windowLamp, 2)
 
 print('@debug bonuGameLayer complete2')
 local wheelPayStencil = cc.Sprite.createWithSpriteFrameName('showarea-2.png')
-wheelPayStencil:setPosition((centerX + 394)* ThemeHuca.Ratio + this._distanceX , (centerY + 49)* ThemeHuca.Ratio + this._distanceY)
+wheelPayStencil:setPosition(394 * ThemeHuca.Ratio + this._distanceX , 49 * ThemeHuca.Ratio + this._distanceY)
 local wheelPayClipper = cc.ClippingNode.create(wheelPayStencil)
 wheelPayClipper:setAlphaThreshold(0.1)
 this._wheelPayWin = cc.Sprite.createWithSpriteFrameName('wheelpaywin.png')
@@ -300,7 +296,7 @@ wheelPayClipper:addChild(this._wheelPayWin)
 root:addChild(wheelPayClipper, 1)
 
 local wheelPay = cc.Sprite.createWithSpriteFrameName('wheelpay.png')
-wheelPay:setPosition((centerX + 421)* ThemeHuca.Ratio + this._distanceX, (centerY + 29)* ThemeHuca.Ratio + this._distanceY)
+wheelPay:setPosition(421 * ThemeHuca.Ratio + this._distanceX, 29 * ThemeHuca.Ratio + this._distanceY)
 root:addChild(wheelPay, 1)
 print('@debug bonuGameLayer complete3')
 
@@ -308,30 +304,30 @@ local wheelSymbolIndex = math.floor(math.random() * ThemeHuca.BonusWheelCellNum)
 local initRotation = (-360/ThemeHuca.BonusWheelCellNum * wheelSymbolIndex + this._wheelAngleInterval + 360)%360
 print('@debug rotation : ' .. initRotation)
 this._wheel = cc.Sprite.createWithSpriteFrameName('wheel.png')
-this._wheel:setPosition((centerX -101)* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+this._wheel:setPosition(-101 * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio + this._distanceY)
 this._wheel:setRotation(initRotation)
 root:addChild(this._wheel, 0)
 
 this._wheelDark  = cc.Sprite.createWithSpriteFrameName('wheeldark.png')
-this._wheelDark:setPosition((centerX -101)* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+this._wheelDark:setPosition(-101 * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio + this._distanceY)
 this._wheelDark:setVisible(false)
 root:addChild(this._wheelDark, 0)
 
 local windowWheelStencil = cc.Sprite.createWithSpriteFrameName('showarea-1.png')
-windowWheelStencil:setPosition((centerX + 212 )* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio+ this._distanceY)
+windowWheelStencil:setPosition(212 * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio+ this._distanceY)
 local windowWheelClipper = cc.ClippingNode.create(windowWheelStencil)
 windowWheelClipper:setAlphaThreshold(0.1)
 this._windowWheel = cc.Sprite.createWithSpriteFrameName('windowheel.png')
-this._windowWheel:setPosition((centerX -263.5)* ThemeHuca.Ratio + this._distanceX , (centerY +  61)* ThemeHuca.Ratio +this._distanceY)
+this._windowWheel:setPosition(-263.5 * ThemeHuca.Ratio + this._distanceX , 61 * ThemeHuca.Ratio +this._distanceY)
 this._windowWheel:setRotation(initRotation)
 windowWheelClipper:addChild(this._windowWheel)
 this._windowDark = cc.Sprite.createWithSpriteFrameName('windowdark.png')
-this._windowDark:setPosition((centerX + 212)* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+this._windowDark:setPosition(212 * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio + this._distanceY)
 this._windowDark:setVisible(false)
 windowWheelClipper:addChild(this._windowDark)
 this._windowWin = cc.Sprite.createWithSpriteFrameName('windowin.png')
 this._windowWin:setBlendFunc(1, 1)
-this._windowWin:setPosition((centerX + 212)* ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+this._windowWin:setPosition(212 * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio + this._distanceY)
 this._windowWin:setOpacity(this._windowWinOpacity)
 this._windowWin:setVisible(false)
 windowWheelClipper:addChild(this._windowWin)
@@ -339,8 +335,8 @@ root:addChild(windowWheelClipper, 1)
 print('@debug bonuGameLayer complete4')
 
 this._spinCellList = {}
-local cellXList = { (centerX -240)* ThemeHuca.Ratio, (centerX -148)* ThemeHuca.Ratio , (centerX -56)* ThemeHuca.Ratio, (centerX + 36)* ThemeHuca.Ratio}
-local cellY = (centerY + 64) * ThemeHuca.Ratio
+local cellXList = {-240 * ThemeHuca.Ratio, -148 * ThemeHuca.Ratio , -56 * ThemeHuca.Ratio, 36 * ThemeHuca.Ratio}
+local cellY = 64 * ThemeHuca.Ratio
 local reelSize = { 72, 140 * ThemeHuca.Ratio }
 local cellSize = { 72, 76 }
 for i = 1, ThemeHuca.BonusCellNum do
@@ -354,7 +350,7 @@ print('@debug bonuGameLayer complete4-1')
 this._symbolLineDark = {}
 for i = 1 , ThemeHuca.BonusCellNum do
     this._symbolLineDark[i] = cc.Sprite.createWithSpriteFrameName('reeldark.png')
-    this._symbolLineDark[i]:setPosition(this._symbolLineDarkPosXList[i] * ThemeHuca.Ratio + this._distanceX , (centerY +  64) * ThemeHuca.Ratio + this._distanceY)
+    this._symbolLineDark[i]:setPosition(this._symbolLineDarkPosXList[i] * ThemeHuca.Ratio + this._distanceX , 64 * ThemeHuca.Ratio + this._distanceY)
     this._symbolLineDark[i]:setVisible(false)
     root:addChild(this._symbolLineDark[i], 1)
 end
@@ -362,16 +358,16 @@ print('@debug bonuGameLayer complete5')
 
 this._reelWin = cc.Sprite.createWithSpriteFrameName('reelwin-a.png')
 this._reelWin:setBlendFunc(1, 1)
-this._reelWin:setPosition((centerX - 101)* ThemeHuca.Ratio + this._distanceX, (centerY + 64)* ThemeHuca.Ratio + this._distanceY)
+this._reelWin:setPosition(-101 * ThemeHuca.Ratio + this._distanceX, 64 * ThemeHuca.Ratio + this._distanceY)
 this._reelWin:setVisible(false)
 root:addChild(this._reelWin, 2)
 
-local symbolLineWinPosX = {centerX -241, centerX -149, centerX -57, centerX+ 35}
+local symbolLineWinPosX = {-241, -149, -57, 35}
 this._symbolLineWin = {}
 for i = 1, ThemeHuca.BonusCellNum do
     this._symbolLineWin[i] = cc.Sprite.createWithSpriteFrameName('reelwin-b.png')
     this._symbolLineWin[i]:setBlendFunc(1, 1)
-    this._symbolLineWin[i]:setPosition(symbolLineWinPosX[i] * ThemeHuca.Ratio + this._distanceX, (centerY + 65) * ThemeHuca.Ratio + this._distanceY)
+    this._symbolLineWin[i]:setPosition(symbolLineWinPosX[i] * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio + this._distanceY)
     this._symbolLineWin[i]:setVisible(false)
     root:addChild(this._symbolLineWin[i], 2)
 end
@@ -380,7 +376,7 @@ this._symbolWindowWin = {}
 for i =1 , ThemeHuca.BonusCellNum do
     this._symbolWindowWin[i] = cc.Sprite.createWithSpriteFrameName('reelwin-c.png')
     this._symbolWindowWin[i]:setBlendFunc(1, 1)
-    this._symbolWindowWin[i]:setPosition(symbolLineWinPosX[i] * ThemeHuca.Ratio + this._distanceX, (centerY + 65)* ThemeHuca.Ratio + this._distanceY)
+    this._symbolWindowWin[i]:setPosition(symbolLineWinPosX[i] * ThemeHuca.Ratio + this._distanceX, 65 * ThemeHuca.Ratio + this._distanceY)
     this._symbolWindowWin[i]:setOpacity(this._windowWinOpacity)
     this._symbolWindowWin[i]:setVisible(false)
     root:addChild(this._symbolWindowWin[i], 2)
