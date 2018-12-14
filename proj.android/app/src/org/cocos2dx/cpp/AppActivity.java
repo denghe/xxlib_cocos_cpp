@@ -43,6 +43,30 @@ public class AppActivity extends Cocos2dxActivity {
         }
         // DO OTHER INITIALIZATION BELOW
         
+		ctx = this;
     }
-
+	public static AppActivity ctx = null;
+	public static boolean IsNetworkReachable()
+	{
+		try
+		{
+			ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+			if (cm != null)
+			{
+				NetworkInfo ni = cm.getActiveNetworkInfo();
+				if (ni != null && ni.isConnected())
+				{
+					if (ni.getState() == NetworkInfo.State.CONNECTED)
+					{
+						return true;
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		return false;
+	}
 }

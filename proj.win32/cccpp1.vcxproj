@@ -230,6 +230,7 @@
     <ClInclude Include="..\Classes\lua_keys.hpp" />
     <ClInclude Include="..\Classes\lua_new_xxx.hpp" />
     <ClInclude Include="..\Classes\lua_pushcall.hpp" />
+    <ClInclude Include="..\Classes\lua_sys.hpp" />
     <ClInclude Include="..\Classes\lua_to_xxx.hpp" />
     <ClInclude Include="..\Classes\lua_xx.hpp" />
     <ClInclude Include="..\Classes\lua_xx_bbuffer.hpp" />

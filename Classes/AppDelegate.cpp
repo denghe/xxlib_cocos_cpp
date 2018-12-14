@@ -31,10 +31,23 @@
 void uuid_generate(unsigned char* buf)
 {
 	auto s = cocos2d::JniHelper::callStaticStringMethod(
-		"org/cocos2dx/cpp_empty_tests/AppActivity", "GetUUID");
+		"org/cocos2dx/cpp/AppActivity", "GetUUID");
 	// todo: s -> buf
 }
 #endif
+
+// 检测设备是否有网( true: wifi/2/3/4g   false: 啥网都没有 )
+inline bool IsNetworkReachable()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	return cocos2d::JniHelper::callStaticBooleanMethod("org/cocos2dx/cpp/AppActivity", "IsNetworkReachable");
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// todo
+#else
+	// todo
+	return true;
+#endif
+}
 
 
 

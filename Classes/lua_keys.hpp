@@ -12,6 +12,7 @@ inline const char* const LuaKey_Callbacks = "AllCallbacks";
 inline const char* const LuaKey_cc = "cc";
 inline const char* const LuaKey_cca = "cca";
 inline const char* const LuaKey_spine = "spine";
+inline const char* const LuaKey_sys = "sys";
 
 
 struct Lua_BBuffer;

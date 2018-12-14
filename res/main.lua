@@ -388,6 +388,8 @@ go(function()
 		initRotation = initRotation - this._wheelAngleInterval
 		this._wheel:setRotation(initRotation)
 		this._windowWheel:setRotation(initRotation)
+
+		print(sys.IsNetworkReachable())
 		yield()
 	end
 end)
