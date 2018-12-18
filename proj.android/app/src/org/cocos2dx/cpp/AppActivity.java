@@ -24,6 +24,11 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.cpp;
 
+// xx
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import android.os.Bundle;
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -42,9 +47,11 @@ public class AppActivity extends Cocos2dxActivity {
             return;
         }
         // DO OTHER INITIALIZATION BELOW
-        
+
+		// xx
 		ctx = this;
     }
+    // xx
 	public static AppActivity ctx = null;
 	public static boolean IsNetworkReachable()
 	{
