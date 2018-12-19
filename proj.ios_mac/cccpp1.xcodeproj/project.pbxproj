@@ -111,6 +111,8 @@
 		E387F1912184BEC400C2842F /* res in Resources */ = {isa = PBXBuildFile; fileRef = E387F18F2184BEC400C2842F /* res */; };
 		ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7B1B68A1F400C3958E /* libiconv.dylib */; };
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
+		F5126DF721C8EB7700C03004 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F5126DF421C8EB7700C03004 /* Reachability.m */; };
+		F5126DF921C8EE3C00C03004 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5126DF821C8EE3C00C03004 /* SystemConfiguration.framework */; };
 		F53349452184642F005E9755 /* xx_uv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F53349272184642F005E9755 /* xx_uv.cpp */; };
 		F53349462184642F005E9755 /* xx_uv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F53349272184642F005E9755 /* xx_uv.cpp */; };
 		F53349472184642F005E9755 /* http_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = F533493A2184642F005E9755 /* http_parser.c */; };
@@ -257,6 +259,9 @@
 		E387F18F2184BEC400C2842F /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; name = res; path = ../res; sourceTree = "<group>"; };
 		ED545A7B1B68A1F400C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		F5126DF421C8EB7700C03004 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		F5126DF621C8EB7700C03004 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		F5126DF821C8EE3C00C03004 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.1.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		F533491C2184642F005E9755 /* xx_dict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_dict.h; sourceTree = "<group>"; };
 		F533491D2184642F005E9755 /* xx_uv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_uv.h; sourceTree = "<group>"; };
 		F533491E2184642F005E9755 /* xx_guid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = xx_guid.hpp; sourceTree = "<group>"; };
@@ -301,6 +306,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5126DF921C8EE3C00C03004 /* SystemConfiguration.framework in Frameworks */,
 				294D0D641D0D56D500F7F5D4 /* CoreText.framework in Frameworks */,
 				ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */,
 				52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */,
@@ -362,6 +368,8 @@
 		1AF87B461F6F77D6007BE51C /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				F5126DF621C8EB7700C03004 /* Reachability.h */,
+				F5126DF421C8EB7700C03004 /* Reachability.m */,
 				1A88B2631FC3D9C9005C14AE /* Images.xcassets */,
 				1AF87B471F6F77D6007BE51C /* AppController.h */,
 				1AF87B481F6F77D6007BE51C /* AppController.mm */,
@@ -395,6 +403,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F5126DF821C8EE3C00C03004 /* SystemConfiguration.framework */,
 				294D0D631D0D56D500F7F5D4 /* CoreText.framework */,
 				ED545A7D1B68A1FA00C3958E /* libiconv.dylib */,
 				ED545A7B1B68A1F400C3958E /* libiconv.dylib */,
@@ -750,6 +759,7 @@
 				E318CB3C2192276F003245B4 /* ldebug.c in Sources */,
 				E318CB602192276F003245B4 /* lcorolib.c in Sources */,
 				E318CB2E2192276F003245B4 /* loslib.c in Sources */,
+				F5126DF721C8EB7700C03004 /* Reachability.m in Sources */,
 				E318CB582192276F003245B4 /* lcode.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos2d-x.org
@@ -37,18 +37,19 @@ void uuid_generate(unsigned char* buf)
 #endif
 
 // 检测设备是否有网( true: wifi/2/3/4g   false: 啥网都没有 )
-inline bool IsNetworkReachable()
-{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	return cocos2d::JniHelper::callStaticBooleanMethod("org/cocos2dx/cpp/AppActivity", "IsNetworkReachable");
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// todo
+bool IsNetworkReachable()
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+;
 #else
+{
+    #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	return cocos2d::JniHelper::callStaticBooleanMethod("org/cocos2dx/cpp/AppActivity", "IsNetworkReachable");
+    #else
 	// todo
 	return true;
-#endif
+    #endif
 }
-
+#endif
 
 
 #define USE_AUDIO_ENGINE 1

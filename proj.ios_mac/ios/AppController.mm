@@ -29,6 +29,14 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
+// xx
+#include "Reachability.h"
+@interface AppController()
+@property (nonatomic) Reachability *internetReachability;
+@end
+static AppController* gAppController = nullptr;
+
+
 @implementation AppController
 
 @synthesize window;
@@ -40,6 +48,10 @@
 static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // xx
+    gAppController = self;
+    self.internetReachability = [Reachability reachabilityForInternetConnection];
     
     cocos2d::Application *app = cocos2d::Application::getInstance();
     
@@ -145,3 +157,10 @@ static AppDelegate s_sharedApplication;
 
 
 @end
+
+
+// xx
+bool IsNetworkReachable()
+{
+    return gAppController.internetReachability.currentReachabilityStatus != NotReachable;
+}
