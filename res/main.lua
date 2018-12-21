@@ -400,15 +400,21 @@ go(function()
 	local a = 360 / 14		-- 每个符号的角度步进值
 	local r = a * -4		-- 钻石的起始角度
 
-	this._wheel:setRotation(r)
-	this._windowWheel:setRotation(r)
-	SleepSecs(3)
-
-	while true do
-		print(r)
-		this._wheel:setRotation(r)
-		this._windowWheel:setRotation(r)
-		yield()
-		r = r - this._wheelAngleInterval
+	function Rotate(ia, n)
+		for i = 1, n do
+			r = r + ia
+			this._wheel:setRotation(r)
+			this._windowWheel:setRotation(r)
+			yield()
+		end
 	end
+
+	Rotate(0, 1)
+	Rotate(a * 0.45, 360 / (a * 0.45) * 5)
+	Rotate(a / 3, 30)
+	Rotate(a / 4, 15)
+	for b = 5, 18 do
+		Rotate(a / b, 19 - b)
+	end
+	Rotate(a / 19, 60)
 end)
