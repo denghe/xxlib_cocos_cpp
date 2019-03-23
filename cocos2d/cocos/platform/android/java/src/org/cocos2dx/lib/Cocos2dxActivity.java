@@ -369,11 +369,11 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         if(powerManager == null) {
             return false;
         }
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {	// xx
-        //    return !powerManager.isInteractive();
-        //} else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            return !powerManager.isInteractive();
+        } else {
             return !powerManager.isScreenOn();
-        //}
+        }
     }
     
     // ===========================================================

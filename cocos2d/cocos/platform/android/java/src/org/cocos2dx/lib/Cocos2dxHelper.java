@@ -767,11 +767,11 @@ public class Cocos2dxHelper {
      * @return true if the screen is rounded, false otherwise
      */
     public static boolean isScreenRound() {
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {		// xx
-        //    if (sActivity.getResources().getConfiguration().isScreenRound()) {
-        //        return true;
-        //    }
-        //}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (sActivity.getResources().getConfiguration().isScreenRound()) {
+                return true;
+            }
+        }
 
         return false;
     }
