@@ -44,7 +44,7 @@ Configuration::Configuration()
 , _maxModelviewStackDepth(0)
 , _supportsPVRTC(false)
 , _supportsETC1(false)
-, _supportsETC2(false)
+, _supportsETC2(false)	// xx
 , _supportsS3TC(false)
 , _supportsATITC(false)
 , _supportsNPOT(false)

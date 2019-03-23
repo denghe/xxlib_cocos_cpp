@@ -203,7 +203,8 @@ public:
         ReadFailed = 3, // Read failed
         NotInitialized = 4, // FileUtils is not initializes
         TooLarge = 5, // The file is too large (great than 2^32-1)
-        ObtainSizeFailed = 6 // Failed to obtain the file size.
+        ObtainSizeFailed = 6, // Failed to obtain the file size.
+        NotRegularFileType = 7 // File type is not S_IFREG
     };
 
     /**
@@ -341,6 +342,7 @@ public:
      @since v2.1
      */
     virtual std::string fullPathForFilename(const std::string &filename) const;
+
 
     /**
      * Loads the filenameLookup dictionary from the contents of a filename.
@@ -843,7 +845,7 @@ public:
     virtual void listFilesRecursivelyAsync(const std::string& dirPath, std::function<void(std::vector<std::string>)> callback) const;
 
     /** Returns the full path cache. */
-    std::unordered_map<std::string, std::string> const& getFullPathCache() const { return _fullPathCache; }	// xx
+    const std::unordered_map<std::string, std::string> getFullPathCache() const { return _fullPathCache; }
 
     /**
      *  Gets the new filename from the filename lookup dictionary.
@@ -904,8 +906,14 @@ protected:
      *  @param filename  The name of the file.
      *  @return The full path of the file, if the file can't be found, it will return an empty string.
      */
-    virtual std::string getFullPathForDirectoryAndFilename(const std::string& directory, const std::string& filename) const;
+    virtual std::string getFullPathForFilenameWithinDirectory(const std::string& directory, const std::string& filename) const;
 
+
+    /**
+     * Returns the fullpath for a given dirname.
+     * @since 3.17.1
+     */
+    virtual std::string fullPathForDirectory(const std::string &dirname) const;
 
     /**
     * mutex used to protect fields. 
@@ -949,10 +957,16 @@ protected:
     std::string _defaultResRootPath;
 
     /**
-     *  The full path cache. When a file is found, it will be added into this cache.
+     *  The full path cache for normal files. When a file is found, it will be added into this cache.
      *  This variable is used for improving the performance of file search.
      */
     mutable std::unordered_map<std::string, std::string> _fullPathCache;
+
+    /**
+     *  The full path cache for directories. When a diretory is found, it will be added into this cache.
+     *  This variable is used for improving the performance of file search.
+     */
+    mutable std::unordered_map<std::string, std::string> _fullPathCacheDir;
 
     /**
      * Writable path.

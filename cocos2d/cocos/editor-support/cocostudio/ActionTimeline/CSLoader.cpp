@@ -1160,7 +1160,7 @@ bool CSLoader::bindCallback(const std::string &callbackName,
             Widget::ccWidgetTouchCallback callbackFunc = callbackHandler->onLocateTouchCallback(callbackName);
             if (callbackFunc)
             {
-                sender->addTouchEventListener(std::move(callbackFunc));
+                sender->addTouchEventListener(callbackFunc);
                 return true;
             }
         }

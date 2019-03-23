@@ -38,10 +38,10 @@ EventListenerAssetsManagerEx::EventListenerAssetsManagerEx()
 {
 }
 
-EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::create(cocos2d::extension::AssetsManagerEx *AssetsManagerEx, std::function<void(EventAssetsManagerEx*)>&& callback) // xx
+EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::create(cocos2d::extension::AssetsManagerEx *AssetsManagerEx, const std::function<void(EventAssetsManagerEx*)>& callback)
 {
     EventListenerAssetsManagerEx* ret = new (std::nothrow) EventListenerAssetsManagerEx();
-    if (ret && ret->init(AssetsManagerEx, std::move(callback)))	// xx
+    if (ret && ret->init(AssetsManagerEx, callback))
     {
         ret->autorelease();
     }
@@ -52,12 +52,12 @@ EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::create(cocos2d::exte
     return ret;
 }
 
-bool EventListenerAssetsManagerEx::init(const AssetsManagerEx *AssetsManagerEx, std::function<void(EventAssetsManagerEx*)>&& callback)	// xx
+bool EventListenerAssetsManagerEx::init(const AssetsManagerEx *AssetsManagerEx, const std::function<void(EventAssetsManagerEx*)>& callback)
 {
     bool ret = false;
     
     _AssetsManagerEx = AssetsManagerEx;
-    _onAssetsManagerExEvent = std::move(callback);
+    _onAssetsManagerExEvent = callback;
     
     auto func = [this](EventCustom *event) -> void
     {
@@ -74,19 +74,16 @@ bool EventListenerAssetsManagerEx::init(const AssetsManagerEx *AssetsManagerEx, 
 
 EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::clone()
 {
-	// xx
-	assert(false);
-	return nullptr;
-    //EventListenerAssetsManagerEx* ret = new (std::nothrow) EventListenerAssetsManagerEx();
-    //if (ret && ret->init(_AssetsManagerEx, _onAssetsManagerExEvent))
-    //{
-    //    ret->autorelease();
-    //}
-    //else
-    //{
-    //    CC_SAFE_DELETE(ret);
-    //}
-    //return ret;
+    EventListenerAssetsManagerEx* ret = new (std::nothrow) EventListenerAssetsManagerEx();
+    if (ret && ret->init(_AssetsManagerEx, _onAssetsManagerExEvent))
+    {
+        ret->autorelease();
+    }
+    else
+    {
+        CC_SAFE_DELETE(ret);
+    }
+    return ret;
 }
 
 bool EventListenerAssetsManagerEx::checkAvailable()

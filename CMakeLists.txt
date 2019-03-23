@@ -33,9 +33,7 @@ set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 
 include(CocosBuildSet)
-if(NOT USE_COCOS_PREBUILT)
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
-endif()
+add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
 # record sources, headers, resources...
 set(GAME_SOURCE)
@@ -47,13 +45,6 @@ set(GAME_RES_FOLDER
 if(APPLE OR WINDOWS)
     cocos_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
-
-# sources need to compile info, include dirs and source files
-include_directories(
-        Classes
-		xxlib
-        lua/src
-)
 
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
@@ -182,11 +173,14 @@ if(APPLE)
     elseif(IOS)
         cocos_pak_xcode(${APP_NAME} INFO_PLIST "iOSBundleInfo.plist.in")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+        set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
+        set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     endif()
 elseif(WINDOWS)
-    cocos_copy_target_dll(${APP_NAME} COPY_TO ${APP_RES_DIR})
+    cocos_copy_target_dll(${APP_NAME})
 endif()
 
 if(LINUX OR WINDOWS)
-    cocos_copy_res(COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+    set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/Resources")
+    cocos_copy_target_res(${APP_NAME} COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 endif()

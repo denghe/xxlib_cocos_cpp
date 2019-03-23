@@ -952,9 +952,9 @@ void Widget::addTouchEventListener(Ref *target, SEL_TouchEvent selector)
     _touchEventSelector = selector;
 }
 
-void Widget::addTouchEventListener(ccWidgetTouchCallback&& callback)	// xx
+void Widget::addTouchEventListener(const ccWidgetTouchCallback& callback)
 {
-    this->_touchEventCallback = std::move(callback);
+    this->_touchEventCallback = callback;
 }
 
 void Widget::addClickEventListener(const ccWidgetClickCallback &callback)

@@ -332,11 +332,11 @@ void Place::update(float time)
 // CallFunc
 //
 
-CallFunc * CallFunc::create(std::function<void()> &&func)	// xx
+CallFunc * CallFunc::create(const std::function<void()> &func)
 {
     CallFunc *ret = new (std::nothrow) CallFunc();
 
-    if (ret && ret->initWithFunction(std::move(func)) )	// xx
+    if (ret && ret->initWithFunction(func) )
     {
         ret->autorelease();
         return ret;
@@ -361,9 +361,9 @@ CallFunc * CallFunc::create(Ref* selectorTarget, SEL_CallFunc selector)
     return nullptr;
 }
 
-bool CallFunc::initWithFunction(std::function<void()> &&func)	// xx
+bool CallFunc::initWithFunction(const std::function<void()> &func)
 {
-    _function = std::move(func);	// xx
+    _function = func;
     return true;
 }
 
@@ -389,23 +389,21 @@ CallFunc::~CallFunc()
 }
 
 CallFunc * CallFunc::clone() const
-{
-	// xx
-	return nullptr;
-    //// no copy constructor
-    //auto a = new (std::nothrow) CallFunc();
-    //if( _selectorTarget)
-    //{
-    //    a->initWithTarget(_selectorTarget);
-    //    a->_callFunc = _callFunc;
-    //}
-    //else if( _function )
-    //{
-    //    a->initWithFunction(_function);
-    //}
+    {
+    // no copy constructor
+    auto a = new (std::nothrow) CallFunc();
+    if( _selectorTarget)
+    {
+        a->initWithTarget(_selectorTarget);
+        a->_callFunc = _callFunc;
+    }
+    else if( _function )
+    {
+        a->initWithFunction(_function);
+    }
 
-    //a->autorelease();
-    //return a;
+    a->autorelease();
+    return a;
 }
 
 CallFunc * CallFunc::reverse() const
