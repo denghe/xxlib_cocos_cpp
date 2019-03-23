@@ -46,6 +46,14 @@ if(APPLE OR WINDOWS)
     cocos_mark_multi_resources(common_res_files RES_TO "res" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
+# sources need to compile info, include dirs and source files
+include_directories(
+        Classes
+        xxlib
+        lua/src
+)
+
+
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
 	 Classes/AppDelegate.cpp

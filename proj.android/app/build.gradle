@@ -3,7 +3,7 @@ import org.gradle.internal.os.OperatingSystem
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 18
+    compileSdkVersion 28
     defaultConfig {
         applicationId "net.denghe.cccpp1"
         minSdkVersion 18
@@ -123,6 +123,6 @@ android.applicationVariants.all { variant ->
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':libcocos2dx')
 }
