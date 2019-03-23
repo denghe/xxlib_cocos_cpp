@@ -23,7 +23,7 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.9)
 
 set(APP_NAME cccpp1)
 
@@ -40,10 +40,10 @@ set(GAME_SOURCE)
 set(GAME_HEADER)
 
 set(GAME_RES_FOLDER
-    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+    "${CMAKE_CURRENT_SOURCE_DIR}/res"
     )
 if(APPLE OR WINDOWS)
-    cocos_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+    cocos_mark_multi_resources(common_res_files RES_TO "res" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
 # add cross-platforms source files and header files 
@@ -181,6 +181,6 @@ elseif(WINDOWS)
 endif()
 
 if(LINUX OR WINDOWS)
-    set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/Resources")
+    set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/res")
     cocos_copy_target_res(${APP_NAME} COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 endif()

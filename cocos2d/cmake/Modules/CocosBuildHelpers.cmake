@@ -119,8 +119,7 @@ function(cocos_mark_resources)
     cmake_parse_arguments(opt "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     if(NOT opt_RESOURCEBASE)
-    #xx
-        set(opt_RESOURCEBASE res)
+        set(opt_RESOURCEBASE Resources)
     endif()
 
     get_filename_component(BASEDIR_ABS ${opt_BASEDIR} ABSOLUTE)
