@@ -6,7 +6,7 @@ inline void Lua_Register_ScrollViews(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::extension::ScrollView();
+		auto&& o = new (std::nothrow) cocos2d::extension::ScrollView();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_Push(L, o);
@@ -14,7 +14,7 @@ inline void Lua_Register_ScrollViews(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var o = cocos2d::extension::ScrollView::create();
+		auto&& o = cocos2d::extension::ScrollView::create();
 		return Lua_Push(L, o);
 	});
 
@@ -31,7 +31,7 @@ inline void Lua_Register_ScrollViews(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::extension::TableView();
+		auto&& o = new (std::nothrow) cocos2d::extension::TableView();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_Push(L, o);
@@ -39,7 +39,7 @@ inline void Lua_Register_ScrollViews(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var o = cocos2d::extension::TableView::create();
+		auto&& o = cocos2d::extension::TableView::create();
 		return Lua_Push(L, o);
 	});
 

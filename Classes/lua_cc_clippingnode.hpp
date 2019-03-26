@@ -8,20 +8,20 @@ inline void Lua_Register_ClippingNode(lua_State* const& L)
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
 
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 0:
 		{
-			var o = new (std::nothrow) cocos2d::ClippingNode();
+			auto&& o = new (std::nothrow) cocos2d::ClippingNode();
 			if (!o) return 0;
 			if (!o->init()) { delete o; return 0; }
 			return Lua_Pushs(L, o);
 		}
 		case 1:
 		{
-			var t = Lua_ToTuple<cocos2d::Node*>(L);
-			var o = new (std::nothrow) cocos2d::ClippingNode();
+			auto&& t = Lua_ToTuple<cocos2d::Node*>(L);
+			auto&& o = new (std::nothrow) cocos2d::ClippingNode();
 			if (!o) return 0;
 			if (!o->init(std::get<0>(t))) { delete o; return 0; }
 			return Lua_Pushs(L, o);
@@ -34,7 +34,7 @@ inline void Lua_Register_ClippingNode(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::ClippingNode* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 0:
@@ -44,7 +44,7 @@ inline void Lua_Register_ClippingNode(lua_State* const& L)
 		}
 		case 1:
 		{
-			var t = Lua_ToTuple<cocos2d::Node*>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Node*>(L);
 			o = cocos2d::ClippingNode::create(std::get<0>(t));
 			break;
 		}
@@ -57,49 +57,49 @@ inline void Lua_Register_ClippingNode(lua_State* const& L)
 
 	Lua_NewFunc(L, "getStencil", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ClippingNode*>(L, "getSpriteFrame error! need 1 args: self");
-		var r = std::get<0>(t)->getStencil();
+		auto&& t = Lua_ToTuple<cocos2d::ClippingNode*>(L, "getSpriteFrame error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getStencil();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setStencil", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ClippingNode*, cocos2d::Node*>(L, "setStencil error! need 2 args: self, Node stencil");
+		auto&& t = Lua_ToTuple<cocos2d::ClippingNode*, cocos2d::Node*>(L, "setStencil error! need 2 args: self, Node stencil");
 		std::get<0>(t)->setStencil(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "hasContent", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ClippingNode*>(L, "hasContent error! need 1 args: self");
-		var r = std::get<0>(t)->hasContent();
+		auto&& t = Lua_ToTuple<cocos2d::ClippingNode*>(L, "hasContent error! need 1 args: self");
+		auto&& r = std::get<0>(t)->hasContent();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getAlphaThreshold", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ClippingNode*>(L, "getAlphaThreshold error! need 1 args: self");
-		var r = std::get<0>(t)->getAlphaThreshold();
+		auto&& t = Lua_ToTuple<cocos2d::ClippingNode*>(L, "getAlphaThreshold error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getAlphaThreshold();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setAlphaThreshold", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ClippingNode*, GLfloat>(L, "setAlphaThreshold error! need 2 args: self, GLfloat alphaThreshold");
+		auto&& t = Lua_ToTuple<cocos2d::ClippingNode*, GLfloat>(L, "setAlphaThreshold error! need 2 args: self, GLfloat alphaThreshold");
 		std::get<0>(t)->setAlphaThreshold(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "isInverted", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ClippingNode*>(L, "isInverted error! need 1 args: self");
-		var r = std::get<0>(t)->isInverted();
+		auto&& t = Lua_ToTuple<cocos2d::ClippingNode*>(L, "isInverted error! need 1 args: self");
+		auto&& r = std::get<0>(t)->isInverted();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setInverted", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ClippingNode*, bool>(L, "setInverted error! need 2 args: self, bool inverted");
+		auto&& t = Lua_ToTuple<cocos2d::ClippingNode*, bool>(L, "setInverted error! need 2 args: self, bool inverted");
 		std::get<0>(t)->setInverted(std::get<1>(t));
 		return 0;
 	});
@@ -112,7 +112,7 @@ inline void Lua_Register_ClippingNode(lua_State* const& L)
 	// 画一个中心在 0,0 的实心矩形作为 stencil
 	Lua_NewFunc(L, "setStencilRect", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ClippingNode*, float, float>(L, "setStencilRect error! need 3 args: self, float width, height");
+		auto&& t = Lua_ToTuple<cocos2d::ClippingNode*, float, float>(L, "setStencilRect error! need 3 args: self, float width, height");
 		auto stencil = cocos2d::DrawNode::create();
 		auto w2 = std::get<1>(t) / 2;
 		auto h2 = std::get<2>(t) / 2;

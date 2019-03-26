@@ -7,7 +7,7 @@ inline void Lua_Register_Scene(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::Scene* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 0:
@@ -17,7 +17,7 @@ inline void Lua_Register_Scene(lua_State* const& L)
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<float, float>(L);
+			auto&& t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::Scene::createWithSize({ std::get<0>(t), std::get<1>(t) });
 			break;
 		}

@@ -6,22 +6,22 @@ inline void Lua_Register_EventListener(lua_State* const& L)
 
 	Lua_NewFunc(L, "setEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*, bool>(L, "setEnabled error! need 2 args: self, bool");
+		auto&& t = Lua_ToTuple<cocos2d::EventListener*, bool>(L, "setEnabled error! need 2 args: self, bool");
 		std::get<0>(t)->setEnabled(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "isEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*>(L, "isEnabled error! need 1 args: self");
-		var r = std::get<0>(t)->isEnabled();
+		auto&& t = Lua_ToTuple<cocos2d::EventListener*>(L, "isEnabled error! need 1 args: self");
+		auto&& r = std::get<0>(t)->isEnabled();
 		return Lua_Push(L, r);
 	});
 
 	Lua_NewFunc(L, "checkAvailable", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*>(L, "checkAvailable error! need 1 args: self");
-		var r = std::get<0>(t)->checkAvailable();
+		auto&& t = Lua_ToTuple<cocos2d::EventListener*>(L, "checkAvailable error! need 1 args: self");
+		auto&& r = std::get<0>(t)->checkAvailable();
 		return Lua_Push(L, r);
 	});
 
@@ -40,7 +40,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::EventListenerTouchAllAtOnce();
+		auto&& o = new (std::nothrow) cocos2d::EventListenerTouchAllAtOnce();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_Push(L, o);
@@ -48,14 +48,14 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var o = cocos2d::EventListenerTouchAllAtOnce::create();
+		auto&& o = cocos2d::EventListenerTouchAllAtOnce::create();
 		if (!o) return 0;
 		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "onTouchesBegan", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchAllAtOnce*, Lua_Func>(L, "onTouchesBegan error! need 2 args: self, func<e, touchs...>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchAllAtOnce*, Lua_Func>(L, "onTouchesBegan error! need 2 args: self, func<e, touchs...>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onTouchesBegan = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
@@ -64,7 +64,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 				lua_checkstack(gLua, ts.size() + 3);
 				Lua_Push(gLua, f);
 				Lua_Push(gLua, e);
-				for (var t : ts)
+				for (auto&& t : ts)
 				{
 					Lua_Push(gLua, t);
 				}
@@ -81,7 +81,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 
 	Lua_NewFunc(L, "onTouchesMoved", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchAllAtOnce*, Lua_Func>(L, "onTouchesMoved error! need 2 args: self, func<e, touchs...>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchAllAtOnce*, Lua_Func>(L, "onTouchesMoved error! need 2 args: self, func<e, touchs...>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onTouchesMoved = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
@@ -90,7 +90,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 				lua_checkstack(gLua, ts.size() + 3);
 				Lua_Push(gLua, f);
 				Lua_Push(gLua, e);
-				for (var t : ts)
+				for (auto&& t : ts)
 				{
 					Lua_Push(gLua, t);
 				}
@@ -107,7 +107,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 
 	Lua_NewFunc(L, "onTouchesEnded", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchAllAtOnce*, Lua_Func>(L, "onTouchesEnded error! need 2 args: self, func<e, touchs...>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchAllAtOnce*, Lua_Func>(L, "onTouchesEnded error! need 2 args: self, func<e, touchs...>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onTouchesEnded = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
@@ -116,7 +116,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 				lua_checkstack(gLua, ts.size() + 3);
 				Lua_Push(gLua, f);
 				Lua_Push(gLua, e);
-				for (var t : ts)
+				for (auto&& t : ts)
 				{
 					Lua_Push(gLua, t);
 				}
@@ -133,7 +133,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 
 	Lua_NewFunc(L, "onTouchesCancelled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchAllAtOnce*, Lua_Func>(L, "onTouchesCancelled error! need 2 args: self, func<e, touchs...>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchAllAtOnce*, Lua_Func>(L, "onTouchesCancelled error! need 2 args: self, func<e, touchs...>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onTouchesCancelled = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
@@ -142,7 +142,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 				lua_checkstack(gLua, ts.size() + 3);
 				Lua_Push(gLua, f);
 				Lua_Push(gLua, e);
-				for (var t : ts)
+				for (auto&& t : ts)
 				{
 					Lua_Push(gLua, t);
 				}
@@ -171,7 +171,7 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::EventListenerTouchOneByOne();
+		auto&& o = new (std::nothrow) cocos2d::EventListenerTouchOneByOne();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_Push(L, o);
@@ -179,35 +179,35 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var o = cocos2d::EventListenerTouchOneByOne::create();
+		auto&& o = cocos2d::EventListenerTouchOneByOne::create();
 		if (!o) return 0;
 		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "setSwallowTouches", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, bool>(L, "setSwallowTouches error! need 2 args: self, bool");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, bool>(L, "setSwallowTouches error! need 2 args: self, bool");
 		std::get<0>(t)->setSwallowTouches(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "isSwallowTouches", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*>(L, "isSwallowTouches error! need 1 args: self");
-		var r = std::get<0>(t)->isSwallowTouches();
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*>(L, "isSwallowTouches error! need 1 args: self");
+		auto&& r = std::get<0>(t)->isSwallowTouches();
 		return Lua_Push(L, r);
 	});
 
 	Lua_NewFunc(L, "onTouchBegan", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, Lua_Func>(L, "onTouchBegan error! need 2 args: self, func<touch, e>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, Lua_Func>(L, "onTouchBegan error! need 2 args: self, func<touch, e>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onTouchBegan = [f = std::move(std::get<1>(t))](cocos2d::Touch* touch, cocos2d::Event* e)
 			{
 				assert(!lua_gettop(gLua));
 				Lua_PCall(gLua, f, touch, e);
-				var t = Lua_ToTuple<bool>(gLua, "onTouchBegan return error! need return 1 result: bool");
+				auto&& t = Lua_ToTuple<bool>(gLua, "onTouchBegan return error! need return 1 result: bool");
 				lua_settop(gLua, 0);
 				return std::get<0>(t);
 			};
@@ -221,7 +221,7 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 
 	Lua_NewFunc(L, "onTouchMoved", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, Lua_Func>(L, "onTouchMoved error! need 2 args: self, func<touch, e>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, Lua_Func>(L, "onTouchMoved error! need 2 args: self, func<touch, e>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onTouchMoved = [f = std::move(std::get<1>(t))](cocos2d::Touch* touch, cocos2d::Event* e)
@@ -240,7 +240,7 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 
 	Lua_NewFunc(L, "onTouchEnded", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, Lua_Func>(L, "onTouchEnded error! need 2 args: self, func<touch, e>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, Lua_Func>(L, "onTouchEnded error! need 2 args: self, func<touch, e>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onTouchEnded = [f = std::move(std::get<1>(t))](cocos2d::Touch* touch, cocos2d::Event* e)
@@ -259,7 +259,7 @@ inline void Lua_Register_EventListenerTouchOneByOne(lua_State* const& L)
 
 	Lua_NewFunc(L, "onTouchCancelled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, Lua_Func>(L, "onTouchCancelled error! need 2 args: self, func<touch, e>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerTouchOneByOne*, Lua_Func>(L, "onTouchCancelled error! need 2 args: self, func<touch, e>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onTouchCancelled = [f = std::move(std::get<1>(t))](cocos2d::Touch* touch, cocos2d::Event* e)
@@ -290,7 +290,7 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::EventListenerKeyboard();
+		auto&& o = new (std::nothrow) cocos2d::EventListenerKeyboard();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_Push(L, o);
@@ -298,14 +298,14 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var o = cocos2d::EventListenerKeyboard::create();
+		auto&& o = cocos2d::EventListenerKeyboard::create();
 		if (!o) return 0;
 		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "onKeyPressed", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyPressed error! need 2 args: self, func<KeyCode, Event>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyPressed error! need 2 args: self, func<KeyCode, Event>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onKeyPressed = [f = std::move(std::get<1>(t))](cocos2d::EventKeyboard::KeyCode kc, cocos2d::Event* e)
@@ -324,7 +324,7 @@ inline void Lua_Register_EventListenerKeyboard(lua_State* const& L)
 
 	Lua_NewFunc(L, "onKeyReleased", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyReleased error! need 2 args: self, func<KeyCode, Event>/null");
+		auto&& t = Lua_ToTuple<cocos2d::EventListenerKeyboard*, Lua_Func>(L, "onKeyReleased error! need 2 args: self, func<KeyCode, Event>/null");
 		if (std::get<1>(t))
 		{
 			std::get<0>(t)->onKeyReleased = [f = std::move(std::get<1>(t))](cocos2d::EventKeyboard::KeyCode kc, cocos2d::Event* e)
@@ -355,57 +355,57 @@ inline void Lua_Register_EventListenerAssetsManagerEx(lua_State* const& L)
 
 	Lua_NewFunc(L, "getEventCode", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getEventCode error! need 1 args: self");
-		var r = std::get<0>(t)->getEventCode();
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getEventCode error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getEventCode();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getCURLECode", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getCURLECode error! need 1 args: self");
-		var r = std::get<0>(t)->getCURLECode();
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getCURLECode error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getCURLECode();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getCURLMCode", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getCURLMCode error! need 1 args: self");
-		var r = std::get<0>(t)->getCURLMCode();
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getCURLMCode error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getCURLMCode();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getMessage", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getMessage error! need 1 args: self");
-		var r = std::get<0>(t)->getMessage();
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getMessage error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getMessage();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getAssetId", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getAssetId error! need 1 args: self");
-		var r = std::get<0>(t)->getAssetId();
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getAssetId error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getAssetId();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getAssetsManagerEx", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getAssetsManagerEx error! need 1 args: self");
-		var r = std::get<0>(t)->getAssetsManagerEx();
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getAssetsManagerEx error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getAssetsManagerEx();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getPercent", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getPercent error! need 1 args: self");
-		var r = std::get<0>(t)->getPercent();
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getPercent error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getPercent();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getPercentByFile", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getPercentByFile error! need 1 args: self");
-		var r = std::get<0>(t)->getPercentByFile();
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventAssetsManagerEx*>(L, "getPercentByFile error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getPercentByFile();
 		return Lua_Pushs(L, r);
 	});
 
@@ -419,14 +419,14 @@ inline void Lua_Register_EventListenerAssetsManagerEx(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::extension::EventListenerAssetsManagerEx();
+		auto&& o = new (std::nothrow) cocos2d::extension::EventListenerAssetsManagerEx();
 		if (!o) return 0;
 		return Lua_Push(L, o);
 	});
 
 	Lua_NewFunc(L, "init", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::EventListenerAssetsManagerEx*, cocos2d::extension::AssetsManagerEx*, Lua_Func>(L, "init error! need 3 args: self, AssetsManagerEx am, function<void(EventAssetsManagerEx*)>& callback");
+		auto&& t = Lua_ToTuple<cocos2d::extension::EventListenerAssetsManagerEx*, cocos2d::extension::AssetsManagerEx*, Lua_Func>(L, "init error! need 3 args: self, AssetsManagerEx am, function<void(EventAssetsManagerEx*)>& callback");
 		std::get<0>(t)->init(std::get<1>(t), [f = std::move(std::get<2>(t))](cocos2d::extension::EventAssetsManagerEx* e)
 		{
 			assert(!lua_gettop(gLua));
@@ -438,8 +438,8 @@ inline void Lua_Register_EventListenerAssetsManagerEx(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::extension::AssetsManagerEx*, Lua_Func>(L, "create EventListenerAssetsManagerEx error! need 3 args: self, AssetsManagerEx am, function<void(EventAssetsManagerEx*)>& callback");
-		var o = cocos2d::extension::EventListenerAssetsManagerEx::create(std::get<0>(t), [f = std::move(std::get<1>(t))](cocos2d::extension::EventAssetsManagerEx* e)
+		auto&& t = Lua_ToTuple<cocos2d::extension::AssetsManagerEx*, Lua_Func>(L, "create EventListenerAssetsManagerEx error! need 3 args: self, AssetsManagerEx am, function<void(EventAssetsManagerEx*)>& callback");
+		auto&& o = cocos2d::extension::EventListenerAssetsManagerEx::create(std::get<0>(t), [f = std::move(std::get<1>(t))](cocos2d::extension::EventAssetsManagerEx* e)
 		{
 			assert(!lua_gettop(gLua));
 			Lua_PCall(gLua, f, e);

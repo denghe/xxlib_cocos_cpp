@@ -6,7 +6,7 @@ inline void Lua_Register_Layer(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::Layer();
+		auto&& o = new (std::nothrow) cocos2d::Layer();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_Push(L, o);
@@ -14,7 +14,7 @@ inline void Lua_Register_Layer(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var o = cocos2d::Layer::create();
+		auto&& o = cocos2d::Layer::create();
 		return Lua_Push(L, o);
 	});
 

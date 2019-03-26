@@ -8,11 +8,11 @@ inline void Lua_Register_xx(lua_State* const& L)
 	lua_setglobal(L, LuaKey_xx);									// xx
 
 	// 创建 xx.Xxxxxx 元表及函数
-	Lua_Register_MemPool(L);
-	//Lua_Register_Object(L);
-	Lua_Register_UvLoop(L);
-	Lua_BBuffer::LuaRegister(L);	// todo: 这个当前不在 xx 中, 需要整改
-	Lua_Register_UvTcpClient(L);
+	Lua_Register_Uv(L);
+	Lua_Register_UvResolver(L);
+	Lua_Register_UvTcpLuaDialer(L);
+	Lua_Register_UvTcpLuaPeer(L);
+	Lua_BBuffer::LuaRegister(L);
 	// .....
 	// .....
 

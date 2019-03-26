@@ -6,15 +6,15 @@ inline void Lua_Register_Event(lua_State* const& L)
 
 	Lua_NewFunc(L, "getCurrentTarget", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Event*>(L, "getCurrentTarget error! need 1 args: self");
-		var r = std::get<0>(t)->getCurrentTarget();
+		auto&& t = Lua_ToTuple<cocos2d::Event*>(L, "getCurrentTarget error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getCurrentTarget();
 		return Lua_Push(L, r);
 	});
 
 	Lua_NewFunc(L, "getType", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Event*>(L, "getType error! need 1 args: self");
-		var r = std::get<0>(t)->getType();
+		auto&& t = Lua_ToTuple<cocos2d::Event*>(L, "getType error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getType();
 		return Lua_Push(L, r);
 	});
 

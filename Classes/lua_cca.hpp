@@ -9,25 +9,25 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "play2d", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 1:
 		{
-			var t = Lua_ToTuple<std::string>(L);
-			var r = cocos2d::experimental::AudioEngine::play2d(std::get<0>(t));
+			auto&& t = Lua_ToTuple<std::string>(L);
+			auto&& r = cocos2d::experimental::AudioEngine::play2d(std::get<0>(t));
 			return Lua_Pushs(L, r);
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<std::string, bool>(L);
-			var r = cocos2d::experimental::AudioEngine::play2d(std::get<0>(t), std::get<1>(t));
+			auto&& t = Lua_ToTuple<std::string, bool>(L);
+			auto&& r = cocos2d::experimental::AudioEngine::play2d(std::get<0>(t), std::get<1>(t));
 			return Lua_Pushs(L, r);
 		}
 		case 3:
 		{
-			var t = Lua_ToTuple<std::string, bool, float>(L);
-			var r = cocos2d::experimental::AudioEngine::play2d(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			auto&& t = Lua_ToTuple<std::string, bool, float>(L);
+			auto&& r = cocos2d::experimental::AudioEngine::play2d(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			return Lua_Pushs(L, r);
 		}
 		default:
@@ -39,35 +39,35 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "setLoop", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int, bool>(L, "setLoop error! need 2 args: int audioID, bool loop");
+		auto&& t = Lua_ToTuple<int, bool>(L, "setLoop error! need 2 args: int audioID, bool loop");
 		cocos2d::experimental::AudioEngine::setLoop(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "isLoop", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "isLoop error! need 1 args: int audioID");
-		var r = cocos2d::experimental::AudioEngine::isLoop(std::get<0>(t));
+		auto&& t = Lua_ToTuple<int>(L, "isLoop error! need 1 args: int audioID");
+		auto&& r = cocos2d::experimental::AudioEngine::isLoop(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setVolume", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int, float>(L, "setVolume error! need 2 args: int audioID, float volume");
+		auto&& t = Lua_ToTuple<int, float>(L, "setVolume error! need 2 args: int audioID, float volume");
 		cocos2d::experimental::AudioEngine::setVolume(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getVolume", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "getVolume error! need 1 args: int audioID");
-		var r = cocos2d::experimental::AudioEngine::getVolume(std::get<0>(t));
+		auto&& t = Lua_ToTuple<int>(L, "getVolume error! need 1 args: int audioID");
+		auto&& r = cocos2d::experimental::AudioEngine::getVolume(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "pause", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "pause error! need 1 args: int audioID");
+		auto&& t = Lua_ToTuple<int>(L, "pause error! need 1 args: int audioID");
 		cocos2d::experimental::AudioEngine::pause(std::get<0>(t));
 		return 0;
 	});
@@ -80,7 +80,7 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "resume", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "resume error! need 1 args: int audioID");
+		auto&& t = Lua_ToTuple<int>(L, "resume error! need 1 args: int audioID");
 		cocos2d::experimental::AudioEngine::resume(std::get<0>(t));
 		return 0;
 	});
@@ -93,7 +93,7 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "stop", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "stop error! need 1 args: int audioID");
+		auto&& t = Lua_ToTuple<int>(L, "stop error! need 1 args: int audioID");
 		cocos2d::experimental::AudioEngine::stop(std::get<0>(t));
 		return 0;
 	});
@@ -106,29 +106,29 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "setCurrentTime", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int, float>(L, "setCurrentTime error! need 2 args: int audioID, float sec");
+		auto&& t = Lua_ToTuple<int, float>(L, "setCurrentTime error! need 2 args: int audioID, float sec");
 		cocos2d::experimental::AudioEngine::setCurrentTime(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getCurrentTime", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "getCurrentTime error! need 1 args: int audioID");
-		var r = cocos2d::experimental::AudioEngine::getCurrentTime(std::get<0>(t));
+		auto&& t = Lua_ToTuple<int>(L, "getCurrentTime error! need 1 args: int audioID");
+		auto&& r = cocos2d::experimental::AudioEngine::getCurrentTime(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getDuration", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "getDuration error! need 1 args: int audioID");
-		var r = cocos2d::experimental::AudioEngine::getDuration(std::get<0>(t));
+		auto&& t = Lua_ToTuple<int>(L, "getDuration error! need 1 args: int audioID");
+		auto&& r = cocos2d::experimental::AudioEngine::getDuration(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getState", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "getState error! need 1 args: int audioID");
-		var r = cocos2d::experimental::AudioEngine::getState(std::get<0>(t));
+		auto&& t = Lua_ToTuple<int>(L, "getState error! need 1 args: int audioID");
+		auto&& r = cocos2d::experimental::AudioEngine::getState(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
 
@@ -142,7 +142,7 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "setFinishCallback", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int, Lua_Func>(L, "setFinishCallback error! need 2 args: int audioID, function<void(int,const std::string&)>& callback");
+		auto&& t = Lua_ToTuple<int, Lua_Func>(L, "setFinishCallback error! need 2 args: int audioID, function<void(int,const std::string&)>& callback");
 		cocos2d::experimental::AudioEngine::setFinishCallback(std::get<0>(t), [f = std::move(std::get<1>(t))](int audioID, const std::string& fileName)
 		{
 			assert(!lua_gettop(gLua));
@@ -154,20 +154,20 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "getMaxAudioInstance", [](lua_State* L)
 	{
-		var r = cocos2d::experimental::AudioEngine::getMaxAudioInstance();
+		auto&& r = cocos2d::experimental::AudioEngine::getMaxAudioInstance();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setMaxAudioInstance", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<int>(L, "setMaxAudioInstance error! need 1 args: int maxInstances");
-		var r = cocos2d::experimental::AudioEngine::setMaxAudioInstance(std::get<0>(t));
+		auto&& t = Lua_ToTuple<int>(L, "setMaxAudioInstance error! need 1 args: int maxInstances");
+		auto&& r = cocos2d::experimental::AudioEngine::setMaxAudioInstance(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "uncache", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<std::string>(L, "uncache error! need 1 args: string filePath");
+		auto&& t = Lua_ToTuple<std::string>(L, "uncache error! need 1 args: string filePath");
 		cocos2d::experimental::AudioEngine::uncache(std::get<0>(t));
 		return 0;
 	});
@@ -180,18 +180,18 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "preload", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 1:
 		{
-			var t = Lua_ToTuple<std::string>(L);
+			auto&& t = Lua_ToTuple<std::string>(L);
 			cocos2d::experimental::AudioEngine::preload(std::get<0>(t));
 			break;
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<std::string, Lua_Func>(L);
+			auto&& t = Lua_ToTuple<std::string, Lua_Func>(L);
 			cocos2d::experimental::AudioEngine::preload(std::get<0>(t), [f = std::move(std::get<1>(t))](bool isSuccess)
 			{
 				assert(!lua_gettop(gLua));
@@ -210,19 +210,19 @@ inline void Lua_Register_cca(lua_State* const& L)
 
 	Lua_NewFunc(L, "getPlayingAudioCount", [](lua_State* L)
 	{
-		var r = cocos2d::experimental::AudioEngine::getPlayingAudioCount();
+		auto&& r = cocos2d::experimental::AudioEngine::getPlayingAudioCount();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "isEnabled", [](lua_State* L)
 	{
-		var r = cocos2d::experimental::AudioEngine::isEnabled();
+		auto&& r = cocos2d::experimental::AudioEngine::isEnabled();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<bool>(L, "setEnabled error! need 1 args: bool isEnabled");
+		auto&& t = Lua_ToTuple<bool>(L, "setEnabled error! need 1 args: bool isEnabled");
 		cocos2d::experimental::AudioEngine::setEnabled(std::get<0>(t));
 		return 0;
 	});

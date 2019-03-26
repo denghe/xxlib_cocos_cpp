@@ -33,7 +33,7 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 	{
 		if (!lua_isstring(L, idx)) goto LabError;
 		size_t len;
-		var s = lua_tolstring(L, idx, &len);
+		auto&& s = lua_tolstring(L, idx, &len);
 		v.assign(s, len);
 		return;
 	}
@@ -52,7 +52,7 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		int i = 1;
 		while (true)
 		{
-			var t = lua_rawgeti(L, idx, i);			// ... t, ..., v
+			auto&& t = lua_rawgeti(L, idx, i);		// ... t, ..., v
 			if (t == LUA_TNIL)
 			{
 				lua_pop(L, 1);						// ... t, ...
@@ -66,7 +66,28 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		}
 		return;
 	}
-	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsRef_v<T>)
+	else if constexpr (std::is_same_v<T, std::vector<std::string>>)
+	{
+		if (!lua_istable(L, idx)) goto LabError;
+		v.clear();
+		int i = 1;
+		while (true)
+		{
+			auto&& t = lua_rawgeti(L, idx, i);		// ... t, ..., v
+			if (t == LUA_TNIL)
+			{
+				lua_pop(L, 1);						// ... t, ...
+				return;
+			}
+			std::string item;
+			Lua_Get(item, L, -1);
+			v.push_back(std::move(item));
+			lua_pop(L, 1);							// ... t, ...
+			++i;
+		}
+		return;
+	}
+	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsShared_v<T>)
 	{
 		// 还需要进一步检测 mt 父子关系, 以及最终指针的 dynamic cast 来进一步判断, 以后上全局内存池方案再说
 		if (!lua_isuserdata(L, idx)) goto LabError;
@@ -74,8 +95,8 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 #ifndef NDEBUG
 		if constexpr (std::is_pointer_v<T> && std::is_base_of_v<cocos2d::Ref, std::remove_pointer_t<T>>)
 		{
-			var p = (T*)lua_touserdata(L, idx);
-			var versionNumber = *(size_t*)(p + 1);
+			auto&& p = (T*)lua_touserdata(L, idx);
+			auto&& versionNumber = *(size_t*)(p + 1);
 			v = *p;
 			if (cocos2d::Ref::ptrs.find(*p) == cocos2d::Ref::ptrs.cend() || cocos2d::Ref::ptrs[*p] != versionNumber) goto LabError;
 		}
@@ -135,86 +156,4 @@ inline std::tuple<TS...> Lua_ToTuple(lua_State* const& L, char const* const& err
 	Lua_ForEach<sizeof...(TS), std::tuple<TS...>>::FillTuple(t, L);
 	return t;
 }
-
-
-
-
-
-//// 试着将 idx 所在 table 转为 vector<T>. . 外部已判断过类型是 table.
-//template<typename T, int idx>
-//inline std::vector<T> const& Lua_ToValues(lua_State* const& L)
-//{
-//	// clear
-//	if constexpr (std::is_same<T, int>::value) { gInts.clear(); }
-//	else if constexpr (std::is_same<T, int64_t>::value) { gLongs.clear(); }
-//	else if constexpr (std::is_same<T, float>::value) { gFloats.clear(); }
-//	else if constexpr (std::is_same<T, double>::value) { gDoubles.clear(); }
-//	else { gStrings.clear(); }
-//
-//	// foreach fill
-//	lua_pushnil(L);								// ... t, nil
-//	int n = 1;
-//	while (lua_next(L, idx) != 0)				// ... t, k, v
-//	{
-//		if constexpr (std::is_same<T, int>::value)
-//		{
-//			int isNum = 0;
-//			var v = (T)lua_tointegerx(L, -1, &isNum);
-//			if (!isNum)
-//			{
-//				luaL_error(L, "args[%d][%d] is not int.", idx, n);
-//			}
-//			gInts.push_back(v);
-//		}
-//		else if constexpr (std::is_same<T, int64_t>::value)
-//		{
-//			int isNum = 0;
-//			var v = (T)lua_tointegerx(L, -1, &isNum);
-//			if (!isNum)
-//			{
-//				luaL_error(L, "args[%d][%d] is not long.", idx, n);
-//			}
-//			gLongs.push_back(v);
-//		}
-//		else if constexpr (std::is_same<T, float>::value)
-//		{
-//			int isNum = 0;
-//			var v = (T)lua_tonumberx(L, -1, &isNum);
-//			if (!isNum)
-//			{
-//				luaL_error(L, "args[%d][%d] is not float.", idx, n);
-//			}
-//			gFloats.push_back(v);
-//		}
-//		else if constexpr (std::is_same<T, double>::value)
-//		{
-//			int isNum = 0;
-//			var v = (T)lua_tonumberx(L, -1, &isNum);
-//			if (!isNum)
-//			{
-//				luaL_error(L, "args[%d][%d] is not double.", idx, n);
-//			}
-//			gDoubles.push_back(v);
-//		}
-//		else	// string
-//		{
-//			if (!lua_isstring(L, -1))
-//			{
-//				luaL_error(L, "args[%d][%d] is not string.", idx, n);
-//			}
-//			size_t len;
-//			var buf = lua_tolstring(L, -1, &len);
-//			gStrings.emplace_back(buf, len);
-//		}
-//		lua_pop(L, 1);							// ... t, k
-//		++n;
-//	}											// ... t
-//
-//	// return
-//	if constexpr (std::is_same<T, int>::value) { return gInts; }
-//	else if constexpr (std::is_same<T, int64_t>::value) { return gLongs; }
-//	else if constexpr (std::is_same<T, float>::value) { return gFloats; }
-//	else if constexpr (std::is_same<T, double>::value) { return gDoubles; }
-//	else { return gStrings; }
-//}
 

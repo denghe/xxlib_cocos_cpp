@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos2d-x.org
@@ -94,17 +94,12 @@ void InitGlobals(bool first)
 	cocos2d::FileUtils::getInstance()->setSearchPaths({ "res/" });
 #endif
 
-	if (first)
-	{
-		mp = new xx::MemPool();
-	}
-	else
+	if (!first)
 	{
 		lua_close(gLua);
-		uv->Release();
+		delete uv;
 	}
-	uv = mp->MPCreate<xx::UvLoop>();
-	uv->InitRpcTimeoutManager();
+	uv = new xx::Uv();
 
 	int r = Lua_Init();
 	assert(!r);
@@ -115,11 +110,8 @@ void ReleaseGlobals()
 	lua_close(gLua);
 	gLua = nullptr;
 
-	uv->Release();
+	delete uv;
 	uv = nullptr;
-
-	delete mp;
-	mp = nullptr;
 }
 
 AppDelegate::AppDelegate()

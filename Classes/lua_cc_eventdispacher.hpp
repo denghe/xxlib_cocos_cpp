@@ -4,14 +4,14 @@ inline void Lua_Register_EventDispacher(lua_State* const& L)
 {
 	Lua_NewFunc(L, "addEventListenerWithSceneGraphPriority", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "addEventListenerWithSceneGraphPriority error! need 2 args: EventListener listener, Node target");
+		auto&& t = Lua_ToTuple<cocos2d::EventListener*, cocos2d::Node*>(L, "addEventListenerWithSceneGraphPriority error! need 2 args: EventListener listener, Node target");
 		cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "addEventListenerWithFixedPriority", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*, int>(L, "addEventListenerWithFixedPriority error! need 2 args: EventListener listener, int fixedPriority");
+		auto&& t = Lua_ToTuple<cocos2d::EventListener*, int>(L, "addEventListenerWithFixedPriority error! need 2 args: EventListener listener, int fixedPriority");
 		cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
@@ -20,32 +20,32 @@ inline void Lua_Register_EventDispacher(lua_State* const& L)
 
 	Lua_NewFunc(L, "removeEventListener", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*>(L, "removeEventListener error! need 1 args: EventListener listener");
+		auto&& t = Lua_ToTuple<cocos2d::EventListener*>(L, "removeEventListener error! need 1 args: EventListener listener");
 		cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListener(std::get<0>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "removeEventListenersForType", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener::Type>(L, "removeEventListenersForType error! need 1 args: EventListenerType type");
+		auto&& t = Lua_ToTuple<cocos2d::EventListener::Type>(L, "removeEventListenersForType error! need 1 args: EventListenerType type");
 		cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListenersForType(std::get<0>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "removeEventListenersForTarget", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 1:
 		{
-			var t = Lua_ToTuple<cocos2d::Node*>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Node*>(L);
 			cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListenersForTarget(std::get<0>(t));
 			break;
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<cocos2d::Node*, bool>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Node*, bool>(L);
 			cocos2d::Director::getInstance()->getEventDispatcher()->removeEventListenersForTarget(std::get<0>(t), std::get<1>(t));
 			break;
 		}
@@ -67,18 +67,18 @@ inline void Lua_Register_EventDispacher(lua_State* const& L)
 
 	Lua_NewFunc(L, "pauseEventListenersForTarget", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 1:
 		{
-			var t = Lua_ToTuple<cocos2d::Node*>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Node*>(L);
 			cocos2d::Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(std::get<0>(t));
 			break;
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<cocos2d::Node*, bool>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Node*, bool>(L);
 			cocos2d::Director::getInstance()->getEventDispatcher()->pauseEventListenersForTarget(std::get<0>(t), std::get<1>(t));
 			break;
 		}
@@ -92,18 +92,18 @@ inline void Lua_Register_EventDispacher(lua_State* const& L)
 
 	Lua_NewFunc(L, "resumeEventListenersForTarget", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 1:
 		{
-			var t = Lua_ToTuple<cocos2d::Node*>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Node*>(L);
 			cocos2d::Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(std::get<0>(t));
 			break;
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<cocos2d::Node*, bool>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Node*, bool>(L);
 			cocos2d::Director::getInstance()->getEventDispatcher()->resumeEventListenersForTarget(std::get<0>(t), std::get<1>(t));
 			break;
 		}
@@ -117,21 +117,21 @@ inline void Lua_Register_EventDispacher(lua_State* const& L)
 
 	Lua_NewFunc(L, "setPriority", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::EventListener*, int>(L, "setPriority error! need 2 args: EventListener* listener, int fixedPriority");
+		auto&& t = Lua_ToTuple<cocos2d::EventListener*, int>(L, "setPriority error! need 2 args: EventListener* listener, int fixedPriority");
 		cocos2d::Director::getInstance()->getEventDispatcher()->setPriority(std::get<0>(t), std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "setEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<bool>(L, "setEnabled error! need 1 args: bool isEnabled");
+		auto&& t = Lua_ToTuple<bool>(L, "setEnabled error! need 1 args: bool isEnabled");
 		cocos2d::Director::getInstance()->getEventDispatcher()->setEnabled(std::get<0>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "isEnabled", [](lua_State* L)
 	{
-		var r = cocos2d::Director::getInstance()->getEventDispatcher()->isEnabled();
+		auto&& r = cocos2d::Director::getInstance()->getEventDispatcher()->isEnabled();
 		return Lua_Pushs(L, r);
 	});
 
@@ -139,8 +139,8 @@ inline void Lua_Register_EventDispacher(lua_State* const& L)
 
 	Lua_NewFunc(L, "isEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<std::string>(L);
-		var r = cocos2d::Director::getInstance()->getEventDispatcher()->hasEventListener(std::get<0>(t));
+		auto&& t = Lua_ToTuple<std::string>(L);
+		auto&& r = cocos2d::Director::getInstance()->getEventDispatcher()->hasEventListener(std::get<0>(t));
 		return Lua_Pushs(L, r);
 	});
 

@@ -8,7 +8,7 @@ inline void Lua_Register_sys(lua_State* const& L)
 
 	Lua_NewFunc(L, "IsNetworkReachable", [](lua_State* L)
 	{
-		var r = IsNetworkReachable();
+		auto&& r = IsNetworkReachable();
 		return Lua_Pushs(L, r);
 	});
 

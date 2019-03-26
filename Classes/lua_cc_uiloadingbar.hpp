@@ -6,7 +6,7 @@ inline void Lua_Register_uiLoadingBar(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::ui::LoadingBar();
+		auto&& o = new (std::nothrow) cocos2d::ui::LoadingBar();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_Push(L, o);
@@ -15,7 +15,7 @@ inline void Lua_Register_uiLoadingBar(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::ui::LoadingBar* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 0:
@@ -25,19 +25,19 @@ inline void Lua_Register_uiLoadingBar(lua_State* const& L)
 		}
 		case 1:
 		{
-			var t = Lua_ToTuple<std::string>(L);
+			auto&& t = Lua_ToTuple<std::string>(L);
 			o = cocos2d::ui::LoadingBar::create(std::get<0>(t));
 			break;
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<std::string, cocos2d::ui::Widget::TextureResType>(L);
+			auto&& t = Lua_ToTuple<std::string, cocos2d::ui::Widget::TextureResType>(L);
 			o = cocos2d::ui::LoadingBar::create(std::get<0>(t), std::get<1>(t));
 			break;
 		}
 		case 3:
 		{
-			var t = Lua_ToTuple<std::string, cocos2d::ui::Widget::TextureResType, float>(L);
+			auto&& t = Lua_ToTuple<std::string, cocos2d::ui::Widget::TextureResType, float>(L);
 			o = cocos2d::ui::LoadingBar::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			break;
 		}
@@ -50,32 +50,32 @@ inline void Lua_Register_uiLoadingBar(lua_State* const& L)
 
 	Lua_NewFunc(L, "setDirection", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::LoadingBar*, cocos2d::ui::LoadingBar::Direction>(L, "setDirection error! need 2 args: self, Direction");
+		auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*, cocos2d::ui::LoadingBar::Direction>(L, "setDirection error! need 2 args: self, Direction");
 		std::get<0>(t)->setDirection(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getDirection", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::LoadingBar*>(L, "setDirection error! need 1 args: self");
-		var r = std::get<0>(t)->getDirection();
+		auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*>(L, "setDirection error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getDirection();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "loadTexture", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 2:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::LoadingBar*, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*, std::string>(L);
 			std::get<0>(t)->loadTexture(std::get<1>(t));
 			break;
 		}
 		case 3:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::LoadingBar*, std::string, cocos2d::ui::Widget::TextureResType>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*, std::string, cocos2d::ui::Widget::TextureResType>(L);
 			std::get<0>(t)->loadTexture(std::get<1>(t), std::get<2>(t));
 			break;
 		}
@@ -87,43 +87,43 @@ inline void Lua_Register_uiLoadingBar(lua_State* const& L)
 
 	Lua_NewFunc(L, "setPercent", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::LoadingBar*, float>(L, "setPercent error! need 2 args: self, float percent");
+		auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*, float>(L, "setPercent error! need 2 args: self, float percent");
 		std::get<0>(t)->setPercent(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getPercent", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::LoadingBar*>(L, "getPercent error! need 1 args: self");
-		var r = std::get<0>(t)->getPercent();
+		auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*>(L, "getPercent error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getPercent();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setScale9Enabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::LoadingBar*, bool>(L, "setScale9Enabled error! need 2 args: self, bool enabled");
+		auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*, bool>(L, "setScale9Enabled error! need 2 args: self, bool enabled");
 		std::get<0>(t)->setScale9Enabled(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "isScale9Enabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::LoadingBar*>(L, "isScale9Enabled error! need 1 args: self");
-		var r = std::get<0>(t)->isScale9Enabled();
+		auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*>(L, "isScale9Enabled error! need 1 args: self");
+		auto&& r = std::get<0>(t)->isScale9Enabled();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setCapInsets", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::LoadingBar*, float, float, float, float>(L, "setCapInsets error! need 5 args: self, float rectX, rectY, rectW, rectH");
+		auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*, float, float, float, float>(L, "setCapInsets error! need 5 args: self, float rectX, rectY, rectW, rectH");
 		std::get<0>(t)->setCapInsets({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getCapInsets", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::LoadingBar*>(L, "getCapInsets error! need 1 args: self");
-		var r = std::get<0>(t)->getCapInsets();
+		auto&& t = Lua_ToTuple<cocos2d::ui::LoadingBar*>(L, "getCapInsets error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getCapInsets();
 		return Lua_Pushs(L, r.origin.x, r.origin.y, r.size.width, r.size.height);
 	});
 

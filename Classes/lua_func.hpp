@@ -52,8 +52,8 @@ struct Lua_Func
 	~Lua_Func()
 	{
 		if (!gLua || funcId.use_count() != 1) return;
-		var top = lua_gettop(gLua);
-		var L = gLua;
+		auto&& top = lua_gettop(gLua);
+		auto&& L = gLua;
 		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// ..., funcs
 		lua_pushnil(L);												// ..., funcs, nil
 		lua_rawseti(L, -2, *funcId);								// ..., funcs

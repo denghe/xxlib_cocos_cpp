@@ -33,8 +33,7 @@
 #include "lua.hpp"
 #include "xx_uv.h"
 
-inline xx::MemPool* mp = nullptr;
-inline xx::UvLoop* uv = nullptr;
+inline xx::Uv* uv = nullptr;
 inline lua_State* gLua = nullptr;
 inline size_t gFrameNumber = 0;
 

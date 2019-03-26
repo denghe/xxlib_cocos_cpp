@@ -2,10 +2,6 @@
 
 #include "lua.hpp"
 
-#ifndef var
-#define var decltype(auto)
-#endif
-
 // todo: 优化函数名和使用, 考虑参考 cocos lua 框架代码提供 return self 以便连写
 
 // 用于临时装载从 lua 获取的参数
@@ -19,11 +15,11 @@ inline cocos2d::Vector<cocos2d::SpriteFrame*> gSpriteFrames;
 #include "lua_new_xxx.hpp"
 #include "lua_to_xxx.hpp"
 
-#include "lua_xx_mempool.hpp"
-#include "lua_xx_object.hpp"
 #include "lua_xx_bbuffer.hpp"
-#include "lua_xx_uvloop.hpp"
-#include "lua_xx_uvtcpclient.hpp"
+#include "lua_xx_uv.hpp"
+#include "lua_xx_uvresolver.hpp"
+#include "lua_xx_uvtcpdialer.hpp"
+#include "lua_xx_uvtcppeer.hpp"
 #include "lua_xx.hpp"
 
 #include "lua_cc.hpp"
@@ -79,21 +75,21 @@ inline int Lua_Main(lua_State* L)
 	lua_pushcclosure(L, [](lua_State* L)							// package, searchers, func
 	{
 		size_t len;
-		var fn = lua_tolstring(L, 1, &len);
-		var fu = cocos2d::FileUtils::getInstance();
+		auto&& fn = lua_tolstring(L, 1, &len);
+		auto&& fu = cocos2d::FileUtils::getInstance();
 		if (!fu->isFileExist(std::string(fn, len)))
 		{
 			return luaL_error(L, "require file '%s' failed. can't find file.", fn);
 		}
-		var data = cocos2d::FileUtils::getInstance()->getDataFromFile(std::string(fn, len));
-		var buf = (char*)data.getBytes();
+		auto&& data = cocos2d::FileUtils::getInstance()->getDataFromFile(std::string(fn, len));
+		auto&& buf = (char*)data.getBytes();
 		len = data.getSize();
 		if (len >= 3 && (uint8_t)buf[0] == 0xEF && (uint8_t)buf[1] == 0xBB && (uint8_t)buf[2] == 0xBF)
 		{
 			buf += 3;
 			len -= 3;
 		}
-		var r = luaL_loadbuffer(L, buf, len, fn);
+		auto&& r = luaL_loadbuffer(L, buf, len, fn);
 		if (r == LUA_OK) return 1;
 		return luaL_error(L, "require file '%s' failed. luaL_loadbuffer r = %d", fn, r);
 	}, 0);
@@ -139,12 +135,13 @@ inline int Lua_Main(lua_State* L)
 
 inline int Lua_Init()
 {
-	// 使用内存池创建 lua state ( 部分操作性能提升 40% )
-	var L = gLua = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
-	{
-		return ((xx::MemPool*)ud)->Realloc(ptr, nsize, osize);
-	}
-	, mp);
+	//// 使用内存池创建 lua state ( 部分操作性能提升 40% )
+	//auto&& L = gLua = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
+	//{
+	//	return ((xx::MemPool*)ud)->Realloc(ptr, nsize, osize);
+	//}
+	//, mp);
+	auto&& L = luaL_newstate();
 	assert(L);
 
 	// 将 Lua_Main 压入 L 安全执行

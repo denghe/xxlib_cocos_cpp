@@ -5,7 +5,7 @@ inline void Lua_Register_Application(lua_State* const& L)
 	// 创建 程序被切到后台事件设置 函数
 	Lua_NewFunc(L, "enterBackground", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<Lua_Func>(L, "enterBackground error! need 1 args: func/null");
+		auto&& t = Lua_ToTuple<Lua_Func>(L, "enterBackground error! need 1 args: func/null");
 		if (std::get<0>(t))
 		{
 			enterBackground = [f = std::move(std::get<0>(t))]
@@ -25,7 +25,7 @@ inline void Lua_Register_Application(lua_State* const& L)
 	// 创建 程序被切到前台事件设置 函数
 	Lua_NewFunc(L, "enterForeground", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<Lua_Func>(L, "enterForeground error! need 1 args: func/null");
+		auto&& t = Lua_ToTuple<Lua_Func>(L, "enterForeground error! need 1 args: func/null");
 		if (std::get<0>(t))
 		{
 			enterForeground = [f = std::move(std::get<0>(t))]
@@ -44,7 +44,7 @@ inline void Lua_Register_Application(lua_State* const& L)
 
 	Lua_NewFunc(L, "getTargetPlatform", [](lua_State* L)
 	{
-		var r = cocos2d::Application::getInstance()->getTargetPlatform();
+		auto&& r = cocos2d::Application::getInstance()->getTargetPlatform();
 		return Lua_Pushs(L, r);
 	});
 

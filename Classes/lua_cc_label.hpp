@@ -6,37 +6,37 @@ inline void Lua_Register_Label(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var r = cocos2d::Label::create();
+		auto&& r = cocos2d::Label::create();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "createWithSystemFont", [](lua_State* L)
 	{
 		cocos2d::Label* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<std::string, std::string, float>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, float>(L);
 			o = cocos2d::Label::createWithSystemFont(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<std::string, std::string, float, float, float>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, float, float, float>(L);
 			o = cocos2d::Label::createWithSystemFont(std::get<0>(t), std::get<1>(t), std::get<2>(t), { std::get<3>(t), std::get<4>(t) });
 			break;
 		}
 		case 6:
 		{
-			var t = Lua_ToTuple<std::string, std::string, float, float, float, cocos2d::TextHAlignment>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, float, float, float, cocos2d::TextHAlignment>(L);
 			o = cocos2d::Label::createWithSystemFont(std::get<0>(t), std::get<1>(t), std::get<2>(t), { std::get<3>(t), std::get<4>(t) }, std::get<5>(t));
 			break;
 		}
 		case 7:
 		{
-			var t = Lua_ToTuple<std::string, std::string, float, float, float, cocos2d::TextHAlignment, cocos2d::TextVAlignment>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, float, float, float, cocos2d::TextHAlignment, cocos2d::TextVAlignment>(L);
 			o = cocos2d::Label::createWithSystemFont(std::get<0>(t), std::get<1>(t), std::get<2>(t), { std::get<3>(t), std::get<4>(t) }, std::get<5>(t), std::get<6>(t));
 			break;
 		}
@@ -50,30 +50,30 @@ inline void Lua_Register_Label(lua_State* const& L)
 	Lua_NewFunc(L, "createWithTTF", [](lua_State* L)
 	{
 		cocos2d::Label* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<std::string, std::string, float>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, float>(L);
 			o = cocos2d::Label::createWithTTF(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<std::string, std::string, float, float, float>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, float, float, float>(L);
 			o = cocos2d::Label::createWithTTF(std::get<0>(t), std::get<1>(t), std::get<2>(t), { std::get<3>(t), std::get<4>(t) });
 			break;
 		}
 		case 6:
 		{
-			var t = Lua_ToTuple<std::string, std::string, float, float, float, cocos2d::TextHAlignment>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, float, float, float, cocos2d::TextHAlignment>(L);
 			o = cocos2d::Label::createWithTTF(std::get<0>(t), std::get<1>(t), std::get<2>(t), { std::get<3>(t), std::get<4>(t) }, std::get<5>(t));
 			break;
 		}
 		case 7:
 		{
-			var t = Lua_ToTuple<std::string, std::string, float, float, float, cocos2d::TextHAlignment, cocos2d::TextVAlignment>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, float, float, float, cocos2d::TextHAlignment, cocos2d::TextVAlignment>(L);
 			o = cocos2d::Label::createWithTTF(std::get<0>(t), std::get<1>(t), std::get<2>(t), { std::get<3>(t), std::get<4>(t) }, std::get<5>(t), std::get<6>(t));
 			break;
 		}
@@ -89,30 +89,30 @@ inline void Lua_Register_Label(lua_State* const& L)
 	Lua_NewFunc(L, "createWithBMFont", [](lua_State* L)
 	{
 		cocos2d::Label* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<std::string, std::string>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string>(L);
 			o = cocos2d::Label::createWithBMFont(std::get<0>(t), std::get<1>(t));
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<std::string, std::string, cocos2d::TextHAlignment>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, cocos2d::TextHAlignment>(L);
 			o = cocos2d::Label::createWithBMFont(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			break;
 		}
 		case 6:
 		{
-			var t = Lua_ToTuple<std::string, std::string, cocos2d::TextHAlignment, int>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, cocos2d::TextHAlignment, int>(L);
 			o = cocos2d::Label::createWithBMFont(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
 			break;
 		}
 		case 7:
 		{
-			var t = Lua_ToTuple<std::string, std::string, cocos2d::TextHAlignment, int, float, float>(L);
+			auto&& t = Lua_ToTuple<std::string, std::string, cocos2d::TextHAlignment, int, float, float>(L);
 			o = cocos2d::Label::createWithBMFont(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t), { std::get<4>(t) , std::get<5>(t) });
 			break;
 		}
@@ -128,71 +128,71 @@ inline void Lua_Register_Label(lua_State* const& L)
 
 	Lua_NewFunc(L, "setString", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, std::string>(L, "setString error! need 2 args: self, string txt");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, std::string>(L, "setString error! need 2 args: self, string txt");
 		std::get<0>(t)->setString(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getString", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getString error! need 1 args: self");
-		var r = std::get<0>(t)->getString();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getString error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getString();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getStringNumLines", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getStringNumLines error! need 1 args: self");
-		var r = std::get<0>(t)->getStringNumLines();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getStringNumLines error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getStringNumLines();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getStringLength", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getStringLength error! need 1 args: self");
-		var r = std::get<0>(t)->getStringLength();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getStringLength error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getStringLength();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setTextColor", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte>(L, "setTextColor error! need 4 args: self, GLubyte r, GLubyte g, GLubyte b, GLubyte a");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte>(L, "setTextColor error! need 4 args: self, GLubyte r, GLubyte g, GLubyte b, GLubyte a");
 		std::get<0>(t)->setTextColor({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 		return 0;
 	});
 	Lua_NewFunc(L, "getTextColor", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getTextColor error! need 1 args: self");
-		var r = std::get<0>(t)->getTextColor();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getTextColor error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getTextColor();
 		return Lua_Pushs(L, r.r, r.g, r.b, r.a);
 	});
 
 	Lua_NewFunc(L, "enableShadow", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 1:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*>(L);
 			std::get<0>(t)->enableShadow();
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte>(L);
 			std::get<0>(t)->enableShadow({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 			break;
 		}
 		case 7:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte, float, float>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte, float, float>(L);
 			std::get<0>(t)->enableShadow({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) }, { std::get<5>(t), std::get<6>(t) });
 			break;
 		}
 		case 8:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte, float, float, int>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte, float, float, int>(L);
 			std::get<0>(t)->enableShadow({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) }, { std::get<5>(t), std::get<6>(t) }, std::get<7>(t));
 			break;
 		}
@@ -204,18 +204,18 @@ inline void Lua_Register_Label(lua_State* const& L)
 
 	Lua_NewFunc(L, "enableOutline", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 5:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte>(L);
 			std::get<0>(t)->enableOutline({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 			break;
 		}
 		case 6:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte, int>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte, int>(L);
 			std::get<0>(t)->enableOutline({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) }, std::get<5>(t));
 			break;
 		}
@@ -227,53 +227,53 @@ inline void Lua_Register_Label(lua_State* const& L)
 
 	Lua_NewFunc(L, "enableGlow", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte>(L, "enableGlow error! need 5 args: self, GLubyte r, g, b, a");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, GLubyte, GLubyte, GLubyte, GLubyte>(L, "enableGlow error! need 5 args: self, GLubyte r, g, b, a");
 		std::get<0>(t)->enableGlow({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 		return 0;
 	});
 
 	Lua_NewFunc(L, "enableItalics", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L);
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L);
 		std::get<0>(t)->enableItalics();
 		return 0;
 	});
 
 	Lua_NewFunc(L, "enableBold", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L);
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L);
 		std::get<0>(t)->enableBold();
 		return 0;
 	});
 
 	Lua_NewFunc(L, "enableUnderline", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L);
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L);
 		std::get<0>(t)->enableUnderline();
 		return 0;
 	});
 
 	Lua_NewFunc(L, "enableStrikethrough", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L);
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L);
 		std::get<0>(t)->enableStrikethrough();
 		return 0;
 	});
 
 	Lua_NewFunc(L, "disableEffect", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 1:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*>(L);
 			std::get<0>(t)->disableEffect();
 			break;
 		}
 		case 2:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*, cocos2d::LabelEffect>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*, cocos2d::LabelEffect>(L);
 			std::get<0>(t)->disableEffect(std::get<1>(t));
 			break;
 		}
@@ -285,67 +285,67 @@ inline void Lua_Register_Label(lua_State* const& L)
 
 	Lua_NewFunc(L, "isShadowEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "isShadowEnabled error! need 1 args: self");
-		var r = std::get<0>(t)->isShadowEnabled();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "isShadowEnabled error! need 1 args: self");
+		auto&& r = std::get<0>(t)->isShadowEnabled();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getShadowOffset", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getShadowOffset error! need 1 args: self");
-		var r = std::get<0>(t)->getShadowOffset();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getShadowOffset error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getShadowOffset();
 		return Lua_Pushs(L, r.width, r.height);
 	});
 
 	Lua_NewFunc(L, "getShadowBlurRadius", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getShadowBlurRadius error! need 1 args: self");
-		var r = std::get<0>(t)->getShadowBlurRadius();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getShadowBlurRadius error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getShadowBlurRadius();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getShadowColor", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getShadowColor error! need 1 args: self");
-		var r = std::get<0>(t)->getShadowColor();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getShadowColor error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getShadowColor();
 		return Lua_Pushs(L, r.r, r.g, r.b, r.a);
 	});
 
 	Lua_NewFunc(L, "getOutlineSize", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getOutlineSize error! need 1 args: self");
-		var r = std::get<0>(t)->getOutlineSize();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getOutlineSize error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getOutlineSize();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getLabelEffectType", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getLabelEffectType error! need 1 args: self");
-		var r = std::get<0>(t)->getLabelEffectType();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getLabelEffectType error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getLabelEffectType();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getEffectColor", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getEffectColor error! need 1 args: self");
-		var r = std::get<0>(t)->getEffectColor();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getEffectColor error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getEffectColor();
 		return Lua_Pushs(L, r.r, r.g, r.b, r.a);
 	});
 
 	Lua_NewFunc(L, "setAlignment", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 2:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*, cocos2d::TextHAlignment>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*, cocos2d::TextHAlignment>(L);
 			std::get<0>(t)->setAlignment(std::get<1>(t));
 			break;
 		}
 		case 3:
 		{
-			var t = Lua_ToTuple<cocos2d::Label*, cocos2d::TextHAlignment, cocos2d::TextVAlignment>(L);
+			auto&& t = Lua_ToTuple<cocos2d::Label*, cocos2d::TextHAlignment, cocos2d::TextVAlignment>(L);
 			std::get<0>(t)->setAlignment(std::get<1>(t), std::get<2>(t));
 			break;
 		}
@@ -357,218 +357,218 @@ inline void Lua_Register_Label(lua_State* const& L)
 
 	Lua_NewFunc(L, "getTextAlignment", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getTextAlignment error! need 1 args: self");
-		var r = std::get<0>(t)->getTextAlignment();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getTextAlignment error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getTextAlignment();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setHorizontalAlignment", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, cocos2d::TextHAlignment>(L, "setHorizontalAlignment error! need 2 args: self, TextHAlignment hAlignment");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, cocos2d::TextHAlignment>(L, "setHorizontalAlignment error! need 2 args: self, TextHAlignment hAlignment");
 		std::get<0>(t)->setHorizontalAlignment(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getHorizontalAlignment", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getHorizontalAlignment error! need 1 args: self");
-		var r = std::get<0>(t)->getHorizontalAlignment();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getHorizontalAlignment error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getHorizontalAlignment();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setVerticalAlignment", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, cocos2d::TextVAlignment>(L, "setVerticalAlignment error! need 2 args: self, TextVAlignment vAlignment");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, cocos2d::TextVAlignment>(L, "setVerticalAlignment error! need 2 args: self, TextVAlignment vAlignment");
 		std::get<0>(t)->setVerticalAlignment(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getVerticalAlignment", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getVerticalAlignment error! need 1 args: self");
-		var r = std::get<0>(t)->getVerticalAlignment();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getVerticalAlignment error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getVerticalAlignment();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setLineBreakWithoutSpace", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, bool>(L, "setLineBreakWithoutSpace error! need 2 args: self, bool breakWithoutSpace");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, bool>(L, "setLineBreakWithoutSpace error! need 2 args: self, bool breakWithoutSpace");
 		std::get<0>(t)->setLineBreakWithoutSpace(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "setMaxLineWidth", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, float>(L, "setMaxLineWidth error! need 2 args: self, float maxLineWidth");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, float>(L, "setMaxLineWidth error! need 2 args: self, float maxLineWidth");
 		std::get<0>(t)->setMaxLineWidth(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getMaxLineWidth", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getMaxLineWidth error! need 1 args: self");
-		var r = std::get<0>(t)->getMaxLineWidth();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getMaxLineWidth error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getMaxLineWidth();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setBMFontSize", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, float>(L, "setBMFontSize error! need 2 args: self, float fontSize");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, float>(L, "setBMFontSize error! need 2 args: self, float fontSize");
 		std::get<0>(t)->setBMFontSize(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getBMFontSize", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getBMFontSize error! need 1 args: self");
-		var r = std::get<0>(t)->getBMFontSize();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getBMFontSize error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getBMFontSize();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "enableWrap", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, bool>(L, "enableWrap error! need 2 args: self, bool enable");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, bool>(L, "enableWrap error! need 2 args: self, bool enable");
 		std::get<0>(t)->enableWrap(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "isWrapEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "isWrapEnabled error! need 1 args: self");
-		var r = std::get<0>(t)->isWrapEnabled();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "isWrapEnabled error! need 1 args: self");
+		auto&& r = std::get<0>(t)->isWrapEnabled();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setOverflow", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, cocos2d::Label::Overflow>(L, "setOverflow error! need 2 args: self, Overflow overflow");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, cocos2d::Label::Overflow>(L, "setOverflow error! need 2 args: self, Overflow overflow");
 		std::get<0>(t)->setOverflow(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getOverflow", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getOverflow error! need 1 args: self");
-		var r = std::get<0>(t)->getOverflow();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getOverflow error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getOverflow();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setWidth", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, float>(L, "setWidth error! need 2 args: self, float width");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, float>(L, "setWidth error! need 2 args: self, float width");
 		std::get<0>(t)->setWidth(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getWidth", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getWidth error! need 1 args: self");
-		var r = std::get<0>(t)->getWidth();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getWidth error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getWidth();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setHeight", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, float>(L, "setHeight error! need 2 args: self, float height");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, float>(L, "setHeight error! need 2 args: self, float height");
 		std::get<0>(t)->setHeight(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getHeight", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getHeight error! need 1 args: self");
-		var r = std::get<0>(t)->getHeight();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getHeight error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getHeight();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setDimensions", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, float, float>(L, "setDimensions error! need 2 args: self, float width, height");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, float, float>(L, "setDimensions error! need 2 args: self, float width, height");
 		std::get<0>(t)->setDimensions(std::get<1>(t), std::get<2>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getDimensions", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getDimensions error! need 1 args: self");
-		var r = std::get<0>(t)->getDimensions();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getDimensions error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getDimensions();
 		return Lua_Pushs(L, r.width, r.height);
 	});
 
 	Lua_NewFunc(L, "getLetter", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, int>(L, "getLetter error! need 2 args: self, int letterIndex");
-		var r = std::get<0>(t)->getLetter(std::get<1>(t));
+		auto&& t = Lua_ToTuple<cocos2d::Label*, int>(L, "getLetter error! need 2 args: self, int letterIndex");
+		auto&& r = std::get<0>(t)->getLetter(std::get<1>(t));
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setClipMarginEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, bool>(L, "setClipMarginEnabled error! need 2 args: self, bool clipEnabled");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, bool>(L, "setClipMarginEnabled error! need 2 args: self, bool clipEnabled");
 		std::get<0>(t)->setClipMarginEnabled(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "isClipMarginEnabled", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "isClipMarginEnabled error! need 1 args: self");
-		var r = std::get<0>(t)->isClipMarginEnabled();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "isClipMarginEnabled error! need 1 args: self");
+		auto&& r = std::get<0>(t)->isClipMarginEnabled();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setLineHeight", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, float>(L, "setLineHeight error! need 2 args: self, float height");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, float>(L, "setLineHeight error! need 2 args: self, float height");
 		std::get<0>(t)->setLineHeight(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getLineHeight", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getLineHeight error! need 1 args: self");
-		var r = std::get<0>(t)->getLineHeight();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getLineHeight error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getLineHeight();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setLineSpacing", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, float>(L, "setLineSpacing error! need 2 args: self, float height");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, float>(L, "setLineSpacing error! need 2 args: self, float height");
 		std::get<0>(t)->setLineSpacing(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getLineSpacing", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getLineSpacing error! need 1 args: self");
-		var r = std::get<0>(t)->getLineSpacing();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getLineSpacing error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getLineSpacing();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getLabelType", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getLabelType error! need 1 args: self");
-		var r = std::get<0>(t)->getLabelType();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getLabelType error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getLabelType();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "getRenderingFontSize", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getRenderingFontSize error! need 1 args: self");
-		var r = std::get<0>(t)->getRenderingFontSize();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getRenderingFontSize error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getRenderingFontSize();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setAdditionalKerning", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*, float>(L, "setAdditionalKerning error! need 2 args: self, float space");
+		auto&& t = Lua_ToTuple<cocos2d::Label*, float>(L, "setAdditionalKerning error! need 2 args: self, float space");
 		std::get<0>(t)->setAdditionalKerning(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getAdditionalKerning", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Label*>(L, "getAdditionalKerning error! need 1 args: self");
-		var r = std::get<0>(t)->getAdditionalKerning();
+		auto&& t = Lua_ToTuple<cocos2d::Label*>(L, "getAdditionalKerning error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getAdditionalKerning();
 		return Lua_Pushs(L, r);
 	});
 

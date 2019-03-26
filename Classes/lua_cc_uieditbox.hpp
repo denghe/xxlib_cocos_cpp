@@ -6,7 +6,7 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "new", [](lua_State* L)
 	{
-		var o = new (std::nothrow) cocos2d::ui::EditBox();
+		auto&& o = new (std::nothrow) cocos2d::ui::EditBox();
 		if (!o) return 0;
 		if (!o->init()) { delete o; return 0; }
 		return Lua_Push(L, o);
@@ -14,24 +14,24 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "initWithSizeAndBackgroundSprite", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 4:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string>(L);
 			std::get<0>(t)->initWithSizeAndBackgroundSprite({ std::get<1>(t), std::get<2>(t) }, std::get<3>(t));
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string, cocos2d::ui::Widget::TextureResType>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string, cocos2d::ui::Widget::TextureResType>(L);
 			std::get<0>(t)->initWithSizeAndBackgroundSprite({ std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t));
 			break;
 		}
 		case 6:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, cocos2d::ui::Scale9Sprite*, cocos2d::ui::Scale9Sprite*, cocos2d::ui::Scale9Sprite*>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, cocos2d::ui::Scale9Sprite*, cocos2d::ui::Scale9Sprite*, cocos2d::ui::Scale9Sprite*>(L);
 			std::get<0>(t)->initWithSizeAndBackgroundSprite({ std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t), std::get<5>(t));
 			break;
 		}
@@ -43,30 +43,30 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "initWithSizeAndTexture", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 4:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string>(L);
 			std::get<0>(t)->initWithSizeAndTexture({ std::get<1>(t), std::get<2>(t) }, std::get<3>(t));
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string, std::string>(L);
 			std::get<0>(t)->initWithSizeAndTexture({ std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t));
 			break;
 		}
 		case 6:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string, std::string, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string, std::string, std::string>(L);
 			std::get<0>(t)->initWithSizeAndTexture({ std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t), std::get<5>(t));
 			break;
 		}
 		case 7:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string, std::string, std::string, cocos2d::ui::Widget::TextureResType>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, std::string, std::string, std::string, cocos2d::ui::Widget::TextureResType>(L);
 			std::get<0>(t)->initWithSizeAndTexture({ std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t), std::get<5>(t));
 			break;
 		}
@@ -78,24 +78,24 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "loadTextures", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, std::string>(L);
 			std::get<0>(t)->loadTextures(std::get<1>(t), std::get<2>(t));
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, std::string, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, std::string, std::string>(L);
 			std::get<0>(t)->loadTextures(std::get<1>(t), std::get<2>(t), std::get<3>(t));
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, std::string, std::string, cocos2d::ui::Widget::TextureResType>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, std::string, std::string, cocos2d::ui::Widget::TextureResType>(L);
 			std::get<0>(t)->loadTextures(std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t));
 			break;
 		}
@@ -107,18 +107,18 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "loadTextureNormal", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string>(L);
 			std::get<0>(t)->loadTextureNormal(std::get<1>(t));
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, cocos2d::ui::Widget::TextureResType>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, cocos2d::ui::Widget::TextureResType>(L);
 			std::get<0>(t)->loadTextureNormal(std::get<1>(t), std::get<2>(t));
 			break;
 		}
@@ -130,18 +130,18 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "loadTexturePressed", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string>(L);
 			std::get<0>(t)->loadTexturePressed(std::get<1>(t));
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, cocos2d::ui::Widget::TextureResType>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, cocos2d::ui::Widget::TextureResType>(L);
 			std::get<0>(t)->loadTexturePressed(std::get<1>(t), std::get<2>(t));
 			break;
 		}
@@ -153,18 +153,18 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "loadTextureDisabled", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string>(L);
 			std::get<0>(t)->loadTextureDisabled(std::get<1>(t));
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, cocos2d::ui::Widget::TextureResType>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, std::string, cocos2d::ui::Widget::TextureResType>(L);
 			std::get<0>(t)->loadTextureDisabled(std::get<1>(t), std::get<2>(t));
 			break;
 		}
@@ -176,116 +176,116 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "setCapInsets", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, float, float>(L, "setCapInsets error! need 5 args: self, float rectX, rectY, rectW, rectH");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, float, float>(L, "setCapInsets error! need 5 args: self, float rectX, rectY, rectW, rectH");
 		std::get<0>(t)->setCapInsets({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 		return 0;
 	});
 
 	Lua_NewFunc(L, "setCapInsetsNormalRenderer", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, float, float>(L, "setCapInsetsNormalRenderer error! need 5 args: self, float rectX, rectY, rectW, rectH");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, float, float>(L, "setCapInsetsNormalRenderer error! need 5 args: self, float rectX, rectY, rectW, rectH");
 		std::get<0>(t)->setCapInsetsNormalRenderer({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getCapInsetsNormalRenderer", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getCapInsetsNormalRenderer error! need 1 args: self");
-		var r = std::get<0>(t)->getCapInsetsNormalRenderer();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getCapInsetsNormalRenderer error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getCapInsetsNormalRenderer();
 		return Lua_Pushs(L, r.origin.x, r.origin.y, r.size.width, r.size.height);
 	});
 
 	Lua_NewFunc(L, "setCapInsetsPressedRenderer", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, float, float>(L, "setCapInsetsPressedRenderer error! need 5 args: self, float rectX, rectY, rectW, rectH");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, float, float>(L, "setCapInsetsPressedRenderer error! need 5 args: self, float rectX, rectY, rectW, rectH");
 		std::get<0>(t)->setCapInsetsPressedRenderer({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getCapInsetsPressedRenderer", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getCapInsetsPressedRenderer error! need 1 args: self");
-		var r = std::get<0>(t)->getCapInsetsPressedRenderer();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getCapInsetsPressedRenderer error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getCapInsetsPressedRenderer();
 		return Lua_Pushs(L, r.origin.x, r.origin.y, r.size.width, r.size.height);
 	});
 
 	Lua_NewFunc(L, "setCapInsetsDisabledRenderer", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, float, float>(L, "setCapInsetsDisabledRenderer error! need 5 args: self, float rectX, rectY, rectW, rectH");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, float, float, float, float>(L, "setCapInsetsDisabledRenderer error! need 5 args: self, float rectX, rectY, rectW, rectH");
 		std::get<0>(t)->setCapInsetsDisabledRenderer({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getCapInsetsDisabledRenderer", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getCapInsetsDisabledRenderer error! need 1 args: self");
-		var r = std::get<0>(t)->getCapInsetsDisabledRenderer();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getCapInsetsDisabledRenderer error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getCapInsetsDisabledRenderer();
 		return Lua_Pushs(L, r.origin.x, r.origin.y, r.size.width, r.size.height);
 	});
 
 	Lua_NewFunc(L, "setText", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*>(L, "setText error! need 2 args: self, string text");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*>(L, "setText error! need 2 args: self, string text");
 		std::get<0>(t)->setText(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getText", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getText error! need 1 args: self");
-		var r = std::get<0>(t)->getText();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getText error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getText();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setFont", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*, int>(L, "setFont error! need 3 args: self, string fontName, int fontSize");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*, int>(L, "setFont error! need 3 args: self, string fontName, int fontSize");
 		std::get<0>(t)->setFont(std::get<1>(t), std::get<2>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "setFontName", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*>(L, "setFontName error! need 2 args: self, string fontName");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*>(L, "setFontName error! need 2 args: self, string fontName");
 		std::get<0>(t)->setFontName(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getFontName", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getFontName error! need 1 args: self");
-		var r = std::get<0>(t)->getFontName();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getFontName error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getFontName();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setFontSize", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, int>(L, "setFontSize error! need 2 args: self, int fontSize");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, int>(L, "setFontSize error! need 2 args: self, int fontSize");
 		std::get<0>(t)->setFontSize(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getFontSize", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getFontSize error! need 1 args: self");
-		var r = std::get<0>(t)->getFontSize();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getFontSize error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getFontSize();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setFontColor", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 4:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, GLubyte, GLubyte, GLubyte>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, GLubyte, GLubyte, GLubyte>(L);
 			std::get<0>(t)->setFontColor({ std::get<1>(t), std::get<2>(t), std::get<3>(t) });
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, GLubyte, GLubyte, GLubyte, GLubyte>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, GLubyte, GLubyte, GLubyte, GLubyte>(L);
 			std::get<0>(t)->setFontColor({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 			break;
 		}
@@ -297,60 +297,60 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "getFontColor", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getFontColor error! need 1 args: self");
-		var r = std::get<0>(t)->getFontColor();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getFontColor error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getFontColor();
 		return Lua_Pushs(L, r.r, r.g, r.b, r.a);
 	});
 
 	Lua_NewFunc(L, "setPlaceholderFont", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*, int>(L, "setPlaceholderFont error! need 3 args: self, string fontName, int fontSize");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*, int>(L, "setPlaceholderFont error! need 3 args: self, string fontName, int fontSize");
 		std::get<0>(t)->setPlaceholderFont(std::get<1>(t), std::get<2>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "setPlaceholderFontName", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*>(L, "setPlaceholderFontName error! need 2 args: self, string fontName");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*>(L, "setPlaceholderFontName error! need 2 args: self, string fontName");
 		std::get<0>(t)->setPlaceholderFontName(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getPlaceholderFontName", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getPlaceholderFontName error! need 1 args: self");
-		var r = std::get<0>(t)->getPlaceholderFontName();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getPlaceholderFontName error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getPlaceholderFontName();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setPlaceholderFontSize", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, int>(L, "setPlaceholderFontSize error! need 2 args: self, int fontSize");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, int>(L, "setPlaceholderFontSize error! need 2 args: self, int fontSize");
 		std::get<0>(t)->setPlaceholderFontSize(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getPlaceholderFontSize", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getPlaceholderFontSize error! need 1 args: self");
-		var r = std::get<0>(t)->getPlaceholderFontSize();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getPlaceholderFontSize error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getPlaceholderFontSize();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setPlaceholderFontColor", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 4:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, GLubyte, GLubyte, GLubyte>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, GLubyte, GLubyte, GLubyte>(L);
 			std::get<0>(t)->setPlaceholderFontColor({ std::get<1>(t), std::get<2>(t), std::get<3>(t) });
 			break;
 		}
 		case 5:
 		{
-			var t = Lua_ToTuple<cocos2d::ui::EditBox*, GLubyte, GLubyte, GLubyte, GLubyte>(L);
+			auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, GLubyte, GLubyte, GLubyte, GLubyte>(L);
 			std::get<0>(t)->setPlaceholderFontColor({ std::get<1>(t), std::get<2>(t), std::get<3>(t), std::get<4>(t) });
 			break;
 		}
@@ -362,98 +362,98 @@ inline void Lua_Register_uiEditBox(lua_State* const& L)
 
 	Lua_NewFunc(L, "getPlaceholderFontColor", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getPlaceholderFontColor error! need 1 args: self");
-		var r = std::get<0>(t)->getPlaceholderFontColor();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getPlaceholderFontColor error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getPlaceholderFontColor();
 		return Lua_Pushs(L, r.r, r.g, r.b, r.a);
 	});
 
 	Lua_NewFunc(L, "setPlaceHolder", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*>(L, "setPlaceHolder error! need 2 args: self, string txt");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, const char*>(L, "setPlaceHolder error! need 2 args: self, string txt");
 		std::get<0>(t)->setPlaceHolder(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getPlaceHolder", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getPlaceHolder error! need 1 args: self");
-		var r = std::get<0>(t)->getPlaceHolder();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getPlaceHolder error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getPlaceHolder();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setInputMode", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, cocos2d::ui::EditBox::InputMode>(L, "setInputMode error! need 2 args: self, InputMode inputMode");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, cocos2d::ui::EditBox::InputMode>(L, "setInputMode error! need 2 args: self, InputMode inputMode");
 		std::get<0>(t)->setInputMode(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getInputMode", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getInputMode error! need 1 args: self");
-		var r = std::get<0>(t)->getInputMode();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getInputMode error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getInputMode();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setMaxLength", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, int>(L, "setMaxLength error! need 2 args: self, int maxLength");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, int>(L, "setMaxLength error! need 2 args: self, int maxLength");
 		std::get<0>(t)->setMaxLength(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getMaxLength", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getMaxLength error! need 1 args: self");
-		var r = std::get<0>(t)->getMaxLength();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getMaxLength error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getMaxLength();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setInputFlag", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, cocos2d::ui::EditBox::InputFlag>(L, "setInputFlag error! need 2 args: self, InputFlag inputFlag");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, cocos2d::ui::EditBox::InputFlag>(L, "setInputFlag error! need 2 args: self, InputFlag inputFlag");
 		std::get<0>(t)->setInputFlag(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getInputFlag", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getInputFlag error! need 1 args: self");
-		var r = std::get<0>(t)->getInputFlag();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getInputFlag error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getInputFlag();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setReturnType", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, cocos2d::ui::EditBox::KeyboardReturnType>(L, "setReturnType error! need 2 args: self, KeyboardReturnType returnType");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, cocos2d::ui::EditBox::KeyboardReturnType>(L, "setReturnType error! need 2 args: self, KeyboardReturnType returnType");
 		std::get<0>(t)->setReturnType(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getReturnType", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getReturnType error! need 1 args: self");
-		var r = std::get<0>(t)->getReturnType();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getReturnType error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getReturnType();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "setTextHorizontalAlignment", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*, cocos2d::TextHAlignment>(L, "setTextHorizontalAlignment error! need 2 args: self, TextHAlignment alignment");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*, cocos2d::TextHAlignment>(L, "setTextHorizontalAlignment error! need 2 args: self, TextHAlignment alignment");
 		std::get<0>(t)->setTextHorizontalAlignment(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "getTextHorizontalAlignment", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getTextHorizontalAlignment error! need 1 args: self");
-		var r = std::get<0>(t)->getTextHorizontalAlignment();
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "getTextHorizontalAlignment error! need 1 args: self");
+		auto&& r = std::get<0>(t)->getTextHorizontalAlignment();
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "openKeyboard", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "openKeyboard error! need 1 args: self");
+		auto&& t = Lua_ToTuple<cocos2d::ui::EditBox*>(L, "openKeyboard error! need 1 args: self");
 		std::get<0>(t)->openKeyboard();
 		return 0;
 	});

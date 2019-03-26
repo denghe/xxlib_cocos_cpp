@@ -14,8 +14,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ActionInterval*, float>(L, "create Speed error! need 2 args: ActionInterval* action, float speed");
-		var r = cocos2d::Speed::create(std::get<0>(t), std::get<1>(t));
+		auto&& t = Lua_ToTuple<cocos2d::ActionInterval*, float>(L, "create Speed error! need 2 args: ActionInterval* action, float speed");
+		auto&& r = cocos2d::Speed::create(std::get<0>(t), std::get<1>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 	});
@@ -60,7 +60,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		if (!numArgs)
 		{
 			return luaL_error(L, "create Sequence error! need 1+ args: FiniteTimeAction*...");
@@ -73,7 +73,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 			Lua_Get(a, L, i);
 			gActions.pushBack(a);
 		}
-		var o = cocos2d::Sequence::create(gActions);
+		auto&& o = cocos2d::Sequence::create(gActions);
 		gActions.clear();
 		if (!o) return 0;
 		return Lua_Push(L, o);
@@ -92,8 +92,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::FiniteTimeAction*, int>(L, "create Repeat error! need 2 args: FiniteTimeAction*, int times");
-		var r = cocos2d::Repeat::create(std::get<0>(t), std::get<1>(t));
+		auto&& t = Lua_ToTuple<cocos2d::FiniteTimeAction*, int>(L, "create Repeat error! need 2 args: FiniteTimeAction*, int times");
+		auto&& r = cocos2d::Repeat::create(std::get<0>(t), std::get<1>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 	});
@@ -111,8 +111,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::ActionInterval*>(L, "create RepeatForever error! need 1 args: ActionInterval*");
-		var r = cocos2d::RepeatForever::create(std::get<0>(t));
+		auto&& t = Lua_ToTuple<cocos2d::ActionInterval*>(L, "create RepeatForever error! need 1 args: ActionInterval*");
+		auto&& r = cocos2d::RepeatForever::create(std::get<0>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 	});
@@ -130,7 +130,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		if (!numArgs)
 		{
 			return luaL_error(L, "create Spawn error! need 1+ args: FiniteTimeAction*...");
@@ -143,7 +143,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 			Lua_Get(a, L, i);
 			gActions.pushBack(a);
 		}
-		var o = cocos2d::Spawn::create(gActions);
+		auto&& o = cocos2d::Spawn::create(gActions);
 		gActions.clear();
 		if (!o) return 0;
 		return Lua_Push(L, o);
@@ -164,24 +164,24 @@ inline void Lua_Register_Actions(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::RotateTo* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 2:
 		{
-			var t = Lua_ToTuple<float, float>(L);
+			auto&& t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::RotateTo::create(std::get<0>(t), std::get<1>(t));
 			break;
 		}
 		case 3:
 		{
-			var t = Lua_ToTuple<float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::RotateTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<float, float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::RotateTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t) });
 			break;
 		}
@@ -207,24 +207,24 @@ inline void Lua_Register_Actions(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::RotateBy* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 2:
 		{
-			var t = Lua_ToTuple<float, float>(L);
+			auto&& t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::RotateBy::create(std::get<0>(t), std::get<1>(t));
 			break;
 		}
 		case 3:
 		{
-			var t = Lua_ToTuple<float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::RotateBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<float, float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::RotateBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t) });
 			break;
 		}
@@ -250,18 +250,18 @@ inline void Lua_Register_Actions(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::MoveBy* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::MoveBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) });
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<float, float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::MoveBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t) });
 			break;
 		}
@@ -286,18 +286,18 @@ inline void Lua_Register_Actions(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::MoveTo* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 3:
 		{
-			var t = Lua_ToTuple<float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::MoveTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) });
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<float, float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::MoveTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t), std::get<3>(t) });
 			break;
 		}
@@ -321,8 +321,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float, float>(L, "create SkewTo error! need 3 args: float duration, float SX, float SY");
-		var r = cocos2d::SkewTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+		auto&& t = Lua_ToTuple<float, float, float>(L, "create SkewTo error! need 3 args: float duration, float SX, float SY");
+		auto&& r = cocos2d::SkewTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -341,8 +341,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float, float>(L, "create SkewBy error! need 3 args: float duration, float deltaSX, float deltaSY");
-		var r = cocos2d::SkewBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+		auto&& t = Lua_ToTuple<float, float, float>(L, "create SkewBy error! need 3 args: float duration, float deltaSX, float deltaSY");
+		auto&& r = cocos2d::SkewBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -362,8 +362,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float, float>(L, "create ResizeTo error! need 3 args: float duration, float finalWidth, float finalHeight");
-		var r = cocos2d::ResizeTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) });
+		auto&& t = Lua_ToTuple<float, float, float>(L, "create ResizeTo error! need 3 args: float duration, float finalWidth, float finalHeight");
+		auto&& r = cocos2d::ResizeTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) });
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -383,8 +383,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float, float>(L, "create ResizeBy error! need 3 args: float duration, float deltaWidth, float deltaHeight");
-		var r = cocos2d::ResizeBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) });
+		auto&& t = Lua_ToTuple<float, float, float>(L, "create ResizeBy error! need 3 args: float duration, float deltaWidth, float deltaHeight");
+		auto&& r = cocos2d::ResizeBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) });
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -403,8 +403,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float, float, float, int>(L, "create JumpBy error! need 5 args: float duration, float x, float y, float height, int times");
-		var r = cocos2d::JumpBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t));
+		auto&& t = Lua_ToTuple<float, float, float, float, int>(L, "create JumpBy error! need 5 args: float duration, float x, float y, float height, int times");
+		auto&& r = cocos2d::JumpBy::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -423,8 +423,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float, float, float, int>(L, "create JumpTo error! need 5 args: float duration, float x, float y, float height, int times");
-		var r = cocos2d::JumpTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t));
+		auto&& t = Lua_ToTuple<float, float, float, float, int>(L, "create JumpTo error! need 5 args: float duration, float x, float y, float height, int times");
+		auto&& r = cocos2d::JumpTo::create(std::get<0>(t), { std::get<1>(t), std::get<2>(t) }, std::get<3>(t), std::get<4>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -443,8 +443,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float, float, float, float, float, float>(L, "create BezierBy error! need 7 args: float duration, float endX, float endY, float c1X, float c1Y, float c2X, float c2Y");
-		var r = cocos2d::BezierBy::create(std::get<0>(t), { { std::get<1>(t), std::get<2>(t) }, { std::get<3>(t), std::get<4>(t) }, { std::get<5>(t), std::get<6>(t) } });
+		auto&& t = Lua_ToTuple<float, float, float, float, float, float, float>(L, "create BezierBy error! need 7 args: float duration, float endX, float endY, float c1X, float c1Y, float c2X, float c2Y");
+		auto&& r = cocos2d::BezierBy::create(std::get<0>(t), { { std::get<1>(t), std::get<2>(t) }, { std::get<3>(t), std::get<4>(t) }, { std::get<5>(t), std::get<6>(t) } });
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -463,8 +463,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float, float, float, float, float, float>(L, "create BezierTo error! need 7 args: float duration, float endX, float endY, float c1X, float c1Y, float c2X, float c2Y");
-		var r = cocos2d::BezierTo::create(std::get<0>(t), { { std::get<1>(t), std::get<2>(t) }, { std::get<3>(t), std::get<4>(t) }, { std::get<5>(t), std::get<6>(t) } });
+		auto&& t = Lua_ToTuple<float, float, float, float, float, float, float>(L, "create BezierTo error! need 7 args: float duration, float endX, float endY, float c1X, float c1Y, float c2X, float c2Y");
+		auto&& r = cocos2d::BezierTo::create(std::get<0>(t), { { std::get<1>(t), std::get<2>(t) }, { std::get<3>(t), std::get<4>(t) }, { std::get<5>(t), std::get<6>(t) } });
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -484,24 +484,24 @@ inline void Lua_Register_Actions(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::ScaleTo* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 2:
 		{
-			var t = Lua_ToTuple<float, float>(L);
+			auto&& t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::ScaleTo::create(std::get<0>(t), std::get<1>(t));
 			break;
 		}
 		case 3:
 		{
-			var t = Lua_ToTuple<float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::ScaleTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<float, float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::ScaleTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
 			break;
 		}
@@ -527,24 +527,24 @@ inline void Lua_Register_Actions(lua_State* const& L)
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
 		cocos2d::ScaleBy* o = nullptr;
-		var numArgs = lua_gettop(L);
+		auto&& numArgs = lua_gettop(L);
 		switch (numArgs)
 		{
 		case 2:
 		{
-			var t = Lua_ToTuple<float, float>(L);
+			auto&& t = Lua_ToTuple<float, float>(L);
 			o = cocos2d::ScaleBy::create(std::get<0>(t), std::get<1>(t));
 			break;
 		}
 		case 3:
 		{
-			var t = Lua_ToTuple<float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float>(L);
 			o = cocos2d::ScaleBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t));
 			break;
 		}
 		case 4:
 		{
-			var t = Lua_ToTuple<float, float, float, float>(L);
+			auto&& t = Lua_ToTuple<float, float, float, float>(L);
 			o = cocos2d::ScaleBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
 			break;
 		}
@@ -569,8 +569,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, int>(L, "create Blink error! need 2 args: float duration, int times");
-		var r = cocos2d::Blink::create(std::get<0>(t), std::get<1>(t));
+		auto&& t = Lua_ToTuple<float, int>(L, "create Blink error! need 2 args: float duration, int times");
+		auto&& r = cocos2d::Blink::create(std::get<0>(t), std::get<1>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -590,8 +590,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, int>(L, "create FadeTo error! need 2 args: float duration, byte opacity");
-		var r = cocos2d::FadeTo::create(std::get<0>(t), std::get<1>(t));
+		auto&& t = Lua_ToTuple<float, int>(L, "create FadeTo error! need 2 args: float duration, byte opacity");
+		auto&& r = cocos2d::FadeTo::create(std::get<0>(t), std::get<1>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -610,8 +610,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float>(L, "create FadeIn error! need 1 args: float duration");
-		var r = cocos2d::FadeIn::create(std::get<0>(t));
+		auto&& t = Lua_ToTuple<float>(L, "create FadeIn error! need 1 args: float duration");
+		auto&& r = cocos2d::FadeIn::create(std::get<0>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -631,8 +631,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float>(L, "create FadeOut error! need 1 args: float duration");
-		var r = cocos2d::FadeOut::create(std::get<0>(t));
+		auto&& t = Lua_ToTuple<float>(L, "create FadeOut error! need 1 args: float duration");
+		auto&& r = cocos2d::FadeOut::create(std::get<0>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -651,8 +651,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, int, int, int>(L, "create TintTo error! need 4 args: float duration, byte red, byte green, byte blue");
-		var r = cocos2d::TintTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
+		auto&& t = Lua_ToTuple<float, int, int, int>(L, "create TintTo error! need 4 args: float duration, byte red, byte green, byte blue");
+		auto&& r = cocos2d::TintTo::create(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -671,8 +671,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, int, int, int>(L, "create TintBy error! need 4 args: float duration, byte deltaRed, byte deltaGreen, byte deltaBlue");
-		var r = cocos2d::TintBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
+		auto&& t = Lua_ToTuple<float, int, int, int>(L, "create TintBy error! need 4 args: float duration, byte deltaRed, byte deltaGreen, byte deltaBlue");
+		auto&& r = cocos2d::TintBy::create(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -692,8 +692,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float>(L, "create DelayTime error! need 1 args: float duration");
-		var r = cocos2d::DelayTime::create(std::get<0>(t));
+		auto&& t = Lua_ToTuple<float>(L, "create DelayTime error! need 1 args: float duration");
+		auto&& r = cocos2d::DelayTime::create(std::get<0>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -713,7 +713,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var r = cocos2d::Show::create();
+		auto&& r = cocos2d::Show::create();
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -733,7 +733,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var r = cocos2d::Hide::create();
+		auto&& r = cocos2d::Hide::create();
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -752,7 +752,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var r = cocos2d::ToggleVisibility::create();
+		auto&& r = cocos2d::ToggleVisibility::create();
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -772,7 +772,7 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var r = cocos2d::RemoveSelf::create();
+		auto&& r = cocos2d::RemoveSelf::create();
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -793,8 +793,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<bool>(L, "create FlipX error! need 1 args: bool");
-		var r = cocos2d::FlipX::create(std::get<0>(t));
+		auto&& t = Lua_ToTuple<bool>(L, "create FlipX error! need 1 args: bool");
+		auto&& r = cocos2d::FlipX::create(std::get<0>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -815,8 +815,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<bool>(L, "create FlipY error! need 1 args: bool");
-		var r = cocos2d::FlipY::create(std::get<0>(t));
+		auto&& t = Lua_ToTuple<bool>(L, "create FlipY error! need 1 args: bool");
+		auto&& r = cocos2d::FlipY::create(std::get<0>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -836,8 +836,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<float, float>(L, "create Place error! need 2 args: x, y");
-		var r = cocos2d::Place::create({ std::get<0>(t), std::get<1>(t) });
+		auto&& t = Lua_ToTuple<float, float>(L, "create Place error! need 2 args: x, y");
+		auto&& r = cocos2d::Place::create({ std::get<0>(t), std::get<1>(t) });
 		if (!r) return 0;
 		return Lua_Push(L, r);
 
@@ -858,12 +858,12 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<Lua_Func>(L, "create CallFunc error! need 1 args: func");
+		auto&& t = Lua_ToTuple<Lua_Func>(L, "create CallFunc error! need 1 args: func");
 		if (!std::get<0>(t))
 		{
 			return luaL_error(L, "create CallFunc error! need 1 args: func");
 		}
-		var r = cocos2d::CallFunc::create([f = std::move(std::get<0>(t))]
+		auto&& r = cocos2d::CallFunc::create([f = std::move(std::get<0>(t))]
 		{
 			assert(!lua_gettop(gLua));
 			Lua_PCall(gLua, f);
@@ -887,8 +887,8 @@ inline void Lua_Register_Actions(lua_State* const& L)
 
 	Lua_NewFunc(L, "create", [](lua_State* L)
 	{
-		var t = Lua_ToTuple<cocos2d::Animation*>(L, "create error! need 1 args: Animation");
-		var r = cocos2d::Animate::create(std::get<0>(t));
+		auto&& t = Lua_ToTuple<cocos2d::Animation*>(L, "create error! need 1 args: Animation");
+		auto&& r = cocos2d::Animate::create(std::get<0>(t));
 		if (!r) return 0;
 		return Lua_Push(L, r);
 

@@ -4,7 +4,7 @@
 // 不会被 cpp 层持有, 传入后都是 memcpy
 struct Lua_BBuffer : public xx::BBuffer
 {
-	Lua_BBuffer() : BBuffer(mp) {}
+	using xx::BBuffer::BBuffer;
 	Lua_BBuffer(Lua_BBuffer const&) = delete;
 	Lua_BBuffer& operator=(Lua_BBuffer const&) = delete;
 
@@ -117,7 +117,7 @@ struct Lua_BBuffer : public xx::BBuffer
 	// 析构
 	inline static int __gc(lua_State* L)
 	{
-		var self = *(Lua_BBuffer**)lua_touserdata(L, -1);
+		auto&& self = *(Lua_BBuffer**)lua_touserdata(L, -1);
 		self->~Lua_BBuffer();
 		self->ReleasePtrDict(L);							// 异常: 因为是移除, 应该不会抛
 		self->ReleaseIdxDict(L);
@@ -128,10 +128,10 @@ struct Lua_BBuffer : public xx::BBuffer
 	// 创建, 无参数
 	inline static int Create(lua_State* L)
 	{
-		var self = *(Lua_BBuffer**)lua_newuserdata(L, sizeof(void*));	// ..., ud
+		auto&& self = *(Lua_BBuffer**)lua_newuserdata(L, sizeof(void*));	// ..., ud
 		lua_getglobal(L, TypeNames<xx::BBuffer*>::value);	// ..., ud, mt
 
-		if (!(self = mp->Create<Lua_BBuffer>()))
+		if (!(self = new (std::nothrow) Lua_BBuffer()))
 		{
 			lua_pop(L, 2);									// ...
 			return 0;
@@ -153,7 +153,7 @@ struct Lua_BBuffer : public xx::BBuffer
 			luaL_error(L, "the arg's type must be a proto table");
 		}
 		lua_getfield(L, 1, "typeId");						// t, int
-		var typeId = (int)lua_tointeger(L, -1);
+		auto&& typeId = (int)lua_tointeger(L, -1);
 
 		lua_pushlightuserdata(L, (void*)TypeNames<xx::BBuffer*>::value);	// t, int, name
 		lua_rawget(L, LUA_REGISTRYINDEX);					// t, int, typeIdProtos
@@ -178,25 +178,25 @@ struct Lua_BBuffer : public xx::BBuffer
 
 	inline static int GetDataLen(lua_State* L)
 	{
-		var self = GetSelf(L, 1);
-		lua_pushinteger(L, self.dataLen);
+		auto&& self = GetSelf(L, 1);
+		lua_pushinteger(L, self.len);
 		return 1;
 	}
 
 	inline static int GetOffset(lua_State* L)
 	{
-		var self = GetSelf(L, 1);
+		auto&& self = GetSelf(L, 1);
 		lua_pushinteger(L, self.offset);
 		return 1;
 	}
 
 	inline static int SetOffset(lua_State* L)
 	{
-		var self = GetSelf(L, 2);
-		var offset = (uint32_t)lua_tointeger(L, 2);
-		if (offset > self.dataLen)
+		auto&& self = GetSelf(L, 2);
+		auto&& offset = (uint32_t)lua_tointeger(L, 2);
+		if (offset > self.len)
 		{
-			luaL_error(L, "the args[ 2 ] offset is out of range. dataLen = %d", self.dataLen);
+			luaL_error(L, "the args[ 2 ] offset is out of range. len = %d", self.len);
 		}
 		self.offset = offset;
 		return 0;
@@ -204,18 +204,18 @@ struct Lua_BBuffer : public xx::BBuffer
 
 	inline static int Clear(lua_State* L)
 	{
-		var self = GetSelf(L, 1);
-		self.dataLen = 0;
+		auto&& self = GetSelf(L, 1);
+		self.len = 0;
 		self.offset = 0;
 		return 0;
 	}
 
 	inline static int __tostring(lua_State* L)
 	{
-		var self = GetSelf(L, 1);
-		var s = self.mempool->Str();
-		self.ToString(*s);
-		lua_pushlstring(L, s->c_str(), s->dataLen);
+		auto&& self = GetSelf(L, 1);
+		std::string s;
+		self.ToString(s);
+		lua_pushlstring(L, s.c_str(), s.size());
 		return 1;
 	}
 
@@ -257,8 +257,8 @@ struct Lua_BBuffer : public xx::BBuffer
 	inline static int WriteNum(lua_State* L)
 	{
 		static_assert(std::is_arithmetic<T>::value);
-		var self = GetSelf(L, 2);
-		var top = lua_gettop(L);
+		auto&& self = GetSelf(L, 2);
+		auto&& top = lua_gettop(L);
 		for (int i = 2; i <= top; ++i)
 		{
 			self.WriteNum_<T>(L, i);
@@ -294,8 +294,8 @@ struct Lua_BBuffer : public xx::BBuffer
 	inline static int WriteNullableNum(lua_State* L)
 	{
 		static_assert(std::is_arithmetic<T>::value);
-		var self = GetSelf(L, 2);
-		var top = lua_gettop(L);
+		auto&& self = GetSelf(L, 2);
+		auto&& top = lua_gettop(L);
 		for (int i = 2; i <= top; ++i)
 		{
 			self.WriteNullableNum_<T>(L, i);
@@ -321,15 +321,15 @@ struct Lua_BBuffer : public xx::BBuffer
 	template<typename T>
 	void Read(lua_State* L, T& v)
 	{
-		if (var rtv = this->BBuffer::Read<T>(v))
+		if (auto&& rtv = this->BBuffer::Read<T>(v))
 		{
 			if (rtv == 1)
 			{
-				luaL_error(L, "read error: not enough data. offset = %d, dataLen = %d", offset, dataLen);
+				luaL_error(L, "read error: not enough data. offset = %d, len = %d", offset, len);
 			}
 			else // 2
 			{
-				luaL_error(L, "read error: overflow. offset = %d, dataLen = %d", offset, dataLen);
+				luaL_error(L, "read error: overflow. offset = %d, len = %d", offset, len);
 			}
 		}
 	}
@@ -357,8 +357,8 @@ struct Lua_BBuffer : public xx::BBuffer
 	static int ReadNum(lua_State* L)
 	{
 		static_assert(std::is_arithmetic<T>::value);
-		var self = GetSelf(L, 1);
-		var top = lua_gettop(L);
+		auto&& self = GetSelf(L, 1);
+		auto&& top = lua_gettop(L);
 		int readCount = 1;
 		if (top == 2)
 		{
@@ -405,8 +405,8 @@ struct Lua_BBuffer : public xx::BBuffer
 	static int ReadNullableNum(lua_State* L)
 	{
 		static_assert(std::is_arithmetic<T>::value);
-		var self = GetSelf(L, 1);
-		var top = lua_gettop(L);
+		auto&& self = GetSelf(L, 1);
+		auto&& top = lua_gettop(L);
 		int readCount = 1;
 		if (top == 2)
 		{
@@ -481,7 +481,7 @@ struct Lua_BBuffer : public xx::BBuffer
 	}
 
 
-	// 针对 string, bbuffer, table, 写 dataLen - offsetRoot 到 buf, 返回是否第一次写入
+	// 针对 string, bbuffer, table, 写 len - offsetRoot 到 buf, 返回是否第一次写入
 	inline bool WriteOffset(lua_State* L, int i)
 	{
 		if (!lua_checkstack(L, 3))
@@ -501,7 +501,7 @@ struct Lua_BBuffer : public xx::BBuffer
 			lua_rawget(L, -2);					// ..., o, ..., dict, nil/offset
 			if (lua_isnil(L, -1))				// 如果未记录则记录 + 写buf
 			{
-				var offset = dataLen - offsetRoot;
+				auto&& offset = len - offsetRoot;
 				Write(offset);					// 写buf
 
 				lua_pop(L, 1);					// ..., o, ..., dict
@@ -513,7 +513,7 @@ struct Lua_BBuffer : public xx::BBuffer
 			}
 			else								// 记录过则取其 value 来写buf
 			{
-				var offset = (uint32_t)lua_tointeger(L, -1);
+				auto&& offset = (uint32_t)lua_tointeger(L, -1);
 				Write(offset);					// 写buf
 				lua_pop(L, 2);					// ..., o, ...
 				return false;
@@ -526,8 +526,8 @@ struct Lua_BBuffer : public xx::BBuffer
 
 	inline static int WriteObject(lua_State* L)
 	{
-		var self = GetSelf(L, 2);				// bb, o1, o2, ...
-		var top = lua_gettop(L);
+		auto&& self = GetSelf(L, 2);				// bb, o1, o2, ...
+		auto&& top = lua_gettop(L);
 		for (int i = 2; i <= top; ++i)
 		{
 			self.WriteObject_(L, i);
@@ -557,9 +557,9 @@ struct Lua_BBuffer : public xx::BBuffer
 				if (WriteOffset(L, i))
 				{
 					size_t len;
-					var s = lua_tolstring(L, i, &len);
+					auto&& s = lua_tolstring(L, i, &len);
 					Write(len);
-					WriteBuf(s, len);
+					AddRange((uint8_t*)s, len);
 				}
 				return;
 			}
@@ -574,15 +574,15 @@ struct Lua_BBuffer : public xx::BBuffer
 					{
 						luaL_error(L, "WriteObject only support userdata is BBuffer.");
 					}
-					Write(bb->dataLen);
-					WriteBuf(bb);
+					Write(bb->len);
+					AddRange(bb->buf, bb->len);
 				}
 				return;
 			}
 
 			lua_getfield(L, i, "__proto");		// bb, ..., o, ..., proto
 			lua_getfield(L, -1, "typeId");		// bb, ..., o, ..., proto, typeId
-			var typeId = (uint16_t)lua_tonumber(L, -1);
+			auto&& typeId = (uint16_t)lua_tonumber(L, -1);
 			Write(typeId);
 			lua_pop(L, 1);						// bb, ..., o, ..., proto
 			lua_pushvalue(L, i);				// bb, ..., o, ..., proto, o
@@ -599,7 +599,7 @@ struct Lua_BBuffer : public xx::BBuffer
 
 	inline void BeginWrite_(lua_State* L)
 	{
-		offsetRoot = dataLen;
+		offsetRoot = len;
 		CreatePtrDict(L);
 	}
 
@@ -623,7 +623,7 @@ struct Lua_BBuffer : public xx::BBuffer
 
 	inline static int WriteRoot(lua_State* L)
 	{
-		var self = GetSelf(L, 2);				// bb, o
+		auto&& self = GetSelf(L, 2);				// bb, o
 		self.BeginWrite_(L);
 		self.WriteObject_(L, 2);				// bb, o
 		self.EndWrite_(L);
@@ -632,7 +632,7 @@ struct Lua_BBuffer : public xx::BBuffer
 
 	inline static int ReadRoot(lua_State* L)
 	{
-		var self = GetSelf(L, 1);				// bb
+		auto&& self = GetSelf(L, 1);				// bb
 		self.BeginRead_(L);
 		self.ReadObject_(L);					// bb, rtv
 		self.EndRead_(L);
@@ -641,8 +641,8 @@ struct Lua_BBuffer : public xx::BBuffer
 
 	inline static int ReadObject(lua_State* L)
 	{
-		var self = GetSelf(L, 1);
-		var top = lua_gettop(L);
+		auto&& self = GetSelf(L, 1);
+		auto&& top = lua_gettop(L);
 		int readCount = 1;
 		if (top == 2)
 		{
@@ -695,33 +695,33 @@ struct Lua_BBuffer : public xx::BBuffer
 		{
 			if (typeId == 1)	// string
 			{
-				uint32_t len;
-				Read(L, len);
-				if (offset + len > dataLen)
+				uint32_t dataLen;
+				Read(L, dataLen);
+				if (offset + dataLen > len)
 				{
-					luaL_error(L, "string's len: %d out of range. buf.offset = %d, buf.dataLen = %d", len, offset, dataLen);
+					luaL_error(L, "string's dataLen: %d out of range. buf.offset = %d, buf.len = %d", dataLen, offset, len);
 				}
-				lua_pushlstring(L, buf + offset, len);	// ..., str
-				offset += len;
+				lua_pushlstring(L, (char*)buf + offset, dataLen);	// ..., str
+				offset += dataLen;
 				StoreOffset(L, ptr_offset);
 				return;
 			}
 			else if (typeId == 2)	// bbuffer
 			{
-				uint32_t len;
-				Read(L, len);
-				if (offset + len > dataLen)
+				uint32_t dataLen;
+				Read(L, dataLen);
+				if (offset + dataLen > len)
 				{
 					lua_pop(L, 1);				// ...
-					luaL_error(L, "BBuffer's len: %d out of range. buf.offset = %d, buf.dataLen = %d", len, offset, dataLen);
+					luaL_error(L, "BBuffer's dataLen: %d out of range. buf.offset = %d, buf.len = %d", dataLen, offset, len);
 				}
 				Create(L);						// ..., bb
-				if (len)
+				if (dataLen)
 				{
-					var bb = *(Lua_BBuffer**)lua_touserdata(L, -1);
-					bb->Reserve(len);
-					memcpy(bb->buf, buf + offset, len);
-					offset += len;
+					auto&& bb = *(Lua_BBuffer**)lua_touserdata(L, -1);
+					bb->Reserve(dataLen);
+					memcpy(bb->buf, buf + offset, dataLen);
+					offset += dataLen;
 				}
 				StoreOffset(L, ptr_offset);
 				return;

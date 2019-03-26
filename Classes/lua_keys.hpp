@@ -4,8 +4,7 @@ inline const char* const LuaKey_null = "null";
 
 inline const char* const LuaKey_xx = "xx";
 inline const char* const LuaKey_Object = "Object";
-inline const char* const LuaKey_MemPool = "MemPool";
-inline const char* const LuaKey_UvLoop = "UvLoop";
+inline const char* const LuaKey_Uv = "Uv";
 
 inline const char* const LuaKey_Callbacks = "AllCallbacks";
 
@@ -61,6 +60,11 @@ template<>
 struct TypeNames<std::string>
 {
 	inline static const char* value = "string";
+};
+template<>
+struct TypeNames<std::vector<std::string>>
+{
+	inline static const char* value = "strings";
 };
 template<>
 struct TypeNames<Lua_Func>
@@ -672,6 +676,14 @@ struct TypeNames<spAnimationState*>
 // todo: more
 
 
+namespace xx {
+	struct UvTcpLuaPeer;
+	using UvItem_s = std::shared_ptr<xx::UvItem>;
+	using UvTcpLuaPeer_s = std::shared_ptr<UvTcpLuaPeer>;
+	using UvTcpLuaDialer = xx::UvTcpDialer<xx::UvTcpLuaPeer>;
+	using UvTcpLuaDialer_s = std::shared_ptr<UvTcpLuaDialer>;
+}
+
 template<>
 struct TypeNames<xx::BBuffer*>
 {
@@ -683,11 +695,25 @@ struct TypeNames<Lua_BBuffer*>
 	inline static const char* value = "BBuffer";
 };
 template<>
-struct TypeNames<xx::UvTcpClient_w>
+struct TypeNames<xx::UvItem_s>
 {
-	inline static const char* value = "UvTcpClient";
+	inline static const char* value = "UvItem";
+};
+template<>
+struct TypeNames<xx::UvResolver_s>
+{
+	inline static const char* value = "UvResolver";
+};
+template<>
+struct TypeNames<xx::UvTcpLuaDialer_s>
+{
+	inline static const char* value = "UvTcpLuaDialer";
+};
+template<>
+struct TypeNames<xx::UvTcpLuaPeer_s>
+{
+	inline static const char* value = "UvTcpLuaPeer";
 };
 
 
 // todo: more
-

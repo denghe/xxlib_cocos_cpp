@@ -26,14 +26,6 @@ int Lua_Push(lua_State* const& L, T const& v)
 	{
 		lua_pushlstring(L, v.data(), v.size());
 	}
-	else if constexpr (std::is_same_v<T, xx::String>)
-	{
-		lua_pushlstring(L, v.buf, v.dataLen);
-	}
-	else if constexpr (std::is_same_v<T, xx::String_p>)
-	{
-		lua_pushlstring(L, v->buf, v->dataLen);
-	}
 	else if constexpr (std::is_same_v<T, Lua_Func>)
 	{
 		assert(v.funcId);
@@ -45,13 +37,12 @@ int Lua_Push(lua_State* const& L, T const& v)
 		}
 		lua_replace(L, -2);											// ..., func
 	}
-	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsRef_v<T>)
+	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsShared_v<T>)
 	{
-		T* p = nullptr;
 #ifndef NDEBUG
 		if constexpr (std::is_pointer_v<T> && std::is_base_of_v<cocos2d::Ref, std::remove_pointer_t<T>>)
 		{
-			p = (T*)lua_newuserdata(L, sizeof(T) + sizeof(size_t));	// ..., &o + versionNumber
+			auto&& p = (T*)lua_newuserdata(L, sizeof(T) + sizeof(size_t));	// ..., &o + versionNumber
 			*(size_t*)(p + 1) = cocos2d::Ref::versionNumber;	// 填充自增版本号
 			cocos2d::Ref::ptrs[(void*)v] = cocos2d::Ref::versionNumber;
 			++cocos2d::Ref::versionNumber;
@@ -59,9 +50,9 @@ int Lua_Push(lua_State* const& L, T const& v)
 		else
 #endif
 		{
-			p = (T*)lua_newuserdata(L, sizeof(T));					// ..., &o
+			auto&& p = lua_newuserdata(L, sizeof(T));				// ..., &o
+			new (p) T(v);	// copy. need gc mt func release
 		}
-		*p = v;
 		lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
 		lua_setmetatable(L, -2);									// ..., &o
 	}
@@ -72,7 +63,7 @@ int Lua_Push(lua_State* const& L, T const& v)
 	{
 		lua_createtable(L, v.size(), 0);
 		int i = 0;
-		for (var o : v)
+		for (auto&& o : v)
 		{
 			Lua_Push(L, o);
 			lua_rawseti(L, -2, ++i);
@@ -81,7 +72,7 @@ int Lua_Push(lua_State* const& L, T const& v)
 	else if constexpr (std::is_same_v<T, std::unordered_map<std::string, std::string>>)
 	{
 		lua_createtable(L, v.size(), 0);
-		for (var o : v)
+		for (auto&& o : v)
 		{
 			Lua_Pushs(L, o.first, o.second);
 			lua_rawset(L, -3);
@@ -150,7 +141,7 @@ cocos2d::Director::getInstance()->mainLoopCallback = [f = std::move(f)]
 {
 	uv->Run(xx::UvRunMode::NoWait);
 
-	var L = gLua;
+	auto&& L = gLua;
 	gFuncId = f.funcId;
 	lua_pushcclosure(L, [](lua_State* L)							// cfunc
 	{
