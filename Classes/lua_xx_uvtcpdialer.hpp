@@ -21,27 +21,14 @@ inline void Lua_Register_UvTcpLuaDialer(lua_State* const& L)
 
 	Lua_NewFunc(L, "Dial", [](lua_State* L)
 	{
-		int rtv = 0;
-		auto&& numArgs = lua_gettop(L);
-		switch (numArgs)
+		auto&& t = Lua_ToTuple<xx::UvTcpLuaDialer_s, std::vector<std::string>, int>(L, "Dial error! need 3/4 args: self, {strings} ipList, int port, int timeoutMS = 0");
+		assert(std::get<0>(t));
+		int timeoutMS = 0;
+		if (lua_gettop(L) > 3)
 		{
-		case 3:
-		{
-			auto&& t = Lua_ToTuple<xx::UvTcpLuaDialer_s, std::vector<std::string>, int>(L);
-			assert(std::get<0>(t));
-			rtv = std::get<0>(t)->Dial(std::get<1>(t), std::get<2>(t));
-			break;
+			Lua_Get(timeoutMS, L, 4);
 		}
-		case 4:
-		{
-			auto&& t = Lua_ToTuple<xx::UvTcpLuaDialer_s, std::vector<std::string>, int, int>(L);
-			assert(std::get<0>(t));
-			rtv = std::get<0>(t)->Dial(std::get<1>(t), std::get<2>(t), std::get<3>(t));
-			break;
-		}
-		default:
-			return luaL_error(L, "Dial error! need 3/4 args: self, {strings} ipList, int port, int timeoutMS = 0");
-		}
+		auto&& rtv = std::get<0>(t)->Dial(std::get<1>(t), std::get<2>(t), timeoutMS);
 		return Lua_Pushs(L, rtv);
 	});
 
@@ -50,11 +37,14 @@ inline void Lua_Register_UvTcpLuaDialer(lua_State* const& L)
 		auto&& t = Lua_ToTuple<xx::UvTcpLuaDialer_s, Lua_Func>(L, "OnAccept error! need 2 args: self, func/null");
 		if (std::get<1>(t))
 		{
-			std::get<0>(t)->OnAccept = [self = std::move(std::get<0>(t)), f = std::move(std::get<1>(t))](xx::UvTcpLuaPeer_s& peer)
+			std::get<0>(t)->OnAccept = [f = std::move(std::get<1>(t))](xx::UvTcpLuaPeer_s& peer)
 			{
+				if (!gLua) return;
 				assert(!lua_gettop(gLua));
-				Lua_PCall(gLua, f, peer);
-				lua_settop(gLua, 0);
+				auto&& L = gLua;
+
+				Lua_PCall(L, f, peer);
+				lua_settop(L, 0);
 			};
 		}
 		else

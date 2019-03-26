@@ -1,5 +1,5 @@
 ﻿----------------------------------------------------------------------
--- 协程相关
+-- 常用全局函数 & 变量
 ----------------------------------------------------------------------
 
 -- 常用函数减少查表次数
@@ -9,13 +9,14 @@ resume = coroutine.resume
 yield = coroutine.yield
 table_unpack = table.unpack
 
--- 简单的 List 结构, 主用于倒序访问并交换删除 if #t > 0 then for i = #t, 1, -1 do ...... end end
+
+-- 简单的 List 结构
 List_Create = function()
 	local t = {}
 	t.Add = function(o)
 		t[#t + 1] = o
 	end
-	-- 有可能调用前需要 t[#t].idxAtT = idx
+	-- 通常调用前还有一句: container[#container].idxAtContainer = idx
 	t.SwapRemoveAt = function(idx)
 		local dl = #t
 		assert(idx > 0 and idx <= dl)
@@ -27,11 +28,83 @@ List_Create = function()
 	return t
 end
 
--- 全局协程池
+
+-- 方便输出表结构
+function DumpTable( t )  
+    local cache = {}
+    local function DumpSubTable(t,indent)
+        if (cache[tostring(t)]) then
+            print(indent.."*"..tostring(t))
+        else
+            cache[tostring(t)] = true
+            if (type(t)=="table") then
+                for pos,val in pairs(t) do
+                    if (type(val)=="table") then
+                        print(indent.."["..pos.."] => "..tostring(t).." {")
+                        DumpSubTable(val,indent..string.rep(" ",string.len(pos)+8))
+                        print(indent..string.rep(" ",string.len(pos)+6).."}")
+                    elseif (type(val)=="string") then
+                        print(indent.."["..pos..'] => "'..val..'"')
+                    else
+                        print(indent.."["..pos.."] => "..tostring(val))
+                    end
+                end
+            else
+                print(indent..tostring(t))
+            end
+        end
+    end
+    if (type(t)=="table") then
+        print(tostring(t).." {")
+        DumpSubTable(t,"  ")
+        print("}")
+    else
+        DumpSubTable(t,"  ")
+    end
+    print()
+end
+
+
+-- 方便输出包结构
+function DumpPackage(t)
+	function DumpPackageCore(t, indent)
+		local spaces = string.rep(" ",indent)
+		print(spaces.."typeName : "..t.__proto.typeName)
+		for k, v in pairs(t) do
+			if k == "__proto"
+				or k == "__index"
+				or k == "__newindex"
+				or k == "__isReleased"
+				or k == "Release" then
+				-- do nothing
+			elseif type(v) == "table" then
+				DumpPackageCore(v, indent + 4)
+			else
+				print(spaces.."["..k.."] = "..tostring(v))
+			end
+		end
+	end
+	local ts = { t }
+	function GetMetatables(t)
+		local mt = getmetatable(t)
+		if mt ~= nil then
+			ts[#ts + 1] = mt
+			GetMetatables(mt)
+		end
+	end
+	GetMetatables(t)
+	for i = #ts, 1, -1 do
+		DumpPackageCore(t, (#ts - i) * 4)
+	end
+end
+
+
+
+-- 全局协程池( 乱序 )
 gCoros = List_Create()
 
 -- 压入一个协程函数. 有参数就跟在后面. 有延迟执行的效果
-go = function(func, ...)
+gCoros_Push = function(func, ...)
 	--print("push")
 	local args = {...}
 	local co = nil
@@ -44,6 +117,9 @@ go = function(func, ...)
 	return co
 end
 
+-- for easy use
+go = gCoros_Push
+
 -- 压入一个协程函数时立即执行一次
 gorun = function(func, ...)
 	local co = go(func, ...)
@@ -51,30 +127,25 @@ gorun = function(func, ...)
 	return co
 end
 
--- 注册每帧执行函数
-cc.mainLoopCallback(function()
-	-- 隐藏执行 uv.Run(Once)
-
-	-- 执行 gCoros 里的所有协程
-	local t = gCoros
-	if #t > 0 then
-		for i = #t, 1, -1 do
-			local co = t[i]
-			local ok, msg = resume(co)
-			if not ok then
-				print(msg)
-			end
-			if coroutine_status(co) == "dead" then
-				t.SwapRemoveAt(i)
-			end
-		end
+-- 阻塞 n 帧
+-- 适合在协程环境使用
+Sleep = function(n)
+	for _=1, n do
+		yield()
 	end
-end)
+end
+
+-- 阻塞 n 秒( 按 60 帧粗算的 )
+-- 适合在协程环境使用
+SleepSecs = function(n)
+	local n = math.floor(n * 60)
+	for _=1, n do
+		yield()
+	end
+end
 
 
-----------------------------------------------------------------------
--- 状态机相关
-----------------------------------------------------------------------
+
 
 -- 状态机集合
 gStates = {}		
@@ -137,9 +208,6 @@ gStates_WaitDisappear = function(state)
 end
 
 
-----------------------------------------------------------------------
--- 坐标角度计算相关函数
-----------------------------------------------------------------------
 
 PI180 = 3.14159265358979323846 / 180
 
@@ -169,41 +237,36 @@ GetRotatePos = function(x, y, angle)
 end
 
 
-----------------------------------------------------------------------
--- 网络相关
-----------------------------------------------------------------------
 
--- 域名解析. 返回 { ip list }. 长度为 0 意味着解析失败或超时
--- 适合在协程环境使用
-GetIPList = function(domain, timeoutSec)
-	local rt = { 1 }
-	local resolver = xx.UvResolver.Create()
-	resolver:OnFinish(function()
-		rt[1] = resolver:GetIPList()
-	end)
-	resolver:Resolve(domain, timeoutSec * 1000)
-	local yield = yield
-	while rt[1] == 1 do
-		yield()
-	end
-	return rt[1];
-end
 
--- 多 ip 拨号. 返回最先连接成功的 peer. 为空则连接超时
--- 适合在协程环境使用
-TcpDial = function(ips, port, timeoutSec)
-	local rt = { 1 }
-	local dialer = xx.UvTcpLuaDialer.Create()
-	dialer:OnAccept(function(peer)
-		rt[1] = peer
-	end)
-	dialer:Dial(ips, port, timeoutSec * 1000)
-	local yield = yield
-	while rt[1] == 1 do
-		yield()
+-- 全局帧数
+gFrameNumber = 0
+
+-- 注册每帧执行函数
+cc.mainLoopCallback(function()
+	-- 隐藏执行 uv.Run(Once)
+
+	-- 执行 gCoros 里的所有协程
+	local t = gCoros
+	if #t > 0 then
+		for i = #t, 1, -1 do
+			local co = t[i]
+			local ok, msg = resume(co)
+			if not ok then
+				print(msg)
+			end
+			if coroutine_status(co) == "dead" then
+				t.SwapRemoveAt(i)
+			end
+		end
 	end
-	return rt[1];
-end
+
+	-- 递增全局帧编号
+	gFrameNumber = gFrameNumber + 1
+end)
+
+
+
 
 
 
@@ -382,102 +445,4 @@ gNet:OnReceivePackage(function(bb)
 		end
 	end
 end)
-]]
-
-
-
---[[
-
--- 阻塞 n 帧
--- 适合在协程环境使用
-Sleep = function(n)
-	for _=1, n do
-		yield()
-	end
-end
-
--- 阻塞 n 秒( 按 60 帧粗算的 )
--- 适合在协程环境使用
-SleepSecs = function(n)
-	local n = math.floor(n * 60)
-	for _=1, n do
-		yield()
-	end
-end
-
-
-
-
-
-
--- 方便输出表结构
-function DumpTable( t )  
-    local cache = {}
-    local function DumpSubTable(t,indent)
-        if (cache[tostring(t)]) then
-            print(indent.."*"..tostring(t))
-        else
-            cache[tostring(t)] = true
-            if (type(t)=="table") then
-                for pos,val in pairs(t) do
-                    if (type(val)=="table") then
-                        print(indent.."["..pos.."] => "..tostring(t).." {")
-                        DumpSubTable(val,indent..string.rep(" ",string.len(pos)+8))
-                        print(indent..string.rep(" ",string.len(pos)+6).."}")
-                    elseif (type(val)=="string") then
-                        print(indent.."["..pos..'] => "'..val..'"')
-                    else
-                        print(indent.."["..pos.."] => "..tostring(val))
-                    end
-                end
-            else
-                print(indent..tostring(t))
-            end
-        end
-    end
-    if (type(t)=="table") then
-        print(tostring(t).." {")
-        DumpSubTable(t,"  ")
-        print("}")
-    else
-        DumpSubTable(t,"  ")
-    end
-    print()
-end
-
-
--- 方便输出包结构
-function DumpPackage(t)
-	function DumpPackageCore(t, indent)
-		local spaces = string.rep(" ",indent)
-		print(spaces.."typeName : "..t.__proto.typeName)
-		for k, v in pairs(t) do
-			if k == "__proto"
-				or k == "__index"
-				or k == "__newindex"
-				or k == "__isReleased"
-				or k == "Release" then
-				-- do nothing
-			elseif type(v) == "table" then
-				DumpPackageCore(v, indent + 4)
-			else
-				print(spaces.."["..k.."] = "..tostring(v))
-			end
-		end
-	end
-	local ts = { t }
-	function GetMetatables(t)
-		local mt = getmetatable(t)
-		if mt ~= nil then
-			ts[#ts + 1] = mt
-			GetMetatables(mt)
-		end
-	end
-	GetMetatables(t)
-	for i = #ts, 1, -1 do
-		DumpPackageCore(t, (#ts - i) * 4)
-	end
-end
-
-
 ]]
