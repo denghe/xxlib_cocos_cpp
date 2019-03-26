@@ -208,6 +208,74 @@ gStates_WaitDisappear = function(state)
 end
 
 
+
+PI180 = 3.14159265358979323846 / 180
+
+GetAngle = function(x, y)
+	return math.atan(y, x) / PI180
+end
+
+GetXyIncAngle = function(x, y)
+	local a = math.atan(y, x)
+	return math.cos(a), math.sin(a), a / PI180
+end
+
+Normalize = function(x, y)
+    local n = x * x + y * y
+    if n == 1 then return x, y end
+    n = math.sqrt(n)
+    if n < 2e-37 then return 0, 0 end
+    n = 1 / n
+    return x * n, y * n
+end
+
+GetRotatePos = function(x, y, angle)
+	angle = -angle * PI180
+	local sina = math.sin(angle)
+	local cosa = math.cos(angle)
+	return x * cosa - y * sina, x * sina + y * cosa
+end
+
+
+
+
+-- 全局帧数
+gFrameNumber = 0
+
+-- 注册每帧执行函数
+cc.mainLoopCallback(function()
+	-- 隐藏执行 uv.Run(Once)
+
+	-- 执行 gCoros 里的所有协程
+	local t = gCoros
+	if #t > 0 then
+		for i = #t, 1, -1 do
+			local co = t[i]
+			local ok, msg = resume(co)
+			if not ok then
+				print(msg)
+			end
+			if coroutine_status(co) == "dead" then
+				t.SwapRemoveAt(i)
+			end
+		end
+	end
+
+	-- 递增全局帧编号
+	gFrameNumber = gFrameNumber + 1
+end)
+
+
+
+
+
+
+
+
+
+
+--[[
+
 -- 域名解析. 返回 { ip list }. 长度为 0 意味着解析失败或超时
 -- 适合在协程环境使用
 GetIPList = function(domain, timeoutSec)
@@ -220,7 +288,6 @@ GetIPList = function(domain, timeoutSec)
 	end
 	return rt[1];
 end
-
 
 -- 创建一个 tcp client 并解析域名 & 连接指定端口. 多 ip 域名将返回最快连上的. 超时时间可能因域名解析而比指定的要长. 不会超过两倍
 -- 如果域名解析失败, 所有ip全都连不上, 超时, 回调将传入空.
@@ -281,23 +348,6 @@ function CreateUvTcpClient2(domain, port, timeoutSec)
 	end
 end
 
-
-
-
--- 用于注册更新函数. 直接往里面放函数或移除. 每帧将逻辑无序遍历执行.
-gUpdates = {}
-
--- 执行所有 update 函数
-gUpdates_Exec = function()
-	local t = gUpdates
-	for k, f in pairs(t) do
-		f()
-	end
-end
-
-
-
-
 -- 推送的多播处理函数集 key: proto, val: { func(serial, pkg)... }
 gNetHandlers = {}
 
@@ -329,7 +379,6 @@ gNetHandlers_Unregister = function(pkgProto, key)
 	end
 end
 
-
 -- 网络解包并返回. 失败返回 nil
 BBToObject = function(bb)
 	if bb ~= nil then
@@ -342,11 +391,9 @@ BBToObject = function(bb)
 	end
 end
 
-
 -- 公用网络层
 -- todo: 用 CreateUvTcpClient 来创建
 gNet = xx.UvTcpClient.Create()
-
 
 -- 发送推送包
 local bb = BBuffer.Create()
@@ -398,64 +445,4 @@ gNet:OnReceivePackage(function(bb)
 		end
 	end
 end)
-
-
-
-PI180 = 3.14159265358979323846 / 180
-
-GetAngle = function(x, y)
-	return math.atan(y, x) / PI180
-end
-
-GetXyIncAngle = function(x, y)
-	local a = math.atan(y, x)
-	return math.cos(a), math.sin(a), a / PI180
-end
-
-Normalize = function(x, y)
-    local n = x * x + y * y
-    if n == 1 then return x, y end
-    n = math.sqrt(n)
-    if n < 2e-37 then return 0, 0 end
-    n = 1 / n
-    return x * n, y * n
-end
-
-GetRotatePos = function(x, y, angle)
-	angle = -angle * PI180
-	local sina = math.sin(angle)
-	local cosa = math.cos(angle)
-	return x * cosa - y * sina, x * sina + y * cosa
-end
-
-
-
-
--- 全局帧数
-gFrameNumber = 0
-
--- 注册每帧执行函数
-cc.mainLoopCallback(function()
-	-- 隐藏执行 uv.Run(Once)
-
-	-- 执行 gUpdates 里的所有函数
-	gUpdates_Exec()
-
-	-- 执行 gCoros 里的所有协程
-	local t = gCoros
-	if #t > 0 then
-		for i = #t, 1, -1 do
-			local co = t[i]
-			local ok, msg = resume(co)
-			if not ok then
-				print(msg)
-			end
-			if coroutine_status(co) == "dead" then
-				t.SwapRemoveAt(i)
-			end
-		end
-	end
-
-	-- 递增全局帧编号
-	gFrameNumber = gFrameNumber + 1
-end)
+]]

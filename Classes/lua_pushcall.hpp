@@ -46,6 +46,7 @@ int Lua_Push(lua_State* const& L, T const& v)
 			*(size_t*)(p + 1) = cocos2d::Ref::versionNumber;	// 填充自增版本号
 			cocos2d::Ref::ptrs[(void*)v] = cocos2d::Ref::versionNumber;
 			++cocos2d::Ref::versionNumber;
+			new (p) T(v);	// copy
 		}
 		else
 #endif

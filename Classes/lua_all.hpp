@@ -141,7 +141,7 @@ inline int Lua_Init()
 	//	return ((xx::MemPool*)ud)->Realloc(ptr, nsize, osize);
 	//}
 	//, mp);
-	auto&& L = luaL_newstate();
+	auto&& L = gLua = luaL_newstate();
 	assert(L);
 
 	// 将 Lua_Main 压入 L 安全执行
