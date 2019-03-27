@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "lua.hpp"
+#include "xx_uv_lua.h"
 
 // todo: 优化函数名和使用, 考虑参考 cocos lua 框架代码提供 return self 以便连写
 
@@ -18,8 +19,10 @@ inline cocos2d::Vector<cocos2d::SpriteFrame*> gSpriteFrames;
 #include "lua_xx_bbuffer.hpp"
 #include "lua_xx_uv.hpp"
 #include "lua_xx_uvresolver.hpp"
-#include "lua_xx_uvtcpdialer.hpp"
 #include "lua_xx_uvtcppeer.hpp"
+#include "lua_xx_uvtcpdialer.hpp"
+#include "lua_xx_uvkcppeer.hpp"
+#include "lua_xx_uvkcpdialer.hpp"
 #include "lua_xx.hpp"
 
 #include "lua_cc.hpp"

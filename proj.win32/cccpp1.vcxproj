@@ -254,6 +254,8 @@
     <ClInclude Include="..\lua_bind\lua_xx.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_bbuffer.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uv.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvkcpdialer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvkcppeer.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uvresolver.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uvtcpdialer.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uvtcppeer.hpp" />
@@ -267,6 +269,7 @@
     <ClInclude Include="..\xxlib\xx_random.h" />
     <ClInclude Include="..\xxlib\xx_uv.h" />
     <ClInclude Include="..\xxlib\xx_uv_coros.h" />
+    <ClInclude Include="..\xxlib\xx_uv_lua.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

@@ -380,6 +380,15 @@
     <ClInclude Include="..\lua_bind\lua_cc_application.hpp">
       <Filter>lua_bind</Filter>
     </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uvkcpdialer.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uvkcppeer.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xxlib\xx_uv_lua.h">
+      <Filter>xxlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

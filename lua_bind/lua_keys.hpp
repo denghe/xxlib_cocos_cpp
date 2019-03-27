@@ -676,14 +676,6 @@ struct TypeNames<spAnimationState*>
 // todo: more
 
 
-namespace xx {
-	struct UvTcpLuaPeer;
-	using UvItem_s = std::shared_ptr<xx::UvItem>;
-	using UvTcpLuaPeer_s = std::shared_ptr<UvTcpLuaPeer>;
-	using UvTcpLuaDialer = xx::UvTcpDialer<xx::UvTcpLuaPeer>;
-	using UvTcpLuaDialer_s = std::shared_ptr<UvTcpLuaDialer>;
-}
-
 template<>
 struct TypeNames<xx::BBuffer*>
 {
@@ -713,6 +705,16 @@ template<>
 struct TypeNames<xx::UvTcpLuaPeer_s>
 {
 	inline static const char* value = "UvTcpLuaPeer";
+};
+template<>
+struct TypeNames<xx::UvKcpLuaDialer_s>
+{
+	inline static const char* value = "UvKcpLuaDialer";
+};
+template<>
+struct TypeNames<xx::UvKcpLuaPeer_s>
+{
+	inline static const char* value = "UvKcpLuaPeer";
 };
 
 
