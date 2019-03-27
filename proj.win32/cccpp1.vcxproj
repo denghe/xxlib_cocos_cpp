@@ -66,16 +66,12 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)external\uv\include;$(EngineRoot)extensions;..\xxlib;..\Classes;..\lua\src;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)external\uv\include;$(EngineRoot)extensions;..\xxlib;..\Classes;..\lua\src;..\lua_bind;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -118,7 +114,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)external\uv\include;$(EngineRoot)extensions;..\xxlib;..\Classes;..\lua\src;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)external\uv\include;$(EngineRoot)extensions;..\xxlib;..\Classes;..\lua\src;..\lua_bind;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -188,53 +184,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\lua_all.hpp" />
-    <ClInclude Include="..\Classes\lua_cc.hpp" />
-    <ClInclude Include="..\Classes\lua_cca.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_animationcache.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_application.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_clippingnode.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_director.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_eventdispacher.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_fileutils.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_spriteframecache.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_texturecache.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_tmxtiledmap.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_userdefault.hpp" />
-    <ClInclude Include="..\Classes\lua_spine.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_actions.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_assetsmanagerex.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_data.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_label.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_scrollview.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_spriteframe.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_uibutton.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_event.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_eventlisteners.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_layer.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_node.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_ref.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_scene.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_sprite.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_texture.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_touch.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_uieditbox.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_uiimageview.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_uilayout.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_uiloadingbar.hpp" />
-    <ClInclude Include="..\Classes\lua_cc_uiwidget.hpp" />
-    <ClInclude Include="..\Classes\lua_func.hpp" />
-    <ClInclude Include="..\Classes\lua_keys.hpp" />
-    <ClInclude Include="..\Classes\lua_new_xxx.hpp" />
-    <ClInclude Include="..\Classes\lua_pushcall.hpp" />
-    <ClInclude Include="..\Classes\lua_sys.hpp" />
-    <ClInclude Include="..\Classes\lua_to_xxx.hpp" />
-    <ClInclude Include="..\Classes\lua_xx.hpp" />
-    <ClInclude Include="..\Classes\lua_xx_bbuffer.hpp" />
-    <ClInclude Include="..\Classes\lua_xx_uv.hpp" />
-    <ClInclude Include="..\Classes\lua_xx_uvresolver.hpp" />
-    <ClInclude Include="..\Classes\lua_xx_uvtcpdialer.hpp" />
-    <ClInclude Include="..\Classes\lua_xx_uvtcppeer.hpp" />
     <ClInclude Include="..\lua\src\lapi.h" />
     <ClInclude Include="..\lua\src\lauxlib.h" />
     <ClInclude Include="..\lua\src\lcode.h" />
@@ -261,6 +210,53 @@
     <ClInclude Include="..\lua\src\lundump.h" />
     <ClInclude Include="..\lua\src\lvm.h" />
     <ClInclude Include="..\lua\src\lzio.h" />
+    <ClInclude Include="..\lua_bind\lua_all.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cca.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_actions.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_animationcache.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_application.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_assetsmanagerex.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_clippingnode.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_data.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_director.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_event.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_eventdispacher.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_eventlisteners.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_fileutils.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_label.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_layer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_node.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_ref.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_scene.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_scrollview.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_sprite.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_spriteframe.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_spriteframecache.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_texture.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_texturecache.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_tmxtiledmap.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_touch.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uibutton.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uieditbox.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uiimageview.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uilayout.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uiloadingbar.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uiwidget.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_userdefault.hpp" />
+    <ClInclude Include="..\lua_bind\lua_func.hpp" />
+    <ClInclude Include="..\lua_bind\lua_keys.hpp" />
+    <ClInclude Include="..\lua_bind\lua_new_xxx.hpp" />
+    <ClInclude Include="..\lua_bind\lua_pushcall.hpp" />
+    <ClInclude Include="..\lua_bind\lua_spine.hpp" />
+    <ClInclude Include="..\lua_bind\lua_sys.hpp" />
+    <ClInclude Include="..\lua_bind\lua_to_xxx.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_bbuffer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uv.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvresolver.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvtcpdialer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvtcppeer.hpp" />
     <ClInclude Include="..\xxlib\fixed_function.hpp" />
     <ClInclude Include="..\xxlib\ikcp.h" />
     <ClInclude Include="..\xxlib\xx_bbuffer.h" />

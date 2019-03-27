@@ -10,11 +10,11 @@
     <Filter Include="xxlib">
       <UniqueIdentifier>{0f00b345-4bdf-475b-acd5-dbd9e313252a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="lua_binds">
-      <UniqueIdentifier>{0c6667db-ae2a-4c75-ba92-f1a84992e4ae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="lua">
       <UniqueIdentifier>{a82a1eaa-8fbc-446d-981b-a554fdfe8f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua_bind">
+      <UniqueIdentifier>{0c6667db-ae2a-4c75-ba92-f1a84992e4ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -131,57 +131,6 @@
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_all.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_event.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_eventlisteners.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_node.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_ref.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_scene.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_sprite.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_texture.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_touch.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_keys.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_xx.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_xx_bbuffer.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_pushcall.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_new_xxx.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_to_xxx.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_func.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
     <ClInclude Include="..\lua\src\lapi.h">
       <Filter>lua</Filter>
     </ClInclude>
@@ -260,84 +209,6 @@
     <ClInclude Include="..\lua\src\lzio.h">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_layer.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_uibutton.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_uiwidget.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_actions.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_scrollview.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_uiimageview.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_label.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_uieditbox.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_spriteframe.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_data.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cca.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_assetsmanagerex.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_uiloadingbar.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_uilayout.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_spine.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_application.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_director.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_eventdispacher.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_fileutils.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_spriteframecache.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_texturecache.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_userdefault.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_animationcache.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_tmxtiledmap.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_cc_clippingnode.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_sys.hpp">
-      <Filter>lua_binds</Filter>
-    </ClInclude>
     <ClInclude Include="..\xxlib\xx_bbuffer.h">
       <Filter>xxlib</Filter>
     </ClInclude>
@@ -368,17 +239,146 @@
     <ClInclude Include="..\xxlib\ikcp.h">
       <Filter>xxlib</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_xx_uvresolver.hpp">
-      <Filter>lua_binds</Filter>
+    <ClInclude Include="..\lua_bind\lua_cc_assetsmanagerex.hpp">
+      <Filter>lua_bind</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_xx_uvtcpdialer.hpp">
-      <Filter>lua_binds</Filter>
+    <ClInclude Include="..\lua_bind\lua_cc_clippingnode.hpp">
+      <Filter>lua_bind</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_xx_uvtcppeer.hpp">
-      <Filter>lua_binds</Filter>
+    <ClInclude Include="..\lua_bind\lua_cc_data.hpp">
+      <Filter>lua_bind</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\lua_xx_uv.hpp">
-      <Filter>lua_binds</Filter>
+    <ClInclude Include="..\lua_bind\lua_cc_director.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_event.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_eventdispacher.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_eventlisteners.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_fileutils.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_label.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_layer.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_node.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_ref.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_scene.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_scrollview.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_sprite.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_spriteframe.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_spriteframecache.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_texture.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_texturecache.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_tmxtiledmap.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_touch.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_uibutton.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_uieditbox.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_uiimageview.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_uilayout.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_uiloadingbar.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_uiwidget.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_userdefault.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cca.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_func.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_keys.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_new_xxx.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_pushcall.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_spine.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_sys.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_to_xxx.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_bbuffer.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uv.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uvresolver.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uvtcpdialer.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uvtcppeer.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_all.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_actions.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_animationcache.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_cc_application.hpp">
+      <Filter>lua_bind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

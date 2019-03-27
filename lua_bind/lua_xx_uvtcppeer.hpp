@@ -4,6 +4,14 @@ inline void Lua_Register_UvTcpLuaPeer(lua_State* const& L)
 {
 	Lua_NewMT(L, TypeNames<xx::UvTcpLuaPeer_s>::value, TypeNames<std::shared_ptr<xx::UvItem>>::value);					// xx.UvTcpDialer ： UvItem
 
+	Lua_NewFunc(L, "__gc", [](lua_State* L)
+	{
+		auto&& t = Lua_ToTuple<xx::UvItem_s>(L, "__gc error! need 1 args: self");
+		assert(std::get<0>(t));
+		std::get<0>(t).~shared_ptr();
+		return 0;
+	});
+
 	Lua_NewFunc(L, "GetIP", [](lua_State* L)
 	{
 		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s, bool>(L, "Send error! need 2 args: self, bool includePort");

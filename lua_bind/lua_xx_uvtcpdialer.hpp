@@ -11,6 +11,14 @@ inline void Lua_Register_UvTcpLuaDialer(lua_State* const& L)
 		return Lua_Pushs(L, o);
 	});
 
+	Lua_NewFunc(L, "__gc", [](lua_State* L)
+	{
+		auto&& t = Lua_ToTuple<xx::UvItem_s>(L, "__gc error! need 1 args: self");
+		assert(std::get<0>(t));
+		std::get<0>(t).~shared_ptr();
+		return 0;
+	});
+
 	Lua_NewFunc(L, "Cancel", [](lua_State* L)
 	{
 		auto&& t = Lua_ToTuple<xx::UvTcpLuaDialer_s>(L, "Cancel error! need 1 args: self");

@@ -109,7 +109,6 @@ void ReleaseGlobals()
 {
 	lua_close(gLua);
 	gLua = nullptr;
-
 	delete uv;
 	uv = nullptr;
 }

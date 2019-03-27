@@ -51,6 +51,7 @@ include_directories(
         Classes
         xxlib
         lua/src
+		lua_bind
 )
 
 
