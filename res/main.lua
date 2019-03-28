@@ -61,10 +61,48 @@ gY7 = gH2
 gY8 = gH2
 gY9 = gH2
 
+require "NET_class.lua"
 
 go(function()
+	local yield = yield
+	local bb = BBuffer.Create()
+
 ::LabRetry::
-	local ips = GetIPList("www.baidu.com", 2)
+	local ips = GetIPList("192.168.1.254", 2000)
+	if #ips == 0 then
+		print("get ip timeout")
+		goto LabRetry 
+	end
+	print("get ip success. ips: ")
+	for _, ip in ipairs(ips) do
+		print(ip)
+	end
+	print("dial.")
+	local peer = NetDial(ips, 12345, 2000, false)
+	if peer == nil then
+		print("dial timeout")
+		goto LabRetry
+	end
+	print(peer:GetIP(false) .. " send ping")
+
+	-- todo: set timeout
+
+	local pkg = NET_Generic_Ping.Create()
+	pkg.ticks = xx.NowSteadyEpochMS()
+	bb:Clear()
+	bb:WriteRoot(pkg)
+	peer:SendPush(bb)
+
+	while not peer:Disposed() do
+		yield()
+	end
+	print("disposed.")
+end)
+
+--[[
+go(function()
+::LabRetry::
+	local ips = GetIPList("www.baidu.com", 2000)
 	if #ips == 0 then
 		print("get ip timeout")
 		goto LabRetry 
@@ -72,7 +110,7 @@ go(function()
 	for _, ip in ipairs(ips) do
 		print(ip)
 	end
-	local peer = TcpDial(ips, 80, 2000)
+	local peer = NetDial(ips, 80, 2000)
 	if peer == nil then
 		print("dial timeout")
 		goto LabRetry
@@ -83,3 +121,4 @@ go(function()
 	end
 	print("disconnected.")
 end)
+]]

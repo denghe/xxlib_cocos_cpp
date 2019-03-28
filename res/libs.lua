@@ -175,13 +175,13 @@ end
 
 -- 域名解析. 返回 { ip list }. 长度为 0 意味着解析失败或超时
 -- 适合在协程环境使用
-GetIPList = function(domain, timeoutSec)
+GetIPList = function(domain, timeoutMS)
 	local rt = { 1 }
 	local resolver = xx.UvResolver.Create()
 	resolver:OnFinish(function()
 		rt[1] = resolver:GetIPList()
 	end)
-	resolver:Resolve(domain, timeoutSec * 1000)
+	resolver:Resolve(domain, timeoutMS)
 	local yield = yield
 	while rt[1] == 1 do
 		yield()
@@ -191,19 +191,25 @@ end
 
 -- 多 ip 拨号. 返回最先连接成功的 peer. 为空则连接超时
 -- 适合在协程环境使用
-TcpDial = function(ips, port, timeoutSec)
+NetDial = function(ips, port, timeoutMS, isKcp)
 	local rt = { 1 }
-	local dialer = xx.UvTcpLuaDialer.Create()
+	local dialer
+	if isKcp then 
+		dialer = xx.UvKcpLuaDialer.Create()
+	else
+		dialer = xx.UvTcpLuaDialer.Create()
+	end
 	dialer:OnAccept(function(peer)
 		rt[1] = peer
 	end)
-	dialer:Dial(ips, port, timeoutSec * 1000)
+	dialer:Dial(ips, port, timeoutMS)
 	local yield = yield
 	while rt[1] == 1 do
 		yield()
 	end
 	return rt[1];
 end
+
 
 
 

@@ -39,23 +39,28 @@ int Lua_Push(lua_State* const& L, T const& v)
 	}
 	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsShared_v<T>)
 	{
+		if (v) {
 #ifndef NDEBUG
-		if constexpr (std::is_pointer_v<T> && std::is_base_of_v<cocos2d::Ref, std::remove_pointer_t<T>>)
-		{
-			auto&& p = (T*)lua_newuserdata(L, sizeof(T) + sizeof(size_t));	// ..., &o + versionNumber
-			*(size_t*)(p + 1) = cocos2d::Ref::versionNumber;	// 填充自增版本号
-			cocos2d::Ref::ptrs[(void*)v] = cocos2d::Ref::versionNumber;
-			++cocos2d::Ref::versionNumber;
-			new (p) T(v);	// copy
-		}
-		else
+			if constexpr (std::is_pointer_v<T> && std::is_base_of_v<cocos2d::Ref, std::remove_pointer_t<T>>)
+			{
+				auto&& p = (T*)lua_newuserdata(L, sizeof(T) + sizeof(size_t));	// ..., &o + versionNumber
+				*(size_t*)(p + 1) = cocos2d::Ref::versionNumber;	// 填充自增版本号
+				cocos2d::Ref::ptrs[(void*)v] = cocos2d::Ref::versionNumber;
+				++cocos2d::Ref::versionNumber;
+				new (p) T(v);	// copy
+			}
+			else
 #endif
-		{
-			auto&& p = lua_newuserdata(L, sizeof(T));				// ..., &o
-			new (p) T(v);	// copy. need gc mt func release
+			{
+				auto&& p = lua_newuserdata(L, sizeof(T));				// ..., &o
+				new (p) T(v);	// copy. need gc mt func release
+			}
+			lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
+			lua_setmetatable(L, -2);									// ..., &o
 		}
-		lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
-		lua_setmetatable(L, -2);									// ..., &o
+		else {
+			lua_pushnil(L);
+		}
 	}
 	else if constexpr (
 		std::is_same_v<T, cocos2d::Vector<cocos2d::Node*>>

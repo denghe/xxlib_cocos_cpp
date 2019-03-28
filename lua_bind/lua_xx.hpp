@@ -7,6 +7,14 @@ inline void Lua_Register_xx(lua_State* const& L)
 	lua_pushvalue(L, -1);											// xx, xx
 	lua_setglobal(L, LuaKey_xx);									// xx
 
+	// 映射几个工具函数
+
+	Lua_NewFunc(L, "NowSteadyEpochMS", [](lua_State* L)
+	{
+		return Lua_Pushs(L, xx::NowSteadyEpochMS());
+	});
+
+
 	// 创建 xx.Xxxxxx 元表及函数
 	Lua_Register_Uv(L);
 	Lua_Register_UvResolver(L);

@@ -16,9 +16,16 @@ inline void Lua_Register_UvKcpLuaPeer(lua_State* const& L)
 	{
 		auto&& t = Lua_ToTuple<xx::UvKcpLuaPeer_s, bool>(L, "Send error! need 2 args: self, bool includePort");
 		assert(std::get<0>(t));
-		std::string s;
-		xx::Uv::FillIP(std::get<0>(t)->addr, s, std::get<1>(t));
-		return Lua_Pushs(L, s);
+		auto&& ip = std::get<0>(t)->GetIP();
+		return Lua_Pushs(L, ip);
+	});
+
+	Lua_NewFunc(L, "ResetTimeoutMS", [](lua_State* L)
+	{
+		auto&& t = Lua_ToTuple<xx::UvKcpLuaPeer_s, int>(L, "Send error! need 2 args: self, bool includePort");
+		assert(std::get<0>(t));
+		std::get<0>(t)->ResetTimeoutMS(std::get<1>(t));
+		return 0;
 	});
 
 	Lua_NewFunc(L, "SendPush", [](lua_State* L)
