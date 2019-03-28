@@ -65,8 +65,6 @@ require "NET_class.lua"
 
 go(function()
 	local yield = yield
-	local bb = BBuffer.Create()
-
 ::LabRetry::
 	local ips = GetIPList("192.168.1.254", 2000)
 	if #ips == 0 then
@@ -78,7 +76,7 @@ go(function()
 		print(ip)
 	end
 	print("dial.")
-	local peer = NetDial(ips, 12345, 2000, false)
+	local peer = NetDial(ips, 12345, 2000, true)
 	if peer == nil then
 		print("dial timeout")
 		goto LabRetry
@@ -87,17 +85,27 @@ go(function()
 
 	-- todo: set timeout
 
+	peer:OnReceivePush(function(bb)
+		print("recv")
+		print(bb)
+	end)
+
 	local pkg = NET_Generic_Ping.Create()
 	pkg.ticks = xx.NowSteadyEpochMS()
-	bb:Clear()
-	bb:WriteRoot(pkg)
-	peer:SendPush(bb)
+	NetSendPush(peer, pkg)
 
-	while not peer:Disposed() do
+	print("wait disconnect")
+	while true do
+		if peer:Disposed() then
+			break
+		else
+			print(".")
+		end
 		yield()
 	end
 	print("disposed.")
 end)
+
 
 --[[
 go(function()

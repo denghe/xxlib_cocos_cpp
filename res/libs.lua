@@ -210,6 +210,15 @@ NetDial = function(ips, port, timeoutMS, isKcp)
 	return rt[1];
 end
 
+-- 公用序列化容器
+local NetBB = BBuffer.Create()
+
+-- 序列化包并发送
+NetSendPush = function(peer, pkg)
+	NetBB:Clear()
+	NetBB:WriteRoot(pkg)
+	peer:SendPush(NetBB)
+end
 
 
 
