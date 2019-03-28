@@ -66,7 +66,7 @@ require "PKG_class.lua"
 go(function()
 	local yield = yield
 ::LabRetry::
-	local ips = GetIPList("127.0.0.1", 2000)
+	local ips = GetIPList("10.0.0.11", 2000)
 	if #ips == 0 then
 		print("get ip timeout")
 		goto LabRetry 
