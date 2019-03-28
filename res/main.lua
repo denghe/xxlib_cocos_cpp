@@ -61,12 +61,12 @@ gY7 = gH2
 gY8 = gH2
 gY9 = gH2
 
-require "NET_class.lua"
+require "PKG_class.lua"
 
 go(function()
 	local yield = yield
 ::LabRetry::
-	local ips = GetIPList("192.168.1.254", 2000)
+	local ips = GetIPList("127.0.0.1", 2000)
 	if #ips == 0 then
 		print("get ip timeout")
 		goto LabRetry 
@@ -84,14 +84,16 @@ go(function()
 	print(peer:GetIP(false) .. " send ping")
 
 	-- todo: set timeout
+	peer:ResetTimeoutMS(3000)
 
 	peer:OnReceivePush(function(bb)
 		print("recv")
 		print(bb)
 	end)
 
-	local pkg = NET_Generic_Ping.Create()
-	pkg.ticks = xx.NowSteadyEpochMS()
+	local pkg = PKG_Error.Create()
+	pkg.id = 123
+	pkg.txt = "asdf"
 	NetSendPush(peer, pkg)
 
 	print("wait disconnect")
@@ -99,11 +101,12 @@ go(function()
 		if peer:Disposed() then
 			break
 		else
-			print(".")
+			--print(".")
 		end
 		yield()
 	end
 	print("disposed.")
+	goto LabRetry;
 end)
 
 
