@@ -984,6 +984,7 @@ namespace xx {
 	};
 
 	struct UvKcpBasePeer : UvUpdate {
+		using UvUpdate::UvUpdate;
 		std::shared_ptr<UvKcpUdp> udp;				// fill by creater
 		Guid guid;									// fill by creater
 		int64_t createMS = 0;						// fill by creater
@@ -993,8 +994,6 @@ namespace xx {
 		sockaddr_in6 addr;							// for Send. fill by owner Unpack
 		std::function<void()> OnDisconnect;
 		inline virtual void Disconnect() noexcept { if (OnDisconnect) OnDisconnect(); }
-
-		UvKcpBasePeer(Uv& uv) : UvUpdate(uv), guid(false) {}
 
 		inline std::string GetIP() {
 			std::string ip;
