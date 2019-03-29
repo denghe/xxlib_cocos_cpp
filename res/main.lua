@@ -61,75 +61,58 @@ gY7 = gH2
 gY8 = gH2
 gY9 = gH2
 
-require "PKG_class.lua"
+require "NET_class.lua"
 
+local StartClient = function(domain, port, timeoutMS, useKcp)
 go(function()
 	local yield = yield
+	local indent = "tcp: "
+	if useKcp then
+		indent = "                                                                 || kcp: "
+	end
 ::LabRetry::
-	local ips = GetIPList("10.0.0.11", 2000)
+	local ips = GetIPList(domain, timeoutMS)
 	if #ips == 0 then
-		print("get ip timeout")
+		print(indent .. "get ip timeout")
 		goto LabRetry 
 	end
-	print("get ip success. ips: ")
+	print(indent.."get ip success. ips: ")
 	for _, ip in ipairs(ips) do
-		print(ip)
+		print(indent ..ip)
 	end
-	print("dial.")
-	local peer = NetDial(ips, 12345, 2000, true)
+	print(indent.. "dial.")
+	local peer = NetDial(ips, port, timeoutMS, useKcp)
 	if peer == nil then
-		print("dial timeout")
+		print(indent.. "dial timeout")
 		goto LabRetry
 	end
-	print(peer:GetIP(false) .. " send ping")
+	print(indent..peer:GetIP(false) .." send ping")
 
 	-- todo: set timeout
 	peer:ResetTimeoutMS(3000)
 
 	peer:OnReceivePush(function(bb)
-		print("recv")
+		io.write(indent.."recv ")
 		print(bb)
 	end)
 
-	local pkg = PKG_Error.Create()
-	pkg.id = 123
-	pkg.txt = "asdf"
+	local pkg = NET_Generic_Ping.Create()
+	pkg.ticks = 123--xx.NowSteadyEpochMS()
 	NetSendPush(peer, pkg)
 
-	print("wait disconnect")
+	print(indent.."wait disconnect")
 	while true do
 		if peer:Disposed() then
 			break
-		else
-			--print(".")
+--		else
+--			print(".")
 		end
 		yield()
 	end
-	print("disposed.")
-	goto LabRetry;
+	print(indent.."disposed.")
+	goto LabRetry
 end)
+end
 
-
---[[
-go(function()
-::LabRetry::
-	local ips = GetIPList("www.baidu.com", 2000)
-	if #ips == 0 then
-		print("get ip timeout")
-		goto LabRetry 
-	end
-	for _, ip in ipairs(ips) do
-		print(ip)
-	end
-	local peer = NetDial(ips, 80, 2000)
-	if peer == nil then
-		print("dial timeout")
-		goto LabRetry
-	end
-	print(peer:GetIP(false) .. " connected")
-	while not peer:Disposed() do
-		yield()
-	end
-	print("disconnected.")
-end)
-]]
+StartClient("192.168.1.254", 12345, 2000, true)
+StartClient("192.168.1.254", 12345, 2000, false)
