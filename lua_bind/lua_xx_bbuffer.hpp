@@ -125,7 +125,7 @@ struct Lua_BBuffer : public xx::BBuffer
 		return 0;
 	}
 
-	// 创建, 无参数
+	// 创建
 	inline static int Create(lua_State* L)
 	{
 		auto&& self = *(Lua_BBuffer**)lua_newuserdata(L, sizeof(void*));	// ..., ud

@@ -70,6 +70,8 @@ bool IsNetworkReachable()
 #include "extensions/cocos-ext.h"
 #include "spine/spine-cocos2dx.h"
 
+#include "CatchFish.h"
+
 #include "lua_all.hpp"
 
 

@@ -64,6 +64,44 @@ inline void Lua_Register_FileUtils(lua_State* const& L)
 		}
 	});
 
+	Lua_NewFunc(L, "getBBufferFromFile", [](lua_State* L)
+	{
+		auto&& numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			auto&& t = Lua_ToTuple<std::string>(L);
+			auto&& data = cocos2d::FileUtils::getInstance()->getDataFromFile(std::get<0>(t));
+			Lua_BBuffer::Create(L);								// 直接用 Data 的内存
+			auto&& Lbb = *(xx::BBuffer**)lua_touserdata(L, -1);
+			Lbb->Reset(data.getBytes(), data.getSize());
+			data.fastSet(nullptr, 0);
+			return 1;
+		}
+		case 2:
+		{
+			auto&& t = Lua_ToTuple<std::string, Lua_Func>(L);
+			cocos2d::FileUtils::getInstance()->getDataFromFile(std::get<0>(t), [f = std::move(std::get<1>(t))](cocos2d::Data data)
+			{
+				assert(!lua_gettop(gLua));
+				auto&& L = gLua;
+
+				Lua_Push(L, f);
+				Lua_BBuffer::Create(L);								// 直接用 Data 的内存
+				auto&& Lbb = *(xx::BBuffer**)lua_touserdata(L, -1);
+				Lbb->Reset(data.getBytes(), data.getSize());
+				data.fastSet(nullptr, 0);
+				Lua_PCall(L, 1);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "getDataFromFile error! need 1 ~ 2 args: string filename, function<void(Data)> callback");
+		}
+	});
+
 	Lua_NewFunc(L, "getFileDataFromZip", [](lua_State* L)
 	{
 		auto&& t = Lua_ToTuple<std::string, std::string>(L, "getFileDataFromZip error! need 2 args: string zipFilePath, filename");
@@ -221,6 +259,40 @@ inline void Lua_Register_FileUtils(lua_State* const& L)
 			return luaL_error(L, "%s", "writeDataToFile error! need 2 ~ 3 args: Data data, string fullPath, function<void(bool)> callback");
 		}
 	});
+
+	Lua_NewFunc(L, "writeBBufferToFile", [](lua_State* L)
+	{
+		auto&& numArgs = lua_gettop(L);
+		switch (numArgs)
+		{
+		case 1:
+		{
+			auto&& t = Lua_ToTuple<Lua_BBuffer*, std::string>(L);
+			cocos2d::Data data;														// data 临时引用 bb 内存
+			data.fastSet(std::get<0>(t)->buf, std::get<0>(t)->len);
+			auto&& r = cocos2d::FileUtils::getInstance()->writeDataToFile(data, std::get<1>(t));
+			data.fastSet(nullptr, 0);
+			return Lua_Pushs(L, r);
+		}
+		case 2:
+		{
+			auto&& t = Lua_ToTuple<Lua_BBuffer*, std::string, Lua_Func>(L);
+			cocos2d::Data data;														// 将 bb 内存移到 data
+			data.fastSet(std::get<0>(t)->buf, std::get<0>(t)->len);
+			std::get<0>(t)->Reset();
+			cocos2d::FileUtils::getInstance()->writeDataToFile(std::move(data), std::get<1>(t), [f = std::move(std::get<2>(t))](bool successful)
+			{
+				assert(!lua_gettop(gLua));
+				Lua_PCall(gLua, f, successful);
+				lua_settop(gLua, 0);
+			});
+			return 0;
+		}
+		default:
+			return luaL_error(L, "%s", "writeDataToFile error! need 2 ~ 3 args: Data data, string fullPath, function<void(bool)> callback");
+		}
+	});
+
 
 	// 不实现 writeValueMapToFile writeValueVectorToFile writeValueVectorToFile getSuitableFOpen getValueVectorFromFile
 

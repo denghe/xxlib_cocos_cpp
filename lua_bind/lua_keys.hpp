@@ -12,6 +12,7 @@ inline const char* const LuaKey_cc = "cc";
 inline const char* const LuaKey_cca = "cca";
 inline const char* const LuaKey_spine = "spine";
 inline const char* const LuaKey_sys = "sys";
+inline const char* const LuaKey_ext = "ext";
 
 
 struct Lua_BBuffer;
@@ -719,3 +720,13 @@ struct TypeNames<xx::UvKcpLuaPeer_s>
 
 
 // todo: more
+
+
+
+
+
+template<>
+struct TypeNames<CatchFish_s>
+{
+	inline static const char* value = "CatchFish";
+};

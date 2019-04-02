@@ -61,58 +61,28 @@ gY7 = gH2
 gY8 = gH2
 gY9 = gH2
 
-require "NET_class.lua"
 
-local StartClient = function(domain, port, timeoutMS, useKcp)
 go(function()
 	local yield = yield
-	local indent = "tcp: "
-	if useKcp then
-		indent = "                                                                 || kcp: "
-	end
-::LabRetry::
-	local ips = GetIPList(domain, timeoutMS)
-	if #ips == 0 then
-		print(indent .. "get ip timeout")
-		goto LabRetry 
-	end
-	print(indent.."get ip success. ips: ")
-	for _, ip in ipairs(ips) do
-		print(indent ..ip)
-	end
-	print(indent.. "dial.")
-	local peer = NetDial(ips, port, timeoutMS, useKcp)
-	if peer == nil then
-		print(indent.. "dial timeout")
-		goto LabRetry
-	end
-	print(indent..peer:GetIP(false) .." send ping")
-
-	-- todo: set timeout
-	peer:ResetTimeoutMS(3000)
-
-	peer:OnReceivePush(function(bb)
-		io.write(indent.."recv ")
-		print(bb)
-	end)
-
-	local pkg = NET_Generic_Ping.Create()
-	pkg.ticks = 123--xx.NowSteadyEpochMS()
-	NetSendPush(peer, pkg)
-
-	print(indent.."wait disconnect")
-	while true do
-		if peer:Disposed() then
-			break
---		else
---			print(".")
+	local cf = CatchFish.Create()
+	if cf == nil then
+		print("CatchFish create fail.")
+	else
+		local r = cf:Init("cfg.bin")
+		if r ~= 0 then
+			print("CatchFish Init fail. r = ".. r)
+		else
+			while true do
+				local r = cf:Update()
+				if r ~= 0 then
+					print("CatchFish Update fail. r = ".. r)
+					break
+				end
+				yield()
+			end
 		end
-		yield()
+		-- todo: get result from cf
+		cf:Dispose()
+		cf = nil
 	end
-	print(indent.."disposed.")
-	goto LabRetry
 end)
-end
-
-StartClient("192.168.1.254", 12345, 2000, true)
-StartClient("192.168.1.254", 12345, 2000, false)

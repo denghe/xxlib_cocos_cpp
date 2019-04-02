@@ -26,12 +26,11 @@ inline cocos2d::Vector<cocos2d::SpriteFrame*> gSpriteFrames;
 #include "lua_xx.hpp"
 
 #include "lua_cc.hpp"
-
 #include "lua_cca.hpp"
-
 #include "lua_spine.hpp"
-
 #include "lua_sys.hpp"
+
+#include "lua_ext.hpp"
 
 // 读取 print 的参数
 inline int get_string_for_print(lua_State* L, std::string* out)
@@ -122,6 +121,9 @@ inline int Lua_Main(lua_State* L)
 
 	// 加载 sys.* 对象 & 函数映射
 	Lua_Register_sys(L);
+
+	// 加载 ext.* 对象 & 函数映射
+	Lua_Register_ext(L);
 
 	// 执行 main.lua
 	if (int r = luaL_dostring(L, "require \"main.lua\""))			//
