@@ -398,6 +398,9 @@
     <ClInclude Include="..\Classes\PKG_class.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\xxlib\xx_pos.h">
+      <Filter>xxlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
