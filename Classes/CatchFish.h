@@ -3,6 +3,8 @@
 #include "PKG_class.h"
 #include "chipmunk.h"
 
+// todo: 切割下面的类到独立文件
+
 struct Physics : PKG::CatchFish::Configs::Physics {
 	cpSpace* space = nullptr;
 	inline void InitCascade() noexcept override {
@@ -49,8 +51,9 @@ using Player_w = std::weak_ptr<Player>;
 
 
 struct Fish : PKG::CatchFish::Fish {
-	// todo: cocos sprite, node...
 	PKG::CatchFish::Configs::Fish* cfg = nullptr;
+	// todo: cocos sprite, node...
+	cocos2d::Sprite* sprite = nullptr;
 
 	inline void InitCascade() noexcept override {
 		cfg = &*::cfg->fishs->At(0);
@@ -71,9 +74,14 @@ struct Fish : PKG::CatchFish::Fish {
 		frameRatio = 1;
 		reverse = false;
 
-
+		
 		// todo: sprite create ....
 	}
+
+	inline virtual int UpdateVoid() noexcept override {
+		// todo: move
+		return 0;
+	};
 
 	~Fish() {
 		// todo: sprite release ....
@@ -82,7 +90,29 @@ struct Fish : PKG::CatchFish::Fish {
 using Fish_s = std::shared_ptr<Fish>;
 using Fish_w = std::weak_ptr<Fish>;
 
+
+
+struct SpriteFrame : PKG::CatchFish::Configs::SpriteFrame {
+	cocos2d::SpriteFrame* spriteFrame = nullptr;
+	inline void InitCascade() noexcept override {
+		auto&& sfc = cocos2d::SpriteFrameCache::getInstance();
+		sfc->addSpriteFramesWithFile(*this->textureName);
+		spriteFrame = sfc->getSpriteFrameByName(*this->frameName);
+		spriteFrame->retain();
+		// todo: check spriteFrame null
+		// todo: InitCascade shoud be return int value
+	}
+	~SpriteFrame() {
+		if (spriteFrame) {
+			spriteFrame->release();
+			spriteFrame = nullptr;
+		}
+	}
+};
+
 // todo: more 
+
+// todo: 声明实现分离, 将实现切割到独立文件
 
 struct CatchFish {
 	CatchFish() {
@@ -90,6 +120,8 @@ struct CatchFish {
 		xx::BBuffer::Register<Physics>(xx::TypeId_v<PKG::CatchFish::Configs::Physics>);
 		xx::BBuffer::Register<Scene>(xx::TypeId_v<PKG::CatchFish::Scene>);
 		xx::BBuffer::Register<Player>(xx::TypeId_v<PKG::CatchFish::Player>);
+		xx::BBuffer::Register<Fish>(xx::TypeId_v<PKG::CatchFish::Fish>);
+		xx::BBuffer::Register<SpriteFrame>(xx::TypeId_v<PKG::CatchFish::Configs::SpriteFrame>);
 		// todo: more
 	}
 	CatchFish(CatchFish&& o) = default;
@@ -157,9 +189,11 @@ struct CatchFish {
 		// todo
 	}
 
+	// todo: 工具函数独立文件放置以便共享
 
-	static const int ScreenWidth = 1280;
-	static const int ScreenHeight = 720;
+	static constexpr int ScreenWidth = 1280;
+	static constexpr int ScreenHeight = 720;
+	static constexpr float ScreenWidthRatio = float(ScreenWidth) / float(ScreenWidth + ScreenHeight);
 
 	// 填充随机生成的有限角度的能立即出现在屏幕上的线段路径
 	// -45 ~ 45, 135 ~ 225 在这两段角度之间随机一个角度值,  + 180 之后的 45 度范围内再次随机一个角度, 用旋转函数转为两个坐标点. 连为1根直线, 最后找出安全出生框与直线的交点
@@ -170,7 +204,7 @@ struct CatchFish {
 		auto&& a = scene->rnd->Next(135, 225);
 		auto&& p1 = xx::Rotate(xx::Pos{ 1, 0 }, a / 180.0f * float(M_PI));
 		xx::Pos abs{ std::fabs(p1.x), std::fabs(p1.y) };
-		if (abs.x / w > abs.y / h) {
+		if (abs.x / (abs.x + abs.y) > ScreenWidthRatio) {
 			p1 = p1 * (w / abs.x);
 		}
 		else {
@@ -180,7 +214,7 @@ struct CatchFish {
 		auto&& p2 = xx::Rotate(xx::Pos{ 1, 0 }, a / 180.0f * float(M_PI));
 		abs.x = std::fabs(p2.x);
 		abs.y = std::fabs(p2.y);
-		if (abs.x / w> abs.y / h) {
+		if (abs.x / (abs.x + abs.y) > ScreenWidthRatio) {
 			p2 = p2 * (w / abs.x);
 		}
 		else {
