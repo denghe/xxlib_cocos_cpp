@@ -18,6 +18,7 @@
 			spriteFrame->release();
 			spriteFrame = nullptr;
 		}
+		// todo: 卸载贴图?
 #endif
 	}
 };

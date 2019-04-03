@@ -1,6 +1,21 @@
 ﻿inline int CatchFish::Init(std::string cfgName) {
 #ifdef CC_TARGET_PLATFORM
 	::cc_scene = cocos2d::Director::getInstance()->getRunningScene();
+
+	auto listener = cocos2d::EventListenerTouchAllAtOnce::create();
+	listener->onTouchesBegan = [](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e) {
+		touchs.AddRange(ts.data(), ts.size());
+	};
+	listener->onTouchesMoved = [](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e) {
+	};
+	listener->onTouchesEnded = [](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e) {
+		for (auto&& t : ts) {
+			touchs.Remove(t);
+		}
+	};
+	listener->onTouchesCancelled = listener->onTouchesEnded;
+	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, cc_scene);
+
 #endif
 	// 从文件加载 cfg. 出问题返回非 0
 	{
@@ -31,12 +46,12 @@
 	selfPlayer = plr;
 	plr->scene = ::scene;
 	players.Add(std::move(plr));
-
 	scene->players->Add(plr);
+
+	//auto&& cannon = xx::Make<
 
 	auto&& fish = MakeRandomFish();
 	scene->fishs->Add(fish);
 
 	return 0;
 }
-
