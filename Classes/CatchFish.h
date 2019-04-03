@@ -43,11 +43,27 @@ struct SpriteFrame : PKG::CatchFish::Configs::SpriteFrame {
 struct Physics : PKG::CatchFish::Configs::Physics {
 	cpSpace* space = nullptr;
 	inline void InitCascade() noexcept override {
-		// todo: space = ......
+		assert(!space);
+		static_assert(sizeof(cpVect) == sizeof(xx::Pos));
+		if (polygons) {
+			space = cpSpaceNew();
+			auto&& body = cpSpaceGetStaticBody(space);
+			for (auto&& polygon : *polygons) {
+				auto&& shape = cpPolyShapeNew(body, (int)polygon->len, (cpVect*)polygon->buf, cpTransformIdentity, 0.0);
+				cpSpaceAddShape(space, shape);
+			}
+		}
 	}
 	~Physics() {
 		if (space) {
-			// todo: release
+			cpSpaceEachShape(space, [](cpShape *shape, void *data) {
+				cpSpaceAddPostStepCallback((cpSpace*)data, [](cpSpace *space, void *key, void *data) {
+					cpSpaceRemoveShape(space, (cpShape *)key);
+					cpShapeFree((cpShape *)key);
+				}, shape, nullptr);
+			}, space);
+			cpSpaceFree(space);
+			space = nullptr;
 		}
 	}
 };
@@ -124,7 +140,7 @@ struct Fish : PKG::CatchFish::Fish {
 		cc_scene->addChild(debugNode);
 #endif
 #endif
-	}
+}
 
 	inline virtual void DrawUpdate() {
 #ifdef CC_TARGET_PLATFORM
@@ -362,7 +378,7 @@ struct CatchFish {
 				}
 			}
 		}
-		
+
 		// test: 自动补鱼
 		while (fishs.len < 10000) {
 			fishs.Add(MakeRandomFish());
