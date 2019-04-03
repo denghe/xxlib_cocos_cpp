@@ -185,7 +185,16 @@
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\CatchFish.h" />
+    <ClInclude Include="..\Classes\CatchFish_Init.h" />
+    <ClInclude Include="..\Classes\CatchFish_MakeBeeline.h" />
+    <ClInclude Include="..\Classes\CatchFish_MakeRandomFish.h" />
+    <ClInclude Include="..\Classes\CatchFish_Update.h" />
+    <ClInclude Include="..\Classes\Fish.h" />
+    <ClInclude Include="..\Classes\Physics.h" />
     <ClInclude Include="..\Classes\PKG_class.h" />
+    <ClInclude Include="..\Classes\Player.h" />
+    <ClInclude Include="..\Classes\Scene.h" />
+    <ClInclude Include="..\Classes\SpriteFrame.h" />
     <ClInclude Include="..\lua\src\lapi.h" />
     <ClInclude Include="..\lua\src\lauxlib.h" />
     <ClInclude Include="..\lua\src\lcode.h" />

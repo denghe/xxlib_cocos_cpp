@@ -147,7 +147,7 @@ namespace xx {
 		}
 
 		// 级联相关( 主用于遍历调用生成物派生类 override 的代码 )
-		inline virtual void InitCascade() noexcept {};
+		inline virtual int InitCascade() noexcept { return 0; };
 
 		// useful funcs
 		inline virtual int UpdateVoid() noexcept { return 0; };

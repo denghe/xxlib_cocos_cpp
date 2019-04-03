@@ -33,6 +33,12 @@ namespace xx
 			float dy = v.y - y;
 			return std::sqrtf(dx * dx + dy * dy);
 		}
+
+#ifdef CC_TARGET_PLATFORM
+		inline operator cocos2d::Vec2() const {
+			return *(cocos2d::Vec2*)this;
+		}
+#endif
 	};
 
 	// 适配 Pos 之 ToString
