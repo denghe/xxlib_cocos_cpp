@@ -364,7 +364,7 @@ struct CatchFish {
 		}
 		
 		// test: 自动补鱼
-		while (fishs.len < 1000) {
+		while (fishs.len < 10000) {
 			fishs.Add(MakeRandomFish());
 		}
 		return 0;
@@ -388,7 +388,13 @@ struct CatchFish {
 	inline PKG::CatchFish::Way_s MakeBeeline(int const& itemRadius) {
 		auto&& w = (ScreenWidth + itemRadius) / 2.0f;
 		auto&& h = (ScreenHeight + itemRadius) / 2.0f;
-		auto&& a = scene->rnd->Next(135, 225);
+		auto&& a = scene->rnd->Next(180);
+		if (a < 90) {
+			a -= 45;
+		}
+		else {
+			a = a - 90 + 135;
+		}
 		auto&& p1 = xx::Rotate(xx::Pos{ 1, 0 }, a / 180.0f * float(M_PI));
 		xx::Pos abs{ std::fabs(p1.x), std::fabs(p1.y) };
 		if (abs.x / (abs.x + abs.y) > ScreenWidthRatio) {
@@ -406,10 +412,6 @@ struct CatchFish {
 		}
 		else {
 			p2 = p2 * (h / abs.y);
-		}
-
-		if (scene->rnd->Next(2) == 1) {
-			std::swap(p1, p2);
 		}
 		auto&& way = xx::Make<PKG::CatchFish::Way>();
 		xx::MakeTo(way->points);
