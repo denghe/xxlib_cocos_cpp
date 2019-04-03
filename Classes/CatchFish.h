@@ -5,6 +5,38 @@
 
 // todo: 切割下面的类到独立文件
 
+#define DRAW_PHYSICS_POLYGON 0
+
+// 放在全局方便到处使用. 在 CatchFish.Init 里赋值
+struct Scene;
+inline Scene* scene = nullptr;
+inline PKG::CatchFish::Configs::Config* cfg = nullptr;
+inline cocos2d::Scene* cc_scene = nullptr;
+
+
+cocos2d::Vec2& Vec2(xx::Pos& pos) {
+	return *(cocos2d::Vec2*)&pos;
+}
+
+struct SpriteFrame : PKG::CatchFish::Configs::SpriteFrame {
+	cocos2d::SpriteFrame* spriteFrame = nullptr;
+	inline void InitCascade() noexcept override {
+		auto&& sfc = cocos2d::SpriteFrameCache::getInstance();
+		sfc->addSpriteFramesWithFile(*this->plistName);
+		spriteFrame = sfc->getSpriteFrameByName(*this->frameName);
+		spriteFrame->retain();
+		// todo: check spriteFrame null
+		// todo: InitCascade shoud be return int value
+	}
+	~SpriteFrame() {
+		if (spriteFrame) {
+			spriteFrame->release();
+			spriteFrame = nullptr;
+		}
+	}
+};
+
+
 struct Physics : PKG::CatchFish::Configs::Physics {
 	cpSpace* space = nullptr;
 	inline void InitCascade() noexcept override {
@@ -30,9 +62,6 @@ struct Scene : PKG::CatchFish::Scene {
 using Scene_s = std::shared_ptr<Scene>;
 using Scene_w = std::weak_ptr<Scene>;
 
-// 放在全局方便到处使用. 在 CatchFish.Init 里赋值
-inline Scene* scene = nullptr;
-inline PKG::CatchFish::Configs::Config* cfg = nullptr;
 
 struct Player : PKG::CatchFish::Player {
 	// 所在场景
@@ -52,39 +81,181 @@ using Player_w = std::weak_ptr<Player>;
 
 struct Fish : PKG::CatchFish::Fish {
 	PKG::CatchFish::Configs::Fish* cfg = nullptr;
-	// todo: cocos sprite, node...
-	cocos2d::Sprite* sprite = nullptr;
 
 	inline void InitCascade() noexcept override {
-		cfg = &*::cfg->fishs->At(0);
-		if (cfg->minCoin == cfg->maxCoin) {
-			this->coin = cfg->minCoin;
-		}
-		else {
-			this->coin = scene->rnd->Next(cfg->minCoin, cfg->maxCoin + 1);
-		}
+		assert(!cfg);
+		cfg = &*::cfg->fishs->At(cfgId);
 
-		//cfgId = 0;
-		speedScale = 1;
-		scale = 1;
-		wayIndex = 0;
-		wayPointIndex = 0;
-		wayPointDistance = 0;
-		spriteFrameIndex = 0;
-		frameRatio = 1;
-		reverse = false;
+		DrawInit();
+	}
 
-		
-		// todo: sprite create ....
+#ifdef CC_TARGET_PLATFORM
+	cocos2d::Sprite* body = nullptr;
+	cocos2d::Sprite* shadow = nullptr;
+#if DRAW_PHYSICS_POLYGON
+	cocos2d::DrawNode* debugNode = nullptr;
+#endif
+#endif
+
+	inline virtual void DrawInit() {
+#ifdef CC_TARGET_PLATFORM
+		assert(!body);
+		body = cocos2d::Sprite::create();
+		body->setGlobalZOrder(cfg->zOrder);
+		body->retain();
+
+		shadow = cocos2d::Sprite::create();
+		shadow->setGlobalZOrder(cfg->zOrder);
+		shadow->setColor(cocos2d::Color3B::BLACK);
+		shadow->setOpacity(125);
+		shadow->retain();
+#if DRAW_PHYSICS_POLYGON
+		debugNode = cocos2d::DrawNode::create();
+		debugNode->setGlobalZOrder(cfg->zOrder);
+		debugNode->retain();
+#endif
+		DrawUpdate();
+		cc_scene->addChild(shadow);
+		cc_scene->addChild(body);
+#if DRAW_PHYSICS_POLYGON
+		cc_scene->addChild(debugNode);
+#endif
+#endif
+	}
+
+	inline virtual void DrawUpdate() {
+#ifdef CC_TARGET_PLATFORM
+		assert(body);
+		auto&& sf = xx::As<SpriteFrame>(cfg->moveFrames->At(spriteFrameIndex)->frame)->spriteFrame;
+
+		// 设鱼的帧图, 坐标, 方向, 缩放
+		body->setSpriteFrame(sf);
+		body->setRotation(-angle);
+		body->setPosition(Vec2(pos));
+		body->setScale(scale * cfg->scale);
+
+		shadow->setSpriteFrame(sf);
+		shadow->setRotation(-angle);
+		shadow->setPosition(Vec2(pos + cfg->shadowOffset));
+		shadow->setScale(scale * cfg->scale * cfg->shadowScale);
+#if DRAW_PHYSICS_POLYGON
+		// 碰撞多边形显示
+		debugNode->setPosition(Vec2(pos));
+		debugNode->setRotation(-angle);
+		debugNode->setScale(scale * cfg->scale);
+		auto&& sfs = cfg->moveFrames->At(spriteFrameIndex);
+		if (sfs->physics) {
+			debugNode->clear();
+			debugNode->drawCircle({ 0,0 }, cfg->maxDetectRadius, 0, 50, true, cocos2d::Color4F::RED);
+			for (auto&& polygon : *sfs->physics->polygons) {
+				for (size_t i = 0; i < polygon->len - 1; ++i) {
+					debugNode->drawLine(Vec2(polygon->At(i)), Vec2(polygon->At(i + 1)), cocos2d::Color4F::GREEN);
+				}
+				debugNode->drawLine(Vec2(polygon->At(0)), Vec2(polygon->At(polygon->len - 1)), cocos2d::Color4F::GREEN);
+			}
+		}
+#endif
+#endif
+	}
+
+	inline virtual void DrawClear() {
+#ifdef CC_TARGET_PLATFORM
+		if (!body) return;
+
+		if (body->getParent()) {
+			body->removeFromParent();
+		}
+		body->release();
+		body = nullptr;
+
+		if (shadow->getParent()) {
+			shadow->removeFromParent();
+		}
+		shadow->release();
+		shadow = nullptr;
+
+#if DRAW_PHYSICS_POLYGON
+		if (debugNode->getParent()) {
+			debugNode->removeFromParent();
+		}
+		debugNode->release();
+		debugNode = nullptr;
+#endif
+#endif
 	}
 
 	inline virtual int UpdateVoid() noexcept override {
-		// todo: move
+		// 取到当前帧结束时应该前进的距离
+		auto&& dist = cfg->moveFrames->At(spriteFrameIndex)->moveDistance * speedScale;
+
+		// 帧下标循环前进
+		if (spriteFrameIndex + 1 < (int)cfg->moveFrames->len) {
+			++spriteFrameIndex;
+		}
+		else {
+			spriteFrameIndex = 0;
+		}
+
+		// 定位到轨迹
+		auto&& way = this->way ? this->way : cfg->ways->At(wayIndex);
+
+	LabKeepMoving:
+		// 试累加鱼当前鱼点移动距离. 如果跨点, 则用多个点的距离来凑够
+		// 如果累加距离之后跨点了, 则将 dist 视作可能跨更多点的距离容器, 继续用下一个点的距离从中减去
+
+		auto&& p = &way->points->At(wayPointIndex);
+		auto&& left = p->distance - wayPointDistance;
+		if (dist > left) {
+			// 循环鱼线: 最后一个点指向第一个点
+			if (way->loop) {
+				// 从 dist 中减去当前鱼线点剩余距离
+				dist -= left;
+				wayPointDistance = 0;
+
+				// 指向下一个鱼线点, 如果到终点, 就指向起点
+				++wayPointIndex;
+				if (wayPointIndex == way->points->len) {
+					wayPointIndex = 0;
+				}
+
+				// 继续 while 从 dist 减 p->distance
+				goto LabKeepMoving;
+			}
+			// 如果还有下一个鱼线点存在( 最后一个点不算 )
+			else if (wayPointIndex + 2 < (int)way->points->len) {
+				// 从 dist 中减去当前鱼线点剩余距离
+				dist -= left;
+				wayPointDistance = 0;
+
+				// 指向下一个鱼线点
+				++wayPointIndex;
+
+				// 继续 while 从 dist 减 p->distance
+				goto LabKeepMoving;
+			}
+			else
+				return -1;			// 通知删鱼
+		}
+		else {
+			wayPointDistance += dist;
+		}
+
+		// 按当前鱼线点上已经前进的距离, 结合下一个点的坐标, 按比例修正 p 坐标 & 角度
+		if (wayPointIndex == way->points->len - 1) {
+			auto&& np = &way->points->At(0);
+			pos = p->pos + ((np->pos - p->pos) * (wayPointDistance / p->distance));
+		}
+		else {
+			pos = p->pos + (((p + 1)->pos - p->pos) * (wayPointDistance / p->distance));
+		}
+
+		angle = p->angle;
+		DrawUpdate();
 		return 0;
 	};
 
 	~Fish() {
-		// todo: sprite release ....
+		DrawClear();
 	}
 };
 using Fish_s = std::shared_ptr<Fish>;
@@ -92,23 +263,6 @@ using Fish_w = std::weak_ptr<Fish>;
 
 
 
-struct SpriteFrame : PKG::CatchFish::Configs::SpriteFrame {
-	cocos2d::SpriteFrame* spriteFrame = nullptr;
-	inline void InitCascade() noexcept override {
-		auto&& sfc = cocos2d::SpriteFrameCache::getInstance();
-		sfc->addSpriteFramesWithFile(*this->textureName);
-		spriteFrame = sfc->getSpriteFrameByName(*this->frameName);
-		spriteFrame->retain();
-		// todo: check spriteFrame null
-		// todo: InitCascade shoud be return int value
-	}
-	~SpriteFrame() {
-		if (spriteFrame) {
-			spriteFrame->release();
-			spriteFrame = nullptr;
-		}
-	}
-};
 
 // todo: more 
 
@@ -135,7 +289,31 @@ struct CatchFish {
 	Player_w selfPlayer;	// 指向玩家自己的 player
 
 
+	Fish_s MakeRandomFish() {
+		auto&& fish = xx::Make<Fish>();
+		fish->cfgId = 0;
+		fish->coin = 3;			// if minCoin < maxCoin    scene->rnd->Next(cfg->minCoin, cfg->maxCoin + 1);
+		fish->speedScale = 1;
+		fish->scale = 1;
+		fish->wayIndex = 0;
+		fish->wayPointIndex = 0;
+		fish->wayPointDistance = 0;
+		fish->spriteFrameIndex = 0;
+		fish->frameRatio = 1;
+		fish->reverse = false;
+		fish->way = MakeBeeline(cfg->fishs->At(0)->maxDetectRadius);		// 先随便生成一条轨迹
+
+		auto&& p = fish->way->points->At(fish->wayPointIndex);
+		fish->pos = p.pos;
+		fish->angle = p.angle;
+
+		fish->InitCascade();
+		return fish;
+	}
+
 	inline int Init(std::string cfgName) {
+		::cc_scene = cocos2d::Director::getInstance()->getRunningScene();
+
 		// 从文件加载 cfg. 出问题返回非 0
 		{
 			auto&& data = cocos2d::FileUtils::getInstance()->getDataFromFile(cfgName);
@@ -168,18 +346,28 @@ struct CatchFish {
 
 		scene->players->Add(plr);
 
-		auto&& fish = xx::Make<Fish>();
-		fish->cfgId = 0;
-		fish->InitCascade();	// fill cfg
-		fish->way = MakeBeeline(fish->cfg->maxDetectRadius);
-
+		auto&& fish = MakeRandomFish();
 		scene->fishs->Add(fish);
-
 
 		return 0;
 	}
 
 	inline int Update() {
+		// 遍历更新. 倒序扫描, 交换删除. 如果存在内部乱序删除的情况, 则需要 名单机制 或 标记机制 在更新结束之后挨个删掉
+		auto&& fishs = *scene->fishs;
+		if (fishs.len) {
+			for (size_t i = fishs.len - 1; i != -1; --i) {
+				if (fishs[i]->UpdateVoid()) {
+					fishs[fishs.len - 1]->indexAtContainer = i;
+					fishs.SwapRemoveAt(i);
+				}
+			}
+		}
+		
+		// test: 自动补鱼
+		if (fishs.len < 400) {
+			fishs.Add(MakeRandomFish());
+		}
 		return 0;
 	}
 

@@ -64,6 +64,9 @@ gY9 = gH2
 
 go(function()
 	local yield = yield
+	-- 暂缓一帧 ( 否则 Director getRunningScene 取不到 )
+	yield()
+	
 	local cf = CatchFish.Create()
 	if cf == nil then
 		print("CatchFish create fail.")
