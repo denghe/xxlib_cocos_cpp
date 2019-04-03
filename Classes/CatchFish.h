@@ -17,6 +17,9 @@ inline cocos2d::Scene* cc_scene = nullptr;
 cocos2d::Vec2& Vec2(xx::Pos& pos) {
 	return *(cocos2d::Vec2*)&pos;
 }
+cocos2d::Vec2 Vec2(xx::Pos const& pos) {
+	return *(cocos2d::Vec2*)&pos;
+}
 
 struct SpriteFrame : PKG::CatchFish::Configs::SpriteFrame {
 	cocos2d::SpriteFrame* spriteFrame = nullptr;
@@ -189,10 +192,7 @@ struct Fish : PKG::CatchFish::Fish {
 		auto&& dist = cfg->moveFrames->At(spriteFrameIndex)->moveDistance * speedScale;
 
 		// 帧下标循环前进
-		if (spriteFrameIndex + 1 < (int)cfg->moveFrames->len) {
-			++spriteFrameIndex;
-		}
-		else {
+		if (++spriteFrameIndex == cfg->moveFrames->len) {
 			spriteFrameIndex = 0;
 		}
 
@@ -213,8 +213,7 @@ struct Fish : PKG::CatchFish::Fish {
 				wayPointDistance = 0;
 
 				// 指向下一个鱼线点, 如果到终点, 就指向起点
-				++wayPointIndex;
-				if (wayPointIndex == way->points->len) {
+				if (++wayPointIndex == way->points->len) {
 					wayPointIndex = 0;
 				}
 
@@ -365,7 +364,7 @@ struct CatchFish {
 		}
 		
 		// test: 自动补鱼
-		if (fishs.len < 400) {
+		while (fishs.len < 1000) {
 			fishs.Add(MakeRandomFish());
 		}
 		return 0;

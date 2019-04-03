@@ -52,6 +52,7 @@ include_directories(
         xxlib
         lua/src
 		lua_bind
+		cocos2d/external/chipmunk/include/chipmunk
 )
 
 
