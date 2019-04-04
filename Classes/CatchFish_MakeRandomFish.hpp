@@ -16,6 +16,6 @@
 	fish->pos = p.pos;
 	fish->angle = p.angle;
 
-	fish->InitCascade();
+	fish->InitCascade(&*scene);
 	return fish;
 }

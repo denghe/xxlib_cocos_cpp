@@ -401,31 +401,37 @@
     <ClInclude Include="..\xxlib\xx_pos.h">
       <Filter>xxlib</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\SpriteFrame.h">
+    <ClInclude Include="..\Classes\SpriteFrame.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Physics.h">
+    <ClInclude Include="..\Classes\Physics.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Scene.h">
+    <ClInclude Include="..\Classes\Scene.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Player.h">
+    <ClInclude Include="..\Classes\Player.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Fish.h">
+    <ClInclude Include="..\Classes\Fish.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CatchFish_MakeBeeline.h">
+    <ClInclude Include="..\Classes\Cannon.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CatchFish_Update.h">
+    <ClInclude Include="..\Classes\CatchFish_MakeBeeline.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CatchFish_Init.h">
+    <ClInclude Include="..\Classes\CatchFish_Update.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CatchFish_MakeRandomFish.h">
+    <ClInclude Include="..\Classes\CatchFish_Init.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CatchFish_MakeRandomFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CatchFish.hpp">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

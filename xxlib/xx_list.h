@@ -263,17 +263,17 @@ namespace xx
 		void ToBBuffer(BBuffer& bb) const noexcept override;
 		int FromBBuffer(BBuffer& bb) noexcept override;
 
-		int InitCascade() noexcept override {
+		int InitCascade(void* const& o) noexcept override {
 			if constexpr (std::is_base_of_v<Object, T>) {
 				for (size_t i = 0; i < len; ++i) {
-					if (int r = buf[i].InitCascade()) return r;
+					if (int r = buf[i].InitCascade(o)) return r;
 				}
 			}
 			else if constexpr (xx::IsShared_v<T>) {
 				if constexpr (std::is_base_of_v<Object, typename T::element_type>) {
 					for (size_t i = 0; i < len; ++i) {
 						if (buf[i]) {
-							if (int r = buf[i]->InitCascade()) return r;
+							if (int r = buf[i]->InitCascade(o)) return r;
 						}
 					}
 				}
