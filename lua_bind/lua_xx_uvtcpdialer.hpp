@@ -45,7 +45,7 @@ inline void Lua_Register_UvTcpLuaDialer(lua_State* const& L)
 		auto&& t = Lua_ToTuple<xx::UvTcpLuaDialer_s, Lua_Func>(L, "OnAccept error! need 2 args: self, func/null");
 		if (std::get<1>(t))
 		{
-			std::get<0>(t)->OnAccept = [f = std::move(std::get<1>(t))](xx::UvTcpLuaPeer_s& peer)
+			std::get<0>(t)->OnAccept = [f = std::move(std::get<1>(t))](xx::UvTcpLuaPeer_s peer)
 			{
 				if (!gLua) return;
 				assert(!lua_gettop(gLua));
