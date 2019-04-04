@@ -30,6 +30,7 @@ struct IDraw {
 	virtual void DrawInit() noexcept = 0;		// 初始化( 通常是显现性质 )
 	virtual void DrawUpdate() noexcept = 0;		// 更新( 通常是移动 / 动画性质 )
 	virtual void DrawDispose() noexcept = 0;	// 销毁( 通常是从图形系统中完全注销对象 )
+	// todo: Show / Hide
 };
 
 

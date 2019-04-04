@@ -18,6 +18,14 @@
 }
 
 inline int Cannon::Update(int const& frameNumber) noexcept {
+	if (this->indexAtContainer) {
+		// todo: 隐藏( 多个炮台, 只显示最上面的且只有最上面的能被操控 )
+		return 0;
+	}
+	else {
+		// todo: 显示
+	}
+
 	// 输入检测. 炮台角度对准首个 touch 点( 暂定方案 )
 	if (cc_touchs.len) {
 		// 世界坐标
@@ -53,7 +61,7 @@ inline bool Cannon::Shoot(int const& frameNumber) noexcept {
 	// todo: 更多发射限制检测
 	if (!quantity) return false;									// 剩余颗数为 0
 	if (frameNumber < shootCD) return false;						// CD 中
-	if (bullets->len == cfg->numLimit) return false;			// 总颗数限制
+	if (bullets->len == cfg->numLimit) return false;				// 总颗数限制
 	
 	// 置 cd
 	shootCD = frameNumber + cfg->shootCD;

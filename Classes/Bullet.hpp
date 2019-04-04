@@ -4,8 +4,6 @@
 	assert(cannon);
 	assert(cfg);
 
-	// todo: calc pos, angle
-
 	// 计算炮口坐标
 	pos = cannon->pos + xx::Rotate(xx::Pos{ cfg->muzzleLen ,0 }, cannon->angle * (float(M_PI) / 180.0f));
 
@@ -25,10 +23,14 @@
 
 inline int Bullet::Update(int const& frameNumber) noexcept {
 	pos += moveInc;
+
+	// 先简单实现飞出屏幕就消失
 	auto&& w = ::ScreenCenter.x + cfg->maxRadius;
 	auto&& h = ::ScreenCenter.y + cfg->maxRadius;
 	if (pos.x > w || pos.x < -w || pos.y > h || pos.y < -h) return -1;
+
 	// todo: hit check
+
 
 	DrawUpdate();
 	return 0;
