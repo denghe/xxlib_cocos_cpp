@@ -52,7 +52,12 @@
 	xx::MakeTo(plr->weapons);
 	auto&& cannon = xx::Make<Cannon>();
 	plr->cannons->Add(cannon);
-	cannon->angle = 90;
+	xx::MakeTo(cannon->bullets);
+	cannon->id = 123;
+	cannon->cfgId = 0;
+	cannon->angle = cfg->cannons->At(cannon->cfgId)->angle;
+	cannon->quantity = cfg->cannons->At(cannon->cfgId)->quantity;
+	cannon->coin = 1;
 	if (int r = players.InitCascade(&*scene)) return r;
 
 	// todo

@@ -1,7 +1,7 @@
 ﻿#pragma once
 namespace PKG {
 	struct PkgGenMd5 {
-		inline static const std::string value = "7c01779aedc6919b55badb75546ab8c8";
+		inline static const std::string value = "ab60c0254b6e9d805b9c734c1d07f1b9";
     };
 
 namespace Generic {
@@ -650,16 +650,22 @@ namespace CatchFish::Configs {
     };
     // 炮台 & 子弹配置基类
     struct Cannon : PKG::CatchFish::Configs::Item {
-        // 炮管默认角度
+        // 初始角度
         int32_t angle = 0;
-        // 炮口于座位坐标的距离 ( 适合大部分炮台 )
-        float muzzleDistance = 0;
+        // 炮管长度
+        float muzzleLen = 0;
         // 拥有的数量( -1: 无限 )
-        int32_t bulletQuantity = 0;
+        int32_t quantity = 0;
         // 同屏颗数限制 ( 到达上限就不允许继续发射 )
-        int32_t numBulletLimit = 0;
+        int32_t numLimit = 0;
         // 发射间隔帧数
         int32_t shootCD = 0;
+        // 子弹检测半径
+        int32_t radius = 0;
+        // 子弹最大 / 显示半径
+        int32_t maxRadius = 0;
+        // 子弹每帧前进距离
+        float distance = 0;
 
         typedef Cannon ThisType;
         typedef PKG::CatchFish::Configs::Item BaseType;
@@ -2873,18 +2879,24 @@ namespace CatchFish::Configs {
     inline void Cannon::ToBBuffer(xx::BBuffer& bb) const noexcept {
         this->BaseType::ToBBuffer(bb);
         bb.Write(this->angle);
-        bb.Write(this->muzzleDistance);
-        bb.Write(this->bulletQuantity);
-        bb.Write(this->numBulletLimit);
+        bb.Write(this->muzzleLen);
+        bb.Write(this->quantity);
+        bb.Write(this->numLimit);
         bb.Write(this->shootCD);
+        bb.Write(this->radius);
+        bb.Write(this->maxRadius);
+        bb.Write(this->distance);
     }
     inline int Cannon::FromBBuffer(xx::BBuffer& bb) noexcept {
         if (int r = this->BaseType::FromBBuffer(bb)) return r;
         if (int r = bb.Read(this->angle)) return r;
-        if (int r = bb.Read(this->muzzleDistance)) return r;
-        if (int r = bb.Read(this->bulletQuantity)) return r;
-        if (int r = bb.Read(this->numBulletLimit)) return r;
+        if (int r = bb.Read(this->muzzleLen)) return r;
+        if (int r = bb.Read(this->quantity)) return r;
+        if (int r = bb.Read(this->numLimit)) return r;
         if (int r = bb.Read(this->shootCD)) return r;
+        if (int r = bb.Read(this->radius)) return r;
+        if (int r = bb.Read(this->maxRadius)) return r;
+        if (int r = bb.Read(this->distance)) return r;
         return 0;
     }
     inline int Cannon::InitCascade(void* const& o) noexcept {
@@ -2908,10 +2920,13 @@ namespace CatchFish::Configs {
     inline void Cannon::ToStringCore(std::string& s) const noexcept {
         this->BaseType::ToStringCore(s);
         xx::Append(s, ", \"angle\":", this->angle);
-        xx::Append(s, ", \"muzzleDistance\":", this->muzzleDistance);
-        xx::Append(s, ", \"bulletQuantity\":", this->bulletQuantity);
-        xx::Append(s, ", \"numBulletLimit\":", this->numBulletLimit);
+        xx::Append(s, ", \"muzzleLen\":", this->muzzleLen);
+        xx::Append(s, ", \"quantity\":", this->quantity);
+        xx::Append(s, ", \"numLimit\":", this->numLimit);
         xx::Append(s, ", \"shootCD\":", this->shootCD);
+        xx::Append(s, ", \"radius\":", this->radius);
+        xx::Append(s, ", \"maxRadius\":", this->maxRadius);
+        xx::Append(s, ", \"distance\":", this->distance);
     }
     inline uint16_t Weapon::GetTypeId() const noexcept {
         return 55;

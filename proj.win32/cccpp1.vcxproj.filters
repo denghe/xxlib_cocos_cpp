@@ -434,6 +434,9 @@
     <ClInclude Include="..\Classes\CatchFish.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Bullet.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

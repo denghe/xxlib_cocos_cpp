@@ -4,31 +4,81 @@
 	assert(!cfg);
 	cfg = &*scene->cfg->cannons->At(cfgId);
 	pos = scene->cfg->sitPositons->At((int)player->sit);
+
+	// 前置填充
+	for (auto&& bullet : *bullets) {
+		auto&& b = xx::As<Bullet>(bullet);
+		b->player = player;
+		b->cannon = this;
+	}
+
+	if (int r = this->BaseType::InitCascade(o)) return r;
 	DrawInit();
 	return 0;
 }
 
 inline int Cannon::Update(int const& frameNumber) noexcept {
-	// todo: scan input, calc angle, shoot logic here
-	// foreach bullet
+	// 输入检测. 炮台角度对准首个 touch 点( 暂定方案 )
 	if (cc_touchs.len) {
-		auto tloc = cc_touchs[0]->getLocationInView();								// 世界坐标
-		xx::Pos tpos{ tloc.x - ScreenCenter.x, ScreenCenter.y - tloc.y };			// 转为游戏坐标系
+		// 世界坐标
+		auto tloc = cc_touchs[0]->getLocationInView();
+
+		// 转为游戏坐标系
+		xx::Pos tpos{ tloc.x - ScreenCenter.x, ScreenCenter.y - tloc.y };
+
+		// 算出朝向角度
 		angle = xx::GetAngle(pos, tpos) * (180.0f / float(M_PI));
+
+		// 试着发射
+		if (Shoot(frameNumber)) {
+			// todo: 开始播放炮台开火特效, 音效
+		}
 	}
 	DrawUpdate();
+
+	// 驱动子弹
+	auto&& bs = *this->bullets;
+	if (bs.len) {
+		for (size_t i = bs.len - 1; i != -1; --i) {
+			if (bs[i]->Update(frameNumber)) {
+				bs[bs.len - 1]->indexAtContainer = i;
+				bs.SwapRemoveAt(i);
+			}
+		}
+	}
 	return 0;
 };
 
-Cannon::~Cannon() {
+inline bool Cannon::Shoot(int const& frameNumber) noexcept {
+	// todo: 更多发射限制检测
+	if (!quantity) return false;									// 剩余颗数为 0
+	if (frameNumber < shootCD) return false;						// CD 中
+	if (bullets->len == cfg->numLimit) return false;			// 总颗数限制
+	
+	// 置 cd
+	shootCD = frameNumber + cfg->shootCD;
+
+	// 剩余颗数 -1
+	if (quantity != -1) {
+		--quantity;
+	}
+
+	auto&& bullet = xx::Make<Bullet>();
+	bullet->indexAtContainer = bullets->len;
+	bullets->Add(bullet);
+	bullet->player = player;
+	bullet->cannon = this;
+	bullet->cfg = cfg;
+	bullet->InitCascade(scene);										// 进一步初始化
+
+	return true;
+}
+
+inline Cannon::~Cannon() {
 	DrawDispose();
 }
 
 #pragma region
-
-#ifdef CC_TARGET_PLATFORM
-cocos2d::Sprite* body = nullptr;
-#endif
 
 inline void Cannon::DrawInit() noexcept {
 #ifdef CC_TARGET_PLATFORM

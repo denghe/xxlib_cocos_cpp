@@ -7,7 +7,7 @@
 	}
 
 	// 开始瀑布初始化
-	return this->PKG::CatchFish::Player::InitCascade(o);
+	return this->BaseType::InitCascade(o);
 }
 
 inline int Player::Update(int const& frameNumber) noexcept {

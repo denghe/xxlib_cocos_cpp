@@ -2,6 +2,7 @@
 	scene = (Scene*)o;
 	assert(!cfg);
 	cfg = &*scene->cfg->fishs->At(cfgId);
+	if (int r = this->BaseType::InitCascade(o)) return r;
 	DrawInit();
 	return 0;
 }

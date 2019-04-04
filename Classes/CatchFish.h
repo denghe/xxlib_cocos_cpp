@@ -49,6 +49,7 @@ struct SpriteFrame : PKG::CatchFish::Configs::SpriteFrame {
 	~SpriteFrame();
 };
 using SpriteFrame_s = std::shared_ptr<SpriteFrame>;
+using SpriteFrame_w = std::weak_ptr<SpriteFrame>;
 
 
 /**************************************************************************************************/
@@ -65,6 +66,7 @@ struct Physics : PKG::CatchFish::Configs::Physics {
 	~Physics();
 };
 using Physics_s = std::shared_ptr<Physics>;
+using Physics_w = std::weak_ptr<Physics>;
 
 
 /**************************************************************************************************/
@@ -174,6 +176,15 @@ struct Cannon : PKG::CatchFish::Cannon, IDraw {
 	// 根据玩家位置从 cfg 读取到坐标记录在此以便于使用
 	xx::Pos pos;
 
+	// 存放下次可开火的 frameNumber
+	int shootCD = 0;
+
+	// 剩余子弹数量. 炮台初创时从 cfg 读取填充. ( -1 表示无限, 其余情况每次发射 -1, 到 0 时无法发射 )
+	int quantity = -1;
+
+	// 发射子弹. 成功返回 true
+	bool Shoot(int const& frameNumber) noexcept;
+
 	int InitCascade(void* const& o) noexcept override;
 	virtual int Update(int const& frameNumber) noexcept override;
 	~Cannon();
@@ -186,8 +197,42 @@ struct Cannon : PKG::CatchFish::Cannon, IDraw {
 	virtual void DrawDispose() noexcept override;
 };
 using Cannon_s = std::shared_ptr<Cannon>;
+using Cannon_w = std::weak_ptr<Cannon>;
 
 
+/**************************************************************************************************/
+// Bullet
+/**************************************************************************************************/
+
+struct Bullet : PKG::CatchFish::Bullet, IDraw {
+	using BaseType = PKG::CatchFish::Bullet;
+	using BaseType::BaseType;
+
+	// 所在场景
+	Scene* scene = nullptr;
+
+	// 所在玩家( 由 Cannon 预填充 )
+	Player* player = nullptr;
+
+	// 所属炮台( 由 Cannon 预填充 )
+	Cannon* cannon = nullptr;
+
+	// 指向具体配置( 由 Cannon 预填充, Bullet 与 Cannon 共享配置 )
+	PKG::CatchFish::Configs::Cannon* cfg = nullptr;
+
+	int InitCascade(void* const& o) noexcept override;
+	virtual int Update(int const& frameNumber) noexcept override;
+	~Bullet();
+
+#ifdef CC_TARGET_PLATFORM
+	cocos2d::Sprite* body = nullptr;
+#endif
+	virtual void DrawInit() noexcept override;
+	virtual void DrawUpdate() noexcept override;
+	virtual void DrawDispose() noexcept override;
+};
+using Bullet_s = std::shared_ptr<Bullet>;
+using Bullet_w = std::weak_ptr<Bullet>;
 
 /**************************************************************************************************/
 // todo: more
@@ -244,3 +289,4 @@ using CatchFish_s = std::shared_ptr<CatchFish>;
 #include "Player.hpp"
 #include "Fish.hpp"
 #include "Cannon.hpp"
+#include "Bullet.hpp"
