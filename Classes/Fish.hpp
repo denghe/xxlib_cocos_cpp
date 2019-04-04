@@ -73,6 +73,34 @@ LabKeepMoving:
 	return 0;
 };
 
+int Fish::HitCheck(Bullet* const& bullet) noexcept {
+	// 计算出鱼中心与子弹中心的距离
+	auto dpos = pos - bullet->pos;
+	auto&& distPow2 = dpos.x * dpos.x + dpos.y * dpos.y;
+
+	// 1 判: 如果有配置最小半径, 即位于圆心的这个半径内 非空心, 一定命中, 如果距离小于两半径和， 则判定成立
+	if (cfg->minDetectRadius > 0) {
+		auto&& r2 = cfg->minDetectRadius + bullet->cfg->radius;
+		if (r2 * r2 > distPow2) {
+			return 1;
+		}
+	}
+	// 2 判: 如果有配置最大半径, 即只要进入这个范围, 就可以进一步物理判断, 如果距离超过, 则判定失败
+	if (cfg->maxDetectRadius > 0) {
+		auto&& r2 = cfg->maxDetectRadius + bullet->cfg->radius;
+		if (r2 * r2 < distPow2) {
+			return 0;
+		}
+	}
+	// 3 判: 物理检测. 用子弹半径经过坐标转换, 去物理 space 选取 shapes. 如果有选到, 则判定成功
+	auto&& space = xx::As<Physics>(cfg->moveFrames->At(spriteFrameIndex)->physics)->space;
+	auto&& p = xx::Rotate(dpos, angle * (float(M_PI) / 180.0f));
+	if (cpSpacePointQueryNearest(space, cpv(p.x, p.y), bullet->cfg->radius, CP_SHAPE_FILTER_ALL, nullptr)) {
+		return 1;
+	}
+	return 0;
+}
+
 inline Fish::~Fish() {
 	DrawDispose();
 }

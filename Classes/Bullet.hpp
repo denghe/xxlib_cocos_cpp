@@ -29,8 +29,21 @@ inline int Bullet::Update(int const& frameNumber) noexcept {
 	auto&& h = ::ScreenCenter.y + cfg->maxRadius;
 	if (pos.x > w || pos.x < -w || pos.y > h || pos.y < -h) return -1;
 
-	// todo: hit check
-
+	// 遍历所有鱼
+	auto&& fs = *scene->fishs;
+	if (fs.len) {
+		for (size_t i = fs.len - 1; i != -1; --i) {
+			// 命中检查
+			if (xx::As<Fish>(fs[i])->HitCheck(this)) {
+				// 删鱼
+				fs[fs.len - 1]->indexAtContainer = i;
+				fs.SwapRemoveAt(i);
+				// todo: 计分?
+				// todo: 播放爆炸特效?
+				return -1;
+			}
+		}
+	}
 
 	DrawUpdate();
 	return 0;

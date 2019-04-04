@@ -15,6 +15,7 @@ inline int Player::Update(int const& frameNumber) noexcept {
 	if (cs.len) {
 		for (size_t i = cs.len - 1; i != -1; --i) {
 			if (cs[i]->Update(frameNumber)) {
+				cs[cs.len - 1]->indexAtContainer = i;
 				cs.SwapRemoveAt(i);
 			}
 		}

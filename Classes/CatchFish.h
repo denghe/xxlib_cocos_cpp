@@ -101,6 +101,7 @@ using Scene_w = std::weak_ptr<Scene>;
 // Fish
 /**************************************************************************************************/
 
+struct Bullet;
 struct Fish : PKG::CatchFish::Fish, IDraw {
 	using BaseType = PKG::CatchFish::Fish;
 	using BaseType::BaseType;
@@ -114,6 +115,8 @@ struct Fish : PKG::CatchFish::Fish, IDraw {
 	virtual int InitCascade(void* const& o) noexcept override;
 	virtual int Update(int const& frameNumber) noexcept override;
 	~Fish();
+
+	virtual int HitCheck(Bullet* const& bullet) noexcept;
 
 #ifdef CC_TARGET_PLATFORM
 	cocos2d::Sprite* body = nullptr;
