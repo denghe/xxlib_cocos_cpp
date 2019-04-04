@@ -11,7 +11,7 @@ inline PKG::CatchFish::Way_s CatchFish::MakeBeeline(int const& itemRadius) {
 	else {
 		a = a - 90 + 135;
 	}
-	auto&& p1 = xx::Rotate(xx::Pos{ 1, 0 }, a / 180.0f * float(M_PI));
+	auto&& p1 = xx::Rotate(xx::Pos{ 1, 0 }, a * (float(M_PI) / 180.0f));
 	xx::Pos abs{ std::fabs(p1.x), std::fabs(p1.y) };
 	if (abs.x / (abs.x + abs.y) > ScreenWidthRatio) {
 		p1 = p1 * (w / abs.x);
@@ -20,7 +20,7 @@ inline PKG::CatchFish::Way_s CatchFish::MakeBeeline(int const& itemRadius) {
 		p1 = p1 * (h / abs.y);
 	}
 	a = a + 180 - 23 + scene->rnd->Next(46);
-	auto&& p2 = xx::Rotate(xx::Pos{ 1, 0 }, a / 180.0f * float(M_PI));
+	auto&& p2 = xx::Rotate(xx::Pos{ 1, 0 }, a * (float(M_PI) / 180.0f));
 	abs.x = std::fabs(p2.x);
 	abs.y = std::fabs(p2.y);
 	if (abs.x / (abs.x + abs.y) > ScreenWidthRatio) {
@@ -31,7 +31,7 @@ inline PKG::CatchFish::Way_s CatchFish::MakeBeeline(int const& itemRadius) {
 	}
 	auto&& way = xx::Make<PKG::CatchFish::Way>();
 	xx::MakeTo(way->points);
-	way->points->Add(PKG::CatchFish::WayPoint{ p1, xx::GetAngle(p1, p2) / float(M_PI) * 180.0f, p1.distance(p2) });
+	way->points->Add(PKG::CatchFish::WayPoint{ p1, xx::GetAngle(p1, p2) * (180.0f / float(M_PI)), p1.distance(p2) });
 	way->points->Add(PKG::CatchFish::WayPoint{ p2, 0, 0 });	// 非循环轨迹最后个点距离和角度不用计算, 也不做统计
 	way->distance = way->points->At(0).distance;
 	way->loop = false;

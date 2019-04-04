@@ -42,16 +42,21 @@
 	xx::MakeTo(scene->rnd, 123);
 	xx::MakeTo(scene->stage);
 
-	auto&& plr = xx::Make<Player>();
-	players.Add(std::move(plr));
-	scene->players->Add(plr);
+	scene->cfg = &*cfg;
+	if (int r = scene->InitCascade()) return r;
 
-	//auto&& cannon = xx::Make<Cannon>();
-	// todo
+	auto&& plr = xx::Make<Player>();
+	players.Add(plr);
+	scene->players->Add(plr);
+	xx::MakeTo(plr->cannons);
+	xx::MakeTo(plr->weapons);
+	auto&& cannon = xx::Make<Cannon>();
+	plr->cannons->Add(cannon);
+	cannon->angle = 90;
+	if (int r = players.InitCascade(&*scene)) return r;
 
 	// todo
 	// selfPlayer = plr;
 
-	scene->cfg = &*cfg;
-	return scene->InitCascade();
+	return 0;
 }

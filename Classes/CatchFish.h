@@ -12,6 +12,7 @@
 static constexpr int ScreenWidth = 1280;
 static constexpr int ScreenHeight = 720;
 static constexpr float ScreenWidthRatio = float(ScreenWidth) / float(ScreenWidth + ScreenHeight);
+static constexpr xx::Pos ScreenCenter = xx::Pos{ ScreenWidth / 2, ScreenHeight / 2 };
 
 #ifdef CC_TARGET_PLATFORM
 inline cocos2d::Scene* cc_scene = nullptr;

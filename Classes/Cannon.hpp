@@ -1,5 +1,6 @@
 ﻿inline int Cannon::InitCascade(void* const& o) noexcept {
 	scene = (Scene*)o;
+	assert(player);
 	assert(!cfg);
 	cfg = &*scene->cfg->cannons->At(cfgId);
 	pos = scene->cfg->sitPositons->At((int)player->sit);
@@ -10,6 +11,11 @@
 inline int Cannon::Update(int const& frameNumber) noexcept {
 	// todo: scan input, calc angle, shoot logic here
 	// foreach bullet
+	if (cc_touchs.len) {
+		auto tloc = cc_touchs[0]->getLocationInView();								// 世界坐标
+		xx::Pos tpos{ tloc.x - ScreenCenter.x, ScreenCenter.y - tloc.y };			// 转为游戏坐标系
+		angle = xx::GetAngle(pos, tpos) * (180.0f / float(M_PI));
+	}
 	DrawUpdate();
 	return 0;
 };
@@ -42,7 +48,7 @@ inline void Cannon::DrawInit() noexcept {
 inline void Cannon::DrawUpdate() noexcept {
 #ifdef CC_TARGET_PLATFORM
 	assert(body);
-	//body->setRotation(-angle);
+	body->setRotation(-angle);
 #endif
 }
 

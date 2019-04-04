@@ -11,6 +11,13 @@
 }
 
 inline int Player::Update(int const& frameNumber) noexcept {
-	// foreach cannon
+	auto&& cs = *this->cannons;
+	if (cs.len) {
+		for (size_t i = cs.len - 1; i != -1; --i) {
+			if (cs[i]->Update(frameNumber)) {
+				cs.SwapRemoveAt(i);
+			}
+		}
+	}
 	return 0;
 };
