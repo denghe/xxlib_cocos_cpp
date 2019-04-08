@@ -19,6 +19,11 @@ static constexpr float ScreenWidthRatio = float(ScreenWidth) / float(ScreenWidth
 static constexpr xx::Pos ScreenCenter = xx::Pos{ ScreenWidth / 2, ScreenHeight / 2 };
 
 #ifdef CC_TARGET_PLATFORM
+struct Dialer;
+struct CatchFish;
+std::shared_ptr<Dialer> dialer;
+CatchFish* catchFish;
+
 inline cocos2d::Scene* cc_scene = nullptr;
 inline xx::List<cocos2d::Touch*> cc_touchs;
 inline cocos2d::EventListenerTouchAllAtOnce* cc_listener = nullptr;
@@ -299,11 +304,6 @@ struct CatchFish {
 	// 游戏场景实例
 	Scene_s scene;
 
-#ifdef CC_TARGET_PLATFORM
-	// 客户端拨号器
-	std::shared_ptr<Dialer> dialer;
-#endif
-
 	// 初始化( 加载配置文件, .... )
 	int Init(std::string const& cfgName) noexcept;			// todo: 传递 server ip port 啥的
 
@@ -375,8 +375,7 @@ struct ClientPeer : xx::UvKcpPeer {
 	using BaseType = xx::UvKcpPeer;
 	using BaseType::BaseType;
 
-	// Dialer Accept 时填充
-	Dialer* dialer = nullptr;
+	// todo: 状态标志位?
 
 	// 处理推送( 向 dialer.recvs 压入数据 )
 	virtual int ReceivePush(xx::Object_s&& msg) noexcept override;
@@ -390,9 +389,6 @@ struct Dialer : xx::UvKcpDialer<ClientPeer> {
 	using BaseType = xx::UvKcpDialer<ClientPeer>;
 	using BaseType::BaseType;
 
-	// 引用到游戏实例
-	CatchFish* catchFish = nullptr;
-
 	// 收到的数据
 	std::deque<xx::Object_s> recvs;
 
@@ -405,7 +401,8 @@ struct Dialer : xx::UvKcpDialer<ClientPeer> {
 	// 每帧驱动脚本
 	int Update() noexcept;
 
-	virtual void Accept(std::shared_ptr<xx::UvKcpBasePeer> peer_) noexcept override;
+	// 指向客户端
+	Player_w selfPlayer;
 };
 using Dialer_s = std::shared_ptr<Dialer>;
 
@@ -429,9 +426,10 @@ using Dialer_s = std::shared_ptr<Dialer>;
 #include "Cannon.hpp"
 #include "Bullet.hpp"
 
-#include "ClientPeer.hpp"
 #ifndef CC_TARGET_PLATFORM
+#include "Peer.hpp"
 #include "Listener.hpp"
 #else
+#include "ClientPeer.hpp"
 #include "Dialer.hpp"
 #endif

@@ -40,9 +40,11 @@
 
 
 #ifdef CC_TARGET_PLATFORM
+	// 存易用单例
+	::catchFish = this;
+
 	// 初始化拨号器
-	xx::MakeTo(dialer, *uv);
-	dialer->catchFish = this;
+	xx::MakeTo(::dialer, *uv);
 #endif
 
 
