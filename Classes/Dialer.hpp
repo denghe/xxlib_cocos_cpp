@@ -66,11 +66,30 @@ inline int Dialer::HandleFirstPackage() noexcept {
 	switch (recvs.front()->GetTypeId()) {
 	case xx::TypeId_v<PKG::CatchFish_Client::EnterSuccess>: {
 		auto&& es = xx::As<PKG::CatchFish_Client::EnterSuccess>(recvs.front());
+
+		// store players
 		for (auto&& p : *es->players) {
 			::catchFish->players.Add(xx::As<Player>(p));
 		}
+
+		// store scene
 		::catchFish->scene = xx::As<Scene>(es->scene);
+
+		// store current player
 		player = xx::As<Player>(es->self.lock());
+
+		// set current player's flag
+		player->isSelf = true;
+
+		// restore scene
+		if (int r = ::catchFish->scene->InitCascade()) return r;
+
+		// restore player
+		for (auto&& p : ::catchFish->players) {
+			if (int r = p->InitCascade(&*::catchFish->scene)) return r;
+		}
+
+		// handle finish, pop / drop.
 		recvs.pop_front();
 		return 0;
 	}
@@ -131,7 +150,7 @@ inline int Dialer::HandlePackages() noexcept {
 					r = Handle(xx::As<PKG::CatchFish::Events::CannonCoinChange>(e)); break;
 				default:
 					// todo: log?
-					assert(false);
+					assert(false);	// 不该执行到这里
 				}
 				if (r) return r;
 			}
@@ -154,7 +173,11 @@ inline void Dialer::Reset() noexcept {
 }
 
 
-inline int Dialer::Handle(PKG::CatchFish::Events::Enter_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::Enter_s o) noexcept {
+	auto&& p = xx::Make<Player>();
+
+	return 0;
+}
 inline int Dialer::Handle(PKG::CatchFish::Events::Leave_s o) noexcept { return 0; }
 inline int Dialer::Handle(PKG::CatchFish::Events::NoMoney_s o) noexcept { return 0; }
 inline int Dialer::Handle(PKG::CatchFish::Events::Refund_s o) noexcept { return 0; }

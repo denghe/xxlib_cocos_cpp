@@ -175,6 +175,9 @@ struct Player : PKG::CatchFish::Player {
 
 	// 解绑, 断开当前 peer 并清空所有收包队列
 	void Disconnect() noexcept;
+#else
+	// 标识这个玩家是本人
+	bool isSelf = false;
 #endif
 
 	virtual int InitCascade(void* const& o) noexcept override;
