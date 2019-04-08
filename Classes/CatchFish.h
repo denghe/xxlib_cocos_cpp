@@ -380,6 +380,8 @@ struct ClientPeer : xx::UvKcpPeer {
 	// 处理推送( 向 dialer.recvs 压入数据 )
 	virtual int ReceivePush(xx::Object_s&& msg) noexcept override;
 };
+using ClientPeer_s = std::shared_ptr<ClientPeer>();
+using ClientPeer_w = std::weak_ptr<ClientPeer>();
 
 /**************************************************************************************************/
 // Dialer
@@ -395,14 +397,29 @@ struct Dialer : xx::UvKcpDialer<ClientPeer> {
 	// 脚本行号
 	int lineNumber = 0;
 
+	// 脚本用变量
+	bool finished = false;
+	PKG::Client_CatchFish::Enter_s pkgEnter;
+	int r = 0;
+	int64_t waitMS = 0;
+
+	// 处理首包( EnterSuccess || Error )
+	int HandleFirstPackage() noexcept;
+
+	// 处理一般数据包( FrameEvents || ... )
+	int HandlePackages() noexcept;
+
+	// 清空 recvs, player, catchFish->players, scene
+	void Reset() noexcept;
+
 	// 脚本实现
 	int UpdateCore(int const& lineNumber) noexcept;
 
 	// 每帧驱动脚本
 	int Update() noexcept;
 
-	// 指向客户端
-	Player_w selfPlayer;
+	// 指向当前玩家
+	Player_s player;
 };
 using Dialer_s = std::shared_ptr<Dialer>;
 
@@ -415,8 +432,6 @@ using Dialer_s = std::shared_ptr<Dialer>;
 /**************************************************************************************************/
 
 #include "CatchFish.hpp"
-#include "CatchFish_Update.hpp"
-#include "CatchFish_Init.hpp"
 
 #include "SpriteFrame.hpp"
 #include "Physics.hpp"

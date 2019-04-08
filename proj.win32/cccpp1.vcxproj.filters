@@ -419,12 +419,6 @@
     <ClInclude Include="..\Classes\Cannon.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CatchFish_Update.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CatchFish_Init.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\CatchFish.hpp">
       <Filter>src</Filter>
     </ClInclude>

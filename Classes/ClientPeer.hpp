@@ -74,5 +74,6 @@ inline int ClientPeer::ReceivePush(xx::Object_s&& msg) noexcept {
 	//	return -1;
 	//}
 
+	::dialer->recvs.push_back(std::move(msg));
 	return 0;
 }
