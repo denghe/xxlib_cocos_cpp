@@ -1,10 +1,8 @@
-﻿inline int CatchFish::Update() {
-	scene->Update();
+﻿inline int CatchFish::Update() noexcept {
+#ifdef CC_TARGET_PLATFORM
+	dialer->lineNumber = dialer->UpdateCore(dialer->lineNumber);
+	if (!dialer->lineNumber) return -1;
+#endif
 
-	// 自动补鱼
-	if (scene->fishs->len < 1000) {
-		scene->fishs->Add(MakeRandomFish());
-	}
-
-	return 0;
+	return scene->Update();
 }

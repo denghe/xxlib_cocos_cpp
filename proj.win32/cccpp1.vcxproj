@@ -81,7 +81,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -123,7 +123,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -191,10 +191,10 @@
     <ClInclude Include="..\Classes\CatchFish.h" />
     <ClInclude Include="..\Classes\CatchFish.hpp" />
     <ClInclude Include="..\Classes\CatchFish_Init.hpp" />
-    <ClInclude Include="..\Classes\CatchFish_MakeBeeline.hpp" />
-    <ClInclude Include="..\Classes\CatchFish_MakeRandomFish.hpp" />
     <ClInclude Include="..\Classes\CatchFish_Update.hpp" />
+    <ClInclude Include="..\Classes\Dialer.hpp" />
     <ClInclude Include="..\Classes\Fish.hpp" />
+    <ClInclude Include="..\Classes\ClientPeer.hpp" />
     <ClInclude Include="..\Classes\Physics.hpp" />
     <ClInclude Include="..\Classes\PKG_class.h" />
     <ClInclude Include="..\Classes\Player.hpp" />

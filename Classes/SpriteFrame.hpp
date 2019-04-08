@@ -5,8 +5,8 @@
 	spriteFrame = sfc->getSpriteFrameByName(*this->frameName);
 	if (!spriteFrame) return -1;
 	spriteFrame->retain();
-	return 0;
 #endif
+	return 0;
 }
 
 inline SpriteFrame::~SpriteFrame() {

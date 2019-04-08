@@ -17,7 +17,9 @@
 	coin = cannon->coin;
 
 	if (int r = this->BaseType::InitCascade(o)) return r;
+#ifdef CC_TARGET_PLATFORM
 	DrawInit();
+#endif
 	return 0;
 }
 
@@ -27,36 +29,54 @@ inline int Bullet::Update(int const& frameNumber) noexcept {
 	// 先简单实现飞出屏幕就消失
 	auto&& w = ::ScreenCenter.x + cfg->maxRadius;
 	auto&& h = ::ScreenCenter.y + cfg->maxRadius;
-	if (pos.x > w || pos.x < -w || pos.y > h || pos.y < -h) return -1;
+	if (pos.x > w || pos.x < -w || pos.y > h || pos.y < -h) {
+#ifndef CC_TARGET_PLATFORM
+		// 退钱
+		auto&& refund = xx::Make<PKG::CatchFish::Events::Refund>();
+		refund->coin = coin;
+		refund->id = player->id;
+		scene->frameEvents->events->Add(std::move(refund));
+#endif
+		return -1;
+	}
 
+#ifdef CC_TARGET_PLATFORM
 	// 遍历所有鱼
 	auto&& fs = *scene->fishs;
 	if (fs.len) {
 		for (size_t i = fs.len - 1; i != -1; --i) {
 			// 命中检查
 			if (xx::As<Fish>(fs[i])->HitCheck(this)) {
-				// 删鱼
-				fs[fs.len - 1]->indexAtContainer = i;
-				fs.SwapRemoveAt(i);
-				// todo: 计分?
-				// todo: 播放爆炸特效?
+				auto&& o = xx::Make<PKG::Client_CatchFish::Hit>();
+				o->bulletId = id;
+				o->cannonId = cannon->id;
+				o->fishId = fs[i]->id;
+				// todo: peer->Send(o);
+
+				//// 删鱼
+				//fs[fs.len - 1]->indexAtContainer = (int)i;
+				//fs.SwapRemoveAt(i);
+				// todo: 播放子弹爆炸特效?
+
+				// 子弹自杀
 				return -1;
 			}
 		}
 	}
-
 	DrawUpdate();
+#endif
 	return 0;
 };
 
 inline Bullet::~Bullet() {
+#ifdef CC_TARGET_PLATFORM
 	DrawDispose();
+#endif
 }
 
-#pragma region
 
-inline void Bullet::DrawInit() noexcept {
 #ifdef CC_TARGET_PLATFORM
+inline void Bullet::DrawInit() noexcept {
 	assert(!body);
 	body = cocos2d::Sprite::create();
 	body->retain();
@@ -67,19 +87,15 @@ inline void Bullet::DrawInit() noexcept {
 	body->setScale(cfg->scale);
 	body->setRotation(-angle);
 	cc_scene->addChild(body);
-#endif
 }
 
 inline void Bullet::DrawUpdate() noexcept {
-#ifdef CC_TARGET_PLATFORM
 	assert(body);
 	body->setRotation(-angle);
 	body->setPosition(pos);
-#endif
 }
 
 inline void Bullet::DrawDispose() noexcept {
-#ifdef CC_TARGET_PLATFORM
 	if (!body) return;
 
 	if (body->getParent()) {
@@ -87,7 +103,5 @@ inline void Bullet::DrawDispose() noexcept {
 	}
 	body->release();
 	body = nullptr;
-#endif
 }
-
-#pragma endregion
+#endif

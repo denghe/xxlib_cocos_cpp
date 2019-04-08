@@ -1,4 +1,8 @@
 ﻿#pragma once
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+#include <cmath>
 #include "xx_pos.h"
 #include "PKG_class.h"
 #include "chipmunk.h"
@@ -20,18 +24,6 @@ inline xx::List<cocos2d::Touch*> cc_touchs;
 inline cocos2d::EventListenerTouchAllAtOnce* cc_listener = nullptr;
 #endif
 
-
-/**************************************************************************************************/
-// IDraw
-/**************************************************************************************************/
-
-// 有绘制行为的类需要实现该接口
-struct IDraw {
-	virtual void DrawInit() noexcept = 0;		// 初始化( 通常是显现性质 )
-	virtual void DrawUpdate() noexcept = 0;		// 更新( 通常是移动 / 动画性质 )
-	virtual void DrawDispose() noexcept = 0;	// 销毁( 通常是从图形系统中完全注销对象 )
-	// todo: Show / Hide
-};
 
 
 /**************************************************************************************************/
@@ -74,18 +66,33 @@ using Physics_w = std::weak_ptr<Physics>;
 // Scene
 /**************************************************************************************************/
 
-struct Scene : PKG::CatchFish::Scene {
+struct Fish;
+struct Scene : PKG::CatchFish::Scene, std::enable_shared_from_this<Scene> {
 	using BaseType = PKG::CatchFish::Scene;
 	using BaseType::BaseType;
 
 	// 引用到配置. 由 Scene 创建者于调用 InitCascade 前填充. ( 需确保 cfg 比 Scene 死的晚 )
 	PKG::CatchFish::Configs::Config* cfg = nullptr;
 
+#ifndef CC_TARGET_PLATFORM
 	// 自减id ( 从 -1 开始, 用于服务器下发鱼生成 )
 	int autoDecId = 0;
 
 	// server 下发鱼生成专用
-	xx::Random rnd2;
+	xx::Random serverRnd;
+
+	// 每帧汇集所有事件下发. 如果没有任何事件, 则根据 frameNumber & 15 == 0 的条件下发空包
+	PKG::CatchFish_Client::FrameEvents_s frameEvents;
+
+	// 记录本帧刚进入的新玩家( 帧结束时清空 ) 用以判断是下发完整同步还是帧事件同步
+	xx::List<void*> frameEnters;
+#endif
+
+	// 生成随机直线路径
+	PKG::CatchFish::Way_s MakeBeeline(float const& itemRadius) noexcept;
+
+	// 生成随机鱼
+	std::shared_ptr<Fish> MakeRandomFish() noexcept;
 
 	// 将 Scene 指针刷到所有子
 	virtual int InitCascade(void* const& o = nullptr) noexcept override;
@@ -102,7 +109,7 @@ using Scene_w = std::weak_ptr<Scene>;
 /**************************************************************************************************/
 
 struct Bullet;
-struct Fish : PKG::CatchFish::Fish, IDraw {
+struct Fish : PKG::CatchFish::Fish {
 	using BaseType = PKG::CatchFish::Fish;
 	using BaseType::BaseType;
 
@@ -124,10 +131,10 @@ struct Fish : PKG::CatchFish::Fish, IDraw {
 #if DRAW_PHYSICS_POLYGON
 	cocos2d::DrawNode* debugNode = nullptr;
 #endif
+	virtual void DrawInit() noexcept;
+	virtual void DrawUpdate() noexcept;
+	virtual void DrawDispose() noexcept;
 #endif
-	virtual void DrawInit() noexcept override;
-	virtual void DrawUpdate() noexcept override;
-	virtual void DrawDispose() noexcept override;
 };
 using Fish_s = std::shared_ptr<Fish>;
 using Fish_w = std::weak_ptr<Fish>;
@@ -137,7 +144,10 @@ using Fish_w = std::weak_ptr<Fish>;
 // Player
 /**************************************************************************************************/
 
-struct Player : PKG::CatchFish::Player/*, IDraw 绘制金币倍率面板啥的?  */ {
+#ifndef CC_TARGET_PLATFORM
+struct Peer;
+#endif
+struct Player : PKG::CatchFish::Player {
 	using BaseType = PKG::CatchFish::Player;
 	using BaseType::BaseType;
 
@@ -150,7 +160,17 @@ struct Player : PKG::CatchFish::Player/*, IDraw 绘制金币倍率面板啥的? 
 	// 开炮等行为花掉的金币数汇总 ( 统计 )
 	int64_t consumeCoin = 0;
 
-	// todo: peer, recv, ....
+#ifndef CC_TARGET_PLATFORM
+	// 绑定的网络连接
+	std::shared_ptr<Peer> peer;
+
+	// 分类收包容器( 在适当的生命周期读取并处理 )
+	std::deque<PKG::Client_CatchFish::Shoot_s> recvShoots;
+	std::deque<PKG::Client_CatchFish::Hit_s> recvHits;
+
+	// 解绑, 断开当前 peer 并清空所有收包队列
+	void Disconnect() noexcept;
+#endif
 
 	virtual int InitCascade(void* const& o) noexcept override;
 	virtual int Update(int const& frameNumber) noexcept override;
@@ -164,7 +184,7 @@ using Player_w = std::weak_ptr<Player>;
 // Cannon
 /**************************************************************************************************/
 
-struct Cannon : PKG::CatchFish::Cannon, IDraw {
+struct Cannon : PKG::CatchFish::Cannon {
 	using BaseType = PKG::CatchFish::Cannon;
 	using BaseType::BaseType;
 
@@ -187,7 +207,15 @@ struct Cannon : PKG::CatchFish::Cannon, IDraw {
 	int quantity = -1;
 
 	// 发射子弹. 成功返回 true
-	bool Shoot(int const& frameNumber) noexcept;
+#ifdef CC_TARGET_PLATFORM
+	virtual bool Shoot(int const& frameNumber) noexcept;
+#else
+	// player 在遍历 recvShoots 的时候定位到炮台就 call 这个函数来发射
+	virtual bool Shoot(PKG::Client_CatchFish::Shoot_s& o) noexcept;
+
+	// player 在遍历 recvHits 的时候定位到炮台就 call 这个函数来做子弹碰撞检测
+	virtual void Hit(PKG::Client_CatchFish::Hit_s& o) noexcept;
+#endif
 
 	int InitCascade(void* const& o) noexcept override;
 	virtual int Update(int const& frameNumber) noexcept override;
@@ -195,10 +223,10 @@ struct Cannon : PKG::CatchFish::Cannon, IDraw {
 
 #ifdef CC_TARGET_PLATFORM
 	cocos2d::Sprite* body = nullptr;
+	virtual void DrawInit() noexcept;
+	virtual void DrawUpdate() noexcept;
+	virtual void DrawDispose() noexcept;
 #endif
-	virtual void DrawInit() noexcept override;
-	virtual void DrawUpdate() noexcept override;
-	virtual void DrawDispose() noexcept override;
 };
 using Cannon_s = std::shared_ptr<Cannon>;
 using Cannon_w = std::weak_ptr<Cannon>;
@@ -208,7 +236,7 @@ using Cannon_w = std::weak_ptr<Cannon>;
 // Bullet
 /**************************************************************************************************/
 
-struct Bullet : PKG::CatchFish::Bullet, IDraw {
+struct Bullet : PKG::CatchFish::Bullet {
 	using BaseType = PKG::CatchFish::Bullet;
 	using BaseType::BaseType;
 
@@ -230,10 +258,10 @@ struct Bullet : PKG::CatchFish::Bullet, IDraw {
 
 #ifdef CC_TARGET_PLATFORM
 	cocos2d::Sprite* body = nullptr;
+	virtual void DrawInit() noexcept;
+	virtual void DrawUpdate() noexcept;
+	virtual void DrawDispose() noexcept;
 #endif
-	virtual void DrawInit() noexcept override;
-	virtual void DrawUpdate() noexcept override;
-	virtual void DrawDispose() noexcept override;
 };
 using Bullet_s = std::shared_ptr<Bullet>;
 using Bullet_w = std::weak_ptr<Bullet>;
@@ -248,11 +276,13 @@ using Bullet_w = std::weak_ptr<Bullet>;
 
 
 
-
 /**************************************************************************************************/
 // CatchFish
 /**************************************************************************************************/
 
+#ifdef CC_TARGET_PLATFORM
+struct Dialer;
+#endif
 struct CatchFish {
 	CatchFish();
 	CatchFish(CatchFish&& o) = default;
@@ -260,15 +290,25 @@ struct CatchFish {
 	CatchFish& operator=(CatchFish&& o) = default;
 	CatchFish& operator=(CatchFish const& o) = delete;
 
+	// 全局公用共享配置单例
 	PKG::CatchFish::Configs::Config_s cfg;
-	xx::List<Player_s> players;
-	Scene_s scene;
-	Player_w selfPlayer;				// 指向玩家自己的 player
 
-	int Init(std::string cfgName);
-	int Update();
-	PKG::CatchFish::Way_s MakeBeeline(int const& itemRadius);
-	Fish_s MakeRandomFish();
+	// 所有玩家的强存储
+	xx::List<Player_s> players;
+
+	// 游戏场景实例
+	Scene_s scene;
+
+#ifdef CC_TARGET_PLATFORM
+	// 客户端拨号器
+	std::shared_ptr<Dialer> dialer;
+#endif
+
+	// 初始化( 加载配置文件, .... )
+	int Init(std::string const& cfgName) noexcept;			// todo: 传递 server ip port 啥的
+
+	// logic. 每帧调用一次. 返回非0 表示退出
+	int Update() noexcept;
 
 	bool disposed = false;
 	void Dispose(int const& flag = 1) noexcept;
@@ -277,15 +317,109 @@ struct CatchFish {
 using CatchFish_s = std::shared_ptr<CatchFish>;
 
 
+
+
+
+#ifndef CC_TARGET_PLATFORM
+
+/**************************************************************************************************/
+// Peer
+/**************************************************************************************************/
+
+struct Peer : xx::UvKcpPeer {
+	using BaseType = xx::UvKcpPeer;
+	using BaseType::BaseType;
+
+	// 所在游戏实例( Listener Accept 时填充 )
+	CatchFish* catchFish = nullptr;
+
+	// Enter 成功后绑定到玩家
+	Player_w player_w;
+
+	// 处理推送
+	virtual int ReceivePush(xx::Object_s&& msg) noexcept override;
+	virtual void Dispose(int const& flag = 1) noexcept override;
+};
+
+
+/**************************************************************************************************/
+// Listener
+/**************************************************************************************************/
+
+struct Listener : xx::UvKcpListener<Peer> {
+	using BaseType = xx::UvKcpListener<Peer>;
+
+	// 游戏实例( 此物也可以与 Listener 同级. 为方便先放这 )
+	CatchFish catchFish;
+
+	// 定时器. 模拟一个游戏循环
+	xx::UvTimer_s looper;
+	int64_t ticksPool = 0;
+	int64_t lastTicks = xx::NowEpoch10m();
+	// 比 60 略快以兼容部分硬件显示刷新不标准, 超过 60 帧的垃圾设备, 例如部分华为高端型号
+	const int64_t ticksPerFrame = int64_t(10000000 / 60.3);	
+
+	Listener(xx::Uv& uv, std::string const& ip, int const& port);
+	virtual void Accept(std::shared_ptr<xx::UvKcpBasePeer> peer_) noexcept override;
+};
+using Listener_s = std::shared_ptr<Listener>;
+
+#else
+
+/**************************************************************************************************/
+// ClientPeer
+/**************************************************************************************************/
+
+struct Dialer;
+struct ClientPeer : xx::UvKcpPeer {
+	using BaseType = xx::UvKcpPeer;
+	using BaseType::BaseType;
+
+	// Dialer Accept 时填充
+	Dialer* dialer = nullptr;
+
+	// 处理推送( 向 dialer.recvs 压入数据 )
+	virtual int ReceivePush(xx::Object_s&& msg) noexcept override;
+};
+
+/**************************************************************************************************/
+// Dialer
+/**************************************************************************************************/
+
+struct Dialer : xx::UvKcpDialer<ClientPeer> {
+	using BaseType = xx::UvKcpDialer<ClientPeer>;
+	using BaseType::BaseType;
+
+	// 引用到游戏实例
+	CatchFish* catchFish = nullptr;
+
+	// 收到的数据
+	std::deque<xx::Object_s> recvs;
+
+	// 脚本行号
+	int lineNumber = 0;
+
+	// 脚本实现
+	int UpdateCore(int const& lineNumber) noexcept;
+
+	// 每帧驱动脚本
+	int Update() noexcept;
+
+	virtual void Accept(std::shared_ptr<xx::UvKcpBasePeer> peer_) noexcept override;
+};
+using Dialer_s = std::shared_ptr<Dialer>;
+
+#endif
+
+
+
 /**************************************************************************************************/
 // hpp includes
 /**************************************************************************************************/
 
 #include "CatchFish.hpp"
-#include "CatchFish_MakeBeeline.hpp"
 #include "CatchFish_Update.hpp"
 #include "CatchFish_Init.hpp"
-#include "CatchFish_MakeRandomFish.hpp"
 
 #include "SpriteFrame.hpp"
 #include "Physics.hpp"
@@ -294,3 +428,10 @@ using CatchFish_s = std::shared_ptr<CatchFish>;
 #include "Fish.hpp"
 #include "Cannon.hpp"
 #include "Bullet.hpp"
+
+#include "ClientPeer.hpp"
+#ifndef CC_TARGET_PLATFORM
+#include "Listener.hpp"
+#else
+#include "Dialer.hpp"
+#endif

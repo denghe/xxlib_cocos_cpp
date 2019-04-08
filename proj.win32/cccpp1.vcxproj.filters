@@ -419,22 +419,22 @@
     <ClInclude Include="..\Classes\Cannon.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CatchFish_MakeBeeline.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\CatchFish_Update.hpp">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CatchFish_Init.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CatchFish_MakeRandomFish.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\CatchFish.hpp">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Bullet.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Dialer.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ClientPeer.hpp">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

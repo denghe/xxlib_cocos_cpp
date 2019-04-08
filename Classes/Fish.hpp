@@ -3,7 +3,9 @@
 	assert(!cfg);
 	cfg = &*scene->cfg->fishs->At(cfgId);
 	if (int r = this->BaseType::InitCascade(o)) return r;
+#ifdef CC_TARGET_PLATFORM
 	DrawInit();
+#endif
 	return 0;
 }
 
@@ -69,7 +71,9 @@ LabKeepMoving:
 	}
 
 	angle = p->angle;
+#ifdef CC_TARGET_PLATFORM
 	DrawUpdate();
+#endif
 	return 0;
 };
 
@@ -95,20 +99,20 @@ int Fish::HitCheck(Bullet* const& bullet) noexcept {
 	// 3 判: 物理检测. 用子弹半径经过坐标转换, 去物理 space 选取 shapes. 如果有选到, 则判定成功
 	auto&& space = xx::As<Physics>(cfg->moveFrames->At(spriteFrameIndex)->physics)->space;
 	auto&& p = xx::Rotate(dpos, angle * (float(M_PI) / 180.0f));
-	if (cpSpacePointQueryNearest(space, cpv(p.x, p.y), bullet->cfg->radius, CP_SHAPE_FILTER_ALL, nullptr)) {
+	if (cpSpacePointQueryNearest(space, cpv(p.x, p.y), cpFloat(bullet->cfg->radius), CP_SHAPE_FILTER_ALL, nullptr)) {
 		return 1;
 	}
 	return 0;
 }
 
 inline Fish::~Fish() {
+#ifdef CC_TARGET_PLATFORM
 	DrawDispose();
+#endif
 }
 
-#pragma region
-
-inline void Fish::DrawInit() noexcept {
 #ifdef CC_TARGET_PLATFORM
+inline void Fish::DrawInit() noexcept {
 	assert(!body);
 	body = cocos2d::Sprite::create();
 	body->setGlobalZOrder(cfg->zOrder);
@@ -130,11 +134,9 @@ inline void Fish::DrawInit() noexcept {
 #if DRAW_PHYSICS_POLYGON
 	cc_scene->addChild(debugNode);
 #endif
-#endif
 }
 
 inline void Fish::DrawUpdate() noexcept {
-#ifdef CC_TARGET_PLATFORM
 	assert(body);
 	auto&& sf = xx::As<SpriteFrame>(cfg->moveFrames->At(spriteFrameIndex)->frame)->spriteFrame;
 
@@ -165,11 +167,9 @@ inline void Fish::DrawUpdate() noexcept {
 		}
 	}
 #endif
-#endif
 }
 
 inline void Fish::DrawDispose() noexcept {
-#ifdef CC_TARGET_PLATFORM
 	if (!body) return;
 
 	if (body->getParent()) {
@@ -191,7 +191,5 @@ inline void Fish::DrawDispose() noexcept {
 	debugNode->release();
 	debugNode = nullptr;
 #endif
-#endif
 }
-
-#pragma endregion
+#endif
