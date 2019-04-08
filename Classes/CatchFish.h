@@ -406,8 +406,27 @@ struct Dialer : xx::UvKcpDialer<ClientPeer> {
 	// 处理首包( EnterSuccess || Error )
 	int HandleFirstPackage() noexcept;
 
-	// 处理一般数据包( FrameEvents || ... )
+	// 处理一般数据包( 总路由 )
 	int HandlePackages() noexcept;
+
+	// 分别处理事件包
+	int Handle(PKG::CatchFish::Events::Enter_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::Leave_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::NoMoney_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::Refund_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::FishDead_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::PushWeapon_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::PushFish_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::OpenAutoLock_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::Aim_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::CloseAutoLock_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::OpenAutoFire_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::CloseAutoFire_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::Fire_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::CannonSwitch_s o) noexcept;
+	int Handle(PKG::CatchFish::Events::CannonCoinChange_s o) noexcept;
+
+
 
 	// 清空 recvs, player, catchFish->players, scene
 	void Reset() noexcept;

@@ -18,8 +18,8 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		// try connect to server
 		Dial("127.0.0.1", 12345, 2000);
 
-		// clear recv datas( 这个时机清的比较彻底. 因为 Dial 函数会 Cleanup, 清除原有 Peer, 如果存在的话 )
-		recvs.clear();
+		// cleanup context data
+		Reset();
 
 		// wait connected or timeout
 		while (!finished) {
@@ -87,23 +87,60 @@ inline int Dialer::HandleFirstPackage() noexcept {
 }
 
 inline int Dialer::HandlePackages() noexcept {
-	// todo: handle frame events
+	int r = 0;
 	while (!recvs.empty()) {
 		switch (recvs.front()->GetTypeId()) {
 		case xx::TypeId_v<PKG::CatchFish_Client::FrameEvents>: {
 			auto&& fe = xx::As<PKG::CatchFish_Client::FrameEvents>(recvs.front());
-
-		}
-		case xx::TypeId_v<PKG::Generic::Error>: {
-			// todo: show error msg?
-			return -1;
+			// 如果本地帧编号慢于 server 则追帧
+			while (fe->frameNumber > ::catchFish->scene->frameNumber) {
+				::catchFish->scene->Update();
+			}
+			// 依次处理事件集合
+			for (auto&& e : *fe->events) {
+				switch (e->GetTypeId()) {
+				case xx::TypeId_v<PKG::CatchFish::Events::Enter>:
+					r = Handle(xx::As<PKG::CatchFish::Events::Enter>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::Leave>:
+					r = Handle(xx::As<PKG::CatchFish::Events::Leave>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::NoMoney>:
+					r = Handle(xx::As<PKG::CatchFish::Events::NoMoney>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::Refund>:
+					r = Handle(xx::As<PKG::CatchFish::Events::Refund>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::FishDead>:
+					r = Handle(xx::As<PKG::CatchFish::Events::FishDead>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::PushWeapon>:
+					r = Handle(xx::As<PKG::CatchFish::Events::PushWeapon>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::PushFish>:
+					r = Handle(xx::As<PKG::CatchFish::Events::PushFish>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::OpenAutoLock>:
+					r = Handle(xx::As<PKG::CatchFish::Events::OpenAutoLock>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::Aim>:
+					r = Handle(xx::As<PKG::CatchFish::Events::Aim>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::CloseAutoLock>:
+					r = Handle(xx::As<PKG::CatchFish::Events::CloseAutoLock>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::OpenAutoFire>:
+					r = Handle(xx::As<PKG::CatchFish::Events::OpenAutoFire>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::CloseAutoFire>:
+					r = Handle(xx::As<PKG::CatchFish::Events::CloseAutoFire>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::Fire>:
+					r = Handle(xx::As<PKG::CatchFish::Events::Fire>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::CannonSwitch>:
+					r = Handle(xx::As<PKG::CatchFish::Events::CannonSwitch>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::CannonCoinChange>:
+					r = Handle(xx::As<PKG::CatchFish::Events::CannonCoinChange>(e)); break;
+				default:
+					// todo: log?
+					assert(false);
+				}
+				if (r) return r;
+			}
 		}
 		default: {
 			// todo: log?
 			return -1;
 		}
 		}
-		// recvs.front()
 		recvs.pop_front();
 	}
 	return 0;
@@ -115,3 +152,20 @@ inline void Dialer::Reset() noexcept {
 	::catchFish->players.Clear();
 	::catchFish->scene.reset();
 }
+
+
+inline int Dialer::Handle(PKG::CatchFish::Events::Enter_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::Leave_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::NoMoney_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::Refund_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::FishDead_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::PushWeapon_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::PushFish_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::OpenAutoLock_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::Aim_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::CloseAutoLock_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::OpenAutoFire_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::CloseAutoFire_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::Fire_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::CannonSwitch_s o) noexcept { return 0; }
+inline int Dialer::Handle(PKG::CatchFish::Events::CannonCoinChange_s o) noexcept { return 0; }
