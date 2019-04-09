@@ -85,7 +85,7 @@ inline Fish_s Scene::MakeRandomFish() noexcept {
 	fish->cfgId = cfgId;
 	fish->cfg = &*fishCfg;
 	if (fishCfg->minCoin < fishCfg->maxCoin) {
-		fish->coin = rnd->Next(fishCfg->minCoin, fishCfg->maxCoin + 1);
+		fish->coin = rnd->Next((int)fishCfg->minCoin, (int)fishCfg->maxCoin + 1);
 	}
 	else {
 		fish->coin = fishCfg->minCoin;			
@@ -143,7 +143,7 @@ inline PKG::CatchFish::Way_s Scene::MakeBeeline(float const& itemRadius) noexcep
 	}
 	auto && way = xx::Make<PKG::CatchFish::Way>();
 	xx::MakeTo(way->points);
-	way->points->Add(PKG::CatchFish::WayPoint{ p1, xx::GetAngle(p1, p2) * (180.0f / float(M_PI)), p1.distance(p2) });
+	way->points->Add(PKG::CatchFish::WayPoint{ p1, xx::GetAngle(p1, p2), p1.distance(p2) });
 	way->points->Add(PKG::CatchFish::WayPoint{ p2, 0, 0 });	// 非循环轨迹最后个点距离和角度不用计算, 也不做统计
 	way->distance = way->points->At(0).distance;
 	way->loop = false;
