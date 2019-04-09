@@ -82,24 +82,25 @@ int Fish::HitCheck(Bullet* const& bullet) noexcept {
 	auto dpos = pos - bullet->pos;
 	auto&& distPow2 = dpos.x * dpos.x + dpos.y * dpos.y;
 
-	// 1 判: 如果有配置最小半径, 即位于圆心的这个半径内 非空心, 一定命中, 如果距离小于两半径和， 则判定成立
-	if (cfg->minDetectRadius > 0) {
-		auto&& r2 = cfg->minDetectRadius + bullet->cfg->radius;
-		if (r2 * r2 > distPow2) {
-			return 1;
-		}
-	}
-	// 2 判: 如果有配置最大半径, 即只要进入这个范围, 就可以进一步物理判断, 如果距离超过, 则判定失败
-	if (cfg->maxDetectRadius > 0) {
-		auto&& r2 = cfg->maxDetectRadius + bullet->cfg->radius;
-		if (r2 * r2 < distPow2) {
-			return 0;
-		}
-	}
+	//// 1 判: 如果有配置最小半径, 即位于圆心的这个半径内 非空心, 一定命中, 如果距离小于两半径和， 则判定成立
+	//if (cfg->minDetectRadius > 0) {
+	//	auto&& r2 = cfg->minDetectRadius * cfg->scale * this->scale + bullet->cfg->radius * bullet->cfg->scale;
+	//	if (r2 * r2 > distPow2) {
+	//		return 1;
+	//	}
+	//}
+	//// 2 判: 如果有配置最大半径, 即只要进入这个范围, 就可以进一步物理判断, 如果距离超过, 则判定失败
+	//if (cfg->maxDetectRadius > 0) {
+	//	auto&& r2 = cfg->maxDetectRadius * cfg->scale * this->scale + bullet->cfg->radius * bullet->cfg->scale;
+	//	if (r2 * r2 < distPow2) {
+	//		return 0;
+	//	}
+	//}
 	// 3 判: 物理检测. 用子弹半径经过坐标转换, 去物理 space 选取 shapes. 如果有选到, 则判定成功
 	auto&& space = xx::As<Physics>(cfg->moveFrames->At(spriteFrameIndex)->physics)->space;
 	auto&& p = xx::Rotate(dpos, angle * (float(M_PI) / 180.0f));
-	if (cpSpacePointQueryNearest(space, cpv(p.x, p.y), cpFloat(bullet->cfg->radius), CP_SHAPE_FILTER_ALL, nullptr)) {
+	p = p / (cfg->scale * this->scale);
+	if (cpSpacePointQueryNearest(space, cpv(p.x, p.y), cpFloat(bullet->cfg->radius * bullet->cfg->scale), CP_SHAPE_FILTER_ALL, nullptr)) {
 		return 1;
 	}
 	return 0;
@@ -148,11 +149,11 @@ inline void Fish::DrawUpdate() noexcept {
 
 	shadow->setSpriteFrame(sf);
 	shadow->setRotation(-angle);
-	shadow->setPosition(pos + cfg->shadowOffset);
+	shadow->setPosition(pos + cfg->shadowOffset * scale * cfg->scale);
 	shadow->setScale(scale * cfg->scale * cfg->shadowScale);
 #if DRAW_PHYSICS_POLYGON
 	// 碰撞多边形显示
-	debugNode->setPosition(Vec2(pos));
+	debugNode->setPosition(pos);
 	debugNode->setRotation(-angle);
 	debugNode->setScale(scale * cfg->scale);
 	auto&& sfs = cfg->moveFrames->At(spriteFrameIndex);
@@ -161,9 +162,9 @@ inline void Fish::DrawUpdate() noexcept {
 		debugNode->drawCircle({ 0,0 }, cfg->maxDetectRadius, 0, 50, true, cocos2d::Color4F::RED);
 		for (auto&& polygon : *sfs->physics->polygons) {
 			for (size_t i = 0; i < polygon->len - 1; ++i) {
-				debugNode->drawLine(Vec2(polygon->At(i)), Vec2(polygon->At(i + 1)), cocos2d::Color4F::GREEN);
+				debugNode->drawLine(polygon->At(i), polygon->At(i + 1), cocos2d::Color4F::GREEN);
 			}
-			debugNode->drawLine(Vec2(polygon->At(0)), Vec2(polygon->At(polygon->len - 1)), cocos2d::Color4F::GREEN);
+			debugNode->drawLine(polygon->At(0), polygon->At(polygon->len - 1), cocos2d::Color4F::GREEN);
 		}
 	}
 #endif

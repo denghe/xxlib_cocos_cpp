@@ -54,7 +54,8 @@ inline int Cannon::Update(int const& frameNumber) noexcept {
 		angle = xx::GetAngle(pos, tpos) * (180.0f / float(M_PI));
 
 		// 试着发射
-		if (Fire(frameNumber)) {
+		int r = Fire(frameNumber);
+		if (!r) {
 			// todo: 开始播放炮台开火特效, 音效
 		}
 	}
@@ -92,13 +93,13 @@ inline void Cannon::Hit(PKG::Client_CatchFish::Hit_s& o) noexcept {
 
 
 #ifndef CC_TARGET_PLATFORM
-inline bool Cannon::Fire(PKG::Client_CatchFish::Fire_s& o) noexcept {
+inline int Cannon::Fire(PKG::Client_CatchFish::Fire_s& o) noexcept {
 	// 如果金币不足, 失败
-	if (player->coin >= coin) return false;
+	if (player->coin < coin) return -1;
 
 	// 如果子弹编号已存在, 失败
 	for (auto&& bullet : *bullets) {
-		if (bullet->id == o->bulletId) return false;
+		if (bullet->id == o->bulletId) return -2;
 	}
 
 	// 根据开火目标坐标计算角度
@@ -107,11 +108,11 @@ inline bool Cannon::Fire(PKG::Client_CatchFish::Fire_s& o) noexcept {
 	// 模拟客户端参数以兼容下方代码
 	auto frameNumber = o->frameNumber;
 #else
-inline bool Cannon::Fire(int const& frameNumber) noexcept {
+inline int Cannon::Fire(int const& frameNumber) noexcept {
 #endif
-	if (!quantity) return false;									// 剩余颗数为 0
-	if (frameNumber < fireCD) return false;						// CD 中
-	if (bullets->len == cfg->numLimit) return false;				// 总颗数限制
+	if (!quantity) return -3;									// 剩余颗数为 0
+	if (frameNumber < fireCD) return -4;						// CD 中
+	if (bullets->len == cfg->numLimit) return -5;				// 总颗数限制
 	// todo: 更多发射限制检测
 	
 	// 置 cd
@@ -129,7 +130,7 @@ inline bool Cannon::Fire(int const& frameNumber) noexcept {
 	bullet->player = player;
 	bullet->cannon = this;
 	bullet->cfg = cfg;
-	bullet->pos = pos + xx::Rotate(xx::Pos{ cfg->muzzleLen ,0 }, angle * (float(M_PI) / 180.0f));		// 计算炮口坐标
+	bullet->pos = pos + xx::Rotate(xx::Pos{ cfg->muzzleLen * cfg->scale ,0 }, angle * (float(M_PI) / 180.0f));		// 计算炮口坐标
 	bullet->angle = angle;	// 角度沿用炮台的( 在发射前炮台已经调整了角度 )
 	bullet->moveInc = xx::Rotate(xx::Pos{ cfg->distance ,0 }, angle * (float(M_PI) / 180.0f));	// 计算出每帧移动增量
 	bullet->coin = coin;	// 存储发射时炮台的倍率
@@ -139,19 +140,19 @@ inline bool Cannon::Fire(int const& frameNumber) noexcept {
 	bullet->DrawInit();
 
 	// 发包
-	auto&& o = xx::Make<PKG::Client_CatchFish::Fire>();
-	o->bulletId = bullet->id;
-	o->cannonId = this->id;
-	o->frameNumber = scene->frameNumber;
-	o->pos = bullet->pos;
-	if (int r = ::dialer->peer->SendPush(o)) return false;
+	auto&& pkg = xx::Make<PKG::Client_CatchFish::Fire>();
+	pkg->bulletId = bullet->id;
+	pkg->cannonId = this->id;
+	pkg->frameNumber = scene->frameNumber;
+	pkg->pos = bullet->pos;
+	if (int r = ::dialer->peer->SendPush(pkg)) return -6;
 
 #else
 	bullet->id = o->bulletId;
 
 	// 追帧. 令子弹轨迹运行至当前帧编号
 	while (frameNumber++ < scene->frameNumber) {
-		if (!bullet->Update(frameNumber)) return true;
+		if (int r = bullet->Update(frameNumber)) return 0;
 	}
 
 	// 创建发射事件( 根据追帧后的结果来下发, 减少接收端追帧强度 )
@@ -162,9 +163,10 @@ inline bool Cannon::Fire(int const& frameNumber) noexcept {
 	fire->playerId = player->id;
 	fire->tarAngle = bullet->angle;
 	fire->tarPos = bullet->pos;
+	scene->frameEvents->events->Add(std::move(fire));
 #endif
 
-	return true;
+	return 0;
 }
 
 inline Cannon::~Cannon() {

@@ -24,8 +24,8 @@ inline int Scene::Update(int const&) noexcept {
 	}
 	// todo: foreach  items, ..... call Update
 
-	// 模拟关卡 鱼发生器. 每 10 帧生成一条
-	if (frameNumber % 10 == 0) {
+	// 模拟关卡 鱼发生器. 每 xx 帧生成一条
+	if (frameNumber % 64 == 0) {
 		fishs->Add(MakeRandomFish());
 	}
 
@@ -76,10 +76,20 @@ inline int Scene::Update(int const&) noexcept {
 
 
 inline Fish_s Scene::MakeRandomFish() noexcept {
+	int cfgId = 0;
+	auto&& fishCfg = cfg->fishs->At(cfgId);
+
 	auto&& fish = xx::Make<Fish>();
+	fish->scene = this;
 	fish->id = ++autoIncId;
-	fish->cfgId = 0;
-	fish->coin = 3;			// if minCoin < maxCoin    rnd->Next(cfg->minCoin, cfg->maxCoin + 1);
+	fish->cfgId = cfgId;
+	fish->cfg = &*fishCfg;
+	if (fishCfg->minCoin < fishCfg->maxCoin) {
+		fish->coin = rnd->Next(fishCfg->minCoin, fishCfg->maxCoin + 1);
+	}
+	else {
+		fish->coin = fishCfg->minCoin;			
+	}
 	fish->speedScale = 1;
 	fish->scale = 1;
 	fish->wayIndex = 0;
@@ -88,13 +98,15 @@ inline Fish_s Scene::MakeRandomFish() noexcept {
 	fish->spriteFrameIndex = 0;
 	fish->frameRatio = 1;
 	fish->reverse = false;
-	fish->way = MakeBeeline(cfg->fishs->At(0)->maxDetectRadius);		// 先随便生成一条轨迹
+	fish->way = MakeBeeline(fishCfg->maxDetectRadius * fishCfg->scale);		// 先随便生成一条轨迹
 
 	auto&& p = fish->way->points->At(fish->wayPointIndex);
 	fish->pos = p.pos;
 	fish->angle = p.angle;
 
-	fish->InitCascade(this);
+#ifdef CC_TARGET_PLATFORM
+	fish->DrawInit();
+#endif
 	return fish;
 }
 

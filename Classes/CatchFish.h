@@ -13,7 +13,7 @@
 // ::
 /**************************************************************************************************/
 
-#define DRAW_PHYSICS_POLYGON 0
+#define DRAW_PHYSICS_POLYGON 1
 
 static constexpr int ScreenWidth = 1280;
 static constexpr int ScreenHeight = 720;
@@ -221,10 +221,10 @@ struct Cannon : PKG::CatchFish::Cannon {
 
 	// 发射子弹. 成功返回 true
 #ifdef CC_TARGET_PLATFORM
-	virtual bool Fire(int const& frameNumber) noexcept;
+	virtual int Fire(int const& frameNumber) noexcept;
 #else
 	// player 在遍历 recvFires 的时候定位到炮台就 call 这个函数来发射
-	virtual bool Fire(PKG::Client_CatchFish::Fire_s& o) noexcept;
+	virtual int Fire(PKG::Client_CatchFish::Fire_s& o) noexcept;
 
 	// player 在遍历 recvHits 的时候定位到炮台就 call 这个函数来做子弹碰撞检测
 	virtual void Hit(PKG::Client_CatchFish::Hit_s& o) noexcept;
