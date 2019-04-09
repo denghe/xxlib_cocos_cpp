@@ -8,6 +8,7 @@
 	xx::BBuffer::Register<Cannon>(xx::TypeId_v<PKG::CatchFish::Cannon>);
 	// todo: more
 }
+
 inline void CatchFish::Dispose(int const& flag) noexcept {
 	if (disposed) return;
 
@@ -72,24 +73,26 @@ inline int CatchFish::Init(std::string const& cfgName) noexcept {
 
 	// 初始化拨号器
 	xx::MakeTo(::dialer, *uv);
+
+#else
+	xx::MakeTo(scene);
+	xx::MakeTo(scene->borns);
+	xx::MakeTo(scene->fishs);
+	xx::MakeTo(scene->freeSits);
+	xx::MakeTo(scene->items);
+	xx::MakeTo(scene->players);
+	xx::MakeTo(scene->rnd, 123);
+	xx::MakeTo(scene->stage);
+	xx::MakeTo(scene->frameEvents);
+	xx::MakeTo(scene->frameEvents->events);
+	scene->cfg = &*cfg;
+
+	scene->freeSits->Add(PKG::CatchFish::Sits::LeftTop
+		, PKG::CatchFish::Sits::RightTop
+		, PKG::CatchFish::Sits::RightBottom
+		, PKG::CatchFish::Sits::LeftBottom);
 #endif
 
-
-	//	// 模拟收到 sync( 含 players & scene )
-	//	xx::MakeTo(scene);
-	//	xx::MakeTo(scene->borns);
-	//	xx::MakeTo(scene->fishs);
-	//	xx::MakeTo(scene->freeSits);
-	//	xx::MakeTo(scene->items);
-	//	xx::MakeTo(scene->players);
-	//	xx::MakeTo(scene->rnd, 123);
-	//	xx::MakeTo(scene->stage);
-	//#ifndef CC_TARGET_PLATFORM
-	//	xx::MakeTo(scene->frameEvents);
-	//	xx::MakeTo(scene->frameEvents->events);
-	//#endif
-	//
-	//	scene->cfg = &*cfg;
 	//	if (int r = scene->InitCascade()) return r;
 	//
 	//	auto&& plr = xx::Make<Player>();
@@ -112,7 +115,8 @@ inline int CatchFish::Init(std::string const& cfgName) noexcept {
 
 inline int CatchFish::Update() noexcept {
 #ifdef CC_TARGET_PLATFORM
-	if (int r = dialer->Update()) return r;
-#endif
+	return dialer->Update();
+#else
 	return scene->Update();
+#endif
 }

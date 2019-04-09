@@ -42,7 +42,7 @@ inline int Scene::Update(int const&) noexcept {
 		// 只给没断线的发
 		if (plr->peer) {
 			// 如果是本帧内进入的玩家, 就下发完整同步
-			if (frameEnters.Find(&*plr) >= 0) {
+			if (frameEnters.Find(&*plr) != -1) {
 				// 如果没创建就创建之
 				if (!enterSuccess) {
 					xx::MakeTo(enterSuccess);

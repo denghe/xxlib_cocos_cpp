@@ -21,6 +21,8 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		// cleanup context data
 		Reset();
 
+		xx::CoutN("1");
+
 		// wait connected or timeout
 		while (!finished) {
 			COR_YIELD
@@ -31,6 +33,8 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 			// todo: sleep?
 			goto LabDial;
 		}
+
+		xx::CoutN("2");
 
 		// send enter package
 		xx::MakeTo(pkgEnter);
@@ -52,10 +56,15 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 			goto LabDial;
 		}
 
+		xx::CoutN("3");
+
 		while (!peer->Disposed()) {				// disconnect checker
 			if (r = HandlePackages()) {
 				// todo: show error?
 				goto LabDial;
+			}
+			if (r = ::catchFish->scene->Update()) {
+				return 0;	// quit game
 			}
 			COR_YIELD
 		}
@@ -82,6 +91,7 @@ inline int Dialer::HandleFirstPackage() noexcept {
 		player->isSelf = true;
 
 		// restore scene
+		::catchFish->scene->cfg = &*::catchFish->cfg;
 		if (int r = ::catchFish->scene->InitCascade()) return r;
 
 		// restore player
@@ -154,6 +164,7 @@ inline int Dialer::HandlePackages() noexcept {
 				}
 				if (r) return r;
 			}
+			break;
 		}
 		default: {
 			// todo: log?

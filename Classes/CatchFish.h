@@ -4,7 +4,9 @@
 #endif
 #include <cmath>
 #include "xx_pos.h"
+#include "xx_random.h"
 #include "PKG_class.h"
+#include "xx_random.hpp"
 #include "chipmunk.h"
 
 /**************************************************************************************************/
@@ -182,7 +184,10 @@ struct Player : PKG::CatchFish::Player {
 
 	virtual int InitCascade(void* const& o) noexcept override;
 	virtual int Update(int const& frameNumber) noexcept override;
-	// ~Player
+#ifndef CC_TARGET_PLATFORM
+	// 归还座位
+	~Player();
+#endif
 };
 using Player_s = std::shared_ptr<Player>;
 using Player_w = std::weak_ptr<Player>;
