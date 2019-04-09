@@ -17,8 +17,10 @@ inline int Scene::Update(int const&) noexcept {
 	auto&& ps = *this->players;
 	if (ps.len) {
 		for (size_t i = ps.len - 1; i != -1; --i) {
-			if (ps[i].lock()->Update(frameNumber)) {
+			auto&& p = xx::As<Player>(ps[i].lock());
+			if (p->Update(frameNumber)) {
 				ps.SwapRemoveAt(i);
+				catchFish->players.Remove(p);
 			}
 		}
 	}
