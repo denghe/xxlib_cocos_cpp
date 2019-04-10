@@ -59,12 +59,9 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 	xx::CoutN("3");
 
 	while (!peer->Disposed()) {				// disconnect checker
-		if (r = HandlePackages()) {
+		if (r = HandlePackagesOrUpdateScene()) {
 			// todo: show error?
 			goto LabDial;
-		}
-		if (r = ::catchFish->scene->Update()) {
-			return 0;	// quit game
 		}
 		COR_YIELD
 	}
@@ -115,15 +112,20 @@ inline int Dialer::HandleFirstPackage() noexcept {
 	assert(false);
 }
 
-inline int Dialer::HandlePackages() noexcept {
+inline int Dialer::HandlePackagesOrUpdateScene() noexcept {
 	int r = 0;
+	bool needUpdateScene = true;
 	while (!recvs.empty()) {
 		switch (recvs.front()->GetTypeId()) {
 		case xx::TypeId_v<PKG::CatchFish_Client::FrameEvents>: {
 			auto&& fe = xx::As<PKG::CatchFish_Client::FrameEvents>(recvs.front());
+			xx::CoutN("          ", fe->frameNumber - ::catchFish->scene->frameNumber);
 			// 如果本地帧编号慢于 server 则追帧
-			while (fe->frameNumber > ::catchFish->scene->frameNumber) {
-				::catchFish->scene->Update();
+			if (fe->frameNumber > ::catchFish->scene->frameNumber) {
+				while (fe->frameNumber > ::catchFish->scene->frameNumber) {
+					if (r = ::catchFish->scene->Update()) return r;
+				}
+				needUpdateScene = false;
 			}
 			// 依次处理事件集合
 			for (auto&& e : *fe->events) {
@@ -158,6 +160,8 @@ inline int Dialer::HandlePackages() noexcept {
 					r = Handle(xx::As<PKG::CatchFish::Events::CannonSwitch>(e)); break;
 				case xx::TypeId_v<PKG::CatchFish::Events::CannonCoinChange>:
 					r = Handle(xx::As<PKG::CatchFish::Events::CannonCoinChange>(e)); break;
+				case xx::TypeId_v<PKG::CatchFish::Events::DebugInfo>:
+					r = Handle(xx::As<PKG::CatchFish::Events::DebugInfo>(e), fe->frameNumber); break;
 				default:
 					// todo: log?
 					assert(false);	// 不该执行到这里
@@ -173,7 +177,8 @@ inline int Dialer::HandlePackages() noexcept {
 		}
 		recvs.pop_front();
 	}
-	return 0;
+
+	return needUpdateScene ? ::catchFish->scene->Update() : 0;
 }
 
 inline void Dialer::Reset() noexcept {
@@ -242,5 +247,13 @@ inline int Dialer::Handle(PKG::CatchFish::Events::CannonSwitch_s o) noexcept {
 	return 0;
 }
 inline int Dialer::Handle(PKG::CatchFish::Events::CannonCoinChange_s o) noexcept {
+	return 0;
+}
+inline int Dialer::Handle(PKG::CatchFish::Events::DebugInfo_s o, int const& frameNumber) noexcept {
+	auto&& fishIds = ::catchFish->scene->fishIdss[frameNumber];
+	assert(fishIds.len == o->fishIds->len);
+	std::sort(fishIds.buf, fishIds.buf + fishIds.len);
+	std::sort(o->fishIds->buf, o->fishIds->buf + o->fishIds->len);
+	assert(memcmp(fishIds.buf, o->fishIds->buf, fishIds.len * sizeof(int)) == 0);
 	return 0;
 }

@@ -80,10 +80,10 @@ void InitGlobals(bool first)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 	std::wstring str;
 	str.resize(16384);
-	decltype(auto) n = GetCurrentDirectory(16384, str.data());
+	(void)GetCurrentDirectory(16384, str.data());
 	str.resize(wcslen(str.data()));
 	str.append(L"/..");
-	auto len = 2 * str.size() + 1;
+	auto&& len = 2 * str.size() + 1;
 	std::string s2;
 	s2.resize(len);
 	s2.resize(wcstombs(s2.data(), str.c_str(), len));

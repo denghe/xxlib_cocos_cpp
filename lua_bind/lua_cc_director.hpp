@@ -17,6 +17,8 @@ inline void Lua_Register_Director(lua_State* const& L)
 				assert(!lua_gettop(gLua));
 				//lua_settop(gLua, 0);
 				//std::cout << ::gFrameNumber++ << std::endl;
+
+				uv->Run(UV_RUN_NOWAIT);
 			};
 		}
 		else
