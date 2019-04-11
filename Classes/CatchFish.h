@@ -13,6 +13,7 @@
 // ::
 /**************************************************************************************************/
 
+// 是否显示物理碰撞检测线
 #define DRAW_PHYSICS_POLYGON 0
 
 static constexpr int ScreenWidth = 1280;
@@ -176,8 +177,8 @@ struct Player : PKG::CatchFish::Player {
 	//// 令牌
 	//std::string token;
 
-	// 开炮等行为花掉的金币数汇总 ( 统计 )
-	int64_t consumeCoin = 0;
+	//// 开炮等行为花掉的金币数汇总 ( 统计 )
+	//int64_t consumeCoin = 0;
 
 	// 绑定的网络连接
 	std::shared_ptr<Peer> peer;
@@ -363,8 +364,14 @@ struct Peer : xx::UvKcpPeer {
 	// Enter 成功后绑定到玩家
 	Player_w player_w;
 
+	// pong package cache for send
+	inline static PKG::Generic::Pong_s pkgPong = xx::Make<PKG::Generic::Pong>();
+
 	// 处理推送
 	virtual int ReceivePush(xx::Object_s&& msg) noexcept override;
+
+	virtual int ReceiveRequest(int const& serial, xx::Object_s&& msg) noexcept override;
+
 	virtual void Dispose(int const& flag = 1) noexcept override;
 };
 
@@ -401,8 +408,6 @@ struct Dialer;
 struct ClientPeer : xx::UvKcpPeer {
 	using BaseType = xx::UvKcpPeer;
 	using BaseType::BaseType;
-
-	// todo: 状态标志位?
 
 	// 处理推送( 向 dialer.recvs 压入数据 )
 	virtual int ReceivePush(xx::Object_s&& msg) noexcept override;
@@ -467,6 +472,11 @@ struct Dialer : xx::UvKcpDialer<ClientPeer> {
 
 	// 指向当前玩家
 	Player_s player;
+
+
+	// ping package cache for send
+	inline static PKG::Generic::Ping_s pkgPing = xx::Make<PKG::Generic::Ping>();
+
 };
 using Dialer_s = std::shared_ptr<Dialer>;
 

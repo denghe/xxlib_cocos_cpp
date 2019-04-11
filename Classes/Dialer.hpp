@@ -58,10 +58,25 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 
 	xx::CoutN("step 3");
 
-	while (!peer->Disposed()) {				// disconnect checker
+	// peer keeper
+	while (!peer->Disposed()) {
 		if (r = HandlePackagesOrUpdateScene()) {
 			// todo: show error?
 			goto LabDial;
+		}
+
+		// ping test
+		if (::catchFish->scene->frameNumber % 60 == 0) {
+			pkgPing->ticks = xx::NowSteadyEpochMS();
+			peer->SendRequest(pkgPing, [](xx::Object_s && msg) {
+				if (auto&& pong = xx::As<PKG::Generic::Pong>(msg)) {
+					xx::CoutN("ping: ",xx::NowSteadyEpochMS() - pong->ticks, "ms");
+				}
+				else {
+					xx::CoutN("ping: timeout");
+				}
+				return 0;
+			}, 2000);
 		}
 		COR_YIELD
 	}
