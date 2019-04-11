@@ -16,12 +16,12 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 	};
 
 	// try connect to server
-	Dial("127.0.0.1", 12345, 2000);
+	Dial(catchFish->serverIp, catchFish->serverPort, 2000);
 
 	// cleanup context data
 	Reset();
 
-	xx::CoutN("1");
+	xx::CoutN("step 1");
 
 	// wait connected or timeout
 	while (!finished) {
@@ -34,7 +34,7 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		goto LabDial;
 	}
 
-	xx::CoutN("2");
+	xx::CoutN("step 2");
 
 	// send enter package
 	xx::MakeTo(pkgEnter);
@@ -56,7 +56,7 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		goto LabDial;
 	}
 
-	xx::CoutN("3");
+	xx::CoutN("step 3");
 
 	while (!peer->Disposed()) {				// disconnect checker
 		if (r = HandlePackagesOrUpdateScene()) {
@@ -119,7 +119,7 @@ inline int Dialer::HandlePackagesOrUpdateScene() noexcept {
 		switch (recvs.front()->GetTypeId()) {
 		case xx::TypeId_v<PKG::CatchFish_Client::FrameEvents>: {
 			auto&& fe = xx::As<PKG::CatchFish_Client::FrameEvents>(recvs.front());
-			xx::CoutN("          ", fe->frameNumber - ::catchFish->scene->frameNumber);
+			xx::CoutN(fe->frameNumber - ::catchFish->scene->frameNumber);
 			// 如果本地帧编号慢于 server 则追帧
 			if (fe->frameNumber > ::catchFish->scene->frameNumber) {
 				while (fe->frameNumber > ::catchFish->scene->frameNumber) {
@@ -191,9 +191,54 @@ inline void Dialer::Reset() noexcept {
 
 inline int Dialer::Handle(PKG::CatchFish::Events::Enter_s o) noexcept {
 	if (o->playerId == player->id) return 0;		// 忽略自己进入游戏的消息
-	//auto&& p = xx::Make<Player>();
-	// todo
-	return 0;
+
+	// 构建玩家上下文( 模拟收到的数据以方便调用 InitCascade )
+	auto&& player = xx::Make<Player>();
+	player->autoFire = false;
+	player->autoIncId = 0;
+	player->autoLock = false;
+	player->avatar_id = o->avatar_id;
+	xx::MakeTo(player->cannons);
+	player->coin = o->coin;
+	player->id = o->playerId;
+	if (o->nickname) {
+		xx::MakeTo(player->nickname, *o->nickname);
+	}
+	player->noMoney = o->noMoney;
+	//player->scene = &*catchFish->scene;
+	player->sit = o->sit;
+	xx::MakeTo(player->weapons);
+
+	// 构建初始炮台
+	switch (o->cannonCfgId) {
+	case 0: {
+		auto&& cannonCfg = catchFish->cfg->cannons->At(o->cannonCfgId);
+		auto&& cannon = xx::Make<Cannon>();
+		cannon->angle = float(cannonCfg->angle);
+		xx::MakeTo(cannon->bullets);
+		cannon->cfgId = o->cannonCfgId;
+		cannon->coin = o->cannonCoin;
+		cannon->id = (int)player->cannons->len;
+		//cannon->player = &*player;
+		//cannon->cfg = &*cannonCfg;
+		//cannon->pos = catchFish->cfg->sitPositons->At((int)o->sit);
+		cannon->quantity = cannonCfg->quantity;
+		cannon->scene = &*catchFish->scene;
+		cannon->fireCD = 0;
+		player->cannons->Add(cannon);
+		break;
+	}
+			// todo: more cannon types here
+	default:
+		return -2;
+	}
+
+	// 将玩家放入相应容器
+	catchFish->players.Add(player);
+	catchFish->scene->players->Add(player);
+
+	// 进一步初始化
+	return player->InitCascade(&*catchFish->scene);
 }
 inline int Dialer::Handle(PKG::CatchFish::Events::Leave_s o) noexcept {
 	return 0;
@@ -211,6 +256,7 @@ inline int Dialer::Handle(PKG::CatchFish::Events::FishDead_s o) noexcept {
 		if (f->id == o->fishId) {
 			fs[fs.len - 1]->indexAtContainer = f->indexAtContainer;
 			fs.SwapRemoveAt(f->indexAtContainer);
+			// todo: 加钱
 			// todo: 鱼死特效
 			return 0;
 		}
@@ -239,8 +285,20 @@ inline int Dialer::Handle(PKG::CatchFish::Events::CloseAutoFire_s o) noexcept {
 	return 0;
 }
 inline int Dialer::Handle(PKG::CatchFish::Events::Fire_s o) noexcept {
+	// 如果是自己发射的就忽略绘制
 	if (o->playerId == player->id) return 0;
-	// todo: 如果不是自己发射的就绘制
+	for (auto&& p : catchFish->players) {
+		if (p->id == o->playerId) {
+			for (auto&& c : *p->cannons) {
+				if (c->id == o->cannonId) {
+					auto&& cannon = xx::As<Cannon>(c);
+					cannon->coin = o->coin;					// todo: 理论上如果做完了币值切换通知就不需要这个赋值了
+					cannon->angle = o->tarAngle;
+					(void)cannon->Fire(o->frameNumber);
+				}
+			}
+		}
+	}
 	return 0;
 }
 inline int Dialer::Handle(PKG::CatchFish::Events::CannonSwitch_s o) noexcept {

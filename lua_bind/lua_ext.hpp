@@ -19,9 +19,9 @@ inline void Lua_Register_ext(lua_State* const& L)
 
 	Lua_NewFunc(L, "Init", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<CatchFish_s, std::string>(L, "Init error! need 2 args: self, string cfgName");
+		auto&& t = Lua_ToTuple<CatchFish_s, std::string, int, std::string>(L, "Init error! need 4 args: self, string ip, int port, string cfgName");
 		assert(std::get<0>(t));
-		auto&& r = std::get<0>(t)->Init(std::move(std::get<1>(t)));
+		auto&& r = std::get<0>(t)->Init(std::move(std::get<1>(t)), std::move(std::get<2>(t)), std::move(std::get<3>(t)));
 		return Lua_Pushs(L, r);
 	});
 

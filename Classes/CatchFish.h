@@ -172,13 +172,13 @@ struct Player : PKG::CatchFish::Player {
 	// 所在场景
 	Scene* scene = nullptr;
 
+#ifndef CC_TARGET_PLATFORM
 	//// 令牌
 	//std::string token;
 
 	// 开炮等行为花掉的金币数汇总 ( 统计 )
 	int64_t consumeCoin = 0;
 
-#ifndef CC_TARGET_PLATFORM
 	// 绑定的网络连接
 	std::shared_ptr<Peer> peer;
 
@@ -277,6 +277,9 @@ struct Bullet : PKG::CatchFish::Bullet {
 	virtual int Update(int const& frameNumber) noexcept override;
 	~Bullet();
 
+	// 移动子弹。如果生命周期结束将返回非 0
+	int Move() noexcept;
+
 #ifdef CC_TARGET_PLATFORM
 	cocos2d::Sprite* body = nullptr;
 	virtual void DrawInit() noexcept;
@@ -320,8 +323,16 @@ struct CatchFish {
 	// 游戏场景实例
 	Scene_s scene;
 
+	// server info( Init 时填充 )
+	std::string serverIp;
+	int serverPort;
+
 	// 初始化( 加载配置文件, .... )
-	int Init(std::string const& cfgName) noexcept;			// todo: 传递 server ip port 啥的
+#ifdef CC_TARGET_PLATFORM
+	int Init(std::string const& ip, int const& port, std::string const& cfgName) noexcept;
+#else
+	int Init(std::string const& cfgName) noexcept;
+#endif
 
 	// logic. 每帧调用一次. 返回非0 表示退出
 	int Update() noexcept;

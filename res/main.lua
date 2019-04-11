@@ -71,7 +71,7 @@ go(function()
 	if cf == nil then
 		print("CatchFish create fail.")
 	else
-		local r = cf:Init("cfg.bin")
+		local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
 		if r ~= 0 then
 			print("CatchFish Init fail. r = ".. r)
 		else

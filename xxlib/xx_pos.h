@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <cmath>
+#include <math.h>
 
 namespace xx
 {
@@ -108,8 +108,8 @@ namespace xx
 	// 以 0,0 为中心旋转. a 为弧度( 角度 * (float(M_PI) / 180.0f) )
 	inline Pos Rotate(Pos const& pos, float const& a) noexcept
 	{
-		auto&& sinA = std::sinf(a);
-		auto&& cosA = std::cosf(a);
+		auto&& sinA = sinf(a);
+		auto&& cosA = cosf(a);
 		return Pos{ pos.x * cosA - pos.y * sinA, pos.x * sinA + pos.y * cosA };
 	}
 }
