@@ -69,12 +69,14 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		if (::catchFish->scene->frameNumber % 60 == 0) {
 			pkgPing->ticks = xx::NowSteadyEpochMS();
 			peer->SendRequest(pkgPing, [](xx::Object_s && msg) {
+				std::string s;
 				if (auto&& pong = xx::As<PKG::Generic::Pong>(msg)) {
-					xx::CoutN("ping: ",xx::NowSteadyEpochMS() - pong->ticks, "ms");
+					xx::Append(s, "ping: ",xx::NowSteadyEpochMS() - pong->ticks, "ms");
 				}
 				else {
-					xx::CoutN("ping: timeout");
+					s = "ping: timeout";
 				}
+				catchFish->SetLabelPingText(s);
 				return 0;
 			}, 2000);
 		}

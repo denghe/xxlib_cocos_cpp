@@ -22,6 +22,15 @@ inline void CatchFish::Dispose(int const& flag) noexcept {
 }
 
 inline CatchFish::~CatchFish() {
+	// todo: 删除面板显示元素
+	if (labelPing) {
+		if (labelPing->getParent()) {
+			labelPing->removeFromParent();
+		}
+		labelPing->release();
+		labelPing = nullptr;
+	}
+
 	Dispose(0);
 }
 
@@ -97,9 +106,23 @@ inline int CatchFish::Init(std::string const& ip, int const& port, std::string c
 
 	// 初始化拨号器
 	xx::MakeTo(::dialer, *uv);
+
+	// 初始面板显示元素
+	labelPing = cocos2d::Label::createWithSystemFont("", "", 32);
+	labelPing->retain();
+	labelPing->setPosition(10 - ScreenCenter.x, 100 - ScreenCenter.y);
+	labelPing->setGlobalZOrder(1000);
+	cc_scene->addChild(labelPing);
+
 #endif
 
 	return 0;
+}
+
+inline void CatchFish::SetLabelPingText(std::string const& txt) noexcept {
+	if (labelPing) {
+		labelPing->setString(txt);
+	}
 }
 
 inline int CatchFish::Update() noexcept {

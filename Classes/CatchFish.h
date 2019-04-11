@@ -326,13 +326,17 @@ struct CatchFish {
 
 	// server info( Init 时填充 )
 	std::string serverIp;
-	int serverPort;
+	int serverPort = 0;
 
 	// 初始化( 加载配置文件, .... )
-#ifdef CC_TARGET_PLATFORM
-	int Init(std::string const& ip, int const& port, std::string const& cfgName) noexcept;
-#else
+#ifndef CC_TARGET_PLATFORM
 	int Init(std::string const& cfgName) noexcept;
+#else
+	int Init(std::string const& ip, int const& port, std::string const& cfgName) noexcept;
+
+	// 显示面板相关
+	cocos2d::Label* labelPing = nullptr;
+	void SetLabelPingText(std::string const& txt) noexcept;
 #endif
 
 	// logic. 每帧调用一次. 返回非0 表示退出
