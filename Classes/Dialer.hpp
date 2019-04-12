@@ -4,19 +4,45 @@ inline int Dialer::Update() noexcept {
 }
 
 inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
-	// todo: client network logic here
 	COR_BEGIN
+
+		// init
+		xx::MakeTo(resolver, uv);
+	resolver->OnFinish = [this] {
+		ips = std::move(resolver->ips);
+		finished = true;
+	};
+	this->OnAccept = [this](auto peer) {
+		finished = true;
+	};
+
+		// begin resolve domain to iplist
+		LabResolveDomain:
+
+	// clear flag
+	finished = false;
+
+	// resolve
+	resolver->Resolve(catchFish->serverIp, 2000);
+
+	// wait resolved or timeout
+	while (!finished) {
+		COR_YIELD
+	}
+
+	// check resolve result. 0 mean timeout
+	if (!ips.size()) {
+		// todo: show error?
+		goto LabResolveDomain;
+	}
+
+	// ip list -> connected peer
 		LabDial :
 	// clear flag
 	finished = false;
 
-	// event: set flag
-	OnAccept = [this](auto peer) {
-		finished = true;
-	};
-
 	// try connect to server
-	Dial(catchFish->serverIp, catchFish->serverPort, 2000);
+	Dial(ips, catchFish->serverPort, 2000);
 
 	// cleanup context data
 	Reset();
@@ -30,7 +56,7 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 
 	// timeout ?
 	if (!peer) {
-		// todo: sleep?
+		// todo: sleep? count check? show "open network permission tips" dialog?
 		goto LabDial;
 	}
 

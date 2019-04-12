@@ -438,6 +438,8 @@ struct Dialer : xx::UvKcpDialer<ClientPeer> {
 	PKG::Client_CatchFish::Enter_s pkgEnter;
 	int r = 0;
 	int64_t waitMS = 0;
+	std::vector<std::string> ips;
+	xx::UvResolver_s resolver;
 
 	// 处理首包( EnterSuccess || Error )
 	int HandleFirstPackage() noexcept;
