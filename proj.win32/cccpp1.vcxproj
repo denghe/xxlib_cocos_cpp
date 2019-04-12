@@ -183,6 +183,7 @@
     <ClCompile Include="..\lua\src\lutf8lib.c" />
     <ClCompile Include="..\lua\src\lvm.c" />
     <ClCompile Include="..\lua\src\lzio.c" />
+    <ClCompile Include="..\xxlib\ikcp.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -108,9 +108,10 @@ inline int CatchFish::Init(std::string const& ip, int const& port, std::string c
 	xx::MakeTo(::dialer, *uv);
 
 	// 初始面板显示元素
-	labelPing = cocos2d::Label::createWithSystemFont("", "", 32);
+	labelPing = cocos2d::Label::createWithSystemFont("ping: 0000ms", "", 32);
 	labelPing->retain();
 	labelPing->setPosition(10 - ScreenCenter.x, 100 - ScreenCenter.y);
+	labelPing->setAnchorPoint({ 0, 0.5 });
 	labelPing->setGlobalZOrder(1000);
 	cc_scene->addChild(labelPing);
 

@@ -123,6 +123,9 @@
     <ClCompile Include="..\lua\src\lzio.c">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="..\xxlib\ikcp.c">
+      <Filter>xxlib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">

@@ -25,7 +25,7 @@ static constexpr xx::Pos ScreenCenter = xx::Pos{ ScreenWidth / 2, ScreenHeight /
 struct Dialer;
 struct CatchFish;
 std::shared_ptr<Dialer> dialer;
-CatchFish* catchFish;
+CatchFish* catchFish = nullptr;
 
 inline cocos2d::Scene* cc_scene = nullptr;
 inline xx::List<cocos2d::Touch*> cc_touchs;

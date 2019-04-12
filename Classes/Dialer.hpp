@@ -74,11 +74,12 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 					xx::Append(s, "ping: ",xx::NowSteadyEpochMS() - pong->ticks, "ms");
 				}
 				else {
-					s = "ping: timeout";
+					s = "ping: timeout";	// todo: 已断开, 重连
 				}
 				catchFish->SetLabelPingText(s);
 				return 0;
 			}, 2000);
+			peer->Flush();
 		}
 		COR_YIELD
 	}

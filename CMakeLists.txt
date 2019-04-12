@@ -59,6 +59,7 @@ include_directories(
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
 	 Classes/AppDelegate.cpp
+	 xxlib/ikcp.c
 	 lua/src/lapi.c
 	 lua/src/lauxlib.c
 	 lua/src/lbaselib.c
