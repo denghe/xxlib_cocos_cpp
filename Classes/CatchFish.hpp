@@ -23,7 +23,9 @@ inline void CatchFish::Dispose(int const& flag) noexcept {
 }
 
 inline CatchFish::~CatchFish() {
-	// todo: 删除面板显示元素
+	Dispose(0);
+#ifdef CC_TARGET_PLATFORM
+	// 删除面板显示元素
 	if (labelPing) {
 		if (labelPing->getParent()) {
 			labelPing->removeFromParent();
@@ -31,8 +33,7 @@ inline CatchFish::~CatchFish() {
 		labelPing->release();
 		labelPing = nullptr;
 	}
-
-	Dispose(0);
+#endif
 }
 
 
@@ -121,11 +122,13 @@ inline int CatchFish::Init(std::string const& ip, int const& port, std::string c
 	return 0;
 }
 
+#ifdef CC_TARGET_PLATFORM
 inline void CatchFish::SetLabelPingText(std::string const& txt) noexcept {
 	if (labelPing) {
 		labelPing->setString(txt);
 	}
 }
+#endif
 
 inline int CatchFish::Update() noexcept {
 #ifdef CC_TARGET_PLATFORM
