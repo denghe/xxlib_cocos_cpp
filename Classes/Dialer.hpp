@@ -285,6 +285,19 @@ inline int Dialer::Handle(PKG::CatchFish::Events::Enter_s o) noexcept {
 	return player->InitCascade(&*catchFish->scene);
 }
 inline int Dialer::Handle(PKG::CatchFish::Events::Leave_s o) noexcept {
+	assert(player && player->id != o->playerId);
+	auto&& ps = *catchFish->scene->players;
+	assert(ps.len);
+	size_t i = ps.len - 1;
+	for (; i != -1; --i) {
+		auto&& p = xx::As<Player>(ps[i].lock());
+		if (p->id == o->playerId) {
+			ps.SwapRemoveAt(i);
+			catchFish->players.Remove(p);
+			break;
+		}
+	}
+	assert(i != -1);
 	return 0;
 }
 inline int Dialer::Handle(PKG::CatchFish::Events::NoMoney_s o) noexcept {
@@ -300,8 +313,9 @@ inline int Dialer::Handle(PKG::CatchFish::Events::FishDead_s o) noexcept {
 		if (f->id == o->fishId) {
 			fs[fs.len - 1]->indexAtContainer = f->indexAtContainer;
 			fs.SwapRemoveAt(f->indexAtContainer);
-			// todo: 加钱
-			// todo: 鱼死特效
+			player->coin += o->coin;
+			// todo: 判断如果 o->fishDeads 有数据，还要进一步处理
+			// todo: coin 显示更新, 鱼死特效
 			return 0;
 		}
 	}

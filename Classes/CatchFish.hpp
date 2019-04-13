@@ -6,6 +6,7 @@
 	xx::BBuffer::Register<Player>(xx::TypeId_v<PKG::CatchFish::Player>);
 	xx::BBuffer::Register<Fish>(xx::TypeId_v<PKG::CatchFish::Fish>);
 	xx::BBuffer::Register<Cannon>(xx::TypeId_v<PKG::CatchFish::Cannon>);
+	xx::BBuffer::Register<Bullet>(xx::TypeId_v<PKG::CatchFish::Bullet>);
 	// todo: more
 }
 
