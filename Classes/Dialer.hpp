@@ -70,7 +70,7 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 	}
 
 	// wait recv data
-	waitMS = xx::NowSteadyEpochMS() + 5000;	// 5 sec timeout
+	waitMS = xx::NowSteadyEpochMS() + 10000;	// calc timeout
 	while (!recvs.size()) {
 		COR_YIELD
 			if (xx::NowSteadyEpochMS() > waitMS) goto LabDial;
@@ -92,7 +92,7 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		}
 
 		// ping test
-		if (::catchFish->scene->frameNumber % 60 == 0) {
+		if (::catchFish->scene->frameNumber % 30 == 0) {
 			pkgPing->ticks = xx::NowSteadyEpochMS();
 			peer->SendRequest(pkgPing, [](xx::Object_s && msg) {
 				std::string s;
