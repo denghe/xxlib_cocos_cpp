@@ -44,10 +44,10 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 	// try connect to server
 	Dial(ips, catchFish->serverPort, 2000);
 
-	// cleanup context data
+	// cleanup context data & displays
 	Reset();
 
-	xx::CoutN("step 1");
+	xx::CoutTN("step 1");
 
 	// wait connected or timeout
 	while (!finished) {
@@ -60,7 +60,7 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		goto LabDial;
 	}
 
-	xx::CoutN("step 2");
+	xx::CoutTN("step 2");
 
 	// send enter package
 	xx::MakeTo(pkgEnter);
@@ -82,16 +82,26 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		goto LabDial;
 	}
 
-	xx::CoutN("step 3");
+	xx::CoutTN("step 3");
+
+	// 记录 / 计算收到的 last frame number 用于接收超时判断( 暂定 5 秒 )
+	timeoutFrameNumber = ::catchFish->scene->frameNumber + 60 * 5;
 
 	// peer keeper
 	while (!peer->Disposed()) {
+		// 处理帧同步消息
 		if (r = HandlePackagesOrUpdateScene()) {
 			// todo: show error?
 			goto LabDial;
 		}
 
-		// ping test
+		// 接收超时就重连
+		if (timeoutFrameNumber < ::catchFish->scene->frameNumber) {
+			xx::CoutTN("recv timeout. redial.");
+			goto LabDial;
+		}
+
+		// 处理 ping 请求的回应. 收到正常 ping 包
 		if (::catchFish->scene->frameNumber % 30 == 0) {
 			pkgPing->ticks = xx::NowSteadyEpochMS();
 			peer->SendRequest(pkgPing, [](xx::Object_s && msg) {
@@ -163,7 +173,10 @@ inline int Dialer::HandlePackagesOrUpdateScene() noexcept {
 		switch (recvs.front()->GetTypeId()) {
 		case xx::TypeId_v<PKG::CatchFish_Client::FrameEvents>: {
 			auto&& fe = xx::As<PKG::CatchFish_Client::FrameEvents>(recvs.front());
-			xx::CoutN(fe->frameNumber - ::catchFish->scene->frameNumber);
+			// 记录 / 计算收到的 last frame number 用于接收超时判断( 暂定 5 秒 )
+			timeoutFrameNumber = fe->frameNumber + 60 * 5;
+			// 如果收到的数据比本地晚太多就重连
+			if (timeoutFrameNumber < ::catchFish->scene->frameNumber) return -1;
 			// 如果本地帧编号慢于 server 则追帧
 			if (fe->frameNumber > ::catchFish->scene->frameNumber) {
 				while (fe->frameNumber > ::catchFish->scene->frameNumber) {
