@@ -22,6 +22,7 @@
 #include <thread>
 #include <ctime>
 #include <iomanip>
+#include <sstream>
 
 
 #include "fixed_function.hpp"
