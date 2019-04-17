@@ -437,6 +437,9 @@
     <ClInclude Include="..\xxlib\xx_random.hpp">
       <Filter>xxlib</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Config.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

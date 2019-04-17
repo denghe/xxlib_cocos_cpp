@@ -192,6 +192,7 @@
     <ClInclude Include="..\Classes\Cannon.hpp" />
     <ClInclude Include="..\Classes\CatchFish.h" />
     <ClInclude Include="..\Classes\CatchFish.hpp" />
+    <ClInclude Include="..\Classes\Config.hpp" />
     <ClInclude Include="..\Classes\Dialer.hpp" />
     <ClInclude Include="..\Classes\Fish.hpp" />
     <ClInclude Include="..\Classes\ClientPeer.hpp" />

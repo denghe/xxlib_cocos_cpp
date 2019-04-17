@@ -98,6 +98,8 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		// 接收超时就重连
 		if (timeoutFrameNumber < ::catchFish->scene->frameNumber) {
 			xx::CoutTN("recv timeout. redial.");
+			++numDialTImes;
+			catchFish->SetText_NumDialTimes(numDialTImes);
 			goto LabDial;
 		}
 
@@ -105,14 +107,11 @@ inline int Dialer::UpdateCore(int const& lineNumber) noexcept {
 		if (::catchFish->scene->frameNumber % 30 == 0) {
 			pkgPing->ticks = xx::NowSteadyEpochMS();
 			peer->SendRequest(pkgPing, [](xx::Object_s && msg) {
-				std::string s;
+				int64_t ms = -1;
 				if (auto&& pong = xx::As<PKG::Generic::Pong>(msg)) {
-					xx::Append(s, "ping: ",xx::NowSteadyEpochMS() - pong->ticks, "ms");
+					ms = xx::NowSteadyEpochMS() - pong->ticks;
 				}
-				else {
-					s = "ping: timeout";	// todo: 已断开, 重连
-				}
-				catchFish->SetLabelPingText(s);
+				catchFish->SetText_Ping(ms);
 				return 0;
 			}, 2000);
 			peer->Flush();
@@ -217,8 +216,6 @@ inline int Dialer::HandlePackagesOrUpdateScene() noexcept {
 					r = Handle(xx::As<PKG::CatchFish::Events::CannonSwitch>(e)); break;
 				case xx::TypeId_v<PKG::CatchFish::Events::CannonCoinChange>:
 					r = Handle(xx::As<PKG::CatchFish::Events::CannonCoinChange>(e)); break;
-				case xx::TypeId_v<PKG::CatchFish::Events::DebugInfo>:
-					r = Handle(xx::As<PKG::CatchFish::Events::DebugInfo>(e), fe->frameNumber); break;
 				default:
 					// todo: log?
 					assert(false);	// 不该执行到这里
@@ -376,13 +373,5 @@ inline int Dialer::Handle(PKG::CatchFish::Events::CannonSwitch_s o) noexcept {
 	return 0;
 }
 inline int Dialer::Handle(PKG::CatchFish::Events::CannonCoinChange_s o) noexcept {
-	return 0;
-}
-inline int Dialer::Handle(PKG::CatchFish::Events::DebugInfo_s o, int const& frameNumber) noexcept {
-	auto&& fishIds = ::catchFish->scene->fishIdss[frameNumber];
-	assert(fishIds.len == o->fishIds->len);
-	std::sort(fishIds.buf, fishIds.buf + fishIds.len);
-	std::sort(o->fishIds->buf, o->fishIds->buf + o->fishIds->len);
-	assert(memcmp(fishIds.buf, o->fishIds->buf, fishIds.len * sizeof(int)) == 0);
 	return 0;
 }
