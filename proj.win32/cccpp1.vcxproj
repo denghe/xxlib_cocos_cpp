@@ -188,18 +188,31 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\Bullet.h" />
     <ClInclude Include="..\Classes\Bullet.hpp" />
+    <ClInclude Include="..\Classes\Cannon.h" />
     <ClInclude Include="..\Classes\Cannon.hpp" />
     <ClInclude Include="..\Classes\CatchFish.h" />
     <ClInclude Include="..\Classes\CatchFish.hpp" />
+    <ClInclude Include="..\Classes\ClientPeer.h" />
+    <ClInclude Include="..\Classes\Config.h" />
     <ClInclude Include="..\Classes\Config.hpp" />
+    <ClInclude Include="..\Classes\Dialer.h" />
     <ClInclude Include="..\Classes\Dialer.hpp" />
+    <ClInclude Include="..\Classes\Fish.h" />
     <ClInclude Include="..\Classes\Fish.hpp" />
     <ClInclude Include="..\Classes\ClientPeer.hpp" />
+    <ClInclude Include="..\Classes\Listener.h" />
+    <ClInclude Include="..\Classes\Peer.h" />
+    <ClInclude Include="..\Classes\Physics.h" />
     <ClInclude Include="..\Classes\Physics.hpp" />
     <ClInclude Include="..\Classes\PKG_class.h" />
+    <ClInclude Include="..\Classes\Player.h" />
     <ClInclude Include="..\Classes\Player.hpp" />
+    <ClInclude Include="..\Classes\RefHolder.h" />
+    <ClInclude Include="..\Classes\Scene.h" />
     <ClInclude Include="..\Classes\Scene.hpp" />
+    <ClInclude Include="..\Classes\SpriteFrame.h" />
     <ClInclude Include="..\Classes\SpriteFrame.hpp" />
     <ClInclude Include="..\lua\src\lapi.h" />
     <ClInclude Include="..\lua\src\lauxlib.h" />
