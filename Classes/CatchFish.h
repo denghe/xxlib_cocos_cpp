@@ -87,8 +87,9 @@ struct CatchFish {
 	// logic. 每帧调用一次. 返回非0 表示退出
 	int Update() noexcept;
 
-	bool disposed = false;
-	void Dispose(int const& flag = 1) noexcept;
+	// 清掉某玩家
+	void Cleanup(Player_s const& p) noexcept;
+
 	~CatchFish();
 };
 using CatchFish_s = std::shared_ptr<CatchFish>;
@@ -98,6 +99,7 @@ using CatchFish_s = std::shared_ptr<CatchFish>;
 #include "Peer.h"
 #include "Listener.h"
 #else
+#include "Panel.h"
 #include "ClientPeer.h"
 #include "Dialer.h"
 #endif
@@ -120,6 +122,7 @@ using CatchFish_s = std::shared_ptr<CatchFish>;
 #include "Peer.hpp"
 #include "Listener.hpp"
 #else
+#include "Panel.hpp"
 #include "ClientPeer.hpp"
 #include "Dialer.hpp"
 #endif

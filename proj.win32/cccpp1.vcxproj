@@ -199,10 +199,13 @@
     <ClInclude Include="..\Classes\Config.hpp" />
     <ClInclude Include="..\Classes\Dialer.h" />
     <ClInclude Include="..\Classes\Dialer.hpp" />
+    <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp" />
     <ClInclude Include="..\Classes\Fish.h" />
     <ClInclude Include="..\Classes\Fish.hpp" />
     <ClInclude Include="..\Classes\ClientPeer.hpp" />
     <ClInclude Include="..\Classes\Listener.h" />
+    <ClInclude Include="..\Classes\Panel.h" />
+    <ClInclude Include="..\Classes\Panel.hpp" />
     <ClInclude Include="..\Classes\Peer.h" />
     <ClInclude Include="..\Classes\Physics.h" />
     <ClInclude Include="..\Classes\Physics.hpp" />

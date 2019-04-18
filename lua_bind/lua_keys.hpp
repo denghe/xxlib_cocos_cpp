@@ -688,32 +688,32 @@ struct TypeNames<Lua_BBuffer*>
 	inline static const char* value = "BBuffer";
 };
 template<>
-struct TypeNames<xx::UvItem_s>
+struct TypeNames<xx::UvItem_s*>
 {
 	inline static const char* value = "UvItem";
 };
 template<>
-struct TypeNames<xx::UvResolver_s>
+struct TypeNames<xx::UvResolver_s*>
 {
 	inline static const char* value = "UvResolver";
 };
 template<>
-struct TypeNames<xx::UvTcpLuaDialer_s>
+struct TypeNames<xx::UvTcpLuaDialer_s*>
 {
 	inline static const char* value = "UvTcpLuaDialer";
 };
 template<>
-struct TypeNames<xx::UvTcpLuaPeer_s>
+struct TypeNames<xx::UvTcpLuaPeer_s*>
 {
 	inline static const char* value = "UvTcpLuaPeer";
 };
 template<>
-struct TypeNames<xx::UvKcpLuaDialer_s>
+struct TypeNames<xx::UvKcpLuaDialer_s*>
 {
 	inline static const char* value = "UvKcpLuaDialer";
 };
 template<>
-struct TypeNames<xx::UvKcpLuaPeer_s>
+struct TypeNames<xx::UvKcpLuaPeer_s*>
 {
 	inline static const char* value = "UvKcpLuaPeer";
 };
@@ -726,7 +726,7 @@ struct TypeNames<xx::UvKcpLuaPeer_s>
 
 
 template<>
-struct TypeNames<CatchFish_s>
+struct TypeNames<CatchFish_s*>
 {
 	inline static const char* value = "CatchFish";
 };

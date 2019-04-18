@@ -87,26 +87,22 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 		}
 		return;
 	}
-	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsShared_v<T>)
+	else if constexpr (std::is_pointer_v<T>)
 	{
 		// 还需要进一步检测 mt 父子关系, 以及最终指针的 dynamic cast 来进一步判断, 以后上全局内存池方案再说
 		if (!lua_isuserdata(L, idx)) goto LabError;
 		// todo: check length == sizeof(T)
-#ifndef NDEBUG
-		if constexpr (std::is_pointer_v<T> && std::is_base_of_v<cocos2d::Ref, std::remove_pointer_t<T>>)
-		{
+		if constexpr (xx::IsWeak_v<std::remove_pointer_t<T>> || xx::IsShared_v<std::remove_pointer_t<T>>) {
+			v = (T)lua_touserdata(L, idx);
+		}
+		else if constexpr (std::is_base_of_v<cocos2d::Ref, std::remove_pointer_t<T>>) {
 			auto&& p = (T*)lua_touserdata(L, idx);
-			auto&& versionNumber = *(size_t*)(p + 1);
 			v = *p;
+#ifndef NDEBUG
+			auto&& versionNumber = *(size_t*)(p + 1);
 			if (cocos2d::Ref::ptrs.find(*p) == cocos2d::Ref::ptrs.cend() || cocos2d::Ref::ptrs[*p] != versionNumber) goto LabError;
-		}
-		else
-		{
-			v = *(T*)lua_touserdata(L, idx);
-		}
-#else
-		v = *(T*)lua_touserdata(L, idx);
 #endif
+		}
 		return;
 	}
 	else

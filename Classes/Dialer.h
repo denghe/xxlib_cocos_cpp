@@ -10,15 +10,18 @@
 
 	// 脚本用变量
 	bool finished = false;
-	PKG::Client_CatchFish::Enter_s pkgEnter;
 	int r = 0;
 	int64_t waitMS = 0;
 	std::vector<std::string> ips;
 	xx::UvResolver_s resolver;
 	int timeoutFrameNumber = 0;
-	int numDialTImes = 0;
+	int numDialTimes = 0;
 	bool autoFire = false;
 	xx::Random rnd;
+	int playerId = 0;			// 保存当前玩家 id
+	Player_s player;			// 指向当前玩家
+	Panel_s panel;				// 持有操作面板
+
 
 	// 处理首包( EnterSuccess || Error )
 	int HandleFirstPackage() noexcept;
@@ -53,24 +56,8 @@
 	// 每帧驱动脚本
 	int Update() noexcept;
 
-	// 指向当前玩家
-	Player_s player;
-
-
-	// 显示面板相关
-	RefHolder<cocos2d::Label> btnAutoFire;
-	RefHolder<cocos2d::EventListenerTouchOneByOne> listenerAutoFire;
-	RefHolder<cocos2d::Label> labelNumDialTimes;
-	RefHolder<cocos2d::Label> labelPing;
-	RefHolder<cocos2d::Label> labelNumFishs;
-	void SetText_AutoFire(bool const& value) noexcept;
-	void SetText_NumDialTimes(int64_t const& value) noexcept;
-	void SetText_Ping(int64_t const& value) noexcept;
-	void SetText_NumFishs(size_t const& value) noexcept;
-
-
-	// ping package cache for send
+	// packages cache
+	inline static PKG::Client_CatchFish::Enter_s pkgEnter = xx::Make<PKG::Client_CatchFish::Enter>();
 	inline static PKG::Generic::Ping_s pkgPing = xx::Make<PKG::Generic::Ping>();
-
 };
 using Dialer_s = std::shared_ptr<Dialer>;

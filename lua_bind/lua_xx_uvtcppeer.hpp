@@ -2,58 +2,58 @@
 
 inline void Lua_Register_UvTcpLuaPeer(lua_State* const& L)
 {
-	Lua_NewMT(L, TypeNames<xx::UvTcpLuaPeer_s>::value, TypeNames<std::shared_ptr<xx::UvItem>>::value);					// xx.UvTcpLuaPeer ： UvItem
+	Lua_NewMT(L, TypeNames<xx::UvTcpLuaPeer_s*>::value, TypeNames<xx::UvItem_s*>::value);					// xx.UvTcpLuaPeer ： UvItem
 
 	Lua_NewFunc(L, "__gc", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvItem_s>(L, "__gc error! need 1 args: self");
-		assert(std::get<0>(t));
-		std::get<0>(t).~shared_ptr();
+		auto&& t = Lua_ToTuple<xx::UvItem_s*>(L, "__gc error! need 1 args: self");
+		assert((*std::get<0>(t)));
+		(*std::get<0>(t)).~shared_ptr();
 		return 0;
 	});
 
 	Lua_NewFunc(L, "GetIP", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s, bool>(L, "Send error! need 2 args: self, bool includePort");
-		assert(std::get<0>(t));
-		auto&& ip = std::get<0>(t)->GetIP();
+		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s*, bool>(L, "Send error! need 2 args: self, bool includePort");
+		assert((*std::get<0>(t)));
+		auto&& ip = (*std::get<0>(t))->GetIP();
 		return Lua_Pushs(L, ip);
 	});
 
 	Lua_NewFunc(L, "ResetTimeoutMS", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvKcpLuaPeer_s, int>(L, "Send error! need 2 args: self, bool includePort");
-		assert(std::get<0>(t));
-		std::get<0>(t)->ResetTimeoutMS(std::get<1>(t));
+		auto&& t = Lua_ToTuple<xx::UvKcpLuaPeer_s*, int>(L, "Send error! need 2 args: self, bool includePort");
+		assert((*std::get<0>(t)));
+		(*std::get<0>(t))->ResetTimeoutMS(std::get<1>(t));
 		return 0;
 	});
 
 	Lua_NewFunc(L, "SendPush", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s, xx::BBuffer*>(L, "Send error! need 2 args: self, BBuffer");
-		assert(std::get<0>(t));
-		auto&& r = std::get<0>(t)->SendPush(*std::get<1>(t));
+		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s*, xx::BBuffer*>(L, "Send error! need 2 args: self, BBuffer");
+		assert((*std::get<0>(t)));
+		auto&& r = (*std::get<0>(t))->SendPush(*std::get<1>(t));
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "SendResponse", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s, int, xx::BBuffer*>(L, "SendResponse error! need 3 args: self, serial, BBuffer");
-		assert(std::get<0>(t));
-		auto&& r = std::get<0>(t)->SendResponse(std::get<1>(t), *std::get<2>(t));
+		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s*, int, xx::BBuffer*>(L, "SendResponse error! need 3 args: self, serial, BBuffer");
+		assert((*std::get<0>(t)));
+		auto&& r = (*std::get<0>(t))->SendResponse(std::get<1>(t), *std::get<2>(t));
 		return Lua_Pushs(L, r);
 	});
 
 	Lua_NewFunc(L, "SendRequest", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s, xx::BBuffer*, Lua_Func>(L, "SendRequest error! need 3 ~ 4 args: self, BBuffer, callback, timeoutMS = 0");
-		assert(std::get<0>(t));
+		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s*, xx::BBuffer*, Lua_Func>(L, "SendRequest error! need 3 ~ 4 args: self, BBuffer, callback, timeoutMS = 0");
+		assert((*std::get<0>(t)));
 		int timeoutMS = 0;
 		if (lua_gettop(L) > 3)
 		{
 			Lua_Get(timeoutMS, L, 4);
 		}
-		auto&& rtv = std::get<0>(t)->SendRequest(*std::get<1>(t), [f = std::move(std::get<2>(t))](xx::BBuffer* const& data) {
+		auto&& rtv = (*std::get<0>(t))->SendRequest(*std::get<1>(t), [f = std::move(std::get<2>(t))](xx::BBuffer* const& data) {
 			if (!gLua) return -1;
 			auto&& L = gLua;
 			assert(!lua_gettop(L));
@@ -84,10 +84,10 @@ inline void Lua_Register_UvTcpLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnDisconnect", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s, Lua_Func>(L, "OnDisconnect error! need 2 args: self, func/null");
+		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s*, Lua_Func>(L, "OnDisconnect error! need 2 args: self, func/null");
 		if (std::get<1>(t))
 		{
-			std::get<0>(t)->OnDisconnect = [f = std::move(std::get<1>(t))]()
+			(*std::get<0>(t))->OnDisconnect = [f = std::move(std::get<1>(t))]()
 			{
 				if (!gLua) return;
 				assert(!lua_gettop(gLua));
@@ -99,17 +99,17 @@ inline void Lua_Register_UvTcpLuaPeer(lua_State* const& L)
 		}
 		else
 		{
-			std::get<0>(t)->OnDisconnect = nullptr;
+			(*std::get<0>(t))->OnDisconnect = nullptr;
 		}
 		return 0;
 	});
 
 	Lua_NewFunc(L, "OnReceivePush", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s, Lua_Func>(L, "OnReceivePackage error! need 2 args: self, func(bb)/null");
+		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s*, Lua_Func>(L, "OnReceivePackage error! need 2 args: self, func(bb)/null");
 		if (std::get<1>(t))
 		{
-			std::get<0>(t)->OnReceivePush = [f = std::move(std::get<1>(t))](xx::BBuffer& data)
+			(*std::get<0>(t))->OnReceivePush = [f = std::move(std::get<1>(t))](xx::BBuffer& data)
 			{
 				if (!gLua) return -1;
 				assert(!lua_gettop(gLua));
@@ -131,17 +131,17 @@ inline void Lua_Register_UvTcpLuaPeer(lua_State* const& L)
 		}
 		else
 		{
-			std::get<0>(t)->OnDisconnect = nullptr;
+			(*std::get<0>(t))->OnDisconnect = nullptr;
 		}
 		return 0;
 	});
 
 	Lua_NewFunc(L, "OnReceiveRequest", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s, Lua_Func>(L, "OnReceiveRequest error! need 2 args: self, func(bb)/null");
+		auto&& t = Lua_ToTuple<xx::UvTcpLuaPeer_s*, Lua_Func>(L, "OnReceiveRequest error! need 2 args: self, func(bb)/null");
 		if (std::get<1>(t))
 		{
-			std::get<0>(t)->OnReceiveRequest = [f = std::move(std::get<1>(t))](int const& serial, xx::BBuffer& data)
+			(*std::get<0>(t))->OnReceiveRequest = [f = std::move(std::get<1>(t))](int const& serial, xx::BBuffer& data)
 			{
 				if (!gLua) return -1;
 				assert(!lua_gettop(gLua));
@@ -163,7 +163,7 @@ inline void Lua_Register_UvTcpLuaPeer(lua_State* const& L)
 		}
 		else
 		{
-			std::get<0>(t)->OnDisconnect = nullptr;
+			(*std::get<0>(t))->OnDisconnect = nullptr;
 		}
 		return 0;
 	});

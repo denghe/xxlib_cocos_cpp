@@ -479,6 +479,15 @@
     <ClInclude Include="..\Classes\Physics.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Panel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Panel.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
