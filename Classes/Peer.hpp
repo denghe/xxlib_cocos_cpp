@@ -73,11 +73,11 @@ inline int Peer::ReceivePush(xx::Object_s&& msg) noexcept {
 				for(auto&& p : catchFish->players) {
 					if (p->id == o->playerId) {
 						assert(p->peer != this->shared_from_this());
-						// 踢掉原有连接
+						// 踢掉原有连接( 可能性: 客户端很久没收到推送, 自己 redial, 而 server 并没发现断线 )
 						p->Kick(this->GetIP(), " reconnect");
-						// 双向 bind
+						// 玩家与连接绑定
+						player_w = p;
 						p->peer = xx::As<Peer>(this->shared_from_this());
-						this->player_w = p;
 						// 放入本帧进入游戏的列表, 以便下发完整同步
 						scene.frameEnters.Add(&*p);
 						// 设置超时
@@ -164,6 +164,9 @@ inline int Peer::ReceivePush(xx::Object_s&& msg) noexcept {
 			// 设置超时
 			this->ResetTimeoutMS(10000);
 			player->ResetTimeoutFrameNumber();
+
+			// 成功退出
+			xx::CoutTN(GetIP(), " player enter. id = ", player->id);
 			break;
 		}
 		default:
