@@ -5,6 +5,8 @@
 
 // todo: 优化函数名和使用, 考虑参考 cocos lua 框架代码提供 return self 以便连写
 
+// todo: 需要用到 gLua call 回调的部分应该存储 gLua 当前 top 并在调用后恢复
+
 // 用于临时装载从 lua 获取的参数
 inline cocos2d::Vector<cocos2d::FiniteTimeAction*> gActions;
 inline std::vector<std::string> gStrings;
