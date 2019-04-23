@@ -204,8 +204,10 @@
     <ClInclude Include="..\Classes\Fish.hpp" />
     <ClInclude Include="..\Classes\ClientPeer.hpp" />
     <ClInclude Include="..\Classes\Listener.h" />
-    <ClInclude Include="..\Classes\Panel.h" />
-    <ClInclude Include="..\Classes\Panel.hpp" />
+    <ClInclude Include="..\Classes\Panel_Dialer.h" />
+    <ClInclude Include="..\Classes\Panel_Dialer.hpp" />
+    <ClInclude Include="..\Classes\Panel_Player.h" />
+    <ClInclude Include="..\Classes\Panel_Player.hpp" />
     <ClInclude Include="..\Classes\Peer.h" />
     <ClInclude Include="..\Classes\Physics.h" />
     <ClInclude Include="..\Classes\Physics.hpp" />
