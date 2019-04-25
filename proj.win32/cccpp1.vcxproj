@@ -219,6 +219,8 @@
     <ClInclude Include="..\Classes\Scene.hpp" />
     <ClInclude Include="..\Classes\SpriteFrame.h" />
     <ClInclude Include="..\Classes\SpriteFrame.hpp" />
+    <ClInclude Include="..\Classes\Stage.h" />
+    <ClInclude Include="..\Classes\Stage.hpp" />
     <ClInclude Include="..\lua\src\lapi.h" />
     <ClInclude Include="..\lua\src\lauxlib.h" />
     <ClInclude Include="..\lua\src\lcode.h" />
