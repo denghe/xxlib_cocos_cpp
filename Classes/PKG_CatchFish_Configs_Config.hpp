@@ -1,4 +1,4 @@
-﻿int Config::InitCascade(void* const& o) noexcept {
+﻿int PKG::CatchFish::Configs::Config::InitCascade(void* const& o) noexcept {
 	// 开始填充 ways
 
 	// 先将 fixed 系列填进去以便于使用. ways[0]
@@ -52,7 +52,7 @@
 	}
 
 
-	// ... more
+	// todo: more
 
 
 	// 关卡数据初始化
@@ -61,10 +61,11 @@
 		bb.WriteRoot(s);
 	}
 
-	return BaseType::InitCascade(this);
+	// 继续级联初始化成员
+	return InitCascadeCore(o);
 }
 
-inline PKG::CatchFish::Way_s Config::MakeBeeline(std::pair<xx::Pos, xx::Pos> const& inOutPos) noexcept {
+inline PKG::CatchFish::Way_s PKG::CatchFish::Configs::Config::MakeBeeline(std::pair<xx::Pos, xx::Pos> const& inOutPos) noexcept {
 	auto&& way = xx::Make<PKG::CatchFish::Way>();
 	xx::MakeTo(way->points);
 	way->points->Add(PKG::CatchFish::WayPoint{ inOutPos.first, xx::GetAngle(inOutPos), xx::GetDistance(inOutPos) });
@@ -74,7 +75,7 @@ inline PKG::CatchFish::Way_s Config::MakeBeeline(std::pair<xx::Pos, xx::Pos> con
 	return way;
 }
 
-inline PKG::CatchFish::Way_s Config::MakeCurve(std::pair<xx::Pos, xx::Pos> const& inOutPos, float const& xStep, xx::Pos const& ratio) noexcept {
+inline PKG::CatchFish::Way_s PKG::CatchFish::Configs::Config::MakeCurve(std::pair<xx::Pos, xx::Pos> const& inOutPos, float const& xStep, xx::Pos const& ratio) noexcept {
 	auto&& way = xx::Make<PKG::CatchFish::Way>();
 	auto&& wps = *xx::MakeTo(way->points);
 

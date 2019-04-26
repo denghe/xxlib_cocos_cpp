@@ -404,28 +404,7 @@
     <ClInclude Include="..\xxlib\xx_pos.h">
       <Filter>xxlib</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\SpriteFrame.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Physics.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Scene.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Player.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Fish.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Cannon.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\CatchFish.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Bullet.hpp">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Dialer.hpp">
@@ -437,34 +416,10 @@
     <ClInclude Include="..\xxlib\xx_random.hpp">
       <Filter>xxlib</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Config.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Dialer.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\RefHolder.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Config.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SpriteFrame.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Scene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Fish.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Player.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Cannon.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Bullet.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Listener.h">
@@ -474,9 +429,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Peer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Physics.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp">
@@ -494,10 +446,82 @@
     <ClInclude Include="..\Classes\Panel_Player.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Stage.h">
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Config.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Stage.hpp">
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Config.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Physics.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Physics.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_SpriteFrame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_SpriteFrame.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Fish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Fish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Item.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Player.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Player.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Scene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Scene.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RandomFishs.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RandomFishs.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RingFishs.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RingFishs.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBigFish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBigFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_StageElement.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_WayFish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_WayFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Cannon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Cannon.hpp">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
