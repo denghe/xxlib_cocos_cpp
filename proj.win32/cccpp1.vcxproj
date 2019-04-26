@@ -218,6 +218,8 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_Player.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Scene.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Scene.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_CircleFishs.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_CircleFishs.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RandomFishs.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RandomFishs.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RingFishs.h" />

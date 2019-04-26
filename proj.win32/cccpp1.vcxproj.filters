@@ -524,6 +524,12 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_Cannon.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_CircleFishs.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_CircleFishs.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
