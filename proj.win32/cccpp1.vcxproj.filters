@@ -422,13 +422,7 @@
     <ClInclude Include="..\Classes\RefHolder.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Listener.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\ClientPeer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Peer.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp">

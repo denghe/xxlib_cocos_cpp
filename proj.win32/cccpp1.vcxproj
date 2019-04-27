@@ -195,12 +195,10 @@
     <ClInclude Include="..\Classes\Dialer.hpp" />
     <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp" />
     <ClInclude Include="..\Classes\ClientPeer.hpp" />
-    <ClInclude Include="..\Classes\Listener.h" />
     <ClInclude Include="..\Classes\Panel_Dialer.h" />
     <ClInclude Include="..\Classes\Panel_Dialer.hpp" />
     <ClInclude Include="..\Classes\Panel_Player.h" />
     <ClInclude Include="..\Classes\Panel_Player.hpp" />
-    <ClInclude Include="..\Classes\Peer.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Cannon.h" />
