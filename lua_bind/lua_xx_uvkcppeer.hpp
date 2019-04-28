@@ -87,7 +87,7 @@ inline void Lua_Register_UvKcpLuaPeer(lua_State* const& L)
 		auto&& t = Lua_ToTuple<xx::UvKcpLuaPeer_s*, Lua_Func>(L, "OnDisconnect error! need 2 args: self, func/null");
 		if (std::get<1>(t))
 		{
-			(*std::get<0>(t))->OnDisconnect = [f = std::move(std::get<1>(t))]()
+			(*std::get<0>(t))->OnDisconnect([f = std::move(std::get<1>(t))]()
 			{
 				if (!gLua) return;
 				assert(!lua_gettop(gLua));
@@ -95,11 +95,11 @@ inline void Lua_Register_UvKcpLuaPeer(lua_State* const& L)
 
 				Lua_PCall(gLua, f);
 				lua_settop(gLua, 0);
-			};
+			});
 		}
 		else
 		{
-			(*std::get<0>(t))->OnDisconnect = nullptr;
+			(*std::get<0>(t))->OnDisconnect(nullptr);
 		}
 		return 0;
 	});
@@ -109,7 +109,7 @@ inline void Lua_Register_UvKcpLuaPeer(lua_State* const& L)
 		auto&& t = Lua_ToTuple<xx::UvKcpLuaPeer_s*, Lua_Func>(L, "OnReceivePackage error! need 2 args: self, func(bb)/null");
 		if (std::get<1>(t))
 		{
-			(*std::get<0>(t))->OnReceivePush = [f = std::move(std::get<1>(t))](xx::BBuffer& data)
+			(*std::get<0>(t))->onReceivePush = [f = std::move(std::get<1>(t))](xx::BBuffer& data)
 			{
 				if (!gLua) return -1;
 				assert(!lua_gettop(gLua));
@@ -131,7 +131,7 @@ inline void Lua_Register_UvKcpLuaPeer(lua_State* const& L)
 		}
 		else
 		{
-			(*std::get<0>(t))->OnDisconnect = nullptr;
+			(*std::get<0>(t))->onReceivePush = nullptr;
 		}
 		return 0;
 	});
@@ -141,7 +141,7 @@ inline void Lua_Register_UvKcpLuaPeer(lua_State* const& L)
 		auto&& t = Lua_ToTuple<xx::UvKcpLuaPeer_s*, Lua_Func>(L, "OnReceiveRequest error! need 2 args: self, func(bb)/null");
 		if (std::get<1>(t))
 		{
-			(*std::get<0>(t))->OnReceiveRequest = [f = std::move(std::get<1>(t))](int const& serial, xx::BBuffer& data)
+			(*std::get<0>(t))->onReceiveRequest = [f = std::move(std::get<1>(t))](int const& serial, xx::BBuffer& data)
 			{
 				if (!gLua) return -1;
 				assert(!lua_gettop(gLua));
@@ -163,7 +163,7 @@ inline void Lua_Register_UvKcpLuaPeer(lua_State* const& L)
 		}
 		else
 		{
-			(*std::get<0>(t))->OnDisconnect = nullptr;
+			(*std::get<0>(t))->onReceiveRequest = nullptr;
 		}
 		return 0;
 	});
