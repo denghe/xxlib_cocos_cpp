@@ -8,6 +8,8 @@ inline PeerContext::PeerContext(xx::IUvPeer_s& peer, Service* service)
 		delete (PeerContext*)peer->userData;
 		peer->userData = nullptr;
 	});
+	peer->OnReceivePush([this](xx::Object_s && msg) { return this->ReceivePush(std::move(msg)); });
+	peer->OnReceiveRequest([this](int const& serial, xx::Object_s && msg) { return this->ReceiveRequest(serial, std::move(msg)); });
 }
 
 inline PeerContext::~PeerContext() noexcept {
@@ -112,7 +114,7 @@ inline int PeerContext::ReceivePush(xx::Object_s&& msg) noexcept {
 			xx::MakeTo(player->cannons);
 			xx::MakeTo(player->events);
 			player->scene = &scene;
-			//player->id = ++listener->playerAutoId;
+			player->id = ++::service->playerAutoId;
 			xx::Append(player->token, xx::Guid(true));
 			player->sit = sit;
 			player->pos = scene.cfg->sitPositons->At((int)sit);

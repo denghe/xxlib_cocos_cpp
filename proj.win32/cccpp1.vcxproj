@@ -190,11 +190,9 @@
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\CatchFish.h" />
     <ClInclude Include="..\Classes\CatchFish.hpp" />
-    <ClInclude Include="..\Classes\ClientPeer.h" />
     <ClInclude Include="..\Classes\Dialer.h" />
     <ClInclude Include="..\Classes\Dialer.hpp" />
     <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp" />
-    <ClInclude Include="..\Classes\ClientPeer.hpp" />
     <ClInclude Include="..\Classes\Panel_Dialer.h" />
     <ClInclude Include="..\Classes\Panel_Dialer.hpp" />
     <ClInclude Include="..\Classes\Panel_Player.h" />
