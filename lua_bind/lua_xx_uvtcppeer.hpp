@@ -131,7 +131,7 @@ inline void Lua_Register_UvTcpLuaPeer(lua_State* const& L)
 		}
 		else
 		{
-			(*std::get<0>(t))->onDisconnect = nullptr;
+			(*std::get<0>(t))->onReceivePush = nullptr;
 		}
 		return 0;
 	});
@@ -163,7 +163,7 @@ inline void Lua_Register_UvTcpLuaPeer(lua_State* const& L)
 		}
 		else
 		{
-			(*std::get<0>(t))->onDisconnect = nullptr;
+			(*std::get<0>(t))->onReceiveRequest = nullptr;
 		}
 		return 0;
 	});
