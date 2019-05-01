@@ -72,8 +72,8 @@ go(function()
 	else
 		--local r = cf:Init("192.168.1.163", 12345, "cfg.bin")
 		--local r = cf:Init("192.168.1.154", 12345, "cfg.bin")
-		--local r = cf:Init("10.0.0.216", 12345, "cfg.bin")
-		local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
+		local r = cf:Init("10.0.0.216", 12345, "cfg.bin")
+		--local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
 		--local r = cf:Init("139.180.218.42", 12345, "cfg.bin")
 		if r ~= 0 then
 			print("CatchFish Init fail. r = ".. r)
