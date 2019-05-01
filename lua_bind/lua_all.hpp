@@ -21,10 +21,8 @@ inline cocos2d::Vector<cocos2d::SpriteFrame*> gSpriteFrames;
 #include "lua_xx_bbuffer.hpp"
 #include "lua_xx_uv.hpp"
 #include "lua_xx_uvresolver.hpp"
-#include "lua_xx_uvtcppeer.hpp"
-#include "lua_xx_uvtcpdialer.hpp"
-#include "lua_xx_uvkcppeer.hpp"
-#include "lua_xx_uvkcpdialer.hpp"
+#include "lua_xx_uvdialer.hpp"
+#include "lua_xx_uvluapeer.hpp"
 #include "lua_xx.hpp"
 
 #include "lua_cc.hpp"

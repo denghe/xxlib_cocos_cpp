@@ -362,12 +362,6 @@
     <ClInclude Include="..\lua_bind\lua_xx_uvresolver.hpp">
       <Filter>lua_bind</Filter>
     </ClInclude>
-    <ClInclude Include="..\lua_bind\lua_xx_uvtcpdialer.hpp">
-      <Filter>lua_bind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lua_bind\lua_xx_uvtcppeer.hpp">
-      <Filter>lua_bind</Filter>
-    </ClInclude>
     <ClInclude Include="..\lua_bind\lua_all.hpp">
       <Filter>lua_bind</Filter>
     </ClInclude>
@@ -381,12 +375,6 @@
       <Filter>lua_bind</Filter>
     </ClInclude>
     <ClInclude Include="..\lua_bind\lua_cc_application.hpp">
-      <Filter>lua_bind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lua_bind\lua_xx_uvkcpdialer.hpp">
-      <Filter>lua_bind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lua_bind\lua_xx_uvkcppeer.hpp">
       <Filter>lua_bind</Filter>
     </ClInclude>
     <ClInclude Include="..\xxlib\xx_uv_lua.h">
@@ -517,6 +505,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_CircleFishs.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uvdialer.hpp">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uvluapeer.hpp">
+      <Filter>lua_bind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

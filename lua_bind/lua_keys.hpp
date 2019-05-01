@@ -698,26 +698,15 @@ struct TypeNames<xx::UvResolver_s*>
 	inline static const char* value = "UvResolver";
 };
 template<>
-struct TypeNames<xx::UvTcpLuaDialer_s*>
+struct TypeNames<xx::UvDialer_s*>
 {
-	inline static const char* value = "UvTcpLuaDialer";
+	inline static const char* value = "UvDialer";
 };
 template<>
-struct TypeNames<xx::UvTcpLuaPeer_s*>
+struct TypeNames<xx::UvLuaPeer_s*>
 {
-	inline static const char* value = "UvTcpLuaPeer";
+	inline static const char* value = "UvLuaPeer";
 };
-template<>
-struct TypeNames<xx::UvKcpLuaDialer_s*>
-{
-	inline static const char* value = "UvKcpLuaDialer";
-};
-template<>
-struct TypeNames<xx::UvKcpLuaPeer_s*>
-{
-	inline static const char* value = "UvKcpLuaPeer";
-};
-
 
 // todo: more
 

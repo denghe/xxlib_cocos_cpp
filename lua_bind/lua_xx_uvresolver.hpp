@@ -46,7 +46,7 @@ inline void Lua_Register_UvResolver(lua_State* const& L)
 		assert((*std::get<0>(t)));
 		if (std::get<1>(t))
 		{
-			(*std::get<0>(t))->OnFinish = [f = std::move(std::get<1>(t))]
+			(*std::get<0>(t))->onFinish = [f = std::move(std::get<1>(t))]
 			{
 				if (!gLua) return;
 				assert(!lua_gettop(gLua));
@@ -59,7 +59,7 @@ inline void Lua_Register_UvResolver(lua_State* const& L)
 		}
 		else
 		{
-			(*std::get<0>(t))->OnFinish = nullptr;
+			(*std::get<0>(t))->onFinish = nullptr;
 		}
 		return 0;
 	});

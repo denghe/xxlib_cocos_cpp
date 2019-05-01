@@ -18,10 +18,8 @@ inline void Lua_Register_xx(lua_State* const& L)
 	// 创建 xx.Xxxxxx 元表及函数
 	Lua_Register_Uv(L);
 	Lua_Register_UvResolver(L);
-	Lua_Register_UvTcpLuaDialer(L);
-	Lua_Register_UvTcpLuaPeer(L);
-	Lua_Register_UvKcpLuaDialer(L);
-	Lua_Register_UvKcpLuaPeer(L);
+	Lua_Register_UvDialer(L);
+	Lua_Register_UvLuaPeer(L);
 	Lua_BBuffer::LuaRegister(L);
 	// .....
 	// .....

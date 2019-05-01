@@ -298,11 +298,9 @@
     <ClInclude Include="..\lua_bind\lua_xx.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_bbuffer.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uv.hpp" />
-    <ClInclude Include="..\lua_bind\lua_xx_uvkcpdialer.hpp" />
-    <ClInclude Include="..\lua_bind\lua_xx_uvkcppeer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvluapeer.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uvresolver.hpp" />
-    <ClInclude Include="..\lua_bind\lua_xx_uvtcpdialer.hpp" />
-    <ClInclude Include="..\lua_bind\lua_xx_uvtcppeer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvdialer.hpp" />
     <ClInclude Include="..\xxlib\fixed_function.hpp" />
     <ClInclude Include="..\xxlib\ikcp.h" />
     <ClInclude Include="..\xxlib\xx_bbuffer.h" />
