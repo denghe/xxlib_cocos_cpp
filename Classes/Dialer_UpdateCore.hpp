@@ -52,8 +52,6 @@ LabDial:
 		goto LabDial;
 	}
 
-	assert(peer->peerBase);
-
 	xx::CoutTN("step 2");
 
 	// 显示连接所用协议
@@ -115,19 +113,17 @@ LabDial:
 		}
 		// 如果没在 ping 并且时机恰当 就发起 ping
 		if (!ping && ::catchFish->scene->frameNumber % 16 == 0) {
-			//pkgPing->ticks = xx::NowSteadyEpochMS();
-			//peer->SendRequest(pkgPing, [this](xx::Object_s && msg) {
-			//	if (!msg && !::catchFish->disposed) {		// 同时防止 catchFish 析构造成的 msg 为空
-			//		ping = -1;
-			//	}
-			//	else  if (auto && pong = xx::As<PKG::Generic::Pong>(msg)) {
-			//		ping = xx::NowSteadyEpochMS() - pong->ticks;
-			//	}
-			//	return 0;
-			//	}, 2000);
-			//peer->Flush();
-
-			peer->Dispose();
+			pkgPing->ticks = xx::NowSteadyEpochMS();
+			peer->SendRequest(pkgPing, [this](xx::Object_s && msg) {
+				if (!msg && !::catchFish->disposed) {		// 同时防止 catchFish 析构造成的 msg 为空
+					ping = -1;
+				}
+				else  if (auto && pong = xx::As<PKG::Generic::Pong>(msg)) {
+					ping = xx::NowSteadyEpochMS() - pong->ticks;
+				}
+				return 0;
+				}, 2000);
+			peer->Flush();
 		}
 
 		// 显示鱼的数量
