@@ -1156,9 +1156,9 @@ namespace xx {
 				if (!p) return -1;								// not enough memory
 				peer_w = p;										// bind
 				auto&& self = As<UvKcp>(shared_from_this());
-				xx::CoutN("1: ", self.use_count());
+				//xx::CoutN("1: ", self.use_count());
 				p->udp = self;
-				xx::CoutN("2: ", self.use_count());
+				//xx::CoutN("2: ", self.use_count());
 				memcpy(&p->conv, recvBuf + 4, 4);
 				memcpy(&p->addr, addr, sizeof(sockaddr_in6));	// upgrade peer's tar addr
 				p->createMS = NowSteadyEpochMS();
@@ -1168,11 +1168,13 @@ namespace xx {
 				p->Flush();
 				connected = true;								// set flag
 				owner->Accept(p);								// cleanup all reqs
-				xx::CoutN("3: ", self.use_count());
+				owner = nullptr;
+				//xx::CoutN("3: ", self.use_count());
 				return 0;
 			}
 
 			if (recvLen < 24) {									// ignore non kcp data
+				xx::CoutN("recv recvLen = ", recvLen);
 				return 0;
 			}
 
