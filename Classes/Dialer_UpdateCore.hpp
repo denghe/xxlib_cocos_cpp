@@ -52,6 +52,8 @@ LabDial:
 		goto LabDial;
 	}
 
+	assert(peer->peerBase);
+
 	xx::CoutTN("step 2");
 
 	// 显示连接所用协议
