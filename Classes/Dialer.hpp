@@ -8,6 +8,7 @@
 	dialer->onAccept = [this](xx::UvPeer_s peer) {
 		this->peer = peer;
 		if (peer) {
+			assert(peer->peerBase);
 			peer->onReceivePush = [this](xx::Object_s && msg) {
 				this->recvs.push_back(std::move(msg));
 				return 0;
@@ -145,6 +146,7 @@ inline int Dialer::HandleEvents(PKG::CatchFish::Events::Event_s const& e) noexce
 }
 
 inline void Dialer::Reset() noexcept {
+	peer.reset();
 	recvs.clear();
 	player.reset();
 	::catchFish->players.Clear();

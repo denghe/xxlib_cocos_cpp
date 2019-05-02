@@ -115,17 +115,19 @@ LabDial:
 		}
 		// 如果没在 ping 并且时机恰当 就发起 ping
 		if (!ping && ::catchFish->scene->frameNumber % 16 == 0) {
-			pkgPing->ticks = xx::NowSteadyEpochMS();
-			peer->SendRequest(pkgPing, [this](xx::Object_s && msg) {
-				if (!msg && !::catchFish->disposed) {		// 同时防止 catchFish 析构造成的 msg 为空
-					ping = -1;
-				}
-				else  if (auto && pong = xx::As<PKG::Generic::Pong>(msg)) {
-					ping = xx::NowSteadyEpochMS() - pong->ticks;
-				}
-				return 0;
-				}, 2000);
-			peer->Flush();
+			//pkgPing->ticks = xx::NowSteadyEpochMS();
+			//peer->SendRequest(pkgPing, [this](xx::Object_s && msg) {
+			//	if (!msg && !::catchFish->disposed) {		// 同时防止 catchFish 析构造成的 msg 为空
+			//		ping = -1;
+			//	}
+			//	else  if (auto && pong = xx::As<PKG::Generic::Pong>(msg)) {
+			//		ping = xx::NowSteadyEpochMS() - pong->ticks;
+			//	}
+			//	return 0;
+			//	}, 2000);
+			//peer->Flush();
+
+			peer->Dispose();
 		}
 
 		// 显示鱼的数量
@@ -134,11 +136,11 @@ LabDial:
 		COR_YIELD
 	}
 
-	xx::CoutTN("user redial or server kick or network disconnected. redial after 2 secs");
-	waitMS = xx::NowSteadyEpochMS() + 2000;	// 等 2 秒再重连
-	while (xx::NowSteadyEpochMS() < waitMS) {
-		COR_YIELD
-	}
+	xx::CoutTN("user redial or server kick or network disconnected. ");
+	//waitMS = xx::NowSteadyEpochMS() + 2000;	// 等 2 秒再重连
+	//while (xx::NowSteadyEpochMS() < waitMS) {
+	//	COR_YIELD
+	//}
 	goto LabDial;
 	COR_END
 }
