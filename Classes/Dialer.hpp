@@ -1,4 +1,4 @@
-inline Dialer::Dialer() {
+ï»¿inline Dialer::Dialer() {
 	xx::MakeTo(resolver, *uv);
 	resolver->onFinish = [this] {
 		ips = std::move(resolver->ips);
@@ -75,20 +75,20 @@ inline int Dialer::HandlePackagesOrUpdateScene() noexcept {
 		switch (recvs.front()->GetTypeId()) {
 		case xx::TypeId_v<PKG::CatchFish_Client::FrameEvents>: {
 			auto&& fe = xx::As<PKG::CatchFish_Client::FrameEvents>(recvs.front());
-			// ÖØÖÃ³¬Ê±ÅĞ¶ÏÌõ¼ş( Ôİ¶¨ 5 Ãë )
+			// é‡ç½®è¶…æ—¶åˆ¤æ–­æ¡ä»¶( æš‚å®š 5 ç§’ )
 			timeoutFrameNumber = fe->frameNumber + 60 * 5;
-			// Èç¹û±¾µØÖ¡±àºÅÂıÓÚ server Ôò×·Ö¡
+			// å¦‚æœæœ¬åœ°å¸§ç¼–å·æ…¢äº server åˆ™è¿½å¸§
 			if (fe->frameNumber > ::catchFish->scene->frameNumber) {
 				while (fe->frameNumber > ::catchFish->scene->frameNumber) {
 					if (int r = ::catchFish->scene->Update()) return r;
 				}
 				needUpdateScene = false;
 			}
-			// ÒÀ´Î´¦ÀíÊÂ¼ş¼¯ºÏ
+			// ä¾æ¬¡å¤„ç†äº‹ä»¶é›†åˆ
 			for (auto&& e : *fe->events) {
 				if (int r = HandleEvents(e)) return r;
 			}
-			// ÒÀ´Î´¦ÀíË½ÓĞÊÂ¼ş¼¯ºÏ
+			// ä¾æ¬¡å¤„ç†ç§æœ‰äº‹ä»¶é›†åˆ
 			for (auto&& e : *fe->persionalEvents) {
 				if (int r = HandleEvents(e)) return r;
 			}
@@ -139,7 +139,7 @@ inline int Dialer::HandleEvents(PKG::CatchFish::Events::Event_s const& e) noexce
 		return Handle(xx::As<PKG::CatchFish::Events::CannonCoinChange>(e));
 	default:
 		// todo: log?
-		assert(false);	// ²»¸ÃÖ´ĞĞµ½ÕâÀï
+		assert(false);	// ä¸è¯¥æ‰§è¡Œåˆ°è¿™é‡Œ
 	}
 	return -1;
 }
@@ -152,10 +152,10 @@ inline void Dialer::Reset() noexcept {
 }
 
 inline int Dialer::Handle(PKG::CatchFish::Events::Enter_s o) noexcept {
-	// ºöÂÔ×Ô¼º½øÈëÓÎÏ·µÄÏûÏ¢
+	// å¿½ç•¥è‡ªå·±è¿›å…¥æ¸¸æˆçš„æ¶ˆæ¯
 	if (o->playerId == player->id) return 0;
 
-	// ¹¹½¨Íæ¼ÒÉÏÏÂÎÄ( Ä£ÄâÊÕµ½µÄÊı¾İÒÔ·½±ãµ÷ÓÃ InitCascade )
+	// æ„å»ºç©å®¶ä¸Šä¸‹æ–‡( æ¨¡æ‹Ÿæ”¶åˆ°çš„æ•°æ®ä»¥æ–¹ä¾¿è°ƒç”¨ InitCascade )
 	auto&& player = xx::Make<PKG::CatchFish::Player>();
 	player->autoFire = false;
 	player->autoIncId = 0;
@@ -172,7 +172,7 @@ inline int Dialer::Handle(PKG::CatchFish::Events::Enter_s o) noexcept {
 	player->sit = o->sit;
 	xx::MakeTo(player->weapons);
 
-	// ¹¹½¨³õÊ¼ÅÚÌ¨
+	// æ„å»ºåˆå§‹ç‚®å°
 	switch (o->cannonCfgId) {
 	case 0: {
 		auto&& cannonCfg = catchFish->cfg->cannons->At(o->cannonCfgId);
@@ -193,22 +193,22 @@ inline int Dialer::Handle(PKG::CatchFish::Events::Enter_s o) noexcept {
 		return -2;
 	}
 
-	// ½«Íæ¼Ò·ÅÈëÏàÓ¦ÈİÆ÷
+	// å°†ç©å®¶æ”¾å…¥ç›¸åº”å®¹å™¨
 	catchFish->players.Add(player);
 	catchFish->scene->players->Add(player);
 
-	// ½øÒ»²½³õÊ¼»¯
+	// è¿›ä¸€æ­¥åˆå§‹åŒ–
 	return player->InitCascade(&*catchFish->scene);
 }
 
 inline int Dialer::Handle(PKG::CatchFish::Events::Leave_s o) noexcept {
-	// ²»Ó¦¸ÃÊÕµ½×Ô¼ºÀë¿ªµÄÏûÏ¢
+	// ä¸åº”è¯¥æ”¶åˆ°è‡ªå·±ç¦»å¼€çš„æ¶ˆæ¯
 	assert(player && player->id != o->playerId);
 
-	// ¶¨Î»µ½Ä¿±êÍæ¼Ò
+	// å®šä½åˆ°ç›®æ ‡ç©å®¶
 	for (auto&& p : catchFish->players) {
 		if (p->id == o->playerId) {
-			// É±µô
+			// æ€æ‰
 			catchFish->Cleanup(p);
 			break;
 		}
@@ -223,10 +223,10 @@ inline int Dialer::Handle(PKG::CatchFish::Events::NoMoney_s o) noexcept {
 
 inline int Dialer::Handle(PKG::CatchFish::Events::Refund_s o) noexcept {
 
-	// ¶¨Î»µ½Ä¿±êÍæ¼Ò
+	// å®šä½åˆ°ç›®æ ‡ç©å®¶
 	for (auto&& p : catchFish->players) {
 		if (p->id == o->playerId) {
-			// ÍË¿î
+			// é€€æ¬¾
 			p->coin += o->coin;
 			break;
 		}
@@ -237,7 +237,7 @@ inline int Dialer::Handle(PKG::CatchFish::Events::Refund_s o) noexcept {
 inline int Dialer::Handle(PKG::CatchFish::Events::FishDead_s o) noexcept {
 	for (auto&& p : catchFish->players) {
 		if (p->id == o->playerId) {
-			// ¼ÓÇ®
+			// åŠ é’±
 			p->coin += o->coin;
 			auto&& fs = *player->scene->fishs;
 			for (auto&& f : fs) {
@@ -245,8 +245,8 @@ inline int Dialer::Handle(PKG::CatchFish::Events::FishDead_s o) noexcept {
 					fs[fs.len - 1]->indexAtContainer = f->indexAtContainer;
 					fs.SwapRemoveAt(f->indexAtContainer);
 
-					// todo: ÅĞ¶ÏÈç¹û o->fishDeads ÓĞÊı¾İ£¬»¹Òª½øÒ»²½´¦Àí
-					// todo: ÌØĞ§
+					// todo: åˆ¤æ–­å¦‚æœ o->fishDeads æœ‰æ•°æ®ï¼Œè¿˜è¦è¿›ä¸€æ­¥å¤„ç†
+					// todo: ç‰¹æ•ˆ
 					break;
 				}
 			}
@@ -261,8 +261,8 @@ inline int Dialer::Handle(PKG::CatchFish::Events::PushWeapon_s o) noexcept {
 }
 
 inline int Dialer::Handle(PKG::CatchFish::Events::PushFish_s o) noexcept {
-	// Èç¹ûÌ«ÍíÊÕµ½Ô¤Ô¼°ü¾Í¶ÏÏßÖØÁ¬
-	if (o->born->beginFrameNumber < catchFish->scene->frameNumber) return -2;
+	// å¦‚æœå¤ªæ™šæ”¶åˆ°é¢„çº¦åŒ…å°±æ–­çº¿é‡è¿
+	if (o->born->beginFrameNumber <= catchFish->scene->frameNumber) return -2;
 	catchFish->scene->borns->Add(std::move(o->born));
 	return 0;
 }
@@ -288,17 +288,17 @@ inline int Dialer::Handle(PKG::CatchFish::Events::CloseAutoFire_s o) noexcept {
 }
 
 inline int Dialer::Handle(PKG::CatchFish::Events::Fire_s o) noexcept {
-	// Èç¹ûÊÇ×Ô¼º·¢ÉäµÄ¾ÍºöÂÔ»æÖÆ
+	// å¦‚æœæ˜¯è‡ªå·±å‘å°„çš„å°±å¿½ç•¥ç»˜åˆ¶
 	if (o->playerId == player->id) return 0;
 
-	// ¶¨Î»µ½Ä¿±êÍæ¼Ò
+	// å®šä½åˆ°ç›®æ ‡ç©å®¶
 	for (auto&& p : catchFish->players) {
 		if (p->id == o->playerId) {
-			// ¶¨Î»µ½Ä¿±êÅÚÌ¨
+			// å®šä½åˆ°ç›®æ ‡ç‚®å°
 			for (auto&& c : *p->cannons) {
 				if (c->id == o->cannonId) {
-					// ·¢Éä
-					c->coin = o->coin;					// todo: ÀíÂÛÉÏÈç¹û×öÍêÁË±ÒÖµÇĞ»»Í¨Öª¾Í²»ĞèÒªÕâ¸ö¸³ÖµÁË
+					// å‘å°„
+					c->coin = o->coin;					// todo: ç†è®ºä¸Šå¦‚æœåšå®Œäº†å¸å€¼åˆ‡æ¢é€šçŸ¥å°±ä¸éœ€è¦è¿™ä¸ªèµ‹å€¼äº†
 					c->angle = o->tarAngle;
 					(void)c->Fire(o->frameNumber);
 					break;
