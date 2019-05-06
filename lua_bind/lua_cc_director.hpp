@@ -96,6 +96,12 @@ inline void Lua_Register_Director(lua_State* const& L)
 		return 0;
 	});
 
+	Lua_NewFunc(L, "getFrameSize", [](lua_State * L)
+	{
+		auto&& siz = cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
+		return Lua_Pushs(L, siz.width, siz.height);
+	});
+
 	Lua_NewFunc(L, "setDesignResolutionSize", [](lua_State* L)
 	{
 		auto&& t = Lua_ToTuple<float, float, ResolutionPolicy>(L, "setDesignResolutionSize error! need 3 args: float width, height, ResolutionPolicy resolutionPolicy");

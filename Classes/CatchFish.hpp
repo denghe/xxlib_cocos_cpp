@@ -80,7 +80,23 @@ inline int CatchFish::Init(std::string const& ip, int const& port, std::string c
 
 	assert(!cc_scene);
 	// 初始化 cocos 相关
+	cc_screenSize = cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
+	cc_designSize = cocos2d::Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
+
 	cc_scene = cocos2d::Director::getInstance()->getRunningScene();
+
+	cc_fishNode = cocos2d::ClippingRectangleNode::create({-halfDesignSize.x, -halfDesignSize.y, designWidth, designHeight});
+	cc_scene->addChild(cc_fishNode);
+
+	cc_uiNode = cocos2d::Node::create();
+	cc_scene->addChild(cc_uiNode);
+
+	if (designSize.x > cc_designSize.width) {	// 上下裁切（横屏）
+		float scale = cc_designSize.width / designSize.x;
+		cc_fishNode->setScale(scale);
+		cc_uiNode->setScale(scale);
+	}
+	
 	cc_listener = cocos2d::EventListenerTouchAllAtOnce::create();
 	cc_listener->onTouchesBegan = [](const std::vector<cocos2d::Touch*> & ts, cocos2d::Event * e) {
 		cc_touchs.AddRange(ts.data(), ts.size());

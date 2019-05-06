@@ -11,10 +11,13 @@ gW = 1280
 gH = 720
 
 -- 创建显示窗口( for desktop os )
-cc.createSetOpenGLView("cocos_cpp_lua", gW, gH)
+--cc.createSetOpenGLView("cocos_cpp_lua", gW, gH)
+cc.createSetOpenGLView("cocos_cpp_lua", 1500, 500)
 
--- 设置设计尺寸和适配模式( 智能留黑边 )
-cc.setDesignResolutionSize(gW, gH, cc.ResolutionPolicy.SHOW_ALL)
+-- 设置设计尺寸和适配模式( 变宽, 高维持设定不变 )
+local sW, sH = cc.getFrameSize()
+gW = sW / sH * gH
+cc.setDesignResolutionSize(gW, gH, cc.ResolutionPolicy.NO_BORDER)
 
 -- 打开 ogl 帧统计信息显示
 cc.setDisplayStats(true)
@@ -72,8 +75,8 @@ go(function()
 	else
 		--local r = cf:Init("192.168.1.163", 12345, "cfg.bin")
 		--local r = cf:Init("192.168.1.154", 12345, "cfg.bin")
-		local r = cf:Init("10.0.0.216", 12345, "cfg.bin")
-		--local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
+		--local r = cf:Init("10.0.0.216", 12345, "cfg.bin")
+		local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
 		--local r = cf:Init("139.180.218.42", 12345, "cfg.bin")
 		if r ~= 0 then
 			print("CatchFish Init fail. r = ".. r)

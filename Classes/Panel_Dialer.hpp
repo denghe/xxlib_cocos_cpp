@@ -3,17 +3,17 @@ inline Panel_Dialer::Panel_Dialer(Dialer* dialer)
 {
 	{
 		labelServer = cocos2d::Label::createWithSystemFont("", "", 24);
-		labelServer->setPosition(10 - screenCenter.x, 240 - screenCenter.y);
+		labelServer->setPosition(10 - halfDesignSize.x, 240 - halfDesignSize.y);
 		labelServer->setAnchorPoint({ 0, 0.5 });
-		labelServer->setGlobalZOrder(1000);
-		cc_scene->addChild(labelServer);
+		labelServer->setLocalZOrder(1000);
+		cc_uiNode->addChild(labelServer);
 	}
 	{
 		btnSwitchTcpKcp = cocos2d::Label::createWithSystemFont("", "", 32);
-		btnSwitchTcpKcp->setPosition(10 - screenCenter.x, 270 - screenCenter.y);
+		btnSwitchTcpKcp->setPosition(10 - halfDesignSize.x, 270 - halfDesignSize.y);
 		btnSwitchTcpKcp->setAnchorPoint({ 0, 0.5 });
-		btnSwitchTcpKcp->setGlobalZOrder(1000);
-		cc_scene->addChild(btnSwitchTcpKcp);
+		btnSwitchTcpKcp->setLocalZOrder(1000);
+		cc_uiNode->addChild(btnSwitchTcpKcp);
 
 		//listenerSwitchTcpKcp = cocos2d::EventListenerTouchOneByOne::create();
 		//listenerSwitchTcpKcp->onTouchBegan = [this](cocos2d::Touch * t, cocos2d::Event * e) {
@@ -38,10 +38,10 @@ inline Panel_Dialer::Panel_Dialer(Dialer* dialer)
 	}
 	{
 		btnRedial = cocos2d::Label::createWithSystemFont("Redial", "", 32);
-		btnRedial->setPosition(10 - screenCenter.x, 90 - screenCenter.y);
+		btnRedial->setPosition(10 - halfDesignSize.x, 90 - halfDesignSize.y);
 		btnRedial->setAnchorPoint({ 0, 0.5 });
-		btnRedial->setGlobalZOrder(1000);
-		cc_scene->addChild(btnRedial);
+		btnRedial->setLocalZOrder(1000);
+		cc_uiNode->addChild(btnRedial);
 
 		listenerRedial = cocos2d::EventListenerTouchOneByOne::create();
 		listenerRedial->onTouchBegan = [this](cocos2d::Touch * t, cocos2d::Event * e) {
@@ -61,10 +61,10 @@ inline Panel_Dialer::Panel_Dialer(Dialer* dialer)
 	}
 	{
 		btnAutoFire = cocos2d::Label::createWithSystemFont("", "", 32);
-		btnAutoFire->setPosition(10 - screenCenter.x, 180 - screenCenter.y);
+		btnAutoFire->setPosition(10 - halfDesignSize.x, 180 - halfDesignSize.y);
 		btnAutoFire->setAnchorPoint({ 0, 0.5 });
-		btnAutoFire->setGlobalZOrder(1000);
-		cc_scene->addChild(btnAutoFire);
+		btnAutoFire->setLocalZOrder(1000);
+		cc_uiNode->addChild(btnAutoFire);
 		SetText_AutoFire(dialer->autoFire);
 
 		listenerAutoFire = cocos2d::EventListenerTouchOneByOne::create();
@@ -84,24 +84,24 @@ inline Panel_Dialer::Panel_Dialer(Dialer* dialer)
 	}
 	{
 		labelNumDialTimes = cocos2d::Label::createWithSystemFont("", "", 32);
-		labelNumDialTimes->setPosition(10 - screenCenter.x, 150 - screenCenter.y);
+		labelNumDialTimes->setPosition(10 - halfDesignSize.x, 150 - halfDesignSize.y);
 		labelNumDialTimes->setAnchorPoint({ 0, 0.5 });
-		labelNumDialTimes->setGlobalZOrder(1000);
-		cc_scene->addChild(labelNumDialTimes);
+		labelNumDialTimes->setLocalZOrder(1000);
+		cc_uiNode->addChild(labelNumDialTimes);
 	}
 	{
 		labelNumFishs = cocos2d::Label::createWithSystemFont("", "", 32);
-		labelNumFishs->setPosition(10 - screenCenter.x, 120 - screenCenter.y);
+		labelNumFishs->setPosition(10 - halfDesignSize.x, 120 - halfDesignSize.y);
 		labelNumFishs->setAnchorPoint({ 0, 0.5 });
-		labelNumFishs->setGlobalZOrder(1000);
-		cc_scene->addChild(labelNumFishs);
+		labelNumFishs->setLocalZOrder(1000);
+		cc_uiNode->addChild(labelNumFishs);
 	}
 	{
 		labelPing = cocos2d::Label::createWithSystemFont("", "", 32);
-		labelPing->setPosition(10 - screenCenter.x, 210 - screenCenter.y);
+		labelPing->setPosition(10 - halfDesignSize.x, 210 - halfDesignSize.y);
 		labelPing->setAnchorPoint({ 0, 0.5 });
-		labelPing->setGlobalZOrder(1000);
-		cc_scene->addChild(labelPing);
+		labelPing->setLocalZOrder(1000);
+		cc_uiNode->addChild(labelPing);
 	}
 }
 
