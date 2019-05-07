@@ -41,15 +41,24 @@ struct Peer;
 // 是否显示物理碰撞检测线
 #define DRAW_PHYSICS_POLYGON 0
 
-static constexpr int designWidth = 1280;
-static constexpr int designHeight = 720;
-static constexpr float designWidthRatio = float(designWidth) / float(designWidth + designHeight);
-static constexpr xx::Pos designSize = xx::Pos{ designWidth, designHeight };
-static constexpr xx::Pos halfDesignSize = xx::Pos{ designWidth / 2, designHeight / 2 };
+static constexpr xx::Pos designSize = xx::Pos{ 1280, 720 };
+static constexpr float designWidthRatio = designSize.x / (designSize.x + designSize.y);
+static constexpr xx::Pos halfDesignSize = xx::Pos{ designSize.x / 2, designSize.y / 2 };
 
 #ifdef CC_TARGET_PLATFORM
-inline static cocos2d::Size cc_screenSize;
+//inline static cocos2d::Size cc_screenSize;
 inline static cocos2d::Size cc_designSize;
+inline static cocos2d::Size cc_halfDesignSize;
+// 基于实际设计尺寸的 9 点定位坐标
+inline static xx::Pos cc_gPos1;
+inline static xx::Pos cc_gPos2;
+inline static xx::Pos cc_gPos3;
+inline static xx::Pos cc_gPos4;
+inline static xx::Pos cc_gPos5;
+inline static xx::Pos cc_gPos6;
+inline static xx::Pos cc_gPos7;
+inline static xx::Pos cc_gPos8;
+inline static xx::Pos cc_gPos9;
 #endif
 // todo: more 
 

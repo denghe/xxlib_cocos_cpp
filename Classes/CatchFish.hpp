@@ -80,12 +80,22 @@ inline int CatchFish::Init(std::string const& ip, int const& port, std::string c
 
 	assert(!cc_scene);
 	// 初始化 cocos 相关
-	cc_screenSize = cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
+	//cc_screenSize = cocos2d::Director::getInstance()->getOpenGLView()->getFrameSize();
 	cc_designSize = cocos2d::Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
+	cc_halfDesignSize = cc_designSize / 2;
+	cc_gPos1 = { -cc_halfDesignSize.width, -cc_halfDesignSize.height };
+	cc_gPos2 = { 0, -cc_halfDesignSize.height };
+	cc_gPos3 = { cc_halfDesignSize.width, -cc_halfDesignSize.height };
+	cc_gPos4 = { -cc_halfDesignSize.width, 0 };
+	cc_gPos5 = { 0, 0 };
+	cc_gPos6 = { cc_halfDesignSize.width, 0 };
+	cc_gPos7 = { -cc_halfDesignSize.width, cc_halfDesignSize.height };
+	cc_gPos8 = { 0, cc_halfDesignSize.height };
+	cc_gPos9 = { cc_halfDesignSize.width, cc_halfDesignSize.height };
 
 	cc_scene = cocos2d::Director::getInstance()->getRunningScene();
 
-	cc_fishNode = cocos2d::ClippingRectangleNode::create({-halfDesignSize.x, -halfDesignSize.y, designWidth, designHeight});
+	cc_fishNode = cocos2d::ClippingRectangleNode::create({ -halfDesignSize.x, -halfDesignSize.y, designSize.x, designSize.y });
 	cc_scene->addChild(cc_fishNode);
 
 	cc_uiNode = cocos2d::Node::create();
@@ -94,7 +104,7 @@ inline int CatchFish::Init(std::string const& ip, int const& port, std::string c
 	if (designSize.x > cc_designSize.width) {	// 上下裁切（横屏）
 		float scale = cc_designSize.width / designSize.x;
 		cc_fishNode->setScale(scale);
-		cc_uiNode->setScale(scale);
+		//cc_uiNode->setScale(scale);
 	}
 	
 	cc_listener = cocos2d::EventListenerTouchAllAtOnce::create();

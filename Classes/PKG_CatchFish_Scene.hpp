@@ -208,9 +208,9 @@ inline PKG::CatchFish::WayFish_s PKG::CatchFish::Scene::MakeRandomFish(int const
 // 由于最终计算出两个交点之后, 可以通过交换顺序的方式反向, 故只需要一段角度作为起始角度即可. 简化起见, 直接 135 ~ 225 ( 不考虑开区间误差 )
 inline std::pair<xx::Pos, xx::Pos> PKG::CatchFish::Scene::MakeRandomInOutPoint(float const& itemRadius) noexcept {
 	std::pair<xx::Pos, xx::Pos> rtv;
-	auto&& w = (designWidth + itemRadius) / 2.0f;
-	auto && h = (designHeight + itemRadius) / 2.0f;
-	auto && a = rnd->Next(180);
+	auto&& w = (designSize.x + itemRadius) / 2.0f;
+	auto&& h = (designSize.y + itemRadius) / 2.0f;
+	auto&& a = rnd->Next(180);
 	if (a < 90) {
 		a -= 45;
 	}

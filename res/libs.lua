@@ -10,7 +10,7 @@ yield = coroutine.yield
 table_unpack = table.unpack
 
 -- 简单的 List 结构, 主用于倒序访问并交换删除 if #t > 0 then for i = #t, 1, -1 do ...... end end
-List_Create = function()
+gListCreate = function()
 	local t = {}
 	t.Add = function(o)
 		t[#t + 1] = o
@@ -28,7 +28,7 @@ List_Create = function()
 end
 
 -- 全局协程池
-gCoros = List_Create()
+gCoros = gListCreate()
 
 -- 压入一个协程函数. 有参数就跟在后面. 有延迟执行的效果
 go = function(func, ...)
@@ -51,6 +51,25 @@ gorun = function(func, ...)
 	return co
 end
 
+-- 阻塞 n 帧
+-- 适合在协程环境使用
+gSleepFrames = function(n)
+	local yield = yield
+	for _=1, n do
+		yield()
+	end
+end
+
+-- 阻塞 n 秒
+-- 适合在协程环境使用
+gSleepSecs = function(n)
+	local elapsedSecs = os.time() + n
+	local yield = yield
+	while elapsedSecs > os.time() do
+		yield()
+	end
+end
+
 -- 注册每帧执行函数
 cc.mainLoopCallback(function()
 	-- 隐藏执行 uv.Run(Once)
@@ -61,9 +80,9 @@ cc.mainLoopCallback(function()
 		for i = #t, 1, -1 do
 			local co = t[i]
 			local ok, msg = resume(co)
-			if not ok then
-				print(msg)
-			end
+			--if not ok then
+				--print(msg)
+			--end
 			if coroutine_status(co) == "dead" then
 				t.SwapRemoveAt(i)
 			end
@@ -77,7 +96,7 @@ end)
 ----------------------------------------------------------------------
 
 -- 状态机集合
-gStates = {}		
+gStates = {}
 
 -- 根据状态名查找是否存在
 function gStates_Exists(name)
@@ -138,21 +157,28 @@ end
 
 
 ----------------------------------------------------------------------
--- 坐标角度计算相关函数
+-- 坐标角度计算相关函数( 弧度 )
 ----------------------------------------------------------------------
 
-PI180 = 3.14159265358979323846 / 180
+gPI_180 = 3.14159265358979323846 / 180
 
-GetAngle = function(x, y)
-	return math.atan(y, x) / PI180
+gGetAngle = function(x1, y1, x2, y2)
+	return math.atan(y2 - y1, x2 - x1)
 end
 
-GetXyIncAngle = function(x, y)
-	local a = math.atan(y, x)
-	return math.cos(a), math.sin(a), a / PI180
+gGetDistance = function(x1, y1, x2, y2)
+	local dx = x1 - x2
+	local dy = y1 - y2
+	return math.sqrt(dx * dx + dy * dy)
 end
 
-Normalize = function(x, y)
+gRotate = function(x, y, angle)
+	local sina = math.sin(angle)
+	local cosa = math.cos(angle)
+	return x * cosa - y * sina, x * sina + y * cosa
+end
+
+gNormalize = function(x, y)
     local n = x * x + y * y
     if n == 1 then return x, y end
     n = math.sqrt(n)
@@ -161,13 +187,33 @@ Normalize = function(x, y)
     return x * n, y * n
 end
 
-GetRotatePos = function(x, y, angle)
-	angle = -angle * PI180
-	local sina = math.sin(angle)
-	local cosa = math.cos(angle)
-	return x * cosa - y * sina, x * sina + y * cosa
+
+
+----------------------------------------------------------------------
+-- 序列化相关
+----------------------------------------------------------------------
+
+-- 将 bb 转为 pkg 并返回 pkg. 失败返回 nil
+gReadRoot = function(bb)
+	if bb ~= nil then
+		local success, pkg = pcall(function() return bb:ReadRoot() end)
+		if success then
+			return pkg
+		--else
+			--print(pkg)
+		end
+	end
 end
 
+-- 将 pkg 填充到 bb 并返回 bb
+gWriteRoot = function(bb, pkg)
+	bb:Clear()
+	bb:WriteRoot(pkg)
+	return bb
+end
+
+-- 公用序列化容器
+gBB = BBuffer.Create()
 
 ----------------------------------------------------------------------
 -- 网络相关
@@ -175,7 +221,7 @@ end
 
 -- 域名解析. 返回 { ip list }. 长度为 0 意味着解析失败或超时
 -- 适合在协程环境使用
-GetIPList = function(domain, timeoutMS)
+gResolveIPs = function(domain, timeoutMS)
 	local rt = { 1 }
 	local resolver = xx.UvResolver.Create()
 	resolver:OnFinish(function()
@@ -191,14 +237,9 @@ end
 
 -- 多 ip 拨号. 返回最先连接成功的 peer. 为空则连接超时
 -- 适合在协程环境使用
-NetDial = function(ips, port, timeoutMS, isKcp)
+gDial = function(ips, port, timeoutMS)
 	local rt = { 1 }
-	local dialer
-	if isKcp then 
-		dialer = xx.UvKcpLuaDialer.Create()
-	else
-		dialer = xx.UvTcpLuaDialer.Create()
-	end
+	local dialer = xx.UvDialer.Create()
 	dialer:OnAccept(function(peer)
 		rt[1] = peer
 	end)
@@ -210,95 +251,28 @@ NetDial = function(ips, port, timeoutMS, isKcp)
 	return rt[1];
 end
 
--- 公用序列化容器
-local NetBB = BBuffer.Create()
-
--- 序列化包并发送
-NetSendPush = function(peer, pkg)
-	NetBB:Clear()
-	NetBB:WriteRoot(pkg)
-	peer:SendPush(NetBB)
+-- 发推送
+gSendPush = function(peer, pkg)
+	peer:SendPush(gWriteRoot(gBB, pkg))
 end
 
+-- 发请求
+gSendRequest = function(peer, pkg, cb)
+	return peer:SendRequest(gWriteRoot(gBB, pkg), function(bb)
+		cb(gReadRoot(bb))
+	end)
+end
 
+-- 发应答
+gSendResponse = function(peer, pkg, serial)
+	return peer:SendResponse(gWriteRoot(gBB, pkg), serial)
+end
 
 
 
 
 
 --[[
-
--- 域名解析. 返回 { ip list }. 长度为 0 意味着解析失败或超时
--- 适合在协程环境使用
-GetIPList = function(domain, timeoutSec)
-	local rt = { 1 }
-	xx.UvLoop.GetIPList(domain, timeoutSec, function(...)
-		rt[1] = {...}
-	end)
-	while rt[1] == 1 do
-		yield()
-	end
-	return rt[1];
-end
-
--- 创建一个 tcp client 并解析域名 & 连接指定端口. 多 ip 域名将返回最快连上的. 超时时间可能因域名解析而比指定的要长. 不会超过两倍
--- 如果域名解析失败, 所有ip全都连不上, 超时, 回调将传入空.
--- domainName 也可以直接就是一个 ip. 这样会达到在 ipv6 协议栈下自动转换 ip 格式的目的
--- 同时, 对 apple 手机应用来讲, 调用本函数 或 GetIPList 可达到弹出网络权限请求面板的效果
--- 如果反复针对相同域名发起查询, 且上次的查询还没触发回调, 将返回 false.
--- 适合在协程环境使用
-function CreateUvTcpClient(domain, port, timeoutSec)
-	local rtv = { null }
-	local b = xx.UvLoop.CreateTcpClientEx(domain, port, function(c)
-		rtv[1] = c
-	end, timeoutSec)
-	while rtv[1] == null do
-		yield()
-	end
-	return rtv[1]
-end
-
--- 上面函数的 lua 实现( 备用 )
-function CreateUvTcpClient2(domain, port, timeoutSec)
-	local ips = GetIPList(domain, timeoutSec)
-	if #ips == 0 then
-		return
-	else
-		-- 为每个 ip 创建一个 UvTcpClient 同时连. 优先返回最快连接成功的
-		local rtv = { numFinished = 0, c = null }
-		for i = 1, #ips do
-			local ip = ips[i]
-			local c = xx.UvTcpClient.Create()
-			local r = nil
-			if string.find(ip, ":") ~= nil then
-				r = c:SetAddress6(ip, port)
-			else
-				r = c:SetAddress(ip, port)
-			end
-			if r ~= 0 then
-				rtv.numFinished = rtv.numFinished + 1
-			else
-				c:OnConnect(function(status)
-					rtv.numFinished = rtv.numFinished + 1
-					if status == 0 then
-						rtv.c = c
-					end
-				end)
-				r = c:Connect(timeoutSec)
-				if r ~= 0 then
-					rtv.numFinished = rtv.numFinished + 1
-				end
-			end
-		end
-		while rtv.c == null and rtv.numFinished < #ips do
-			yield()
-		end
-		if rtv.c == null then
-			return nil 
-		end
-		return rtv.c
-	end
-end
 
 -- 推送的多播处理函数集 key: proto, val: { func(serial, pkg)... }
 gNetHandlers = {}
@@ -347,41 +321,6 @@ end
 -- todo: 用 CreateUvTcpClient 来创建
 gNet = xx.UvTcpClient.Create()
 
--- 发送推送包
-local bb = BBuffer.Create()
-gNet_Send = function(pkg)
-	bb:Clear()
-	bb:WriteRoot(pkg)
-	return gNet:Send(bb)
-end
-
--- 发送请求包. 如果不传入 cb, 则会阻塞等待网络返回数据并 return. 如果传入 cb, 则会在超时或收到返回数据时触发执行 cb
--- 适合在 coro 环境使用( 如果不传入 cb )
-gNet_SendRequest = function(pkg, cb)
-	bb:Clear()
-	bb:WriteRoot(pkg)
-	if cb ~= nil then
-		return gNet:SendRequest(bb, cb)
-	else
-		local yield = coroutine.yield
-		local t = { [1] = null }
-		gNet:SendRequest(bb, function(pkg)
-			t[1] = pkg
-		end)
-		while t[1] == null do
-			yield()
-		end
-		return BBToObject(t[1])
-	end
-end
-
--- 发送应答包
-gNet_SendResponse = function(pkg, serial)
-	bb:Clear()
-	bb:WriteRoot(pkg)
-	return gNet:SendResponse(bb, serial)
-end
-
 -- 设置默认的推送处理回调
 gNet:OnReceivePackage(function(bb)
 	local pkg = BBToObject(bb)
@@ -402,28 +341,6 @@ end)
 
 
 --[[
-
--- 阻塞 n 帧
--- 适合在协程环境使用
-Sleep = function(n)
-	for _=1, n do
-		yield()
-	end
-end
-
--- 阻塞 n 秒( 按 60 帧粗算的 )
--- 适合在协程环境使用
-SleepSecs = function(n)
-	local n = math.floor(n * 60)
-	for _=1, n do
-		yield()
-	end
-end
-
-
-
-
-
 
 -- 方便输出表结构
 function DumpTable( t )  

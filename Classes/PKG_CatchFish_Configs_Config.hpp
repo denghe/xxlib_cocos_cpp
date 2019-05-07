@@ -6,8 +6,8 @@
 
 	// 按一定密度遍历组合产生所有对角斜线
 	std::vector<std::pair<xx::Pos, xx::Pos>> ios_normal;
-	auto&& w = (designWidth + normalFishMaxRadius) / 2.0f;
-	auto && h = (designHeight + normalFishMaxRadius) / 2.0f;
+	auto&& w = (designSize.x + normalFishMaxRadius) / 2.0f;
+	auto&& h = (designSize.y + normalFishMaxRadius) / 2.0f;
 	for (int a_ = 0; a_ < 180; a_ += 10) {
 		int a1 = a_;
 		if (a1 < 90) {

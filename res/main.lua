@@ -12,7 +12,7 @@ gH = 720
 
 -- 创建显示窗口( for desktop os )
 --cc.createSetOpenGLView("cocos_cpp_lua", gW, gH)
-cc.createSetOpenGLView("cocos_cpp_lua", 1500, 500)
+cc.createSetOpenGLView("cocos_cpp_lua", 2500, 500)
 
 -- 设置设计尺寸和适配模式( 变宽, 高维持设定不变 )
 local sW, sH = cc.getFrameSize()
@@ -29,6 +29,7 @@ cc.setAnimationInterval(1 / 60)
 gX, gY, gW, gH = cc.getSafeAreaRect()
 gW2 = gW/2
 gH2 = gH/2
+print(gX, gY, gW, gH)
 
 -- 创建 scene, 将 safe area 中心设为 0,0 点
 gScene = cc.Scene.create()
@@ -76,8 +77,8 @@ go(function()
 		--local r = cf:Init("192.168.1.163", 12345, "cfg.bin")
 		--local r = cf:Init("192.168.1.154", 12345, "cfg.bin")
 		--local r = cf:Init("10.0.0.216", 12345, "cfg.bin")
-		local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
-		--local r = cf:Init("139.180.218.42", 12345, "cfg.bin")
+		--local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
+		local r = cf:Init("45.77.249.137", 12345, "cfg.bin")
 		if r ~= 0 then
 			print("CatchFish Init fail. r = ".. r)
 		else
