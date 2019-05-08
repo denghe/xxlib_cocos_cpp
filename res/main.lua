@@ -7,7 +7,7 @@ collectgarbage("setstepmul", 5000)
 -- 初始化显示相关
 
 -- 创建显示窗口( for desktop os )
-cc.createSetOpenGLView("cocos_cpp_lua", 3000, 1000)
+cc.createSetOpenGLView("cocos_cpp_lua", 1440, 800)
 
 -- 打开 ogl 帧统计信息显示
 cc.setDisplayStats(true)
@@ -61,7 +61,7 @@ go(function()
 	local yield = yield
 	-- 暂缓一帧 ( 否则 Director getRunningScene 取不到 )
 	yield()
-	
+
 	local cf = CatchFish.Create()
 	if cf == nil then
 		print("CatchFish create fail.")

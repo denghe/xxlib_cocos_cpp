@@ -63,9 +63,9 @@ end
 -- 阻塞 n 秒
 -- 适合在协程环境使用
 gSleepSecs = function(n)
-	local elapsedSecs = os.time() + n
+	local elapsedSecs = os.clock() + n
 	local yield = yield
-	while elapsedSecs > os.time() do
+	while elapsedSecs > os.clock() do
 		yield()
 	end
 end

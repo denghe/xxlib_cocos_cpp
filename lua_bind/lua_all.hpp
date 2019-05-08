@@ -3,7 +3,7 @@
 #include "lua.hpp"
 #include "xx_uv_lua.h"
 
-#define USE_LUA_MEMPOOL 1
+#define USE_LUA_MEMPOOL 0
 
 
 // todo: 优化函数名和使用, 考虑参考 cocos lua 框架代码提供 return self 以便连写
