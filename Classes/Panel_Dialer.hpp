@@ -2,7 +2,7 @@ inline Panel_Dialer::Panel_Dialer(Dialer* dialer)
 	: dialer(dialer)
 {
 	// 从下往上流式布局. g1 坐标向上偏移 70 以避开 cocos ogl 统计区
-	auto&& pos = cc_gPos1 + xx::Pos{ 10, 70 };
+	auto&& pos = cc_p1 + xx::Pos{ 10, 70 };
 	std::function<cocos2d::Label*(char const* const& txt, float const& fontSize)> CreateLabelToUI = [&](char const* const& txt, float const& fontSize) {
 		auto&& L = cocos2d::Label::createWithSystemFont(txt, "", fontSize);
 		L->setAnchorPoint({ 0, 0 });	// 以 Label 左下角为基点定位

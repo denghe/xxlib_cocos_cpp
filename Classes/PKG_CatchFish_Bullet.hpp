@@ -15,8 +15,8 @@ inline int PKG::CatchFish::Bullet::Move() noexcept {
 	pos += moveInc;
 
 	// 飞出屏幕就消失
-	auto&& w = ::halfDesignSize.x + cfg->maxRadius;
-	auto&& h = ::halfDesignSize.y + cfg->maxRadius;
+	auto&& w = ::designSize_2.x + cfg->maxRadius;
+	auto&& h = ::designSize_2.y + cfg->maxRadius;
 	if (pos.x > w || pos.x < -w || pos.y > h || pos.y < -h) return -1;
 	return 0;
 }

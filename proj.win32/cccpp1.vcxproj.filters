@@ -512,6 +512,9 @@
     <ClInclude Include="..\lua_bind\lua_xx_uvluapeer.hpp">
       <Filter>lua_bind</Filter>
     </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_mempool.h">
+      <Filter>lua_bind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

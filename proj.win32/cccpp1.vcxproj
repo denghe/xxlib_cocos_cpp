@@ -290,6 +290,7 @@
     <ClInclude Include="..\lua_bind\lua_ext.hpp" />
     <ClInclude Include="..\lua_bind\lua_func.hpp" />
     <ClInclude Include="..\lua_bind\lua_keys.hpp" />
+    <ClInclude Include="..\lua_bind\lua_mempool.h" />
     <ClInclude Include="..\lua_bind\lua_new_xxx.hpp" />
     <ClInclude Include="..\lua_bind\lua_pushcall.hpp" />
     <ClInclude Include="..\lua_bind\lua_spine.hpp" />

@@ -3,6 +3,9 @@
 #include "lua.hpp"
 #include "xx_uv_lua.h"
 
+#define USE_LUA_MEMPOOL 1
+
+
 // todo: 优化函数名和使用, 考虑参考 cocos lua 框架代码提供 return self 以便连写
 
 // todo: 需要用到 gLua call 回调的部分应该存储 gLua 当前 top 并在调用后恢复
@@ -138,15 +141,23 @@ inline int Lua_Main(lua_State* L)
 	return 0;
 }
 
+
+#if USE_LUA_MEMPOOL
+#include "lua_mempool.h"
+inline xx::Lua_MemPool luaMP;
+#endif
 inline int Lua_Init()
 {
-	//// 使用内存池创建 lua state ( 部分操作性能提升 40% )
-	//auto&& L = gLua = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
-	//{
-	//	return ((xx::MemPool*)ud)->Realloc(ptr, nsize, osize);
-	//}
-	//, mp);
+#if USE_LUA_MEMPOOL
+	// 使用内存池创建 lua state ( 部分操作性能提升 40% )
+	auto&& L = gLua = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize)
+	{
+		return ((xx::Lua_MemPool*)ud)->Realloc(ptr, nsize, osize);
+	}
+	, & luaMP);
+#else
 	auto&& L = gLua = luaL_newstate();
+#endif
 	assert(L);
 
 	// 将 Lua_Main 压入 L 安全执行

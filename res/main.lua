@@ -6,18 +6,8 @@ collectgarbage("setstepmul", 5000)
 
 -- 初始化显示相关
 
--- 定显示尺寸
-gW = 1280
-gH = 720
-
 -- 创建显示窗口( for desktop os )
---cc.createSetOpenGLView("cocos_cpp_lua", gW, gH)
-cc.createSetOpenGLView("cocos_cpp_lua", 2500, 500)
-
--- 设置设计尺寸和适配模式( 变宽, 高维持设定不变 )
-local sW, sH = cc.getFrameSize()
-gW = sW / sH * gH
-cc.setDesignResolutionSize(gW, gH, cc.ResolutionPolicy.NO_BORDER)
+cc.createSetOpenGLView("cocos_cpp_lua", 3000, 1000)
 
 -- 打开 ogl 帧统计信息显示
 cc.setDisplayStats(true)
@@ -27,9 +17,11 @@ cc.setAnimationInterval(1 / 60)
 
 -- 取可用区域坐标宽高
 gX, gY, gW, gH = cc.getSafeAreaRect()
+
+print(gX, gY, gW, gH)
+
 gW2 = gW/2
 gH2 = gH/2
-print(gX, gY, gW, gH)
 
 -- 创建 scene, 将 safe area 中心设为 0,0 点
 gScene = cc.Scene.create()

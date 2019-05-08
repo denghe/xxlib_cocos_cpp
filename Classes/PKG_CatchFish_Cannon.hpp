@@ -72,7 +72,7 @@ inline int PKG::CatchFish::Cannon::Update(int const& frameNumber) noexcept {
 
 		// 自动射击。直接在屏幕上随机一个坐标来用
 		if (::dialer->autoFire) {
-			tpos = { ::dialer->rnd.Next((int)designSize.x) - halfDesignSize.x, ::dialer->rnd.Next((int)designSize.y) - halfDesignSize.y };
+			tpos = { ::dialer->rnd.Next((int)designSize.x) - designSize_2.x, ::dialer->rnd.Next((int)designSize.y) - designSize_2.y };
 			fire = true;
 		}
 		else {
