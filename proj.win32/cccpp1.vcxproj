@@ -197,6 +197,8 @@
     <ClInclude Include="..\Classes\Panel_Dialer.hpp" />
     <ClInclude Include="..\Classes\Panel_Player.h" />
     <ClInclude Include="..\Classes\Panel_Player.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_BigFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_BigFish.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Cannon.h" />
@@ -212,6 +214,8 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_Item.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Player.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Player.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_RoundFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_RoundFish.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Scene.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Scene.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_CircleFishs.h" />

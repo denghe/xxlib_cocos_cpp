@@ -1,13 +1,13 @@
-inline Panel_Dialer::Panel_Dialer(Dialer* dialer)
+ï»¿inline Panel_Dialer::Panel_Dialer(Dialer* dialer)
 	: dialer(dialer)
 {
-	// ´ÓÏÂÍùÉÏÁ÷Ê½²¼¾Ö. g1 ×ø±êÏòÉÏÆ«ÒÆ 70 ÒÔ±Ü¿ª cocos ogl Í³¼ÆÇø
+	// ä»ä¸‹å¾€ä¸Šæµå¼å¸ƒå±€. g1 åæ ‡å‘ä¸Šåç§» 70 ä»¥é¿å¼€ cocos ogl ç»Ÿè®¡åŒº
 	auto&& pos = cc_p1 + xx::Pos{ 10, 70 };
 	std::function<cocos2d::Label*(char const* const& txt, float const& fontSize)> CreateLabelToUI = [&](char const* const& txt, float const& fontSize) {
 		auto&& L = cocos2d::Label::createWithSystemFont(txt, "", fontSize);
-		L->setAnchorPoint({ 0, 0 });	// ÒÔ Label ×óÏÂ½ÇÎª»ùµã¶¨Î»
+		L->setAnchorPoint({ 0, 0 });	// ä»¥ Label å·¦ä¸‹è§’ä¸ºåŸºç‚¹å®šä½
 		L->setPosition(pos);
-		pos.y += fontSize + 3;			// ¸üĞÂ y ×ø±êÖ¸ÏòÏÂÒ»¸ö¿ÉÓÃÎ»ÖÃ. ĞĞ¾à 3
+		pos.y += fontSize + 3;			// æ›´æ–° y åæ ‡æŒ‡å‘ä¸‹ä¸€ä¸ªå¯ç”¨ä½ç½®. è¡Œè· 3
 		cc_uiNode->addChild(L);
 		return L;
 	};
