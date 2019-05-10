@@ -405,7 +405,7 @@ namespace xx {
 		inline virtual bool Disposed() const noexcept override {
 			return !tcpListener && !kcpListener;
 		}
-		virtual void Dispose(int const& flag) noexcept;
+		virtual void Dispose(int const& flag) noexcept override;
 	};
 	using UvListener_s = std::shared_ptr<UvListener>;
 	using UvListener_w = std::weak_ptr<UvListener>;
@@ -670,7 +670,7 @@ namespace xx {
 
 		inline virtual void Flush() noexcept override {}
 
-		inline virtual int Update(int64_t const& nowMS) noexcept { return 0; }
+		inline virtual int Update(int64_t const& nowMS) noexcept override { return 0; }
 
 
 		// called by dialer or listener
@@ -901,7 +901,7 @@ namespace xx {
 		}
 
 		// called by ext class
-		inline virtual int Update(int64_t const& nowMS) noexcept {
+		inline virtual int Update(int64_t const& nowMS) noexcept override {
 			if (!kcp) return -1;
 
 			auto&& currentMS = uint32_t(nowMS - createMS);				// known issue: uint32 limit. connect only alive 50+ days
@@ -1399,7 +1399,6 @@ namespace xx {
 		uv_connect_t req;
 		std::shared_ptr<UvTcpPeerBase> peer;
 		std::weak_ptr<UvTcpDialer> dialer_w;
-		bool finished = false;
 	};
 
 	struct UvTcpDialer : UvDialerBase {
@@ -1441,15 +1440,13 @@ namespace xx {
 
 			if (uv_tcp_connect(&req->req, req->peer->uvTcp, (sockaddr*)& addr, [](uv_connect_t * conn, int status) {
 				auto&& req = std::unique_ptr<uv_connect_t_ex>(container_of(conn, uv_connect_t_ex, req));// auto delete when return
-				if (req->finished) return;												// canceled
-				req->finished = true;													// set flag
+				if (!req->peer) return;													// canceled
 				auto&& dialer = req->dialer_w.lock();
 				if (!dialer) return;													// container disposed
 				if (status) return;														// error or -4081 canceled
-				if (req->peer->ReadStart()) return;										// read error
 
-				auto&& peer = std::move(req->peer);
-				dialer->Cancel();														// cancel other reqs
+				auto&& peer = std::move(req->peer);										// remove peer to outside, avoid cancel
+				if (peer->ReadStart()) return;											// read error
 				Uv::FillIP(peer->uvTcp, peer->ip);
 				dialer->Accept(peer);													// callback
 				})) return -3;
@@ -1462,9 +1459,9 @@ namespace xx {
 		inline virtual void Cancel() noexcept override {
 			if (disposed) return;
 			for (auto&& req : reqs) {
-				if (!req->finished) {
-					req->finished = true;
+				if (req->peer) {
 					uv_cancel((uv_req_t*)& req->req);
+					req->peer.reset();
 				}
 			}
 			reqs.clear();
