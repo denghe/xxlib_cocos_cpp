@@ -1,10 +1,12 @@
-﻿require "libs.lua"
+require "libs.lua"
 
 -- avoid memory leak
 collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 5000)
 
--- 初始化显示相关
+-- 初始化设计尺寸( 如果不设置，iOS 上左下角统计会显示不出来 )
+local sW, sH = cc.getFrameSize()
+cc.setDesignResolutionSize( sW, sH, cc.ResolutionPolicy.NO_BORDER )
 
 -- 创建显示窗口( for desktop os )
 cc.createSetOpenGLView("cocos_cpp_lua", 1440, 800)
@@ -69,8 +71,8 @@ go(function()
 		--local r = cf:Init("192.168.1.163", 12345, "cfg.bin")
 		--local r = cf:Init("192.168.1.154", 12345, "cfg.bin")
 		--local r = cf:Init("10.0.0.216", 12345, "cfg.bin")
-		local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
-		--local r = cf:Init("45.77.249.137", 12345, "cfg.bin")
+		--local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
+		local r = cf:Init("192.168.1.254", 12345, "cfg.bin")
 		if r ~= 0 then
 			print("CatchFish Init fail. r = ".. r)
 		else
