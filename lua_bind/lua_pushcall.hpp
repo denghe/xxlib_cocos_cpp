@@ -1,37 +1,42 @@
 ﻿#pragma once
 
-// 注意: lua_checkstack
-
-// 压入单个值并返回 1
+// 压入单个值并返回实际压入 stack 的个数
 template<typename T>
 int Lua_Push(lua_State* const& L, T const& v)
 {
 	if constexpr (std::is_same_v<T, bool>)
 	{
+		lua_checkstack(L, 1);
 		lua_pushboolean(L, (int)v);
 	}
 	else if constexpr (std::is_enum_v<T>)
 	{
+		lua_checkstack(L, 1);
 		lua_pushinteger(L, (int)v);
 	}
 	else if constexpr (std::is_integral_v<T>)
 	{
+		lua_checkstack(L, 1);
 		lua_pushinteger(L, v);
 	}
 	else if constexpr (std::is_floating_point_v<T>)
 	{
+		lua_checkstack(L, 1);
 		lua_pushnumber(L, v);
 	}
 	else if constexpr (std::is_same_v<T, std::string>)
 	{
+		lua_checkstack(L, 1);
 		lua_pushlstring(L, v.data(), v.size());
 	}
 	else if constexpr (std::is_same_v<T, char*> || std::is_same_v<T, char const*>)
 	{
+		lua_checkstack(L, 1);
 		lua_pushstring(L, v);
 	}
 	else if constexpr (std::is_same_v<T, Lua_Func>)
 	{
+		lua_checkstack(L, 2);
 		assert(v.funcId);
 		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// ..., funcs
 		lua_rawgeti(L, -1, *v.funcId);								// ..., funcs, func
@@ -43,6 +48,7 @@ int Lua_Push(lua_State* const& L, T const& v)
 	}
 	else if constexpr (std::is_pointer_v<T> || xx::IsWeak_v<T> || xx::IsShared_v<T>)
 	{
+		lua_checkstack(L, 2);
 		if (v) {
 			if constexpr (std::is_pointer_v<T> && std::is_base_of_v<cocos2d::Ref, std::remove_pointer_t<T>>)
 			{
@@ -79,6 +85,7 @@ int Lua_Push(lua_State* const& L, T const& v)
 		|| std::is_same_v<T, std::vector<std::string>>
 		)
 	{
+		lua_checkstack(L, 2);
 		lua_createtable(L, v.size(), 0);
 		int i = 0;
 		for (auto&& o : v)
@@ -89,6 +96,7 @@ int Lua_Push(lua_State* const& L, T const& v)
 	}
 	else if constexpr (std::is_same_v<T, std::unordered_map<std::string, std::string>>)
 	{
+		lua_checkstack(L, 3);
 		lua_createtable(L, v.size(), 0);
 		for (auto&& o : v)
 		{
@@ -96,38 +104,45 @@ int Lua_Push(lua_State* const& L, T const& v)
 			lua_rawset(L, -3);
 		}
 	}
+	else if constexpr (std::is_same_v<T, std::vector<cocos2d::Touch*>>)
+	{
+		lua_checkstack(L, v.size());
+		for (auto&& o : v)
+		{
+			Lua_Push(L, o);
+		}
+		return v.size();
+	}
 	return 1;
 }
 
 template<typename Arg, typename...Args>
-void Lua_PushsCore(lua_State* const& L, Arg const& arg)
+int Lua_PushsCore(lua_State* const& L, Arg const& arg)
 {
-	Lua_Push(L, arg);
+	return Lua_Push(L, arg);
 }
 
 template<typename Arg, typename...Args>
-void Lua_PushsCore(lua_State* const& L, Arg const& arg, Args const&...args)
+int Lua_PushsCore(lua_State* const& L, Arg const& arg, Args const&...args)
 {
-	Lua_Push(L, arg);
-	Lua_PushsCore(L, args...);
+	int n = Lua_Push(L, arg);
+	return n + Lua_PushsCore(L, args...);
 }
 
 // 压入一串返回值并 return 其个数
 template<typename...Args>
 int Lua_Pushs(lua_State* const& L, Args const&...args)
 {
-	Lua_PushsCore(L, args...);
-	return sizeof...(args);
+	return Lua_PushsCore(L, args...);
 }
 
 // 安全调用一个函数( 同时压入一串参数 ). 返回 r.
 template<typename...Args>
 int Lua_PCall(lua_State* const& L, Lua_Func const& f, Args const&...args)
 {
-	lua_checkstack(L, sizeof...(args) + 1);				// 这句就先不查是否成功了. 无视一切内存不足的问题
-	Lua_Pushs(L, f, args...);
+	int n = Lua_Pushs(L, f, args...) - 1;
 	int r = 0;
-	if (r = lua_pcall(L, sizeof...(args), LUA_MULTRET, 0))
+	if (r = lua_pcall(L, n, LUA_MULTRET, 0))
 	{
 		cocos2d::log("%s", lua_tostring(L, -1));
 		lua_pop(L, 1);

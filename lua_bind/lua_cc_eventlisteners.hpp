@@ -61,14 +61,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 			std::get<0>(t)->onTouchesBegan = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 			{
 				assert(!lua_gettop(gLua));
-				lua_checkstack(gLua, ts.size() + 3);
-				Lua_Push(gLua, f);
-				Lua_Push(gLua, e);
-				for (auto&& t : ts)
-				{
-					Lua_Push(gLua, t);
-				}
-				Lua_PCall(gLua, ts.size() + 1);
+				Lua_PCall(gLua, f, e, ts);
 				lua_settop(gLua, 0);
 			};
 		}
@@ -87,14 +80,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 			std::get<0>(t)->onTouchesMoved = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 			{
 				assert(!lua_gettop(gLua));
-				lua_checkstack(gLua, ts.size() + 3);
-				Lua_Push(gLua, f);
-				Lua_Push(gLua, e);
-				for (auto&& t : ts)
-				{
-					Lua_Push(gLua, t);
-				}
-				Lua_PCall(gLua, ts.size() + 1);
+				Lua_PCall(gLua, f, e, ts);
 				lua_settop(gLua, 0);
 			};
 		}
@@ -113,14 +99,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 			std::get<0>(t)->onTouchesEnded = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 			{
 				assert(!lua_gettop(gLua));
-				lua_checkstack(gLua, ts.size() + 3);
-				Lua_Push(gLua, f);
-				Lua_Push(gLua, e);
-				for (auto&& t : ts)
-				{
-					Lua_Push(gLua, t);
-				}
-				Lua_PCall(gLua, ts.size() + 1);
+				Lua_PCall(gLua, f, e, ts);
 				lua_settop(gLua, 0);
 			};
 		}
@@ -139,14 +118,7 @@ inline void Lua_Register_EventListenerTouchAllAtOnce(lua_State* const& L)
 			std::get<0>(t)->onTouchesCancelled = [f = std::move(std::get<1>(t))](const std::vector<cocos2d::Touch*>& ts, cocos2d::Event* e)
 			{
 				assert(!lua_gettop(gLua));
-				lua_checkstack(gLua, ts.size() + 3);
-				Lua_Push(gLua, f);
-				Lua_Push(gLua, e);
-				for (auto&& t : ts)
-				{
-					Lua_Push(gLua, t);
-				}
-				Lua_PCall(gLua, ts.size() + 1);
+				Lua_PCall(gLua, f, e, ts);
 				lua_settop(gLua, 0);
 			};
 		}
