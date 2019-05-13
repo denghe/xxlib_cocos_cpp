@@ -27,6 +27,7 @@
 	SetText_AutoFire(autoFire);
 
 	listenerAutoFire = cocos2d::EventListenerTouchOneByOne::create();
+	listenerAutoFire->setSwallowTouches(true);
 	listenerAutoFire->onTouchBegan = [this](cocos2d::Touch * t, cocos2d::Event * e) {
 		auto&& tL = t->getLocation();
 		auto&& p = btnAutoFire->convertToNodeSpace(tL);
@@ -42,6 +43,7 @@
 	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerAutoFire, btnAutoFire);
 
 	listenerRedial = cocos2d::EventListenerTouchOneByOne::create();
+	listenerRedial->setSwallowTouches(true);
 	listenerRedial->onTouchBegan = [this](cocos2d::Touch * t, cocos2d::Event * e) {
 		auto&& tL = t->getLocation();
 		auto&& p = btnRedial->convertToNodeSpace(tL);
@@ -58,6 +60,7 @@
 	cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerRedial, btnRedial);
 
 	//listenerSwitchTcpKcp = cocos2d::EventListenerTouchOneByOne::create();
+	//listenerSwitchTcpKcp->setSwallowTouches(true);
 	//listenerSwitchTcpKcp->onTouchBegan = [this](cocos2d::Touch * t, cocos2d::Event * e) {
 	//	auto&& tL = t->getLocation();
 	//	auto&& p = btnSwitchTcpKcp->convertToNodeSpace(tL);

@@ -240,7 +240,7 @@ inline int Dialer::Handle(PKG::CatchFish::Events::Refund_s o) noexcept {
 inline int Dialer::Handle(PKG::CatchFish::Events::FishDead_s o) noexcept {
 	for (auto&& p : catchFish->players) {
 		if (p->id == o->playerId) {
-			// 加钱
+			// 鱼在不在都要加钱
 			p->coin += o->coin;
 			auto&& fs = *player->scene->fishs;
 			for (auto&& f : fs) {
@@ -301,7 +301,6 @@ inline int Dialer::Handle(PKG::CatchFish::Events::Fire_s o) noexcept {
 			for (auto&& c : *p->cannons) {
 				if (c->id == o->cannonId) {
 					// 发射
-					c->coin = o->coin;					// todo: 理论上如果做完了币值切换通知就不需要这个赋值了
 					c->angle = o->tarAngle;
 					(void)c->Fire(o->frameNumber);
 					break;
@@ -318,5 +317,22 @@ inline int Dialer::Handle(PKG::CatchFish::Events::CannonSwitch_s o) noexcept {
 }
 
 inline int Dialer::Handle(PKG::CatchFish::Events::CannonCoinChange_s o) noexcept {
+	// 如果是自己的就忽略
+	if (o->playerId == player->id) return 0;
+
+	// 定位到目标玩家
+	for (auto&& p : catchFish->players) {
+		if (p->id == o->playerId) {
+			// 定位到目标炮台
+			for (auto&& c : *p->cannons) {
+				if (c->id == o->cannonId) {
+					c->coin = o->coin;
+					c->SetText_Coin();
+					break;
+				}
+			}
+			break;
+		}
+	}
 	return 0;
 }
