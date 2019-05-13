@@ -193,10 +193,8 @@
     <ClInclude Include="..\Classes\Dialer.h" />
     <ClInclude Include="..\Classes\Dialer.hpp" />
     <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp" />
-    <ClInclude Include="..\Classes\Panel_Dialer.h" />
-    <ClInclude Include="..\Classes\Panel_Dialer.hpp" />
-    <ClInclude Include="..\Classes\Panel_Player.h" />
-    <ClInclude Include="..\Classes\Panel_Player.hpp" />
+    <ClInclude Include="..\Classes\Dialer_Panel.h" />
+    <ClInclude Include="..\Classes\Dialer_Panel.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_BigFish.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_BigFish.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.h" />
@@ -212,6 +210,7 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_Fish.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Fish.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Item.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Item.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Player.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Player.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_RoundFish.h" />
@@ -227,9 +226,11 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBigFish.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBigFish.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_StageElement.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_StageElement.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_WayFish.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_WayFish.hpp" />
     <ClInclude Include="..\Classes\PKG_class.h" />
+    <ClInclude Include="..\Classes\PKG_class.hpp" />
     <ClInclude Include="..\Classes\RefHolder.h" />
     <ClInclude Include="..\lua\src\lapi.h" />
     <ClInclude Include="..\lua\src\lauxlib.h" />

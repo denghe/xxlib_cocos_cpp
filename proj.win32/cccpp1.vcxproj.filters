@@ -410,18 +410,6 @@
     <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Panel_Dialer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Panel_Dialer.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Panel_Player.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Panel_Player.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Config.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -525,6 +513,21 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\PKG_CatchFish_RoundFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Dialer_Panel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Dialer_Panel.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_class.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Item.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_StageElement.hpp">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
