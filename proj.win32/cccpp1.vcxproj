@@ -193,7 +193,6 @@
     <ClInclude Include="..\Classes\Dialer.h" />
     <ClInclude Include="..\Classes\Dialer.hpp" />
     <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp" />
-    <ClInclude Include="..\Classes\Dialer_Panel.h" />
     <ClInclude Include="..\Classes\Dialer_Panel.hpp" />
     <ClInclude Include="..\Classes\PKG_CatchFish_BigFish.h" />
     <ClInclude Include="..\Classes\PKG_CatchFish_BigFish.hpp" />

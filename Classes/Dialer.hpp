@@ -1,4 +1,7 @@
-﻿inline Dialer::Dialer() {
+﻿#include "Dialer_UpdateCore.hpp"
+#include "Dialer_Panel.hpp"
+
+inline Dialer::Dialer() {
 	xx::MakeTo(resolver, *uv);
 	resolver->onFinish = [this] {
 		ips = std::move(resolver->ips);
@@ -22,7 +25,6 @@ inline int Dialer::Update() noexcept {
 	return lineNumber ? 0 : -1;
 }
 
-#include "Dialer_UpdateCore.hpp"
 
 inline int Dialer::HandleFirstPackage() noexcept {
 	switch (recvs.front()->GetTypeId()) {

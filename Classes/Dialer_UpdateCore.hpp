@@ -3,10 +3,10 @@
 
 		// init
 	// 初始面板显示元素
-		xx::MakeTo(panel, this);
+		DrawInit();
 
 	// 显示目标服务器 ip:port
-	panel->SetText_Server(catchFish->serverIp + ":" + std::to_string(catchFish->serverPort));
+	SetText_Server(catchFish->serverIp + ":" + std::to_string(catchFish->serverPort));
 
 	// begin resolve domain to iplist
 LabResolveDomain:
@@ -55,10 +55,10 @@ LabDial:
 	xx::CoutTN("step 2");
 
 	// 显示连接所用协议
-	panel->SetText_TcpKcp(peer->IsKcp());
+	SetText_TcpKcp(peer->IsKcp());
 
 	++numDialTimes;
-	panel->SetText_NumDialTimes(numDialTimes);
+	SetText_NumDialTimes(numDialTimes);
 
 	// send enter package
 	if (token.size()) {
@@ -108,7 +108,7 @@ LabDial:
 
 		// 如果已得到 ping 的返回结果 就显示并重置
 		if (ping) {
-			panel->SetText_Ping(ping);
+			SetText_Ping(ping);
 			ping = 0;
 		}
 		// 如果没在 ping 并且时机恰当 就发起 ping
@@ -127,7 +127,7 @@ LabDial:
 		}
 
 		// 显示鱼的数量
-		panel->SetText_NumFishs(::catchFish->scene->fishs->len);
+		SetText_NumFishs(::catchFish->scene->fishs->len);
 
 		COR_YIELD
 	}

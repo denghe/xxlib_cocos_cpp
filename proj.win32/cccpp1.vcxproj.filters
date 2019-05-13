@@ -515,9 +515,6 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_RoundFish.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Dialer_Panel.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Dialer_Panel.hpp">
       <Filter>src</Filter>
     </ClInclude>
