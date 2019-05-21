@@ -183,12 +183,9 @@ inline int PKG::CatchFish::Cannon::Hit(PKG::Client_CatchFish::Hit_s& o) noexcept
 
 #ifndef CC_TARGET_PLATFORM
 inline int PKG::CatchFish::Cannon::Fire(PKG::Client_CatchFish::Fire_s& o) noexcept {
-	// 如果金币不足, 失败
-	if (player->coin < coin) return -1;
-
 	// 如果子弹编号已存在, 失败
 	for (auto&& bullet : *bullets) {
-		if (bullet->id == o->bulletId) return -2;
+		if (bullet->id == o->bulletId) return -1;
 	}
 
 	// 根据开火目标坐标计算角度
@@ -197,22 +194,21 @@ inline int PKG::CatchFish::Cannon::Fire(PKG::Client_CatchFish::Fire_s& o) noexce
 	// 模拟客户端参数以兼容下方代码
 	auto frameNumber = o->frameNumber;
 #else
-inline int PKG::CatchFish::Cannon::Fire(int const& frameNumber) noexcept {
+inline int PKG::CatchFish::Cannon::Fire(int frameNumber) noexcept {
 	// 只有玩家本人发射行为受限
 	if (player->isSelf) {
+#endif
 		// 如果金币不足, 失败
-		if (player->coin < coin) return 0;	// todo: 显示提示?
-#endif
-		if (!quantity) return -4;									// 剩余颗数为 0
-		if (frameNumber < fireCD) return -5;						// CD 中
-		if (bullets->len == cfg->numLimit) {						// 总颗数限制
-#ifndef CC_TARGET_PLATFORM
-			return -6;
-#else
-			// todo: 看情况显示发射遇到上限?
-			return 0;
-#endif
-		}
+		if (player->coin < coin) return -2;
+
+		// 剩余颗数为 0
+		if (!quantity) return -3;
+
+		// CD 中
+		if (frameNumber < fireCD) return -4;
+
+		// 总颗数限制
+		if (bullets->len == cfg->numLimit) return -5; // todo: 显示发射遇到上限?
 		// todo: 更多发射限制检测
 
 		// 置 cd
@@ -227,8 +223,6 @@ inline int PKG::CatchFish::Cannon::Fire(int const& frameNumber) noexcept {
 
 	auto&& bullet = xx::TryMake<Bullet>();
 	if (!bullet) return -6;
-	bullet->indexAtContainer = (int)bullets->len;
-	bullets->Add(bullet);
 	bullet->scene = scene;
 	bullet->player = player;
 	bullet->cannon = this;
@@ -236,43 +230,22 @@ inline int PKG::CatchFish::Cannon::Fire(int const& frameNumber) noexcept {
 	bullet->pos = pos + xx::Rotate(xx::Pos{ cfg->muzzleLen * cfg->scale ,0 }, angle);			// 计算炮口坐标
 	bullet->angle = angle;	// 角度沿用炮台的( 在发射前炮台已经调整了角度 )
 	bullet->moveInc = xx::Rotate(xx::Pos{ cfg->distance ,0 }, angle);							// 计算出每帧移动增量
-	bullet->coin = coin;											// 存储发射时炮台的倍率
-	player->coin -= coin;											// 扣钱
-#ifdef CC_TARGET_PLATFORM
-	bullet->id = ++player->autoIncId;
-	bullet->DrawInit();
+	bullet->coin = coin;																		// 存储发射时炮台的倍率
 
-	if (player->isSelf) {
-		// 如果是玩家本人就发包
-		auto&& pkg = xx::TryMake<PKG::Client_CatchFish::Fire>();
-		if (!pkg) return -9;
-		pkg->bulletId = bullet->id;
-		pkg->cannonId = this->id;
-		pkg->frameNumber = scene->frameNumber;
-		pkg->pos = bullet->pos;
-		::dialer->peer->SendPush(pkg);
-		::dialer->peer->Flush();
-	}
-	else if (scene->cfg->enableBulletFastForward) {
-		// 其他玩家: 子弹追帧并绘制( 追或不追, 这是个选项 )
-		auto&& times = scene->frameNumber - frameNumber;
-		assert(times >= 0);
-		while (--times > 0) {
-			if (int r = bullet->Move()) return 0;
-		}
-	}
-#else
+#ifndef CC_TARGET_PLATFORM
 	bullet->id = o->bulletId;
 
-	// 追帧. 令子弹轨迹运行至当前帧编号
+	// 追帧. 令子弹轨迹运行至当前帧编号. 如果已经消失就没必要继续创建了
 	while (frameNumber++ < scene->frameNumber) {
 		// 如果子弹生命周期已经到了
 		if (int r = bullet->Move()) {
-			player->coin += coin;									// 退钱
-			player->MakeRefundEvent(coin, true);					// 生成私有退款事件通知( 其他客户端收到后不理会 )
+			// 生成私有退款事件通知( 其他客户端收到后不理会 )
+			player->MakeRefundEvent(coin, true);
 			return 0;
 		}
 	}
+
+	player->coin -= coin;					// 扣钱
 
 	// 创建发射事件
 	{
@@ -284,10 +257,35 @@ inline int PKG::CatchFish::Cannon::Fire(int const& frameNumber) noexcept {
 		fire->tarAngle = bullet->angle;
 		scene->frameEvents->events->Add(std::move(fire));
 	}
+#else
+	bullet->id = ++player->autoIncId;
+	player->coin -= coin;					// 扣钱
 
-	//xx::CoutN("fire. ", o);
+	// 如果是玩家本人就发包
+	if (player->isSelf) {
+		auto&& pkg = xx::Make<PKG::Client_CatchFish::Fire>();
+		pkg->bulletId = bullet->id;
+		pkg->cannonId = this->id;
+		pkg->frameNumber = scene->frameNumber;
+		pkg->pos = bullet->pos;
+		::dialer->peer->SendPush(pkg);
+		::dialer->peer->Flush();
+	}
+	// 其他玩家: 子弹追帧并绘制( 追或不追, 这是个选项 )
+	else if (scene->cfg->enableBulletFastForward) {
+		while (frameNumber++ < scene->frameNumber) {
+			// 如果子弹生命周期已经到了就退出
+			if (int r = bullet->Move()) return 0;
+		}
+	}
+
+	// 绘制子弹
+	bullet->DrawInit();
 #endif
 
+	// 放入容器
+	bullet->indexAtContainer = (int)bullets->len;
+	bullets->Add(std::move(bullet));
 	return 0;
 }
 

@@ -141,7 +141,7 @@ inline int PKG::CatchFish::Scene::Update() noexcept {
 		calcResult = 1;
 
 		// 将 hitChecks 发给 Calc 计算
-		service->calcPeer->SendRequest(hitChecks, [this](xx::Object_s&& msg)->int { UpdateCalc(std::move(msg)); return 0; }, 1000);
+		service->calcPeer->SendRequest(hitChecks, [this](xx::Object_s && msg)->int { UpdateCalc(std::move(msg)); return 0; }, 1000);
 
 		// 清理 for next fill
 		hitChecks->hits->Clear();
@@ -156,9 +156,10 @@ inline int PKG::CatchFish::Scene::Update() noexcept {
 };
 
 #ifndef CC_TARGET_PLATFORM
-inline void PKG::CatchFish::Scene::UpdateCalc(xx::Object_s&& msg) noexcept {
+inline void PKG::CatchFish::Scene::UpdateCalc(xx::Object_s && msg) noexcept {
 	// 超时检查
 	if (!msg) {
+		xx::CoutTN("recv timeout.");
 		calcResult = -1;
 		return;
 	}
@@ -181,7 +182,7 @@ inline void PKG::CatchFish::Scene::UpdateCalc(xx::Object_s&& msg) noexcept {
 	}
 }
 
-inline void PKG::CatchFish::Scene::Handle(PKG::Calc_CatchFish::HitCheckResult_s&& msg) noexcept {
+inline void PKG::CatchFish::Scene::Handle(PKG::Calc_CatchFish::HitCheckResult_s && msg) noexcept {
 	// 令相应的鱼死掉( 子弹在 hit 请求产生时便已被移除 ), 同步玩家 coin, 生成各种 鱼死 & 退款 事件
 
 	for (auto&& f : *msg->fishs) {
@@ -201,14 +202,17 @@ inline void PKG::CatchFish::Scene::Handle(PKG::Calc_CatchFish::HitCheckResult_s&
 			frameEvents->events->Add(std::move(fishDead));
 		}
 
-		// 定位到玩家加钱( 这部分代码容忍 player 在 Calc 回调后找不到 )
-		for (auto&& p : *players) {
-			auto&& player = p.lock();
+		// 定位到玩家加钱
+		auto&& j = players->len - 1;
+		for (; j != -1; --j) {
+			auto&& player = players->At(j).lock();
 			assert(player);
 			if (player->id == f.playerId) {
 				player->coin += c;
+				break;
 			}
 		}
+		assert(j != -1);
 	}
 
 	// 批量删鱼 by fishIds
@@ -236,16 +240,21 @@ inline void PKG::CatchFish::Scene::Handle(PKG::Calc_CatchFish::HitCheckResult_s&
 	// 批量退钱
 	for (auto&& b : *msg->bullets) {
 		// 定位到玩家退钱 & 生成退钱事件包
-		for (auto&& p : *players) {
-			auto&& player = p.lock();
+		auto&& j = players->len - 1;
+		for (; j != -1; --j) {
+			auto&& player = players->At(j).lock();
 			assert(player);
 			if (player->id == b.playerId) {
 				auto&& c = b.bulletCoin * b.bulletCount;
 				player->coin += c;
 				player->MakeRefundEvent(c);	// todo: 为退钱增加 bulletId 以便与鱼死关联？
+				break;
 			}
 		}
+		assert(j != -1);
 	}
+
+	UpdateEnd();
 }
 
 inline void PKG::CatchFish::Scene::UpdateEnd() noexcept {
@@ -291,7 +300,12 @@ inline void PKG::CatchFish::Scene::UpdateEnd() noexcept {
 				}
 			}
 		}
+
+		// 临时输出一下 players 的 coin
+		xx::Cout(" sit: ", plr->sit, " coin: ", plr->coin);
 	}
+	xx::CoutN();
+
 	frameEvents->events->Clear();		// 清除发送过的数据
 	frameEnters.Clear();				// 清除发送过的数据
 }

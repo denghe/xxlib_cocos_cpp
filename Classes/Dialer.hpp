@@ -230,7 +230,6 @@ inline int Dialer::Handle(PKG::CatchFish::Events::Refund_s o) noexcept {
 		if (o->playerId != player->id) return 0;
 		// 退款
 		player->coin += o->coin;
-		xx::CoutTN("personal refund occur. coin = ", o->coin);
 	}
 	else {
 		// 定位到目标玩家

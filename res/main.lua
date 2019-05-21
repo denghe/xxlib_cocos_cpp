@@ -5,7 +5,7 @@ collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 5000)
 
 -- 创建显示窗口( for desktop os )
-cc.createSetOpenGLView("cocos_cpp_lua", 1440, 800)
+cc.createSetOpenGLView("cocos_cpp_lua", 800, 500)
 
 -- 初始化设计尺寸( 如果不设置，iOS 上左下角统计会显示不出来 )
 local sW, sH = cc.getFrameSize()
@@ -68,11 +68,12 @@ go(function()
 	if cf == nil then
 		print("CatchFish create fail.")
 	else
+		local r = cf:Init("192.168.1.149", 12345, "cfg.bin")
 		--local r = cf:Init("192.168.1.163", 12345, "cfg.bin")
 		--local r = cf:Init("192.168.1.154", 12345, "cfg.bin")
-		--local r = cf:Init("10.0.0.216", 12345, "cfg.bin")
-		local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
 		--local r = cf:Init("192.168.1.254", 12345, "cfg.bin")
+		--local r = cf:Init("10.0.0.216", 12345, "cfg.bin")
+		--local r = cf:Init("127.0.0.1", 12345, "cfg.bin")
 		if r ~= 0 then
 			print("CatchFish Init fail. r = ".. r)
 		else
