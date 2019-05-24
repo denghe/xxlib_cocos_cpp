@@ -5,7 +5,7 @@ collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 5000)
 
 -- 创建显示窗口( for desktop os )
-cc.createSetOpenGLView("cocos_cpp_lua", 800, 500)
+cc.createSetOpenGLView("cocos_cpp_lua", 800, 450)
 
 -- 初始化设计尺寸( 如果不设置，iOS 上左下角统计会显示不出来 )
 local sW, sH = cc.getFrameSize()
