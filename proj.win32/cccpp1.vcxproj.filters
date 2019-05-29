@@ -527,6 +527,66 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_StageElement.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBombFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBombFish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombBullet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombBullet.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombFish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillBullet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillBullet.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillCannon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillCannon.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillFish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryBullet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryBullet.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryCannon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryCannon.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryFish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_ColorFish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_ColorFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
