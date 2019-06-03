@@ -109,7 +109,7 @@ inline int PKG::CatchFish::Cannon::Hit(PKG::Client_CatchFish::Hit_s& o) noexcept
 					//xx::CoutN("hit cancel. refund = ", b->coin);
 				}
 				else {
-					// 从鱼队列定位鱼. 如果找到就 fish die check( 本地逻辑进而直接下发 fishdie ). 没找到就退钱. 最后删子弹退出
+					// 从鱼队列定位鱼. 如果找到就 fish die check
 					if (fs.len) {
 						size_t j = fs.len - 1;
 						for (; j != -1; --j) {
@@ -117,8 +117,6 @@ inline int PKG::CatchFish::Cannon::Hit(PKG::Client_CatchFish::Hit_s& o) noexcept
 							assert(f->indexAtContainer == j);
 							// 定位到鱼
 							if (f->id == o->fishId) {
-#if 1
-								// 远程计算逻辑( 依赖 Calc 服务 )
 								// 构造 hit 计算数据
 								auto && hit = scene->hitChecks->hits->Emplace();
 								hit.fishId = f->id;
@@ -128,33 +126,9 @@ inline int PKG::CatchFish::Cannon::Hit(PKG::Client_CatchFish::Hit_s& o) noexcept
 								hit.bulletId = b->id;
 								hit.bulletCount = 1;		// 写死. 当前子弹就是单颗
 								hit.bulletCoin = b->coin;
-#else
-								// 本地计算逻辑( 不依赖 Calc 服务 )
-								// 先根据 1/coin 死亡比例 来判断是否打死
-								if (scene->serverRnd.Next((int)f->coin) == 0) {
-									// 算钱
-									auto&& c = b->coin * f->coin;	// 数量只可能为 1
-									// 构造鱼死事件包
-									{
-										auto&& fishDead = xx::Make<PKG::CatchFish::Events::FishDead>();
-										fishDead->cannonId = id;
-										fishDead->bulletId = b->id;
-										fishDead->coin = c;
-										fishDead->fishId = f->id;
-										fishDead->playerId = player->id;
-										scene->frameEvents->events->Add(std::move(fishDead));
-									}
-									// 加钱
-									player->coin += c;
-									// 删鱼
-									fs[fs.len - 1]->indexAtContainer = (int)j;
-									fs.SwapRemoveAt(j);
-									//xx::CoutN("hit fish dead. ", o);
-								}
-								else {
-									//xx::CoutN("hit fish not dead. ", o);
-								}
-#endif
+
+								// 将子弹放入字典备查. 删子弹之后继续存在于字典
+								scene->bullets[std::make_tuple(hit.playerId, hit.cannonId, hit.bulletId)].bullet = b;
 								break;
 							}
 						}
@@ -203,6 +177,10 @@ inline int PKG::CatchFish::Cannon::Fire(PKG::Client_CatchFish::Fire_s& o) noexce
 	// todo: 更多发射限制检测
 
 	// 检测通过, 开始发射
+
+	// 同步自增 id 以免断线重连后发射的子弹 id 重复
+	player->autoIncId = o->bulletId;
+
 	// 剩余颗数 -1
 	if (quantity != -1) {
 		--quantity;
