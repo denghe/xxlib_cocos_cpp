@@ -533,12 +533,6 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBombFish.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\PKG_CatchFish_BombBullet.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\PKG_CatchFish_BombBullet.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\PKG_CatchFish_BombFish.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -585,6 +579,42 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\PKG_CatchFish_ColorFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillWeapon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillWeapon.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryWeapon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryWeapon.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_LightWeapon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_LightWeapon.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_LightFish.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_LightFish.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombWeapon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombWeapon.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Weapon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PKG_CatchFish_Weapon.hpp">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
