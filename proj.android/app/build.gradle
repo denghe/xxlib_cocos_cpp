@@ -3,11 +3,11 @@ import org.gradle.internal.os.OperatingSystem
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "net.denghe.cccpp1"
         minSdkVersion 18
-        targetSdkVersion 18
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -49,7 +49,7 @@ android {
         java.srcDir "src"
         res.srcDir "res"
         manifest.srcFile "AndroidManifest.xml"
-        assets.srcDir "../../res"
+        assets.srcDir "assets"
     }
 
     externalNativeBuild {
@@ -110,19 +110,25 @@ android {
 }
 
 android.applicationVariants.all { variant ->
-    // delete previous files first
-    delete "${buildDir}/intermediates/assets/${variant.dirName}"
+    def project_root_folder = "${projectDir}/../.."
+    def dest_assets_folder = "${projectDir}/assets"
 
-    variant.mergeAssets.doLast {
+    // delete previous files first
+    delete dest_assets_folder
+    def targetName = variant.name.capitalize()
+    def copyTaskName = "copy${targetName}ResourcesToAssets"
+    
+    tasks.register(copyTaskName) {
         copy {
-            from "${buildDir}/../../res"
-            into "${buildDir}/intermediates/assets/${variant.dirName}"
+            from project_root_folder + "/res"
+            into dest_assets_folder
             exclude "**/*.gz"
         }
     }
+    tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libcocos2dx')
 }

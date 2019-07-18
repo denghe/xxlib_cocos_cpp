@@ -420,7 +420,7 @@ void Node::setRotationSkewY(float rotationY)
 }
 
 /// scale getter
-float Node::getScale(void) const
+float Node::getScale() const
 {
     CCASSERT( _scaleX == _scaleY, "CCNode#scale. ScaleX != ScaleY. Don't know which one to return");
     return _scaleX;
@@ -812,13 +812,13 @@ Node* Node::getChildByName(const std::string& name) const
     for (const auto& child : _children)
     {
         // Different strings may have the same hash code, but can use it to compare first for speed
-        if(child->_hashOfName == hash && child->_name.compare(name) == 0)
+        if(child->_hashOfName == hash && child->_name == name)
             return child;
     }
     return nullptr;
 }
 
-void Node::enumerateChildren(const std::string &name, std::function<bool (Node *)> callback) const
+void Node::enumerateChildren(const std::string &name, const std::function<bool (Node *)>& callback) const
 {
     CCASSERT(!name.empty(), "Invalid name");
     CCASSERT(callback != nullptr, "Invalid callback function");
@@ -869,7 +869,7 @@ void Node::enumerateChildren(const std::string &name, std::function<bool (Node *
     }
 }
 
-bool Node::doEnumerateRecursive(const Node* node, const std::string &name, std::function<bool (Node *)> callback) const
+bool Node::doEnumerateRecursive(const Node* node, const std::string &name, const std::function<bool (Node *)>& callback) const
 {
     bool ret =false;
     
@@ -894,7 +894,7 @@ bool Node::doEnumerateRecursive(const Node* node, const std::string &name, std::
     return ret;
 }
 
-bool Node::doEnumerate(std::string name, std::function<bool (Node *)> callback) const
+bool Node::doEnumerate(std::string name, const std::function<bool (Node *)>& callback) const
 {
     // name may be xxx/yyy, should find its parent
     size_t pos = name.find('/');
@@ -1992,7 +1992,7 @@ void Node::removeAllComponents()
 
 // MARK: Opacity and Color
 
-GLubyte Node::getOpacity(void) const
+GLubyte Node::getOpacity() const
 {
     return _realOpacity;
 }
@@ -2023,7 +2023,7 @@ void Node::updateDisplayedOpacity(GLubyte parentOpacity)
     }
 }
 
-bool Node::isCascadeOpacityEnabled(void) const
+bool Node::isCascadeOpacityEnabled() const
 {
     return _cascadeOpacityEnabled;
 }
@@ -2077,7 +2077,7 @@ bool Node::isOpacityModifyRGB() const
     return false;
 }
 
-const Color3B& Node::getColor(void) const
+const Color3B& Node::getColor() const
 {
     return _realColor;
 }
@@ -2110,7 +2110,7 @@ void Node::updateDisplayedColor(const Color3B& parentColor)
     }
 }
 
-bool Node::isCascadeColorEnabled(void) const
+bool Node::isCascadeColorEnabled() const
 {
     return _cascadeColorEnabled;
 }

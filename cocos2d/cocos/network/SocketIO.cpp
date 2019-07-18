@@ -29,15 +29,16 @@
  ****************************************************************************/
 
 #include "network/SocketIO.h"
-#include "network/Uri.h"
-#include <algorithm>
-#include <sstream>
-#include <iterator>
-#include "base/ccUTF8.h"
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
-#include "network/WebSocket.h"
+#include "base/ccUTF8.h"
 #include "network/HttpClient.h"
+#include "network/Uri.h"
+#include "network/WebSocket.h"
+#include <algorithm>
+#include <iterator>
+#include <sstream>
+#include <utility>
 
 #include "json/rapidjson.h"
 #include "json/document-wrapper.h"
@@ -151,7 +152,7 @@ std::string SocketIOPacket::toString()const
     encoded << this->_separator;
 
     // Add the endpoint for the namespace to be used if not the default namespace "" or "/", and as long as it is not an ACK, heartbeat, or disconnect packet
-    if (_endpoint != "/" && _endpoint != "" && _type != "ack" && _type != "heartbeat" && _type != "disconnect") {
+    if (_endpoint != "/" && !_endpoint.empty() && _type != "ack" && _type != "heartbeat" && _type != "disconnect") {
         encoded << _endpoint << _endpointseparator;
     }
     encoded << this->_separator;
@@ -441,8 +442,6 @@ void SIOClientImpl::handshake()
     HttpClient::getInstance()->send(request);
 
     request->release();
-
-    return;
 }
 
 void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *response)
@@ -489,7 +488,7 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *resp
     std::string sid = "";
     int heartbeat = 0, timeout = 0;
 
-    if (res.find("}") != std::string::npos) {
+    if (res.find('}') != std::string::npos) {
 
         CCLOGINFO("SIOClientImpl::handshake() Socket.IO 1.x detected");
         _version = SocketIOPacket::SocketIOVersion::V10x;
@@ -500,29 +499,29 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *resp
         std::string temp = res.substr(a, res.size() - a);
 
         // find the sid
-        a = temp.find(":");
-        b = temp.find(",");
+        a = temp.find(':');
+        b = temp.find(',');
 
         sid = temp.substr(a + 2, b - (a + 3));
 
         temp = temp.erase(0, b + 1);
 
         // chomp past the upgrades
-        b = temp.find(",");
+        b = temp.find(',');
 
         temp = temp.erase(0, b + 1);
 
         // get the pingInterval / heartbeat
-        a = temp.find(":");
-        b = temp.find(",");
+        a = temp.find(':');
+        b = temp.find(',');
 
         std::string heartbeat_str = temp.substr(a + 1, b - a);
         heartbeat = atoi(heartbeat_str.c_str()) / 1000;
         temp = temp.erase(0, b + 1);
 
         // get the timeout
-        a = temp.find(":");
-        b = temp.find("}");
+        a = temp.find(':');
+        b = temp.find('}');
 
         std::string timeout_str = temp.substr(a + 1, b - a);
         timeout = atoi(timeout_str.c_str()) / 1000;
@@ -536,20 +535,20 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *resp
         // sample: 3GYzE9md2Ig-lm3cf8Rv:60:60:websocket,htmlfile,xhr-polling,jsonp-polling
         size_t pos = 0;
 
-        pos = res.find(":");
+        pos = res.find(':');
         if (pos != std::string::npos)
         {
             sid = res.substr(0, pos);
             res.erase(0, pos + 1);
         }
 
-        pos = res.find(":");
+        pos = res.find(':');
         if (pos != std::string::npos)
         {
             heartbeat = atoi(res.substr(pos + 1, res.size()).c_str());
         }
 
-        pos = res.find(":");
+        pos = res.find(':');
         if (pos != std::string::npos)
         {
             timeout = atoi(res.substr(pos + 1, res.size()).c_str());
@@ -562,9 +561,6 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *resp
     _timeout = timeout;
 
     openSocket();
-
-    return;
-
 }
 
 void SIOClientImpl::openSocket()
@@ -593,8 +589,6 @@ void SIOClientImpl::openSocket()
     {
         CC_SAFE_DELETE(_ws);
     }
-
-    return;
 }
 
 bool SIOClientImpl::init()
@@ -727,7 +721,7 @@ void SIOClientImpl::send(SocketIOPacket *packet)
     if (_connected)
     {
         CCLOGINFO("-->SEND:%s", req.data());
-        _ws->send(req.data());
+        _ws->send(req);
     }
     else
         CCLOGINFO("Cant send the message (%s) because disconnected", req.c_str());
@@ -764,7 +758,7 @@ void SIOClientImpl::onOpen(WebSocket* /*ws*/)
     if (_version == SocketIOPacket::SocketIOVersion::V10x)
     {
         std::string s = "5";//That's a ping https://github.com/Automattic/engine.io-parser/blob/1b8e077b2218f4947a69f5ad18be2a512ed54e93/lib/index.js#L21
-        _ws->send(s.data());
+        _ws->send(s);
     }
 
     Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(SIOClientImpl::heartbeat), this, (_heartbeat * .9f), false);
@@ -795,20 +789,20 @@ void SIOClientImpl::onMessage(WebSocket* /*ws*/, const WebSocket::Data& data)
 
             std::string::size_type pos, pos2;
 
-            pos = payload.find(":");
+            pos = payload.find(':');
             if (pos != std::string::npos)
             {
                 payload.erase(0, pos + 1);
             }
 
-            pos = payload.find(":");
+            pos = payload.find(':');
             if (pos != std::string::npos)
             {
                 msgid = atoi(payload.substr(0, pos + 1).c_str());
             }
             payload.erase(0, pos + 1);
 
-            pos = payload.find(":");
+            pos = payload.find(':');
             if (pos != std::string::npos)
             {
                 endpoint = payload.substr(0, pos);
@@ -819,7 +813,7 @@ void SIOClientImpl::onMessage(WebSocket* /*ws*/, const WebSocket::Data& data)
                 endpoint = payload;
             }
 
-            if (endpoint == "") endpoint = "/";
+            if (endpoint.empty()) endpoint = "/";
 
             c = getClient(endpoint);
 
@@ -860,8 +854,8 @@ void SIOClientImpl::onMessage(WebSocket* /*ws*/, const WebSocket::Data& data)
                 if (c)
                 {
                     eventname = "";
-                    pos = s_data.find(":");
-                    pos2 = s_data.find(",");
+                    pos = s_data.find(':');
+                    pos2 = s_data.find(',');
                     if (pos2 > pos)
                     {
                         eventname = s_data.substr(pos + 2, pos2 - (pos + 3));
@@ -917,8 +911,8 @@ void SIOClientImpl::onMessage(WebSocket* /*ws*/, const WebSocket::Data& data)
 
                 std::string endpoint = "";
 
-                std::string::size_type a = payload.find("/");
-                std::string::size_type b = payload.find("[");
+                std::string::size_type a = payload.find('/');
+                std::string::size_type b = payload.find('[');
 
                 if (b != std::string::npos)
                 {
@@ -934,14 +928,14 @@ void SIOClientImpl::onMessage(WebSocket* /*ws*/, const WebSocket::Data& data)
                 }
 
                 // we didn't find and endpoint and we are in the default namespace
-                if (endpoint == "") endpoint = "/";
+                if (endpoint.empty()) endpoint = "/";
 
                 c = getClient(endpoint);
 
                 payload = payload.substr(1);
 
                 if (endpoint != "/") payload = payload.substr(endpoint.size());
-                if (endpoint != "/" && payload != "") payload = payload.substr(1);
+                if (endpoint != "/" && !payload.empty()) payload = payload.substr(1);
 
                 switch (control2)
                 {
@@ -961,8 +955,8 @@ void SIOClientImpl::onMessage(WebSocket* /*ws*/, const WebSocket::Data& data)
                 {
                     CCLOGINFO("Event Received (%s)", payload.c_str());
 
-                    std::string::size_type payloadFirstSlashPos = payload.find("\"");
-                    std::string::size_type payloadSecondSlashPos = payload.substr(payloadFirstSlashPos + 1).find("\"");
+                    std::string::size_type payloadFirstSlashPos = payload.find('\"');
+                    std::string::size_type payloadSecondSlashPos = payload.substr(payloadFirstSlashPos + 1).find('\"');
 
                     std::string eventname = payload.substr(payloadFirstSlashPos + 1,
                                                            payloadSecondSlashPos - payloadFirstSlashPos + 1);
@@ -1004,8 +998,6 @@ void SIOClientImpl::onMessage(WebSocket* /*ws*/, const WebSocket::Data& data)
         }
         break;
     }
-
-    return;
 }
 
 void SIOClientImpl::onClose(WebSocket* /*ws*/)
@@ -1138,7 +1130,7 @@ void SIOClient::setConnected(bool connected)
     _connected = connected;
 }
 
-void SIOClient::on(const std::string& eventName, SIOEvent e)
+void SIOClient::on(const std::string& eventName, const SIOEvent& e)
 {
     _eventRegistry[eventName] = e;
 }
@@ -1208,7 +1200,7 @@ SIOClient* SocketIO::connect(const std::string& uri, SocketIO::SIODelegate& dele
     SIOClient *c = nullptr;
 
     std::string path = uriObj.getPath();
-    if (path == "")
+    if (path.empty())
         path = "/";
 
     if (socket == nullptr)
