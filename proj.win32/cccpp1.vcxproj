@@ -342,10 +342,13 @@
     <ClInclude Include="..\xxlib\xx_coros.h" />
     <ClInclude Include="..\xxlib\xx_dict.h" />
     <ClInclude Include="..\xxlib\xx_list.h" />
+    <ClInclude Include="..\xxlib\xx_logger.h" />
     <ClInclude Include="..\xxlib\xx_object.h" />
     <ClInclude Include="..\xxlib\xx_pos.h" />
     <ClInclude Include="..\xxlib\xx_random.h" />
     <ClInclude Include="..\xxlib\xx_random.hpp" />
+    <ClInclude Include="..\xxlib\xx_sqlite.h" />
+    <ClInclude Include="..\xxlib\xx_threadpool.h" />
     <ClInclude Include="..\xxlib\xx_uv.h" />
     <ClInclude Include="..\xxlib\xx_uv_coros.h" />
     <ClInclude Include="..\xxlib\xx_uv_lua.h" />

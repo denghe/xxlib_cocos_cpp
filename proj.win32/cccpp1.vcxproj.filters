@@ -617,6 +617,15 @@
     <ClInclude Include="..\Classes\PKG_CatchFish_Weapon.hpp">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\xxlib\xx_logger.h">
+      <Filter>xxlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xxlib\xx_sqlite.h">
+      <Filter>xxlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xxlib\xx_threadpool.h">
+      <Filter>xxlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
