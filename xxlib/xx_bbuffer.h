@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "xx_list.h"
 
 namespace xx {
@@ -37,7 +37,7 @@ namespace xx {
 		}
 	};
 
-	// ÊÊÅä Buffer
+	// é€‚é… Buffer
 	template<>
 	struct IsTrivial<Buffer, void> {
 		static const bool value = true;
@@ -48,11 +48,11 @@ namespace xx {
 	using BBuffer_w = std::weak_ptr<BBuffer>;
 
 	struct BBuffer : Buffer {
-		size_t offset = 0;													// ¶ÁÖ¸ÕëÆ«ÒÆÁ¿
-		size_t offsetRoot = 0;												// offsetÖµĞ´ÈëĞŞÕı
-		size_t readLengthLimit = 0;											// Ö÷ÓÃÓÚ´«µİ¸øÈİÆ÷Àà½øĞĞ³¤¶ÈºÏ·¨Ğ£Ñé
+		size_t offset = 0;													// è¯»æŒ‡é’ˆåç§»é‡
+		size_t offsetRoot = 0;												// offsetå€¼å†™å…¥ä¿®æ­£
+		size_t readLengthLimit = 0;											// ä¸»ç”¨äºä¼ é€’ç»™å®¹å™¨ç±»è¿›è¡Œé•¿åº¦åˆæ³•æ ¡éªŒ
 
-		// todo: ÕâĞ©ÈİÆ÷¸ÄÎªÖ¸Õë, XxxxxRoot º¯ÊıÖĞ¼ì²â²¢´´½¨
+		// todo: è¿™äº›å®¹å™¨æ”¹ä¸ºæŒ‡é’ˆ, XxxxxRoot å‡½æ•°ä¸­æ£€æµ‹å¹¶åˆ›å»º
 		std::unordered_map<void*, size_t> ptrs;
 		std::unordered_map<size_t, std::shared_ptr<Object>> objIdxs;
 		std::unordered_map<size_t, std::shared_ptr<std::string>> strIdxs;
@@ -66,7 +66,7 @@ namespace xx {
 		inline BBuffer& operator=(BBuffer&& o) noexcept {
 			this->Buffer::operator=(std::move(o));
 			std::swap(offset, o.offset);
-			// ptrs, objIdxs, strIdxs ÒòÎªÊÇÁÙÊ±Êı¾İ, ²»ĞèÒª´¦Àí
+			// ptrs, objIdxs, strIdxs å› ä¸ºæ˜¯ä¸´æ—¶æ•°æ®, ä¸éœ€è¦å¤„ç†
 			return *this;
 		}
 		BBuffer(BBuffer const&) = delete;
@@ -298,9 +298,9 @@ namespace xx {
 		}
 
 		inline virtual void ToString(std::string& s) const noexcept override {
-			s += "{ \"len\":" + std::to_string(len) + ", \"offset\":" + std::to_string(offset) + ", \"data\":[ ";
+			Append(s, "{ \"len\":", len, ", \"cap\":", cap, ", \"offset\":", offset, ", \"buf\":[ ");
 			for (size_t i = 0; i < len; i++) {
-				s += std::to_string((int)buf[i]) + ", ";
+				Append(s, (int)buf[i], ", ");
 			}
 			if (len) s.resize(s.size() - 2);
 			s += " ] }";
@@ -343,7 +343,7 @@ namespace xx {
 		return 0;
 	}
 
-	// ÊÊÅä 1 ×Ö½Ú³¤¶ÈµÄ ÊıÖµ »ò float( ÕâĞ©ÀàĞÍÖ±½Ó memcpy )
+	// é€‚é… 1 å­—èŠ‚é•¿åº¦çš„ æ•°å€¼ æˆ– float( è¿™äº›ç±»å‹ç›´æ¥ memcpy )
 	template<typename T>
 	struct BFuncs<T, std::enable_if_t< (std::is_arithmetic_v<T> && sizeof(T) == 1) || (std::is_floating_point_v<T> && sizeof(T) == 4) >> {
 		static inline void WriteTo(BBuffer& bb, T const &in) noexcept {
@@ -359,7 +359,7 @@ namespace xx {
 		}
 	};
 
-	// ÊÊÅä 2+ ×Ö½ÚÕûÊı( ±ä³¤¶ÁĞ´ )
+	// é€‚é… 2+ å­—èŠ‚æ•´æ•°( å˜é•¿è¯»å†™ )
 	template<typename T>
 	struct BFuncs<T, std::enable_if_t<std::is_integral_v<T> && sizeof(T) >= 2>> {
 		static inline void WriteTo(BBuffer& bb, T const &in) noexcept {
@@ -370,7 +370,7 @@ namespace xx {
 		}
 	};
 
-	// ÊÊÅä enum( ¸ù¾İÔ­Ê¼Êı¾İÀàĞÍµ÷ÉÏÃæµÄÊÊÅä )
+	// é€‚é… enum( æ ¹æ®åŸå§‹æ•°æ®ç±»å‹è°ƒä¸Šé¢çš„é€‚é… )
 	template<typename T>
 	struct BFuncs<T, std::enable_if_t<std::is_enum_v<T>>> {
 		typedef std::underlying_type_t<T> UT;
@@ -382,7 +382,7 @@ namespace xx {
 		}
 	};
 
-	// ÊÊÅä double
+	// é€‚é… double
 	template<>
 	struct BFuncs<double, void> {
 		static inline void WriteTo(BBuffer& bb, double const &in) noexcept {
@@ -413,8 +413,8 @@ namespace xx {
 			}
 		}
 		static inline int ReadFrom(BBuffer& bb, double &out) noexcept {
-			if (bb.offset >= bb.len) return -13;	// È·±£»¹ÓĞ 1 ×Ö½Ú¿É¶Á
-			switch (bb.buf[bb.offset++]) {			// Ìø¹ı 1 ×Ö½Ú
+			if (bb.offset >= bb.len) return -13;	// ç¡®ä¿è¿˜æœ‰ 1 å­—èŠ‚å¯è¯»
+			switch (bb.buf[bb.offset++]) {			// è·³è¿‡ 1 å­—èŠ‚
 			case 0:
 				out = 0;
 				return 0;
@@ -445,7 +445,28 @@ namespace xx {
 		}
 	};
 
-	// ÊÊÅä std::string ( Ğ´Èë 32b³¤¶È + ÄÚÈİ )
+
+	// é€‚é… literal char[len] string  ( å†™å…¥ 32bé•¿åº¦ + å†…å®¹. ä¸å†™å…¥æœ«å°¾ 0 )
+	template<size_t len>
+	struct BFuncs<char[len], void> {
+		static inline void WriteTo(BBuffer& bb, char const(&in)[len]) noexcept {
+			bb.Write((size_t)(len - 1));
+			bb.AddRange((uint8_t*)in, len - 1);
+		}
+		static inline int ReadFrom(BBuffer& bb, char (&out)[len]) noexcept {
+			size_t readLen = 0;
+			if (auto r = bb.Read(readLen)) return r;
+			if (bb.readLengthLimit && bb.readLengthLimit < readLen) return -18;
+			if (bb.offset + readLen > bb.len) return -19;
+			if (readLen >= len) return -20;
+			memcpy(out, bb.buf + bb.offset, readLen);
+			out[readLen] = 0;
+			bb.offset += readLen;
+			return 0;
+		}
+	};
+
+	// é€‚é… std::string ( å†™å…¥ 32bé•¿åº¦ + å†…å®¹ )
 	template<>
 	struct BFuncs<std::string, void> {
 		static inline void WriteTo(BBuffer& bb, std::string const& in) noexcept {
@@ -463,7 +484,7 @@ namespace xx {
 		}
 	};
 
-	// ÊÊÅä std::shared_ptr<T>
+	// é€‚é… std::shared_ptr<T>
 	template<typename T>
 	struct BFuncs<std::shared_ptr<T>, std::enable_if_t<std::is_base_of_v<Object, T> || std::is_same_v<std::string, T>>> {
 		static inline void WriteTo(BBuffer& bb, std::shared_ptr<T> const& in) noexcept {
@@ -474,7 +495,7 @@ namespace xx {
 		}
 	};
 
-	// ÊÊÅä std::weak_ptr<T>
+	// é€‚é… std::weak_ptr<T>
 	template<typename T>
 	struct BFuncs<std::weak_ptr<T>, std::enable_if_t<std::is_base_of_v<Object, T> || std::is_same_v<std::string, T>>> {
 		static inline void WriteTo(BBuffer& bb, std::weak_ptr<T> const& in) noexcept {
@@ -493,7 +514,7 @@ namespace xx {
 		}
 	};
 
-	// ÊÊÅä Guid
+	// é€‚é… Guid
 	template<>
 	struct BFuncs<Guid, void> {
 		static inline void WriteTo(BBuffer& bb, Guid const& in) noexcept {
@@ -507,11 +528,51 @@ namespace xx {
 		}
 	};
 
-	// todo: ÊÊÅä std::optional<T>
+	// é€‚é… std::optional<T>
+	template<typename T>
+	struct BFuncs<std::optional<T>, void> {
+		static inline void WriteTo(BBuffer& bb, std::optional<T> const& in) noexcept {
+			if (in.has_value()) {
+				bb.Write((uint8_t)1, in.value());
+			}
+			else {
+				bb.Write((uint8_t)0);
+			}
+		}
+		static inline int ReadFrom(BBuffer& bb, std::optional<T>& out) noexcept {
+			uint8_t hasValue = 0;
+			if (int r = bb.Read(hasValue)) return r;
+			if (!hasValue) return 0;
+			return bb.Read(out.value());
+		}
+	};
+
+	// é€‚é… xx::List<T>
+	template<typename T>
+	struct BFuncs<List<T>, void> {
+		static inline void WriteTo(BBuffer& bb, List<T> const& in) noexcept {
+			in.ToBBuffer(bb);
+		}
+		static inline int ReadFrom(BBuffer& bb, List<T>& out) noexcept {
+			return out.FromBBuffer(bb);
+		}
+	};
+
+	// é€‚é… xx::BBuffer
+	template<>
+	struct BFuncs<BBuffer, void> {
+		static inline void WriteTo(BBuffer& bb, BBuffer const& in) noexcept {
+			in.ToBBuffer(bb);
+		}
+		static inline int ReadFrom(BBuffer& bb, BBuffer& out) noexcept {
+			return out.FromBBuffer(bb);
+		}
+	};
 
 	template<typename ...TS>
 	void BBuffer::Write(TS const& ...vs) noexcept {
 		std::initializer_list<int> n{ (BFuncs<TS>::WriteTo(*this, vs), 0)... };
+		(void)n;
 	}
 
 	template<typename T, typename ...TS>
@@ -529,5 +590,4 @@ namespace xx {
 	int BBuffer::Read(TS&...vs) noexcept {
 		return ReadCore(vs...);
 	}
-
 }
