@@ -37,6 +37,10 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
+// xx fix vs2019 release compile bug
+#if defined(NDEBUG) && _MSC_VER >= 1920 && _MSC_VER <= 1921
+#pragma optimize( "g", off )
+#endif
 class CC_DLL ControllerImpl
 {
 	public:
@@ -4903,6 +4907,11 @@ class CC_DLL ControllerImpl
 		//should suffice.
 		static std::map<std::string, std::pair< std::unordered_map<int, int>, std::unordered_map<int, int> > > s_controllerProfiles;
 };
+// xx
+#if defined(NDEBUG) && _MSC_VER >= 1920 && _MSC_VER <= 1921
+#pragma optimize( "", on )
+#endif
+
 
 std::map<std::string, std::pair< std::unordered_map<int, int>, std::unordered_map<int, int> > > ControllerImpl::s_controllerProfiles;
 
