@@ -76,7 +76,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 			{
 				Lua_BBuffer::Create(L);									// func, data
 				auto&& Lbb = *(xx::BBuffer**)lua_touserdata(L, -1);
-				Lbb->AddRange(data->buf + data->offset, data->len - data->offset);
+				Lbb->AddRange(data->buf, data->len);
 
 				Lua_PCall(L, 1);
 				if (lua_gettop(L)) {
@@ -126,7 +126,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 				Lua_Push(L, f);												// func
 				Lua_BBuffer::Create(L);										// func, bb
 				auto&& Lbb = *(xx::BBuffer**)lua_touserdata(L, -1);
-				Lbb->AddRange(data.buf + data.offset, data.readLengthLimit - data.offset);
+				Lbb->AddRange(data.buf, data.len);
 
 				Lua_PCall(L, 1);											// rtv?
 				if (lua_gettop(L)) {
@@ -146,7 +146,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnReceiveRequest", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, Lua_Func>(L, "OnReceiveRequest error! need 2 args: self, func(bb)/null");
+		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, Lua_Func>(L, "OnReceiveRequest error! need 2 args: self, func(serial, bb)/null");
 		if (std::get<1>(t))
 		{
 			(*std::get<0>(t))->onReceiveRequest = [f = std::move(std::get<1>(t))](int const& serial, xx::BBuffer& data)
@@ -158,7 +158,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 				Lua_Pushs(L, f, serial);									// func, serial
 				Lua_BBuffer::Create(L);										// func, serial, bb
 				auto&& Lbb = *(xx::BBuffer**)lua_touserdata(L, -1);
-				Lbb->AddRange(data.buf + data.offset, data.readLengthLimit - data.offset);
+				Lbb->AddRange(data.buf, data.len);
 
 				Lua_PCall(L, 2);											// rtv?
 				if (lua_gettop(L)) {
