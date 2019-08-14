@@ -215,9 +215,6 @@
     <ClInclude Include="..\xxlib\xx_bbuffer.h">
       <Filter>xxlib</Filter>
     </ClInclude>
-    <ClInclude Include="..\xxlib\xx_coros.h">
-      <Filter>xxlib</Filter>
-    </ClInclude>
     <ClInclude Include="..\xxlib\xx_dict.h">
       <Filter>xxlib</Filter>
     </ClInclude>
@@ -231,9 +228,6 @@
       <Filter>xxlib</Filter>
     </ClInclude>
     <ClInclude Include="..\xxlib\xx_uv.h">
-      <Filter>xxlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\xxlib\xx_uv_coros.h">
       <Filter>xxlib</Filter>
     </ClInclude>
     <ClInclude Include="..\xxlib\fixed_function.hpp">
@@ -377,9 +371,6 @@
     <ClInclude Include="..\lua_bind\lua_cc_application.hpp">
       <Filter>lua_bind</Filter>
     </ClInclude>
-    <ClInclude Include="..\xxlib\xx_uv_lua.h">
-      <Filter>xxlib</Filter>
-    </ClInclude>
     <ClInclude Include="..\lua_bind\lua_ext.hpp">
       <Filter>lua_bind</Filter>
     </ClInclude>
@@ -495,9 +486,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\lua_bind\lua_xx_uvdialer.hpp">
-      <Filter>lua_bind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lua_bind\lua_xx_uvluapeer.hpp">
       <Filter>lua_bind</Filter>
     </ClInclude>
     <ClInclude Include="..\lua_bind\lua_mempool.h">
@@ -625,6 +613,12 @@
     </ClInclude>
     <ClInclude Include="..\xxlib\xx_threadpool.h">
       <Filter>xxlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\xxlib\xx_uv_ext.h">
+      <Filter>xxlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua_bind\lua_xx_uvpeer.hpp">
+      <Filter>lua_bind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-inline void Lua_Register_UvLuaPeer(lua_State* const& L)
+inline void Lua_Register_UvPeer(lua_State* const& L)
 {
-	Lua_NewMT(L, TypeNames<xx::UvLuaPeer_s*>::value, TypeNames<xx::UvItem_s*>::value);					// xx.UvTcpLuaPeer ： UvItem
+	Lua_NewMT(L, TypeNames<xx::UvSerialBBufferPeer_s*>::value, TypeNames<xx::UvItem_s*>::value);					// xx.UvSerialBBufferPeer ： UvItem
 
 	Lua_NewFunc(L, "__gc", [](lua_State* L)
 	{
@@ -14,7 +14,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "GetIP", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*>(L, "GetIP error! need 1 args: self");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*>(L, "GetIP error! need 1 args: self");
 		assert((*std::get<0>(t)));
 		auto&& r = (*std::get<0>(t))->GetIP();
 		return Lua_Pushs(L, r);
@@ -22,7 +22,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "IsKcp", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*>(L, "IsKcp error! need 1 args: self");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*>(L, "IsKcp error! need 1 args: self");
 		assert((*std::get<0>(t)));
 		auto&& r = (*std::get<0>(t))->IsKcp();
 		return Lua_Pushs(L, r);
@@ -30,7 +30,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "ResetTimeoutMS", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, int64_t>(L, "ResetTimeoutMS error! need 2 args: self, int64_t ms");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*, int64_t>(L, "ResetTimeoutMS error! need 2 args: self, int64_t ms");
 		assert((*std::get<0>(t)));
 		(*std::get<0>(t))->ResetTimeoutMS(std::get<1>(t));
 		return 0;
@@ -38,7 +38,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "SendPush", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, xx::BBuffer*>(L, "SendPush error! need 2 args: self, BBuffer");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*, xx::BBuffer*>(L, "SendPush error! need 2 args: self, BBuffer");
 		assert((*std::get<0>(t)));
 		auto&& r = (*std::get<0>(t))->SendPush(*std::get<1>(t));
 		return Lua_Pushs(L, r);
@@ -46,7 +46,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "SendResponse", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, int, xx::BBuffer*>(L, "SendResponse error! need 3 args: self, serial, BBuffer");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*, int, xx::BBuffer*>(L, "SendResponse error! need 3 args: self, serial, BBuffer");
 		assert((*std::get<0>(t)));
 		auto&& r = (*std::get<0>(t))->SendResponse(std::get<1>(t), *std::get<2>(t));
 		return Lua_Pushs(L, r);
@@ -54,7 +54,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "SendRequest", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, xx::BBuffer*, Lua_Func>(L, "SendRequest error! need 3 ~ 4 args: self, BBuffer, callback, timeoutMS = 0");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*, xx::BBuffer*, Lua_Func>(L, "SendRequest error! need 3 ~ 4 args: self, BBuffer, callback, timeoutMS = 0");
 		assert((*std::get<0>(t)));
 		int64_t timeoutMS = 0;
 		if (lua_gettop(L) > 3)
@@ -92,7 +92,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnDisconnect", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, Lua_Func>(L, "OnDisconnect error! need 2 args: self, func/null");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*, Lua_Func>(L, "OnDisconnect error! need 2 args: self, func/null");
 		if (std::get<1>(t))
 		{
 			(*std::get<0>(t))->onDisconnect = [f = std::move(std::get<1>(t))]()
@@ -114,7 +114,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnReceivePush", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, Lua_Func>(L, "OnReceivePush error! need 2 args: self, func(bb)/null");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*, Lua_Func>(L, "OnReceivePush error! need 2 args: self, func(bb)/null");
 		if (std::get<1>(t))
 		{
 			(*std::get<0>(t))->onReceivePush = [f = std::move(std::get<1>(t))](xx::BBuffer& data)
@@ -146,7 +146,7 @@ inline void Lua_Register_UvLuaPeer(lua_State* const& L)
 
 	Lua_NewFunc(L, "OnReceiveRequest", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvLuaPeer_s*, Lua_Func>(L, "OnReceiveRequest error! need 2 args: self, func(serial, bb)/null");
+		auto&& t = Lua_ToTuple<xx::UvSerialBBufferPeer_s*, Lua_Func>(L, "OnReceiveRequest error! need 2 args: self, func(serial, bb)/null");
 		if (std::get<1>(t))
 		{
 			(*std::get<0>(t))->onReceiveRequest = [f = std::move(std::get<1>(t))](int const& serial, xx::BBuffer& data)

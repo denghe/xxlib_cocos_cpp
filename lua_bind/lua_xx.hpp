@@ -19,7 +19,7 @@ inline void Lua_Register_xx(lua_State* const& L)
 	Lua_Register_Uv(L);
 	Lua_Register_UvResolver(L);
 	Lua_Register_UvDialer(L);
-	Lua_Register_UvLuaPeer(L);
+	Lua_Register_UvPeer(L);
 	Lua_BBuffer::LuaRegister(L);
 	// .....
 	// .....

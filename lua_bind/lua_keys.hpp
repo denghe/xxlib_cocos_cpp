@@ -703,9 +703,9 @@ struct TypeNames<xx::UvDialer_s*>
 	inline static const char* value = "UvDialer";
 };
 template<>
-struct TypeNames<xx::UvLuaPeer_s*>
+struct TypeNames<xx::UvSerialBBufferPeer_s*>
 {
-	inline static const char* value = "UvLuaPeer";
+	inline static const char* value = "UvPeer";
 };
 
 // todo: more

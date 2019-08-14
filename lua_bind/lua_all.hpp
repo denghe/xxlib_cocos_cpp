@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "lua.hpp"
-#include "xx_uv_lua.h"
+#include "xx_uv_ext.h"
 
 #define USE_LUA_MEMPOOL 0
 
@@ -25,7 +25,7 @@ inline cocos2d::Vector<cocos2d::SpriteFrame*> gSpriteFrames;
 #include "lua_xx_uv.hpp"
 #include "lua_xx_uvresolver.hpp"
 #include "lua_xx_uvdialer.hpp"
-#include "lua_xx_uvluapeer.hpp"
+#include "lua_xx_uvpeer.hpp"
 #include "lua_xx.hpp"
 
 #include "lua_cc.hpp"

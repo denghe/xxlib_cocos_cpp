@@ -332,13 +332,12 @@
     <ClInclude Include="..\lua_bind\lua_xx.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_bbuffer.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uv.hpp" />
-    <ClInclude Include="..\lua_bind\lua_xx_uvluapeer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvpeer.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uvresolver.hpp" />
     <ClInclude Include="..\lua_bind\lua_xx_uvdialer.hpp" />
     <ClInclude Include="..\xxlib\fixed_function.hpp" />
     <ClInclude Include="..\xxlib\ikcp.h" />
     <ClInclude Include="..\xxlib\xx_bbuffer.h" />
-    <ClInclude Include="..\xxlib\xx_coros.h" />
     <ClInclude Include="..\xxlib\xx_dict.h" />
     <ClInclude Include="..\xxlib\xx_list.h" />
     <ClInclude Include="..\xxlib\xx_logger.h" />
@@ -349,8 +348,7 @@
     <ClInclude Include="..\xxlib\xx_sqlite.h" />
     <ClInclude Include="..\xxlib\xx_threadpool.h" />
     <ClInclude Include="..\xxlib\xx_uv.h" />
-    <ClInclude Include="..\xxlib\xx_uv_coros.h" />
-    <ClInclude Include="..\xxlib\xx_uv_lua.h" />
+    <ClInclude Include="..\xxlib\xx_uv_ext.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

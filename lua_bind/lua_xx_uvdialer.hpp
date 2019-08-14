@@ -9,7 +9,7 @@ inline void Lua_Register_UvDialer(lua_State* const& L)
 		auto&& o = xx::TryMake<xx::UvDialer>(*uv);
 		if (!o) return 0;
 		o->onCreatePeer = [](xx::Uv& uv) {
-			return xx::TryMake<xx::UvLuaPeer>(uv);
+			return xx::TryMake<xx::UvSerialBBufferPeer>(uv);
 		};
 		return Lua_Pushs(L, o);
 	});
@@ -54,7 +54,7 @@ inline void Lua_Register_UvDialer(lua_State* const& L)
 				assert(!lua_gettop(gLua));
 				auto&& L = gLua;
 
-				auto&& peer = xx::As<xx::UvLuaPeer>(peer_);
+				auto&& peer = xx::As<xx::UvSerialBBufferPeer>(peer_);
 				Lua_PCall(L, f, peer);
 				lua_settop(L, 0);
 			};
