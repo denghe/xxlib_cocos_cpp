@@ -38,7 +38,8 @@ int Lua_Push(lua_State* const& L, T const& v)
 	{
 		lua_checkstack(L, 2);
 		assert(v.funcId);
-		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// ..., funcs
+		lua_pushlightuserdata(L, (void*)LuaKey_Callbacks);			// ..., key
+		lua_rawget(L, LUA_REGISTRYINDEX);							// ..., funcs
 		lua_rawgeti(L, -1, *v.funcId);								// ..., funcs, func
 		if (!lua_isfunction(L, -1))
 		{
@@ -61,18 +62,20 @@ int Lua_Push(lua_State* const& L, T const& v)
 				auto&& p = lua_newuserdata(L, sizeof(T));				// ..., &o
 #endif
 				new (p) T(v);	// copy
-				lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
+				lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);	// ..., &o, mt
 			}
 			else if constexpr(xx::IsWeak_v<T> || xx::IsShared_v<T>)
 			{
 				auto&& p = lua_newuserdata(L, sizeof(T));				// ..., &o
 				new (p) T(v);	// copy. need gc mt func release
-				lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T*>::value);		// ..., &o, mt
+				lua_pushlightuserdata(L, (void*)TypeNames<T*>::value);	// ..., &o, key
+				lua_rawget(L, LUA_REGISTRYINDEX );						// ..., &o, mt
 			}
 			else {
 				auto&& p = lua_newuserdata(L, sizeof(T));				// ..., &o
 				new (p) T(v);	// copy. need gc mt func release
-				lua_rawgetp(L, LUA_REGISTRYINDEX, TypeNames<T>::value);		// ..., &o, mt
+				lua_pushlightuserdata(L, (void*)TypeNames<T*>::value);	// ..., &o, key
+				lua_rawget(L, LUA_REGISTRYINDEX );						// ..., &o, mt
 			}
 			lua_setmetatable(L, -2);									// ..., &o
 		}

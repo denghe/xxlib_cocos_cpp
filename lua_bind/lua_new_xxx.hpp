@@ -4,8 +4,9 @@
 inline void Lua_NewMT(lua_State* const& L, char const* const& mtKey, char const* const& parentMtKey = nullptr, bool isGlobal = false)
 {
 	lua_createtable(L, 0, 20);										// ..., MT
-	lua_pushvalue(L, -1);											// ..., MT, MT
-	lua_rawsetp(L, LUA_REGISTRYINDEX, mtKey);						// ..., MT
+	lua_pushlightuserdata(L, (void*)mtKey);							// ..., MT, key
+	lua_pushvalue(L, -2);											// ..., MT, key, MT
+	lua_rawset(L, LUA_REGISTRYINDEX);								// ..., MT
 
 	if (isGlobal)
 	{
@@ -25,7 +26,8 @@ inline void Lua_NewMT(lua_State* const& L, char const* const& mtKey, char const*
 
 	if (parentMtKey)
 	{
-		lua_rawgetp(L, LUA_REGISTRYINDEX, parentMtKey);				// ..., MT, PMT
+		lua_pushlightuserdata(L, (void*)parentMtKey);				// ..., MT, key
+		lua_rawget(L, LUA_REGISTRYINDEX);							// ..., MT, PMT
 		lua_setmetatable(L, -2);									// ..., MT
 	}
 }

@@ -20,7 +20,8 @@ struct Lua_Func
 	{
 		if (!idx) return;
 		funcId = std::make_shared<int>(autoIncFuncId);
-		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// ..., funcs
+		lua_pushlightuserdata(L, (void*)LuaKey_Callbacks);			// ..., key
+		lua_rawget(L, LUA_REGISTRYINDEX);							// ..., funcs
 		lua_pushvalue(L, idx);										// ..., funcs, func
 		lua_rawseti(L, -2, *funcId);								// ..., funcs
 		lua_pop(L, 1);												// ...
@@ -54,7 +55,8 @@ struct Lua_Func
 		if (!gLua || funcId.use_count() != 1) return;
 		auto&& top = lua_gettop(gLua);
 		auto&& L = gLua;
-		lua_rawgetp(L, LUA_REGISTRYINDEX, (void*)LuaKey_Callbacks);	// ..., funcs
+		lua_pushlightuserdata(L, (void*)LuaKey_Callbacks);			// ..., key
+		lua_rawget(L, LUA_REGISTRYINDEX);							// ..., funcs
 		lua_pushnil(L);												// ..., funcs, nil
 		lua_rawseti(L, -2, *funcId);								// ..., funcs
 		lua_pop(L, 1);												// ...

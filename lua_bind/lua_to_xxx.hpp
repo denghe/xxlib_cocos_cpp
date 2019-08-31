@@ -103,6 +103,9 @@ void Lua_Get(T& v, lua_State* const& L, int const& idx)
 			if (cocos2d::Ref::ptrs.find(*p) == cocos2d::Ref::ptrs.cend() || cocos2d::Ref::ptrs[*p] != versionNumber) goto LabError;
 #endif
 		}
+		else {
+			v = *(T*)lua_touserdata(L, idx);
+		}
 		return;
 	}
 	else

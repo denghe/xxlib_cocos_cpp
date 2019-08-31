@@ -287,6 +287,9 @@ struct Lua_BBuffer : public xx::BBuffer
 			Write((uint8_t)0);
 			return;
 		}
+		else {
+			Write((uint8_t)1);
+		}
 		WriteNum_<T>(L, i);
 	}
 

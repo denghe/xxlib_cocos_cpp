@@ -29,15 +29,22 @@ inline void Lua_Register_UvResolver(lua_State* const& L)
 
 	Lua_NewFunc(L, "Resolve", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvResolver_s*, std::string>(L, "Resolve error! need 2/3 args: self, string domainName, int timeoutMS = 0");
+		auto&& t = Lua_ToTuple<xx::UvResolver_s*, std::string>(L, "Resolve error! need 2/3 args: self, string domainName, int timeoutMS = 3000");
 		assert((*std::get<0>(t)));
-		int timeoutMS = 0;
-		if (lua_gettop(L) > 3)
+		int timeoutMS = 3000;
+		if (lua_gettop(L) > 2)
 		{
-			Lua_Get(timeoutMS, L, 4);
+			Lua_Get(timeoutMS, L, 3);
 		}
 		int rtv = (*std::get<0>(t))->Resolve(std::get<1>(t), timeoutMS);
 		return Lua_Pushs(L, rtv);
+	});
+
+	Lua_NewFunc(L, "Busy", [](lua_State* L)
+	{
+		auto&& t = Lua_ToTuple<xx::UvResolver_s*>(L, "Busy error! need 1 args: self");
+		assert((*std::get<0>(t)));
+		return Lua_Pushs(L, (*std::get<0>(t))->Busy());
 	});
 
 	Lua_NewFunc(L, "OnFinish", [](lua_State* L)

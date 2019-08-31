@@ -6,7 +6,11 @@ inline void Lua_Register_UvDialer(lua_State* const& L)
 
 	Lua_NewFunc(L, "Create", [](lua_State* L)
 	{
-		auto&& o = xx::TryMake<xx::UvDialer>(*uv);
+		int tcpKcpOpt = 2;
+		if (lua_gettop(L) >= 1) {
+			Lua_Get(tcpKcpOpt, L, 1);
+		}
+		auto&& o = xx::TryMake<xx::UvDialer>(*uv, tcpKcpOpt);
 		if (!o) return 0;
 		o->onCreatePeer = [](xx::Uv& uv) {
 			return xx::TryMake<xx::UvSerialBBufferPeer>(uv);
@@ -20,6 +24,13 @@ inline void Lua_Register_UvDialer(lua_State* const& L)
 		assert((*std::get<0>(t)));
 		(*std::get<0>(t)).~shared_ptr();
 		return 0;
+	});
+
+	Lua_NewFunc(L, "Busy", [](lua_State* L)
+	{
+		auto&& t = Lua_ToTuple<xx::UvDialer_s*>(L, "Busy error! need 1 args: self");
+		assert((*std::get<0>(t)));
+		return Lua_Pushs(L, (*std::get<0>(t))->Busy());
 	});
 
 	Lua_NewFunc(L, "Cancel", [](lua_State* L)
@@ -66,5 +77,5 @@ inline void Lua_Register_UvDialer(lua_State* const& L)
 		return 0;
 	});
 
-	lua_pop(L, 1);																									// xx
+	lua_pop(L, 1);																						// xx
 }

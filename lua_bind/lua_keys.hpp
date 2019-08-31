@@ -707,6 +707,16 @@ struct TypeNames<xx::UvSerialBBufferPeer_s*>
 {
 	inline static const char* value = "UvPeer";
 };
+template<>
+struct TypeNames<std::shared_ptr<xx::UvToGatewayDialer<xx::UvSerialBBufferSimulatePeer>>*>
+{
+	inline static const char* value = "UvDialerPeer";
+};
+template<>
+struct TypeNames<std::shared_ptr<xx::UvSerialBBufferSimulatePeer>*>
+{
+	inline static const char* value = "UvSimPeer";
+};
 
 // todo: more
 
