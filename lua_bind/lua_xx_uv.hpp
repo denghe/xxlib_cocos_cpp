@@ -19,10 +19,13 @@ inline void Lua_Register_Uv(lua_State* const& L)
 
 	Lua_NewFunc(L, "Dispose", [](lua_State* L)
 	{
-		auto&& t = Lua_ToTuple<xx::UvItem_s*>(L, "Dispose error! need 1 args: self");
+		auto&& t = Lua_ToTuple<xx::UvItem_s*>(L, "Dispose error! need 1/2 args: self, int flag( 0 / 1 )");
 		assert((*std::get<0>(t)));
-		(*std::get<0>(t))->Dispose(1);
-		return 0;
+		int flag = 1;
+		if (lua_gettop(L) >= 2) {
+			Lua_Get(flag, L, 1);
+		}
+		return Lua_Pushs(L, (*std::get<0>(t))->Dispose(flag));
 	});
 
 	Lua_NewFunc(L, "Disposed", [](lua_State* L)

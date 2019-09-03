@@ -74,7 +74,7 @@ int Lua_Push(lua_State* const& L, T const& v)
 			else {
 				auto&& p = lua_newuserdata(L, sizeof(T));				// ..., &o
 				new (p) T(v);	// copy. need gc mt func release
-				lua_pushlightuserdata(L, (void*)TypeNames<T*>::value);	// ..., &o, key
+				lua_pushlightuserdata(L, (void*)TypeNames<T>::value);	// ..., &o, key
 				lua_rawget(L, LUA_REGISTRYINDEX );						// ..., &o, mt
 			}
 			lua_setmetatable(L, -2);									// ..., &o
