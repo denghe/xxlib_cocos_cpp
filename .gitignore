@@ -3,6 +3,7 @@ Release.win32
 .vs
 .DS_Store
 .idea
+.cxx
 /cocos2d/cocos/platform/android/libcocos2dx/libcocos2dx.iml
 /proj.android/app/cccpp1.iml
 /proj.android/proj.android.iml

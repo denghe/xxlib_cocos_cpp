@@ -145,7 +145,7 @@ int Lua_PCall(lua_State* const& L, Lua_Func const& f, Args const&...args)
 {
 	int n = Lua_Pushs(L, f, args...) - 1;
 	int r = 0;
-	if (r = lua_pcall(L, n, LUA_MULTRET, 0))
+	if ((r = lua_pcall(L, n, LUA_MULTRET, 0)))
 	{
 		cocos2d::log("%s", lua_tostring(L, -1));
 		lua_pop(L, 1);
@@ -158,7 +158,7 @@ template<typename...Args>
 int Lua_PCall(lua_State* const& L, int const& numArgs)
 {
 	int r = 0;
-	if (r = lua_pcall(L, numArgs, LUA_MULTRET, 0))
+	if ((r = lua_pcall(L, numArgs, LUA_MULTRET, 0)))
 	{
 		cocos2d::log("%s", lua_tostring(L, -1));
 		lua_pop(L, 1);

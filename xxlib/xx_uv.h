@@ -641,7 +641,7 @@ namespace xx {
 	struct UvTcpPeerBase : UvPeerBase {
 		uv_tcp_t* uvTcp = nullptr;
 		std::string ip;
-		Buffer buf;
+		List<uint8_t> buf;
 
 		UvTcpPeerBase(Uv& uv) : UvPeerBase(uv) {
 			uvTcp = Uv::Alloc<uv_tcp_t>(this);
@@ -694,7 +694,7 @@ namespace xx {
 			bb.Reserve(sizeof(uv_write_t_ex) + 4 + reserveLen);
 			bb.len = sizeof(uv_write_t_ex) + 4;		// skip header space
 		}
-		inline virtual int SendAfterPrepare(BBuffer& bb) noexcept {
+		inline virtual int SendAfterPrepare(BBuffer& bb) noexcept override {
 			auto buf = bb.buf + sizeof(uv_write_t_ex);						// ref to header
 			auto len = (uint32_t)(bb.len - sizeof(uv_write_t_ex) - 4);		// calc data's len
 			::memcpy(buf, &len, sizeof(len));								// fill header
@@ -755,7 +755,6 @@ namespace xx {
 	struct UvKcp : UvItem {
 		uv_udp_t* uvUdp = nullptr;
 		sockaddr_in6 addr;
-		Buffer buf;
 		int port = 0;								// fill by owner. dict's key. port > 0: listener  < 0: dialer fill by --uv.udpId
 		virtual void Remove(uint32_t const& conv) noexcept = 0;
 
@@ -833,7 +832,7 @@ namespace xx {
 		int64_t createMS = 0;						// fill by creater
 		ikcpcb* kcp = nullptr;
 		uint32_t nextUpdateMS = 0;					// for kcp update interval control. reduce cpu usage
-		Buffer buf;
+		List<uint8_t> buf;
 		sockaddr_in6 addr;							// for Send. fill by owner Unpack
 
 		// require: fill udp, conv, createMS, addr
@@ -916,7 +915,7 @@ namespace xx {
 			bb.len = 4;												// skip header space
 		}
 
-		inline virtual int SendAfterPrepare(BBuffer& bb) noexcept {
+		inline virtual int SendAfterPrepare(BBuffer& bb) noexcept override {
 			auto len = uint32_t(bb.len - 4);						// calc data's len
 			memcpy(bb.buf, &len, 4);								// fill header
 			return Send(bb.buf, bb.len);							// send by kcp

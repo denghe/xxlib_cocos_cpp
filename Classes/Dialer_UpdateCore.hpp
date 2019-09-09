@@ -67,7 +67,7 @@ LabDial:
 	else {
 		pkgEnter->token.reset();
 	}
-	if (r = peer->SendPush(pkgEnter)) {
+	if ((r = peer->SendPush(pkgEnter))) {
 		// todo: log?
 		goto LabDial;
 	}
@@ -82,7 +82,7 @@ LabDial:
 
 	xx::CoutTN("step 4");
 	// first package handle
-	if (r = HandleFirstPackage()) {
+	if ((r = HandleFirstPackage())) {
 		// todo: show error?
 		goto LabDial;
 	}
@@ -95,7 +95,7 @@ LabDial:
 	// peer keeper
 	while (!peer->Disposed()) {
 		// 处理帧同步消息
-		if (r = HandlePackagesOrUpdateScene()) {
+		if ((r = HandlePackagesOrUpdateScene())) {
 			xx::CoutTN("redial when HandlePackagesOrUpdateScene() r = ", r);
 			goto LabDial;
 		}

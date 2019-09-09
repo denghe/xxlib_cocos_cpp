@@ -164,6 +164,17 @@ namespace xx
 			}
 		}
 
+		// 从 0 下标移除一段. 只支持简单类型
+		template<typename ENABLED = std::enable_if_t<std::is_pod_v<T>>>
+		inline void RemoveFront(size_t const& len) {
+			assert(len <= this->len);
+			if (!len) return;
+			this->len -= len;
+			if (this->len) {
+				memmove(buf, buf + len, this->len);
+			}
+		}
+
 		void RemoveAt(size_t const& idx) noexcept {
 			assert(idx < len);
 			--len;
@@ -246,6 +257,11 @@ namespace xx
 			len += count;
 		}
 
+		template<typename T2>
+		void AddRange(List<T2> const& list) noexcept {
+			return AddRange(list.buf, list.len);
+		}
+
 		// 如果找到就返回索引. 找不到将返回 size_t(-1)
 		size_t Find(T const& v) const noexcept {
 			for (size_t i = 0; i < len; ++i) {
@@ -323,7 +339,7 @@ namespace xx
 		}
 	};
 
-	// 适配 List<T>
+	// 标识内存可移动
 	template<typename T>
 	struct IsTrivial<List<T>, void> {
 		static const bool value = true;
