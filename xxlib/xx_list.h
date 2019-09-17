@@ -155,6 +155,13 @@ namespace xx
 			}
 		}
 
+		// unsafe: direct change field value
+		void Reset(uint8_t* const& buf = nullptr, size_t const& len = 0, size_t const& cap = 0) noexcept {
+			this->buf = buf;
+			this->len = len;
+			this->cap = cap;
+		}
+
 		void Remove(T const& v) noexcept {
 			for (size_t i = 0; i < len; ++i) {
 				if (v == buf[i]) {
@@ -165,13 +172,14 @@ namespace xx
 		}
 
 		// 从 0 下标移除一段. 只支持简单类型
-		template<typename ENABLED = std::enable_if_t<std::is_pod_v<T>>>
 		inline void RemoveFront(size_t const& len) {
-			assert(len <= this->len);
-			if (!len) return;
-			this->len -= len;
-			if (this->len) {
-				memmove(buf, buf + len, this->len);
+			if constexpr (std::is_pod_v<T>) {
+				assert(len <= this->len);
+				if (!len) return;
+				this->len -= len;
+				if (this->len) {
+					memmove(buf, buf + len, this->len * sizeof(T));
+				}
 			}
 		}
 

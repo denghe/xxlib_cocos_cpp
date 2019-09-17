@@ -49,7 +49,7 @@ inline int PKG::CatchFish::Fish::HitCheck(PKG::CatchFish::Bullet* const& bullet)
 	// 3 判: 物理检测. 用子弹半径经过坐标转换, 去物理 space 选取 shapes. 如果有选到, 则判定成功
 	auto&& space = cfg->moveFrames->At(spriteFrameIndex)->physics->space;
 	auto&& s = cfg->scale * this->scale;
-	auto&& p = xx::Rotate(xx::Pos{ sqrtf(d2) / s, 0 }, this->angle - xx::GetAngle(pos, bullet->pos));
+	auto&& p = xx::Rotate(xx::Pos{ sqrtf(d2) / s, 0 }, xx::GetAngle(pos, bullet->pos) - this->angle);
 	if (cpSpacePointQueryNearest(space, cpv(p.x, p.y), cpFloat(bullet->cfg->radius * bullet->cfg->scale / s), CP_SHAPE_FILTER_ALL, nullptr)) {
 		return 1;
 	}
