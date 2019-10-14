@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -31,7 +31,4 @@
 #include <windows.h>
 #include <tchar.h>
 
-// C RunTime Header Files
-#include "platform/CCStdC.h"
-
-#endif    // __MAIN_H__
+#endif    // __WINMAIN_H__

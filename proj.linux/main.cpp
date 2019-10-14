@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 #include "../Classes/AppDelegate.h"
+#include "cocos2d.h"
 
 #include <stdlib.h>
 #include <stdio.h>

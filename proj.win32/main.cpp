@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -23,42 +23,16 @@
  ****************************************************************************/
 
 #include "main.h"
-#include "AppDelegate.h"
-#include "cocos2d.h"
-
-#include <stdlib.h>
-
-#define CONSOLE 1
-
+#include "SimulatorWin.h"
+#include <shellapi.h>
 
 int WINAPI _tWinMain(HINSTANCE hInstance,
-                       HINSTANCE hPrevInstance,
-                       LPTSTR    lpCmdLine,
-                       int       nCmdShow)
+	HINSTANCE hPrevInstance,
+	LPTSTR    lpCmdLine,
+	int       nCmdShow)
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-
-#if CONSOLE
-	AllocConsole();
-	SetConsoleTitle(_T("Debug Output"));
-	decltype(auto) hwnd = GetConsoleWindow();
-	if (hwnd != NULL)
-	{
-		ShowWindow(hwnd, SW_SHOW);
-		BringWindowToTop(hwnd);
-
-		freopen("CONOUT$", "wt", stdout);
-		freopen("CONOUT$", "wt", stderr);
-
-		HMENU hmenu = GetSystemMenu(hwnd, FALSE);
-		if (hmenu != NULL)
-		{
-			DeleteMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
-		}
-	}
-#endif
-
-	AppDelegate app;
-	return cocos2d::Application::getInstance()->run();
+    auto simulator = SimulatorWin::getInstance();
+    return simulator->run();
 }
