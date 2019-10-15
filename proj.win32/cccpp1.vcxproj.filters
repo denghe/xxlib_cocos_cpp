@@ -622,11 +622,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="game.rc">
-      <Filter>win32</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Natvis Include="..\xxlib\lua.natvis">
       <Filter>xxlib</Filter>
     </Natvis>

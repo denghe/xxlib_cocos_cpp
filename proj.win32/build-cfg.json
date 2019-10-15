@@ -1,8 +1,0 @@
-{
-    "copy_resources": [
-        {
-            "from": "../res",
-            "to": ""
-        }
-    ]
-}

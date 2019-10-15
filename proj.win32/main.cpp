@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,8 +23,13 @@
  ****************************************************************************/
 
 #include "main.h"
-#include "SimulatorWin.h"
-#include <shellapi.h>
+#include "AppDelegate.h"
+#include "cocos2d.h"
+
+#include <stdlib.h>
+
+#define CONSOLE 1
+
 
 int WINAPI _tWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -33,6 +38,27 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-    auto simulator = SimulatorWin::getInstance();
-    return simulator->run();
+
+#if CONSOLE
+	AllocConsole();
+	SetConsoleTitle(_T("Debug Output"));
+	decltype(auto) hwnd = GetConsoleWindow();
+	if (hwnd != NULL)
+	{
+		ShowWindow(hwnd, SW_SHOW);
+		BringWindowToTop(hwnd);
+
+		freopen("CONOUT$", "wt", stdout);
+		freopen("CONOUT$", "wt", stderr);
+
+		HMENU hmenu = GetSystemMenu(hwnd, FALSE);
+		if (hmenu != NULL)
+		{
+			DeleteMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
+		}
+	}
+#endif
+
+	AppDelegate app;
+	return cocos2d::Application::getInstance()->run();
 }
