@@ -17,6 +17,30 @@ inline void Lua_Register_UvDialerPeer(lua_State* const& L)
 		return Lua_Pushs(L, (*std::get<0>(t))->PeerAlive());
 	});
 
+	Lua_NewFunc(L, "PeerDispose", [](lua_State* L)
+	{
+		auto&& t = Lua_ToTuple<Dialer_s*>(L, "PeerDispose error! need 1 args: self");
+		assert((*std::get<0>(t)));
+		(*std::get<0>(t))->PeerDispose();
+		return 0;
+	});
+
+	Lua_NewFunc(L, "PeerSetTimeoutMS", [](lua_State* L)
+	{
+		auto&& t = Lua_ToTuple<Dialer_s*, int>(L, "PeerSetTimeoutMS error! need 2 args: self, timeoutMS(int)");
+		assert((*std::get<0>(t)));
+		(*std::get<0>(t))->peerTimeoutMS = std::get<1>(t);
+		return 0;
+	});
+
+	Lua_NewFunc(L, "PeerSetCheckIntervalMS", [](lua_State* L)
+	{
+		auto&& t = Lua_ToTuple<Dialer_s*, int>(L, "PeerSetCheckIntervalMS error! need 2 args: self, timeoutMS(int)");
+		assert((*std::get<0>(t)));
+		(*std::get<0>(t))->peerCheckIntervalMS = std::get<1>(t);
+		return 0;
+	});
+
 	Lua_NewFunc(L, "PeerIsKcp", [](lua_State* L)
 	{
 		auto&& t = Lua_ToTuple<Dialer_s*>(L, "PeerIsKcp error! need 1 args: self");
