@@ -19,7 +19,7 @@ inline int PKG::CatchFish::Stages::Emitter_RingFishs::Update(int const& ticks) n
 			fish->scale = cfg_scale;
 			fish->speedScale = 1;
 			fish->spriteFrameIndex = 0;
-			fish->pos = { 0,0 };
+			fish->pos = xx:Pos{ 0,0 };
 			fish->angle = a;
 			fish->moveInc = xx::Rotate({ cfg_speed ,0 }, a);
 			fish->frameRatio = 1;
