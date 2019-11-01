@@ -15,7 +15,7 @@ inline int PKG::CatchFish::Stages::Emitter_CircleFishs::Update(int const& ticks)
 		fish->scale = cfg_scale;
 		fish->speedScale = 1;
 		fish->spriteFrameIndex = 0;
-		fish->pos = { 0,0 };
+		fish->pos = xx::Pos{ 0,0 };
 		fish->angle = angle;
 		fish->moveInc = xx::Rotate({ cfg_speed ,0 }, angle);
 		fish->frameRatio = 1;
