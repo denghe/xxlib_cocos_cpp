@@ -52,14 +52,14 @@ inline int PKG::CatchFish::Cannon::Update(int const& frameNumber) noexcept {
 
 		// 自动射击。直接在屏幕上随机一个坐标来用
 		if (::dialer->autoFire) {
-			tpos = { ::dialer->rnd.Next((int)designSize.x) - designSize_2.x, ::dialer->rnd.Next((int)designSize.y) - designSize_2.y };
+			tpos = xx::Pos{ ::dialer->rnd.Next((int)designSize.x) - designSize_2.x, ::dialer->rnd.Next((int)designSize.y) - designSize_2.y };
 			fire = true;
 		}
 		else {
 			// 输入检测. 炮台角度对准首个 touch 点( 暂定方案 )
 			if (cc_touchs.len) {
 				auto tloc = cc_fishNode->convertTouchToNodeSpace(cc_touchs[0]);
-				tpos = { tloc.x, tloc.y };
+				tpos = xx::Pos{ tloc.x, tloc.y };
 				angle = xx::GetAngle(pos, tpos);	// 手工模式不管有没有打出子弹，炮管始终转向
 				fire = true;
 			}

@@ -84,15 +84,15 @@ inline int CatchFish::Init(std::string const& ip, int const& port, std::string c
 	// 初始化 cocos 相关
 	cc_visibleSize = cocos2d::Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
 	cc_visibleSize_2 = cc_visibleSize / 2;
-	cc_p1 = { -cc_visibleSize_2.width, -cc_visibleSize_2.height };
-	cc_p2 = { 0, -cc_visibleSize_2.height };
-	cc_p3 = { cc_visibleSize_2.width, -cc_visibleSize_2.height };
-	cc_p4 = { -cc_visibleSize_2.width, 0 };
-	cc_p5 = { 0, 0 };
-	cc_p6 = { cc_visibleSize_2.width, 0 };
-	cc_p7 = { -cc_visibleSize_2.width, cc_visibleSize_2.height };
-	cc_p8 = { 0, cc_visibleSize_2.height };
-	cc_p9 = { cc_visibleSize_2.width, cc_visibleSize_2.height };
+	cc_p1 = xx::Pos{ -cc_visibleSize_2.width, -cc_visibleSize_2.height };
+	cc_p2 = xx::Pos{ 0, -cc_visibleSize_2.height };
+	cc_p3 = xx::Pos{ cc_visibleSize_2.width, -cc_visibleSize_2.height };
+	cc_p4 = xx::Pos{ -cc_visibleSize_2.width, 0 };
+	cc_p5 = xx::Pos{ 0, 0 };
+	cc_p6 = xx::Pos{ cc_visibleSize_2.width, 0 };
+	cc_p7 = xx::Pos{ -cc_visibleSize_2.width, cc_visibleSize_2.height };
+	cc_p8 = xx::Pos{ 0, cc_visibleSize_2.height };
+	cc_p9 = xx::Pos{ cc_visibleSize_2.width, cc_visibleSize_2.height };
 
 	cc_scene = cocos2d::Director::getInstance()->getRunningScene();
 

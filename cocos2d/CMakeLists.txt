@@ -41,11 +41,11 @@ include(PreventInSourceBuilds)
 include(CocosBuildSet)
 
 # build options
-option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_TESTS "Build tests" ON)
 
 # default tests include lua, js test project, so we set those option on to build libs
-set(BUILD_LUA_LIBS OFF)
-set(BUILD_JS_LIBS OFF)
+set(BUILD_LUA_LIBS ON)
+set(BUILD_JS_LIBS ON)
 
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
