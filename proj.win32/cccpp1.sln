@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "res", "res", "{02F42E29-3EB
 	ProjectSection(SolutionItems) = preProject
 		..\res\libs.lua = ..\res\libs.lua
 		..\res\main.lua = ..\res\main.lua
+		..\res\PKG_class.lua = ..\res\PKG_class.lua
 	EndProjectSection
 EndProject
 Global

@@ -70,11 +70,11 @@ yield()
 go(function()
 	require "PKG_class.lua"
 
-	local domain = "192.168.1.52"	--"www.baidu.com"
+	local domain = "www.baidu.com"--"192.168.1.52"	--"www.baidu.com"
 	local ips = {}
 	local resolver = xx.UvResolver.Create()
 
-	local dialer = xx.UvDialer.Create(1)  -- 2)
+	local dialer = xx.UvDialer.Create(0)	-- 2: kcp+tcp
 	local peer = nil
 	dialer:OnAccept(function(p)
 		peer = p
@@ -106,7 +106,7 @@ go(function()
 ::LabDial::
 	print("dial...")
 	dialer:Cancel()
-	r = dialer:Dial(ips, 20001, 500)
+	r = dialer:Dial(ips, 80, 2000)
 	if r ~= 0 then
 		print("r = " .. r)
 		gSleepSecs(3)
@@ -116,6 +116,7 @@ go(function()
 		yield()
 	end
 	if peer == nil then
+		print("peer = nil")
 		goto LabResolveIPs
 	end
 	print("connected. ip = ".. peer:GetIP())
