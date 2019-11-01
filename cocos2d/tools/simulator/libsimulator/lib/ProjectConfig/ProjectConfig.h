@@ -68,8 +68,8 @@ class CC_LIBSIM_DLL ProjectConfig
 public:
     ProjectConfig();
 
-    static const int DEFAULT_WIDTH = 720;
-    static const int DEFAULT_HEIGHT = 1280;
+    static const int DEFAULT_WIDTH = 640;
+    static const int DEFAULT_HEIGHT = 960;
 
     string getProjectDir() const;
     void setProjectDir(const string &projectDir);

@@ -24,23 +24,11 @@ distribution.
 #ifndef TINYXML2_INCLUDED
 #define TINYXML2_INCLUDED
 
-// external "tinyxml2.h" shouldn't depend on cocos internal headers "CCPlatformMacros.h"
-#if defined(_MSC_VER)
-#   if defined(CC_STATIC)
-#       define CC_DLL
-#   else
-#       if defined(_USRDLL)
-#           define CC_DLL   __declspec(dllexport)
-#       else         /* use a DLL library */
-#           define CC_DLL   __declspec(dllimport)
-#       endif  
-#   endif
-#else
-#   define CC_DLL
-#endif
+// #include "platform/CCPlatformConfig.h"
+// #include "platform/CCPlatformMacros.h"
+#define CC_DLL 
 
-
-#if defined(ANDROID_NDK) || defined(__BORLANDC__)
+#if defined(ANDROID_NDK) || defined(__BORLANDC__) || (CC_TARGET_PLATFORM == CC_PLATFORM_BLACKBERRY)
 #   include <ctype.h>
 #   include <limits.h>
 #   include <stdio.h>
@@ -89,7 +77,7 @@ distribution.
 #endif
 
 
-#if (defined(_MSC_VER) && (_MSC_VER >= 1400 ))
+#if (defined(_MSC_VER) && (_MSC_VER >= 1400 ) && (CC_TARGET_PLATFORM != CC_PLATFORM_MARMALADE))
 // Microsoft visual studio, version 2005 and higher.
 /*int _snprintf_s(
    char *buffer,

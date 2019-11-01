@@ -1,7 +1,5 @@
 /****************************************************************************
-Copyright (c) 2008-2010 Ricardo Quesada
-Copyright (c) 2010-2016 cocos2d-x.org
-Copyright (c) 2013-2016 Chukong Technologies Inc.
+Copyright (c) 2015-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
 http://www.cocos2d-x.org
@@ -51,7 +49,7 @@ public class AppActivity extends Cocos2dxActivity {
             // Don't need to finish it again since it's finished in super.onCreate .
             return;
         }
-		// Make sure we're running on Pie or higher to change cutout mode
+        // Make sure we're running on Pie or higher to change cutout mode
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             // Enable rendering into the cutout area
             WindowManager.LayoutParams lp = getWindow().getAttributes();
