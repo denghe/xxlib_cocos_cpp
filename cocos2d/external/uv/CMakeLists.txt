@@ -19,6 +19,7 @@ set_target_properties(${target_name} PROPERTIES
 if(WINDOWS)
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${platform_spec_path}/${lib_name}.dll"
+    IMPORTED_LOCATION "${platform_spec_path}/lib${lib_name}.dll"
     IMPORTED_IMPLIB "${platform_spec_path}/${lib_name}_a.lib"
   )
 else()

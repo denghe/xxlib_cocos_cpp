@@ -3,6 +3,7 @@ import org.gradle.internal.os.OperatingSystem
 apply plugin: 'com.android.application'
 
 android {
+    useLibrary'org.apache.http.legacy'
     compileSdkVersion 29
     defaultConfig {
         applicationId "net.denghe.cccpp1"
