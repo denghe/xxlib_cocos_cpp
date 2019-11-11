@@ -1,8 +1,10 @@
 package org.cocos2dx.cpp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
@@ -10,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.denghe.cccpp1.R;
@@ -48,11 +52,20 @@ public class UpdateActivity extends Activity {
     // bundle config: SO 库名：lib xxxx .so 的 xxxx 部分
     public static String app_so;
 
+    // bundle config: apk 里面的 v7a 版 SO 的 md5
+    public static String app_so_a32_md5;
+
+    // bundle config: apk 里面的 v8a-arm64 版 SO 的 md5
+    public static String app_so_a64_md5;
+
     // bundle config: 用于更新 so 网址
     public static String app_check_url;
 
     // bundle config: 用到的监听器 key ( 需要非常唯一 )
     public static String app_receiver_key;
+
+    // bundle config: 是否禁用下载功能( 方便本地调试 )
+    public static String app_disable_download;
 
 
     // 可写目录路径( 尾部没有 / )
@@ -60,9 +73,6 @@ public class UpdateActivity extends Activity {
 
     // 指向可写目录中的 so 文件名
     public static String so_path;
-
-    // 指向安装目录中的 so 文件名
-    public static String so_install_path;
 
     // 指向可写目录中的 update.zip 文件名
     public static String zip_path;
@@ -93,14 +103,15 @@ public class UpdateActivity extends Activity {
         // 开始填充各种 static 上下文变量
         app_tag = bundle.getString("app_tag");
         app_so = bundle.getString("app_so");
+        app_so_a32_md5 = bundle.getString("app_so_a32_md5").toLowerCase();
+        app_so_a64_md5 = bundle.getString("app_so_a64_md5").toLowerCase();
         app_check_url = bundle.getString("app_check_url");
         app_receiver_key = bundle.getString("app_receiver_key");
+        app_disable_download = bundle.getString("app_disable_download");
 
         writable_path = getFilesDir().getAbsolutePath();
         so_path = writable_path + "/lib" + app_so + ".so";
         zip_path = writable_path + "/update.zip";
-
-        so_install_path = "/data/data/" + getPackageName() + "/lib/lib" + app_so + ".so";
 
         // 透传库名到 cocos 的 activity
         AppActivity.libraryName = app_so;
@@ -140,28 +151,79 @@ public class UpdateActivity extends Activity {
     }
 
 
+    private void showRestartDialog(final String title, final String text, final String btn1text, final String btn2text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    LinearLayout layout = new LinearLayout(UpdateActivity.this);
+                    TextView tv_text = new TextView(UpdateActivity.this);
+                    tv_text.setText(text);
+                    LinearLayout.LayoutParams pm = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layout.addView(tv_text, pm);
+                    layout.setGravity(Gravity.CENTER);
+
+                    TextView tv_title = new TextView(UpdateActivity.this);
+                    tv_title.setText(title);
+                    tv_title.setGravity(Gravity.CENTER);
+
+                    new AlertDialog.Builder(UpdateActivity.this)
+                            .setCustomTitle(tv_title)
+                            .setView(layout)
+                            .setPositiveButton(btn1text, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //  dialog.dismiss();
+                                    checkUpdate();
+                                }
+                            })
+                            .setNegativeButton(btn2text, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    System.exit(0);
+                                }
+                            })
+                            .show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     private void checkUpdate() {
-        tv_msg.setText("check update...");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 do {
+                    // 如果禁用了下载，就删掉 so 进原版
+                    if(app_disable_download.equals("yes")) {
+                        TryDeleteFile(so_path);
+                        break;
+                    }
+
+                    // 初始化提示文本
+                    tv_msg.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv_msg.setText("check update...");
+                        }
+                    });
+
                     // 获取升级信息: so md5 | zip md5 | zip url
                     String info = getUpdateInfo(5000, 15000);
 
                     // 异常判断：网址访问失败
                     if (info == null) {
                         Log.i(app_tag, "info == null");
-                        break;                                     // 打开 url 异常, 继续加载游戏
+                        break;                                      // 打开 url 异常, 继续加载游戏
                     }
                     Log.i(app_tag, "info == '" + info + "'");
 
                     // 检测完毕: 无下载, 加载 apk 内的原始包
                     if (info.equals("")) {
-                        try {
-                            deleteFile(so_path);                    // 无脑删一次, 确保加载 apk 中的原始 so
-                        } catch (Exception ignored) {
-                        }
+                        TryDeleteFile(so_path);
                         break;                                      // 出 do 执行加载 so 操作
                     }
 
@@ -169,27 +231,22 @@ public class UpdateActivity extends Activity {
                     String[] ss = info.split("\\|");
                     if (ss.length != 3) {
                         Log.i(app_tag, "ss.length != 3");
-                        return;                                     // todo: 提示 切割错误, 重新访问 url?
+                        break;                                     // 切割错误, 继续加载游戏
                     }
                     String info_so_md5 = ss[0].toLowerCase();
                     String info_zip_md5 = ss[1].toLowerCase();
                     String info_url = ss[2];
 
-                    // 如果需要的话, 复制 安装目录的 so 到 可写目录
-                    if (!new File(so_path).exists()) {
-                        int r = copyFile(so_install_path, so_path);
-                        if (r != 0 && r != -2) {    // -2 表示调试模式找不到 src
-                            Log.i(app_tag, "copyFile fail. r = " + r);
-                            return;                                 // todo: 提示 copy 失败
-                        }
+                    // 判断是否为版本回滚的情况. 删掉进原版
+                    if (info_so_md5.contains(isArch64() ? app_so_a64_md5 : app_so_a32_md5)) {
+                        TryDeleteFile(so_path);
+                        break;                                      // 出 do 执行加载 so 操作
                     }
 
-                    // 计算 so 的 md5
+                    // 计算 so 的 md5. 如果找不到文件, 则从配置取
                     String so_md5 = getFileMD5(so_path);
-
-                    // 兼容 debug 模式因 so_install_path 找不到 进而 so_path 找不到而导致的空返回值
                     if (so_md5 == null) {
-                        so_md5 = " ";  // 令 info_so_md5.contains(so_md5) 为假
+                        so_md5 = isArch64() ? app_so_a64_md5 : app_so_a32_md5;
                     }
 
                     // 判断 so 是否需要更新. md5 没变化就不更新
@@ -199,39 +256,67 @@ public class UpdateActivity extends Activity {
                     }
 
                     // 删除之前的 zip
-                    try {
-                        deleteFile(zip_path);
-                    }
-                    catch (Exception ignored) {
-                    }
+                    TryDeleteFile(zip_path);
 
                     // 开始下载 zip
                     Log.i(app_tag, "begin download zip");
-                    if (!downloadZip(info_url)) {
+                    if (!downloadZip(info_url)) {                   // 提示 下载错误? 自动重试? 续传?
                         Log.i(app_tag, "downloadZip fail. url == " + info_url);
-                        return;                                     // todo: 提示 下载错误? 自动重试? 续传?
+                        showRestartDialog(
+                                "warning"
+                                , "download error!! network bad??"
+                                , "Retry"
+                                , "Exit");
+                        return;
                     }
 
                     // 计算 zip 的 md5
-                    String zip_md5 = getFileMD5(zip_path);
+                    String zip_md5 = getFileMD5(zip_path);          // 提示 重下? 数次后 提示 数据错误?
                     if (!info_zip_md5.contains(zip_md5)) {
                         Log.i(app_tag, "info_zip_md5'" + info_zip_md5 + "' != zip_md5'" + zip_md5 + "'");
-                        return;                                     // todo: 重下? 数次后 提示 数据错误?
+                        showRestartDialog(
+                                "warning"
+                                , "download error!! network bad??"
+                                , "Retry"
+                                , "Exit");
+                        return;
                     }
 
                     // 删除之前的 so
-                    try {
-                        deleteFile(so_path);
-                    }
-                    catch (Exception ignored) {
-                    }
+                    TryDeleteFile(so_path);
 
                     // 解压并覆盖 so
                     Log.i(app_tag, "begin decompression zip");
                     int r = decompressionFile(zip_path, writable_path);
-                    if (0 != r) {
+                    if (0 != r) {                                   // 提示 解压失败?
                         Log.i(app_tag, "decompressionFile fail r = " + r + ". zip_path = " + zip_path + ", writable_path = " + writable_path);
-                        return;                                     // todo: 提示解压失败?
+                        showRestartDialog(
+                                "warning"
+                                , "unzip file error!! no more free space??"
+                                , "Retry"
+                                , "Exit");
+                        return;
+                    }
+
+                    // 再次计算 so 的 md5
+                    so_md5 = getFileMD5(so_path);
+                    if (so_md5 == null) {
+                        so_md5 = " ";
+                    }
+
+                    // 判断 so 是否需要更新. md5 没变化就不更新
+                    if (info_so_md5.contains(so_md5)) {
+                        Log.i(app_tag, "info_so_md5 == unzip so_md5");
+                        break;                                      // 更新完成, 出 do 执行加载 so 操作
+                    }
+                    else {
+                        Log.i(app_tag, "info_so_md5 != unzip so_md5");
+                        showRestartDialog(
+                                "warning"
+                                , "unzip file crc check error! need download again!"
+                                , "Ok"
+                                , "Exit");
+                        return;
                     }
 
                 } while (false);
@@ -244,6 +329,7 @@ public class UpdateActivity extends Activity {
                         // 加载 cocos 的 activity
                         Intent activity = new Intent(UpdateActivity.this, AppActivity.class);
                         startActivityForResult(activity, 0);
+                        overridePendingTransition(0, 0);
 
                         // 产生关闭当前 activity 的通知
                         Intent closeNotify = new Intent();
@@ -253,6 +339,16 @@ public class UpdateActivity extends Activity {
                 });
             }
         }).start();
+    }
+
+    // 试着删文件. 返回是否出错
+    public static boolean TryDeleteFile(String fn) {
+        try {
+            (new File(so_path)).delete();
+            return true;
+        } catch (Exception ignored) {
+        }
+        return false;
     }
 
     // 拼接出类似 http://xxxxxxx/ package name / a32 这样的 url 去打开并返回内容. 内容为 null 表示访问出错. "" 表示加载原始 so. 有更新: so_md5|zip_md5|zip_url

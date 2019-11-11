@@ -29,8 +29,12 @@
         <!-- configs -->
         <meta-data android:name="app_tag" android:value="cccpp1.UpdateActivity" />
         <meta-data android:name="app_so" android:value="MyGame" />
+        <meta-data android:name="app_so_a32_md5" android:value="866CFA712941BD3609800AD9A61FFDF2" />
+        <meta-data android:name="app_so_a64_md5" android:value="5F528B4347C2247651AE537C5F7C1EB2" />
         <meta-data android:name="app_check_url" android:value="http://192.168.1.196:8081/updateso/" />
         <meta-data android:name="app_receiver_key" android:value="{D05D6556-4D02-416E-AA8E-E7DC2024202B}" />
+        <!-- android studio debug mode can disable download, set value to yes -->
+        <meta-data android:name="app_disable_download" android:value="no" />
 
         <activity
             android:name="org.cocos2dx.cpp.UpdateActivity"
