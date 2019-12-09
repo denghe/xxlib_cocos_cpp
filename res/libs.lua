@@ -24,6 +24,14 @@ gListCreate = function()
 		end
 		t[dl] = nil
 	end
+	t.Find = function(tar)
+		for i = #t, 1, -1 do
+			if t[i] == tar then 
+				return i
+			end
+		end
+		return -1
+	end
 	return t
 end
 
@@ -55,7 +63,7 @@ end
 -- 适合在协程环境使用
 gSleepFrames = function(n)
 	local yield = yield
-	for _=1, n do
+	for _ = 1, n do
 		yield()
 	end
 end
@@ -66,6 +74,15 @@ gSleepSecs = function(n)
 	local elapsedSecs = os.clock() + n
 	local yield = yield
 	while elapsedSecs > os.clock() do
+		yield()
+	end
+end
+
+-- 睡指定秒( 每一帧都要对比系统时间 )
+-- 适合在 coro 环境使用
+gSleepSecsByClock = function(secs)
+	local ms = NowSteadyEpochMS() + secs * 1000
+	while ms > NowSteadyEpochMS() do 
 		yield()
 	end
 end
