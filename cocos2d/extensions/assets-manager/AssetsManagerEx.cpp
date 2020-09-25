@@ -77,6 +77,7 @@ AssetsManagerEx::AssetsManagerEx(const std::string& manifestUrl, const std::stri
 , _versionCompareHandle(nullptr)
 , _verifyCallback(nullptr)
 , _inited(false)
+, _downloadTimes(0) // xx
 {
     // Init variables
     _eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -739,7 +740,17 @@ void AssetsManagerEx::startUpdate()
             }
             _totalWaitToDownload = _totalToDownload = (int)_downloadUnits.size();
             this->batchDownload();
-            
+			
+			// xx
+			_downloadTimes++;
+			CCLOG("start update times: %d", _downloadTimes);
+			if (_downloadTimes == 1)
+			{
+				//CCLOG("start update times: %d", _downloadTimes);
+				_allDownloadUnits.clear();
+				_allDownloadUnits = _downloadUnits;
+			}
+
             std::string msg = StringUtils::format("Start to update %d files from remote package.", _totalToDownload);
             dispatchUpdateEvent(EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION, "", msg);
         }
@@ -839,6 +850,38 @@ void AssetsManagerEx::checkUpdate()
         default:
             break;
     }
+}
+
+// xx
+std::string AssetsManagerEx::getDownloadUnits()
+{
+	if ((int)_allDownloadUnits.size() > 0)
+	{
+		std::string ret = "{";
+		int temp = 0;
+		for (auto iter : _allDownloadUnits)
+		{
+			temp++;
+			//"version" : "1.0.0",
+			const std::string str = iter.first;
+			if (temp == _allDownloadUnits.size())
+			{
+				ret = ret + "\"" + std::to_string(temp) + "\" :" + "\"" + str + "\"";
+			}
+			else
+			{
+				ret = ret + "\"" + std::to_string(temp) + "\" :" + "\"" + str + "\",";
+			}
+
+		}
+		ret = ret + "}";
+		return ret;
+	}
+	else
+	{
+		return "null";
+	}
+
 }
 
 void AssetsManagerEx::update()
@@ -1010,6 +1053,7 @@ void AssetsManagerEx::onError(const network::DownloadTask& task,
     if (task.identifier == VERSION_ID)
     {
         CCLOG("AssetsManagerEx : Fail to download version file, step skipped\n");
+		CCLOG("%s\n", errorStr.c_str()); // xx
         _updateState = State::PREDOWNLOAD_MANIFEST;
         downloadManifest();
     }

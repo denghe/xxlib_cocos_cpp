@@ -575,7 +575,7 @@ void TextureCache::removeUnusedTextures()
     for (auto it = _textures.cbegin(); it != _textures.cend(); /* nothing */) {
         Texture2D *tex = it->second;
         if (tex->getReferenceCount() == 1) {
-            CCLOG("cocos2d: TextureCache: removing unused texture: %s", it->first.c_str());
+            //CCLOG("cocos2d: TextureCache: removing unused texture: %s", it->first.c_str());
 
             tex->release();
             it = _textures.erase(it);

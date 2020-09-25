@@ -2,17 +2,20 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 29
+
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
+
     sourceSets.main {
         aidl.srcDir "../java/src"
         java.srcDir "../java/src"
         manifest.srcFile "AndroidManifest.xml"
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -22,5 +25,5 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: '../java/libs')
+    implementation fileTree(dir: '../java/libs', include: ['*.jar'])
 }

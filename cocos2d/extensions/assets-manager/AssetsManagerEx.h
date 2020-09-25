@@ -85,6 +85,9 @@ public:
      */
     void checkUpdate();
     
+	// 得到本次下载所有文件路径
+	std::string getDownloadUnits(); // xx
+
     /** @brief Update with the current local manifest.
      */
     void update();
@@ -274,6 +277,13 @@ private:
 
     UpdateEntry _updateEntry;
     
+	// xx
+	// 校验MD5需要的所有本次下载的文件 cx（_downloadUnits会在有资源下载失败的时候被下载失败的资源表替换所以不靠谱）
+	DownloadUnits _allDownloadUnits;
+
+	// 下载次数（由于下载失败的文件会重复下载，记录一下实例下载的次数）
+	int _downloadTimes;
+
     //! All assets unit to download
     DownloadUnits _downloadUnits;
     

@@ -431,7 +431,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
         {
             toRemoveFrames.push_back(iter.first);
             spriteFrame->getTexture()->removeSpriteFrameCapInset(spriteFrame);
-            CCLOG("cocos2d: SpriteFrameCache: removing unused frame: %s", iter.first.c_str());
+            //CCLOG("cocos2d: SpriteFrameCache: removing unused frame: %s", iter.first.c_str());
             removed = true;
         }
     }
