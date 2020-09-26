@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -27,23 +27,6 @@
 
 #include "cocos2d.h"
 
-
-// 附加一组方便使用的全局量, 以及 mp, uv, lua 单例环境
-
-#include "lua.hpp"
-#include "xx_uv.h"
-
-inline xx::Uv* uv = nullptr;
-inline lua_State* gLua = nullptr;
-inline size_t gFrameNumber = 0;
-
-inline std::function<void()> enterBackground;
-inline std::function<void()> enterForeground;
-
-void InitGlobals(bool first = true);
-void ReleaseGlobals();
-
-
 /**
 @brief    The cocos2d Application.
 
@@ -54,8 +37,9 @@ class  AppDelegate : private cocos2d::Application
 public:
     AppDelegate();
     virtual ~AppDelegate();
-    virtual void initGLContextAttrs();
 
+    virtual void initGLContextAttrs();
+    
     /**
     @brief    Implement Director and Scene init code here.
     @return true    Initialize success, app continue.
@@ -77,3 +61,4 @@ public:
 };
 
 #endif // _APP_DELEGATE_H_
+

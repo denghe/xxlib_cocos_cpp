@@ -1,0 +1,76 @@
+{
+	"actions": [
+		{
+			"name": "idle",
+			"totalSeconds": 0.8333333333333325,
+			"lps": [
+				{
+					"time": 0,
+					"mainLockPoint": {
+						"x": 0,
+						"y": 0
+					},
+					"lockPoints": [
+						{
+							"x": -1,
+							"y": 0
+						},
+						{
+							"x": 1,
+							"y": 0
+						}
+					]
+				}
+			],
+			"cds": [
+				{
+					"time": 0,
+					"maxCDCircle": {
+						"x": 0,
+						"y": 0,
+						"r": 55
+					},
+					"cdCircles": [
+						{
+							"x": -30,
+							"y": 0,
+							"r": 20
+						},
+						{
+							"x": 0,
+							"y": 0,
+							"r": 12
+						},
+						{
+							"x": 30,
+							"y": 18,
+							"r": 18
+						},
+						{
+							"x": 30,
+							"y": -18,
+							"r": 18
+						}
+					]
+				}
+			],
+			"ss": [
+				{
+					"time": 0,
+					"speed": 100
+				},
+				{
+					"time": 0.35,
+					"speed": -1
+				},
+				{
+					"time": 0.4,
+					"speed": 200
+				}
+			]
+		}
+	],
+	"shadowX": -5,
+	"shadowY": -5,
+    "shadowScale": 1.0
+}

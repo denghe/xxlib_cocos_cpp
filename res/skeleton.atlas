@@ -1,0 +1,27 @@
+
+skeleton.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+dianguangshuimu_tou
+  rotate: false
+  xy: 2, 75
+  size: 212, 348
+  orig: 212, 348
+  offset: 0, 0
+  index: -1
+dianguangshuimu_tou_02
+  rotate: false
+  xy: 216, 75
+  size: 212, 348
+  orig: 212, 348
+  offset: 0, 0
+  index: -1
+dianguangshuimu_weiba
+  rotate: false
+  xy: 2, 2
+  size: 350, 71
+  orig: 350, 71
+  offset: 0, 0
+  index: -1

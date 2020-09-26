@@ -1,0 +1,113 @@
+{
+	"actions": [
+		{
+			"name": "idle",
+			"totalSeconds": 0.8333333333333325,
+			"frames": [
+				{
+					"time": 0,
+					"picName": "longxia_move (1).png"
+				},
+				{
+					"time": 0.0333333333333333,
+					"picName": "longxia_move (3).png"
+				},
+				{
+					"time": 0.0666666666666666,
+					"picName": "longxia_move (5).png"
+				},
+				{
+					"time": 0.0999999999999999,
+					"picName": "longxia_move (7).png"
+				},
+				{
+					"time": 0.1333333333333332,
+					"picName": "longxia_move (9).png"
+				},
+				{
+					"time": 0.1666666666666665,
+					"picName": "longxia_move (11).png"
+				},
+				{
+					"time": 0.1999999999999998,
+					"picName": "longxia_move (13).png"
+				},
+				{
+					"time": 0.2333333333333331,
+					"picName": "longxia_move (15).png"
+				},
+				{
+					"time": 0.2666666666666664,
+					"picName": "longxia_move (17).png"
+				},
+				{
+					"time": 0.2999999999999997,
+					"picName": "longxia_move (19).png"
+				},
+				{
+					"time": 0.333333333333333,
+					"picName": "longxia_move (21).png"
+				},
+				{
+					"time": 0.3666666666666663,
+					"picName": "longxia_move (23).png"
+				},
+				{
+					"time": 0.3999999999999996,
+					"picName": "longxia_move (25).png"
+				},
+				{
+					"time": 0.4333333333333329,
+					"picName": "longxia_move (27).png"
+				},
+				{
+					"time": 0.4666666666666662,
+					"picName": "longxia_move (29).png"
+				},
+				{
+					"time": 0.4999999999999995,
+					"picName": "longxia_move (31).png"
+				},
+				{
+					"time": 0.5333333333333328,
+					"picName": "longxia_move (33).png"
+				},
+				{
+					"time": 0.5666666666666661,
+					"picName": "longxia_move (35).png"
+				},
+				{
+					"time": 0.5999999999999994,
+					"picName": "longxia_move (37).png"
+				},
+				{
+					"time": 0.6333333333333327,
+					"picName": "longxia_move (39).png"
+				},
+				{
+					"time": 0.666666666666666,
+					"picName": "longxia_move (41).png"
+				},
+				{
+					"time": 0.6999999999999993,
+					"picName": "longxia_move (43).png"
+				},
+				{
+					"time": 0.7333333333333326,
+					"picName": "longxia_move (45).png"
+				},
+				{
+					"time": 0.7666666666666659,
+					"picName": "longxia_move (47).png"
+				},
+				{
+					"time": 0.7999999999999992,
+					"picName": "longxia_move (49).png"
+				}
+			]
+		}
+	],
+	"plists": [
+		"longxia_move.plist"
+	]
+}

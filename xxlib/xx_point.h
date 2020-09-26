@@ -2,7 +2,8 @@
 
 #include "xx_data_rw.h"
 #include "xx_string.h"
-#include <cmath>        // PI.....
+#define _USE_MATH_DEFINES
+#include <math.h>        // M_PI PI.....
 
 namespace xx {
 
@@ -473,7 +474,6 @@ namespace xx {
 			points[i].d = 0;
 		}
 	}
-
 
 	inline PathwayMaker::PathwayMaker(xx::Point const& pos) {
 		xx::MakeTo(pathway);
