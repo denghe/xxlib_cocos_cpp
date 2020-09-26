@@ -37,7 +37,7 @@
         <meta-data android:name="app_check_url" android:value="http://192.168.1.196:8081/updateso/" />
         <meta-data android:name="app_receiver_key" android:value="{D05D6556-4D02-416E-AA8E-E7DC2024202B}" />
         <!-- android studio debug mode can disable download, set value to yes -->
-        <meta-data android:name="app_disable_download" android:value="no" />
+        <meta-data android:name="app_disable_download" android:value="yes" />
 
         <activity
             android:name="org.cocos2dx.cpp.UpdateActivity"

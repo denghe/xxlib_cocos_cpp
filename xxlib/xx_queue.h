@@ -1,17 +1,21 @@
 ﻿#pragma once
-#include "xx_object.h"
+#include "xx_typehelpers.h"
+#include "xx_math.h"
+#include <type_traits>
 
 namespace xx {
-	// ring buffer FIFO 队列, 能随机检索...能批量 pop. 简单测试比 std::deque 快 70% 左右
+
+	// ring buffer FIFO 队列, 能随机检索...能批量 pop. 简单测试 windows + msvc 下比 std::queue 快 70% 左右
+
 	//...............FR...............					// Head == Tail
 	//......Head+++++++++++Tail.......					// DataLen = Tail - Head
 	//++++++Tail...........Head+++++++					// DataLen = BufLen - Head + Tail
-	template <class T>
+	template <typename T>
 	struct Queue {
 		typedef T ChildType;
-		T*				buf;
+		T*			buf;
 		size_t		cap;
-		size_t		head = 0, tail = 0;					// FR..............................
+		size_t		head = 0, tail = 0;					// TH..............................
 
 		// 因为该队列似乎没办法令 buf 为空, 故移动操作也会创建 buf
 		explicit Queue(size_t capacity = 8) noexcept;
@@ -50,10 +54,7 @@ namespace xx {
 	};
 
 	template<typename T>
-	using Queue_s = std::shared_ptr<Queue<T>>;
-
-	template<typename T>
-	using Queue_w = std::weak_ptr<Queue<T>>;
+	struct IsPod<Queue<T>, void> : std::true_type {};
 }
 
 // impls
@@ -104,7 +105,10 @@ namespace xx
 	template <class T>
 	void Queue<T>::Pop() noexcept {
 		assert(head != tail);
-		buf[head++].~T();
+		if constexpr (!std::is_pod_v<T>) {
+            buf[head].~T();
+		}
+        ++head;
 		if (head == cap) {
 			head = 0;
 		}
@@ -113,7 +117,10 @@ namespace xx
 	template <class T>
 	void Queue<T>::PopLast() noexcept {
 		assert(head != tail);
-		buf[tail--].~T();
+        if constexpr (!std::is_pod_v<T>) {
+            buf[tail].~T();
+        }
+        --tail;
 		if (tail == (size_t)-1) {
 			tail = cap - 1;
 		}
@@ -230,7 +237,7 @@ namespace xx
 
 		//......Head+++++++++++Tail.......
 		if (head < tail) {
-			if constexpr (IsTrivial_v<T>) {
+			if constexpr (IsPod_v<T>) {
 				memcpy((void*)newBuf, buf + head, dataLen * sizeof(T));
 			}
 			else {
@@ -246,7 +253,7 @@ namespace xx
 		{
 			//...Head++++++
 			auto frontDataLen = cap - head;
-			if constexpr (IsTrivial_v<T>) {
+			if constexpr (IsPod_v<T>) {
 				memcpy((void*)newBuf, buf + head, frontDataLen * sizeof(T));
 			}
 			else {
@@ -257,7 +264,7 @@ namespace xx
 			}
 
 			// ++++++Tail...
-			if constexpr (IsTrivial_v<T>) {
+			if constexpr (IsPod_v<T>) {
 				memcpy((void*)(newBuf + frontDataLen), buf, tail * sizeof(T));
 			}
 			else {

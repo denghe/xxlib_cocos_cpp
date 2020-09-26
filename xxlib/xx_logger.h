@@ -1,258 +1,418 @@
-﻿#pragma once
-#include "xx_sqlite.h"
+﻿#include "xx_fixeddata_w.h"
+#include "ajson.hpp"
 #include <mutex>
 #include <thread>
-#include <vector>
+#include <fstream>
 #include <iostream>
-#include <chrono>
+#include <sstream>
+
+// 如果要使用自己定义的日志实例和宏，就在包含之前 #define XX_USE_CUSTOM_LOG_DEFINES
 
 namespace xx {
 
-	// 对应 sqlite log 表 中的一行
-	struct LogRow {
-		//int64_t id = 0;				// 主键
-		int64_t time = 0;				// 发生时间
-		std::string desc;				// 日志明细
+    // 针对 __FILE__ 编译期 定位到纯文件名部分并返回指针
+    template<size_t len>
+    inline constexpr char const *CutPath(char const(&in)[len]) {
+        auto &&i = len - 1;
+        for (; i >= 0; --i) {
+            if (in[i] == '\\' || in[i] == '/') return in + i + 1;
+        }
+        return in + i;
+    }
 
-		LogRow() = default;
-		LogRow(LogRow const&) = delete;
-		LogRow& operator=(LogRow const&) = delete;
-		LogRow(LogRow&& o)
-			: time(std::move(o.time))
-			, desc(std::move(o.desc))
-		{
-		}
-		inline LogRow& operator=(LogRow&& o) {
-			this->time = std::move(o.time);
-			this->desc = std::move(o.desc);
-			return *this;
-		}
-	};
+    // 获取当前执行文件名字
+    inline std::string GetExecuteName() {
+#if defined(PLATFORM_POSIX) || defined(__linux__)
+        std::string s;
+        std::ifstream("/proc/self/comm") >> s;
+        return s;
+#elif defined(_WIN32)
+        //char buf[MAX_PATH];
+        //GetModuleFileNameA(nullptr, buf, MAX_PATH);
+        //return buf;
+        return "unnamed.exe";   // 为避免在此处引入 windows.h .可以通过配置解决
+#else
+        static_assert(false, "unrecognized platform");
+#endif
+    }
 
-	// sqlite 版日志写入器, 每秒最多只能写入几十万行, 特点是空间可以循环利用, 自动删除过期数据
-	struct SqliteLogWriter {
-		// sqlite 连接主体
-		SQLite::Connection db;
+    // 将时间转为 2020-08-01 13:56:48.123456 这样的长相
+    inline std::string
+    ToString(std::chrono::system_clock::time_point const &tp, char const *const &format = "%F %T") noexcept {
+        auto &&t = std::chrono::system_clock::to_time_t(tp);
+        std::tm tm;
+#ifdef _WIN32
+        localtime_s(&tm, &t);
+#else
+        localtime_r(&t, &tm);
+#endif
+        std::stringstream ss;
+        ss << std::put_time(&tm, format);
+//        auto &&e = tp.time_since_epoch();
+//        ss << "." << std::chrono::duration_cast<std::chrono::microseconds>(e).count() -
+//                     std::chrono::duration_cast<std::chrono::seconds>(e).count() * 1000000LL;
+        return ss.str();
+    }
 
-		// 要用到的查询
-		SQLite::Query query_Insert;
-		SQLite::Query query_DeleteRange;
-		SQLite::Query query_DeleteAll;
+    // 日志级别
+    enum class LogLevels : int {
+        TRACE, DEBUG, INFO, WARN, ERROR
+    };
+    inline char const *logLevelNames[] = {
+            "TRACE", "DEBUG", "INFO", "WARN", "ERROR"
+    };
 
-		// 表数据行数限制. insert 的同时将执行 delete 删除最早的数据以维持总行数, 滚动利用存储空间
-		int64_t rowsLimit = 0;
+    // 带颜色的 日志级别串（ERROR 那个是红色，别的乱来的）
+    inline char const *logLevelColorNames[] = {
+            "\033[35mTRACE\033[37m", "\033[32mDEBUG\033[37m", "\033[33mINFO\033[37m", "\033[34mWARN\033[37m",
+            "\033[31mERROR\033[37m"
+    };
 
-		// 当前自增id( 用前++ )
-		int64_t autoIncId = 0;
+    /***********************************************************************************************/
+    // 日志配置
+    /***********************************************************************************************/
 
-		// 当前数据行数
-		int64_t numRows = 0;
-
-		SqliteLogWriter(char const* const& logFileName, bool cleanup, int64_t rowsLimit)
-			: db(logFileName)
-			, query_Insert(db)
-			, query_DeleteRange(db)
-			, query_DeleteAll(db)
-			, rowsLimit(rowsLimit)
-		{
-			if (rowsLimit <= 0) {
-				rowsLimit = std::numeric_limits<decltype(rowsLimit)>::max();
-			}
-
-			// 优化选项
-			db.SetPragmaJournalMode(xx::SQLite::JournalModes::Memory);
-			db.SetPragmaTempStoreType(xx::SQLite::TempStoreTypes::Memory);
-			db.SetPragmaCacheSize(4096);
-
-			// 建表
-			if (!db.TableExists("log")) {
-				db.Call(R"=-=(
-CREATE TABLE `log`(
-    `id` INTEGER PRIMARY KEY NOT NULL UNIQUE,
-    `time` INTEGER NOT NULL, 
-    `desc` TEXT NOT NULL
-);
-)=-=");
-				db.Call(R"=-=(
-CREATE VIEW `view_log` AS
-SELECT `id`, `time`, datetime(`time` / 10000000, 'unixepoch') as `datetime`, `desc`
-  FROM `log`;
-)=-=");
-				// time 创建索引??
-			}
-			else {
-				// 初始化查询器
-				query_DeleteAll.SetQuery("delete from `log`");
-
-				if (cleanup) {
-					// 清数据
-					query_DeleteAll();
-				}
-				else {
-					// 取最大, 最小 id 值
-					autoIncId = db.Execute<int64_t>("select max(`id`) from `log`");
-					numRows = db.Execute<int64_t>("select min(`id`) from `log`") - autoIncId + 1;
-				}
-			}
-
-			// 继续初始化查询器
-			query_Insert.SetQuery("insert into `log` (`id`, `time`, `desc`) values (?, ?, ?)");
-			query_DeleteRange.SetQuery("delete from `log` where id <= ?");
-
-			// 检测当前数据是否超限. 超了就删除一部分
-			if (numRows > rowsLimit) {
-				query_DeleteRange.SetParameters(autoIncId - rowsLimit)();
-				numRows = rowsLimit;
-			}
-		}
-		SqliteLogWriter(SqliteLogWriter const&) = delete;
-		SqliteLogWriter& operator=(SqliteLogWriter const&) = delete;
-
-		// 将队列数据写盘. 成功返回 0. 失败 -1
-		inline int Save(std::vector<LogRow> const& rows) {
-			int64_t idx = 0, len = (int64_t)rows.size();
-			assert(len);
-			try {
-				// 如果本次写入必然导致数据库行数超限制, 就直接清库，并调整 idx 指向 rows 后方符合 rowsLimit 的起始处
-				if (len >= rowsLimit) {
-					// 如果库有数据就清
-					if (numRows) {
-						query_DeleteAll();
-					}
-					// 调整指向, 确保写入数据在 rowsLimit 范围内
-					idx = len - rowsLimit;
-
-					// 提前计算出写入完成之后的记录数
-					numRows = rowsLimit;
-				}
-				else {
-					// 计算 db 中要留多少行, 
-					auto newRowsLimit = rowsLimit - len;
-					if (numRows > newRowsLimit) {
-						query_DeleteRange.SetParameters(autoIncId - newRowsLimit)();
-					}
-
-					// 提前计算出写入完成之后的记录数
-					numRows = newRowsLimit + len;
-				}
-				if (idx == len) return 0;
-
-				db.BeginTransaction();
-				for (; idx < len; ++idx) {
-					auto&& o = rows[idx];
-					query_Insert.SetParameters(++autoIncId, o.time, o.desc)();
-				}
-				db.EndTransaction();
-				return 0;
-			}
-			catch (...)
-			{
-				std::cout << "logdb insert error! errNO = " << db.lastErrorCode << " errMsg = " << db.lastErrorMessage << std::endl;
-				return -1;
-			}
-		}
-	};
-
-	// todo: 文本版日志写入器, 写入速度受限于磁盘, 特点是可以根据 行数 啥的条件拆分文件. 自动在文件名后添加后缀存为多个文件
-
-	// 日志记录器
-	template<typename LogWriter = SqliteLogWriter>
-	class Logger {
-	protected:
-		// 内存队列限长. 超限将放弃本次写入，返回 -1: 写入失败
-		uint64_t queueLimit = 0;
-
-		// 切换锁定依赖
-		std::mutex mtx;
-
-		// 切换使用的双队列
-		std::vector<LogRow> rows;
-		std::vector<LogRow> bgRows;
-
-		// 通知后台线程退出的标志位
-		int disposing = 0;
-
-		// 日志写入器
-		LogWriter writer;
-
-	public:
-		// 用于外界查询当前后台线程工作状态
-		bool writing = false;
-
-	protected:
-
-		// 从构造函数中剥离以便于构造函数路由不同的 LogWriter
-		void Init() {
-			// 预分配内存
-			rows.reserve(queueLimit);
-			bgRows.reserve(queueLimit);
-
-			// 起一个后台线程用于日志写库
-			std::thread t([this] {
-				while (true) {
-					// 切换前后台队列( 如果有数据. 没有就 sleep 一下继续扫 )
-					{
-						std::lock_guard<std::mutex> lg(mtx);
-						if (!rows.size()) goto LabEnd;
-						std::swap(rows, bgRows);
-					}
-
-					writing = true;
-					if (writer.Save(bgRows)) {
-						writing = false;
-						disposing = -1;
-						return;
-					}
-					writing = false;
-					bgRows.clear();
-					continue;
-
-				LabEnd:
-					if (disposing == 1) {
-						++disposing;
-						continue;
-					}
-					else if (disposing == 2) {
-						break;
-					}
-					std::this_thread::sleep_for(std::chrono::milliseconds(1));
-				}
-				disposing = 0;
-				});
-			t.detach();
-		}
-
-	public:
-
-		template<typename ENABLED = std::enable_if_t<std::is_base_of_v<SqliteLogWriter, LogWriter>>>
-		Logger(char const* const& logFileName, bool cleanup = false, int64_t rowsLimit = 1000000, uint64_t queueLimit = 1000000)
-			: queueLimit(queueLimit)
-			, writer(logFileName, cleanup, rowsLimit) {
-			Init();
-		}
-
-		~Logger() {
-			if (disposing) return;
-			disposing = 1;
-			while (disposing) {
-				std::this_thread::sleep_for(std::chrono::milliseconds(1));
-			}
-		}
-		Logger(Logger const&) = delete;
-		Logger& operator=(Logger const&) = delete;
-
-		// 往内存队列插入一条日志. 返回 非0 表示失败( 可能超过了数量限制 或者是实例正在析构 或已析构 )
-		template<typename DescType>
-		int Write(DescType&& desc) noexcept {
-			std::lock_guard<std::mutex> lg(mtx);
-			if (disposing || (queueLimit && rows.size() > queueLimit)) return -1;
-
-			typedef std::chrono::duration<long long, std::ratio<1LL, 10000000LL>> MicroX10;	// 10 倍 micro 精度. 当前 x86 pc 常见精度
-			rows.emplace_back();
-			auto&& o = rows.back();
-			o.time = std::chrono::duration_cast<MicroX10>(std::chrono::system_clock::now().time_since_epoch()).count();
-			o.desc = std::forward<DescType>(desc);
-			return 0;
-		}
-	};
+    /*
+json 样板:
+{
+    "logLevel" : 1
+    , "logFileName" : "log/server.log"
+    , "logFileMaxBytes" : 5242880
+    , "logFileCount" : 30
+    , "outputConsole" : true
 }
+     */
+    struct LoggerConfig {
+        // 小于等于这个级别的才记录日志
+        int logLevel = (int) LogLevels::TRACE;
+        // 日志文件 路径 & 文件名前缀( 后面可能还有日期 / 分段标志 )
+        std::string logFileName = GetExecuteName() + ".log";
+        // 单个日志文件体积上限( 字节 )
+        int64_t logFileMaxBytes = 1024 * 1024 * 5;
+        // 日志文件最多个数( 滚动使用，超过个数将删除最早的 )
+        int logFileCount = 30;
+        // 写文件的同时, 是否同时输出到控制台
+        bool outputConsole = true;
+
+        LoggerConfig() = default;
+
+        LoggerConfig(LoggerConfig const &) = default;
+
+        LoggerConfig &operator=(LoggerConfig const &) = default;
+
+        ~LoggerConfig() = default;
+    };
+
+}
+AJSON(xx::LoggerConfig, logLevel, logFileName, logFileMaxBytes, logFileCount, outputConsole);
+namespace xx {
+
+    // 适配 std::cout
+    inline std::ostream &operator<<(std::ostream &o, LoggerConfig const &c) {
+        ajson::save_to(o, c);
+        return o;
+    }
+
+    /***********************************************************************************************/
+    // 日志类主体
+    /***********************************************************************************************/
+
+    struct Logger {
+        // 每条日志保存容器数据类型（定长 256 字节 data )
+        typedef FixedData<256> Item;
+
+        // 后台线程扫描写入队列的休息时长（毫秒）
+        inline static const int64_t loopSleepMS = 1;
+
+        // 后台线程重新加载 cfg 文件的间隔时长（秒）
+        inline static const int64_t reloadConfigIntervalSeconds = 60;
+
+        // 当前配置（如果没有配置文件则可直接改。否则会被重新加载覆盖掉）
+        LoggerConfig cfg;
+    protected:
+        // 前后台队列
+        std::vector<Item> items1;
+        std::vector<Item> items2;
+
+        // 后台线程 & Lock 系列
+        std::thread thread;
+        std::mutex mtx;
+
+        // 是否正在析构
+        volatile int disposing = 0;
+
+        // 后台是否没有正在写
+        bool writing = false;
+
+        // 当前默认配置文件名
+        std::string cfgName = "xxlog.config";
+
+        // 当前日志文件名( 日志主体名 + 时间 )
+        std::string currLogFileName;
+
+        // 指向日志文件的句柄
+        std::ofstream ofs;
+
+        // 已经写入多长
+        int64_t wroteLen = 0;
+
+        // 已经写了多少个文件
+        int fileCount = 0;
+
+        // 最后一次读取配置的时间点
+        int64_t lastLoadConfigTP = 0;
+
+    public:
+        // 参数：开辟多少兆初始内存 cache
+        explicit Logger(size_t const &capMB = 8, char const *const &cfgName = nullptr) {
+            // 如果有传入新的配置文件名 就覆盖
+            if (cfgName) {
+                this->cfgName = cfgName;
+            }
+
+            // 试着加载配置
+            LoadConfig();
+
+            // 打开当前日志文件
+            OpenLogFile();
+
+            // 初始化内存池
+            items1.reserve(1024 * 1024 * capMB / 256);
+            items2.reserve(1024 * 1024 * capMB / 256);
+
+            // 初始化后台线程
+            thread = std::thread(&Logger::Loop, this);
+        }
+
+        ~Logger() {
+            // 可能是后台线程主动异常退出导致
+            if (disposing) return;
+
+            // 通知后台线程收尾退出
+            disposing = 1;
+
+            // 等后台线程结束
+            thread.join();
+        }
+
+        // 固定以 level, __LINE__, __FILE__, __FUNCTION__, now 打头的日志内容写入. 宏代指的 char* 不会丢失，故不需要复制其内容
+        // 直接写入固定无 type 前缀: level + lineNumber + fileName* + funcName* + now
+        template<typename ...TS>
+        void
+        Log(xx::LogLevels const &level, int const &lineNumber, char const *const &fileName, char const *const &funcName,
+            TS const &...vs) {
+            // 忽略一些级别不写入
+            if ((int) level < cfg.logLevel) return;
+
+            // 如果已经在析构阶段也不写入
+            if (disposing) return;
+
+            // 锁定队列
+            std::lock_guard<std::mutex> lg(mtx);
+            // 申请一条存储空间
+            auto &&d = items1.emplace_back();
+            // 确保存储空间一定存的下这些参数
+            static_assert(Item::innerSpaceLen >= sizeof(int) + sizeof(int) + sizeof(char *) + sizeof(char *) +
+                                                 sizeof(std::chrono::system_clock::time_point));
+            // 准备开始将参数复制到 data( 这几个 char* 参数可以直接复制指针而不必担心其消失，因为是编译器编译到代码数据段里的 )
+            auto p = d.buf;
+            *(int *) p = (int) level;
+            *(int *) (p + sizeof(int)) = lineNumber;
+            *(char const **) (p + sizeof(int) + sizeof(int)) = fileName;
+            *(char const **) (p + sizeof(int) + sizeof(int) + sizeof(char *)) = funcName;
+            *(std::chrono::system_clock::time_point *) (p + sizeof(int) + sizeof(int) + sizeof(char *) +
+                                                        sizeof(char *)) = std::chrono::system_clock::now();
+            d.len = sizeof(int) + sizeof(int) + sizeof(char *) + sizeof(char *) +
+                    sizeof(std::chrono::system_clock::time_point);
+            // 继续常规写入变参部分( typeid + data, typeid + data, ....... )
+            xx::WriteTo(d, vs...);
+        }
+
+        // 能简单粗略查询队列是否已经写空( 不一定准确, 测试目的 )
+        inline bool const &Busy() const {
+            return writing;
+        }
+
+    protected:
+        // 后台线程专用函数
+        inline void Loop() {
+            while (true) {
+                // 每 ? 秒重新读一次配置
+                LoadConfig();
+
+                // 如果有数据: 交换前后台队列. 没有就继续循环
+                {
+                    std::lock_guard<std::mutex> lg(mtx);
+                    if (items1.empty()) goto LabEnd;
+                    std::swap(items1, items2);
+                }
+
+                // 开始将后台队列的内容写入存储
+                {
+                    writing = true;
+                    // 输出 items2
+                    Dump();
+                    items2.clear();
+                    writing = false;
+                    continue;
+                }
+
+                LabEnd:
+                // 如果需要退出，还是要多循环一次，写光数据
+                {
+                    if (disposing == 1) {
+                        ++disposing;
+                        continue;
+                    } else if (disposing == 2) break;
+                }
+
+                // 省点 cpu
+                std::this_thread::sleep_for(std::chrono::milliseconds(loopSleepMS));
+            }
+        }
+
+        // 文件编号循环使用 & 改名逻辑
+        inline void FileRename() {
+            ofs.close();
+
+            int i = fileCount;
+            char oldName[225], newName[225];
+            while (i > 0) {
+                snprintf(oldName, sizeof(oldName), "%s.%d", currLogFileName.c_str(), i);
+                snprintf(newName, sizeof(newName), "%s.%d", currLogFileName.c_str(), i + 1);
+                if (i == cfg.logFileCount) {
+                    remove(oldName);
+                } else {
+                    rename(oldName, newName);
+                }
+                --i;
+            }
+
+            snprintf(oldName, sizeof(oldName), "%s", currLogFileName.c_str());
+            snprintf(newName, sizeof(newName), "%s.%d", currLogFileName.c_str(), i + 1);
+            rename(oldName, newName);
+
+            if (fileCount < cfg.logFileCount) {
+                ++fileCount;
+            }
+
+            ofs.open(oldName, std::ios_base::app);
+            if (ofs.fail()) {
+                std::cerr << "ERROR!!! open log file failed: \"" << oldName << "\", forget mkdir ??" << std::endl;
+            }
+        }
+
+        inline void LoadConfig() {
+            auto &&nowTicks = std::chrono::duration_cast<std::chrono::seconds>(
+                    std::chrono::system_clock::now().time_since_epoch()).count();
+            if (nowTicks - lastLoadConfigTP > reloadConfigIntervalSeconds) {
+                // 试图加载 logger cfg
+                if (std::ifstream(cfgName.c_str()).good()) {
+                    ajson::load_from_file(cfg, cfgName.c_str());
+                    std::cout << "logger load \"" << cfgName << "\" = " << cfg << std::endl;
+                } else {
+                    std::cout << "can't find config file: " << cfgName << ", will be use default settings = " << cfg
+                              << std::endl;
+                }
+                // 更新最后加载时间
+                lastLoadConfigTP = nowTicks;
+            }
+        }
+
+        inline void OpenLogFile() {
+            // 根据配置和当前时间推算出日志文件名并以追加模式打开
+            currLogFileName = cfg.logFileName + ToString(std::chrono::system_clock::now(), ".%F_%H.%M.%S");
+            ofs.open(currLogFileName, std::ios_base::app);
+            if (ofs.fail()) {
+                std::cerr << "ERROR!!! open log file failed: \"" << currLogFileName << "\", forget mkdir ??"
+                          << std::endl;
+            }
+        }
+
+        // 默认提供文件 dump 和 console dump. 可以覆盖实现自己的特殊需求
+        inline virtual void Dump() {
+            // 输出到控制台?
+            if (cfg.outputConsole) {
+                for (auto &&item : items2) {
+                    DumpItem(std::cout, item, true);
+                }
+                std::cout.flush();
+            }
+
+            // 输出到文件 & 文件打开成功 ?
+            if (ofs.is_open()) {
+                for (auto &&item : items2) {
+                    DumpItem(ofs, item, false);
+
+                    // 粗略统计当前已经写了多长了. 不是很精确. 如果超长就换文件写
+                    wroteLen += item.len;
+                    if (wroteLen > cfg.logFileMaxBytes) {
+                        wroteLen = 0;
+                        FileRename();
+                    }
+                }
+                ofs.flush();
+            }
+        }
+
+        // dump 单行日志. 可覆盖实现自己的特殊需求
+        inline virtual void DumpItem(std::ostream &o, Item &item, bool const &isConsole) {
+            // dump 前缀. 反向取出几个头部参数, 传递到格式化函数
+            auto p = item.buf;
+            Dump_Prefix(o, (LogLevels) *(int *) p, *(int *) (p + sizeof(int)),
+                        *(char const **) (p + sizeof(int) + sizeof(int)),
+                        *(char const **) (p + sizeof(int) + sizeof(int) + sizeof(char *)),
+                        *(std::chrono::system_clock::time_point *) (p + sizeof(int) + sizeof(int) + sizeof(char *) +
+                                                                    sizeof(char *)), isConsole);
+            // dump 内容
+            DumpTo(o, item, sizeof(int) + sizeof(int) + sizeof(char *) + sizeof(char *) +
+                            sizeof(std::chrono::system_clock::time_point));
+            // 弄个换行符
+            o << std::endl;
+        }
+
+        // dump 单行日志 的前缀部分。可覆盖实现自己的写入格式
+        inline virtual void
+        Dump_Prefix(std::ostream &o, LogLevels const &level, int const &lineNumber, char const *const &fileName, char const *const &funcName,
+                    std::chrono::system_clock::time_point const &tp, bool const &isConsole) {
+            if (lineNumber) {
+                if (isConsole) {
+                    o << "\033[36m" << ToString(tp) << "\033[37m" << " [" << logLevelColorNames[(int) level] << "] [file:\033[36m" << fileName << "\033[37m line:\033[36m"
+                      << lineNumber << "\033[37m func:\033[36m" << funcName << "\033[37m] ";
+                } else {
+                    o << ToString(tp) << " [" << logLevelNames[(int) level] << "] [file:" << fileName << " line:" << lineNumber << " func:" << funcName << "] ";
+                }
+            } else {
+                // 行号为 0 乃精简模式. 不输出 文件，行号，函数名
+                if (isConsole) {
+                    o << "\033[36m" << ToString(tp) << "\033[37m" << " [" << logLevelColorNames[(int) level] << "\033[37m] ";
+                } else {
+                    o << ToString(tp) << " [" << logLevelNames[(int) level] << "] ";
+                }
+            }
+        }
+    };
+}
+
+inline xx::Logger __xxLogger;
+#if defined(LOG_INFO) || defined(LOG_WARN) || defined(LOG_ERROR) || defined(LOG_ERR) || defined(LOG_TRACE) || defined(LOG_DEBUG)
+#error
+#endif
+
+#ifdef XX_DISABLE_ALL_LOGS
+#   define LOG_INFO(...) void()
+#   define LOG_WARN(...) void()
+#   define LOG_ERROR(...) void()
+#   define LOG_ERR(...) void()
+#   define LOG_TRACE(...) void()
+#   define LOG_DEBUG(...) void()
+#   define LOG_SIMPLE(...) void()
+#else
+#   define LOG_INFO(...) __xxLogger.Log(xx::LogLevels::INFO, __LINE__, xx::CutPath(__FILE__), __FUNCTION__, __VA_ARGS__)
+#   define LOG_WARN(...) __xxLogger.Log(xx::LogLevels::WARN, __LINE__, xx::CutPath(__FILE__), __FUNCTION__, __VA_ARGS__)
+#   define LOG_ERROR(...) __xxLogger.Log(xx::LogLevels::ERROR, __LINE__, xx::CutPath(__FILE__), __FUNCTION__, __VA_ARGS__)
+#   define LOG_ERR(...) __xxLogger.Log(xx::LogLevels::ERROR, __LINE__, xx::CutPath(__FILE__), __FUNCTION__, __VA_ARGS__)
+#   define LOG_TRACE(...) __xxLogger.Log(xx::LogLevels::TRACE, __LINE__, xx::CutPath(__FILE__), __FUNCTION__, __VA_ARGS__)
+#   define LOG_DEBUG(...) __xxLogger.Log(xx::LogLevels::DEBUG, __LINE__, xx::CutPath(__FILE__), __FUNCTION__, __VA_ARGS__)
+#   define LOG_SIMPLE(...) __xxLogger.Log(xx::LogLevels::INFO, 0, "", "", __VA_ARGS__)
+#endif

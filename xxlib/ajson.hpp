@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 /*
 __ _____ _____ _____
@@ -859,7 +859,11 @@ namespace ajson
     enum{ INIT_AMSG_BUFF_SIZE = 1024 };
     ajson_file_stream(const char * filename) :m_f(NULL), m_status(good)
     {
+#ifdef _WIN32
+      fopen_s(&this->m_f, filename, "w");
+#else
       this->m_f = std::fopen(filename, "w");
+#endif
       if (NULL == this->m_f)
       {
         this->m_status = file_error;
@@ -1383,7 +1387,7 @@ namespace ajson
 #ifdef _MSC_VER
       _gcvt_s(buffer, 63 , val, 8);
 #else
-      gcvt(val, 62, buffer);
+      auto&& _ = gcvt(val, 62, buffer);
 #endif // MSVC
       size_t len = std::strlen(buffer);
       if (buffer[len - 1] == '.')
@@ -2019,7 +2023,12 @@ namespace ajson
           std::fclose(f_);
       }
     };
-    std::FILE * f = std::fopen(filename, "rb");
+#ifdef _WIN32
+    std::FILE* f = nullptr;
+    fopen_s(&f, filename, "rb");
+#else
+    std::FILE* f = std::fopen(filename, "rb");
+#endif
     if (nullptr == f)
     {
       std::string errmsg = "can't open file:";
@@ -2047,7 +2056,7 @@ namespace ajson
     buffer[sz] = 0;
     if (sz >= 3)
     {
-      if (buffer[0] == 0xEF && buffer[1] == 0xBB && buffer[2] == 0xBF)
+      if (buffer[0] == (char)0xEF && buffer[1] == (char)0xBB && buffer[2] == (char)0xBF)
       {
         buffer += 3;
         sz -= 3;
