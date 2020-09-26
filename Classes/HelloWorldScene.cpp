@@ -200,7 +200,7 @@ void HelloWorld::update(float delta)
         } else {
             anim->Draw();
         }
-    }
+    } 
 
     char tmp[64];
     snprintf(tmp, sizeof(tmp), "cnt:%d", anims.size());
@@ -217,17 +217,11 @@ void HelloWorld::update(float delta)
             }
             float srcAngle = ran / 180.0f * M_PI;
             auto srcPos = xx::Rotate(pos, srcAngle) + center;
-//        auto pathway = xx::PathwayMaker(srcPos);
 
             float destAngle = srcAngle + M_PI + RandomHelper::random_int(-30, 30) / 180.0f * M_PI;
             auto destPos = xx::Rotate(pos, destAngle) + center;
             auto pathway = xx::PathwayMaker(srcPos).To(destPos).End();
-//        xx::CoutN(srcAngle, destAngle);
-//        xx::CoutN(*pathway);
-            //int type = RandomHelper::random_int(0, 2) & 1;
-            int type = frame & 2;
-            //type = 1;
-//            type = 0;
+            int type = RandomHelper::random_int(0, 20) == 1 ? 0 : 1;
             auto path = type ? "1.frames.ext" : "skeleton.atlas.ext";
             auto anim = CreateAnimExt(path, this);
             if (anim) {
