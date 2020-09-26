@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{76A39BB2-9B84-4C65-98A5-654D86B86F2A}</ProjectGuid>
+    <RootNamespace>games</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0'">v120</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v120_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0'">v140</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v140_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0'">v120</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v120_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0'">v140</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v140_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\cocos2d\cocos\2d\cocos2dx.props" />
+    <Import Project="..\cocos2d\cocos\2d\cocos2d_headers.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\cocos2d\cocos\2d\cocos2dx.props" />
+    <Import Project="..\cocos2d\cocos\2d\cocos2d_headers.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration).win32\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration).win32\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)external\uv\include;$(EngineRoot)extensions;..\xxlib;..\Classes;..\lua\src;..\lua_bind;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libcurl.lib;uv_a.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories);$(_COCOS_LIB_PATH_WIN32_BEGIN);$(_COCOS_LIB_PATH_WIN32_END)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <CustomBuildStep>
+      <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"</Command>
+      <Outputs>$(TargetName).cab</Outputs>
+      <Inputs>$(TargetFileName)</Inputs>
+    </CustomBuildStep>
+    <ClCompile>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdcpp17</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(EngineRoot);$(EngineRoot)external;$(EngineRoot)cocos\audio\include;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)external\uv\include;$(EngineRoot)extensions;..\xxlib;..\Classes;..\lua\src;..\lua_bind;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libcurl.lib;uv_a.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories);$(_COCOS_LIB_PATH_WIN32_BEGIN);$(_COCOS_LIB_PATH_WIN32_END)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\lua\src\lapi.c" />
+    <ClCompile Include="..\lua\src\lauxlib.c" />
+    <ClCompile Include="..\lua\src\lbaselib.c" />
+    <ClCompile Include="..\lua\src\lbitlib.c" />
+    <ClCompile Include="..\lua\src\lcode.c" />
+    <ClCompile Include="..\lua\src\lcorolib.c" />
+    <ClCompile Include="..\lua\src\lctype.c" />
+    <ClCompile Include="..\lua\src\ldblib.c" />
+    <ClCompile Include="..\lua\src\ldebug.c" />
+    <ClCompile Include="..\lua\src\ldo.c" />
+    <ClCompile Include="..\lua\src\ldump.c" />
+    <ClCompile Include="..\lua\src\lfunc.c" />
+    <ClCompile Include="..\lua\src\lgc.c" />
+    <ClCompile Include="..\lua\src\linit.c" />
+    <ClCompile Include="..\lua\src\liolib.c" />
+    <ClCompile Include="..\lua\src\llex.c" />
+    <ClCompile Include="..\lua\src\lmathlib.c" />
+    <ClCompile Include="..\lua\src\lmem.c" />
+    <ClCompile Include="..\lua\src\loadlib.c" />
+    <ClCompile Include="..\lua\src\lobject.c" />
+    <ClCompile Include="..\lua\src\lopcodes.c" />
+    <ClCompile Include="..\lua\src\loslib.c" />
+    <ClCompile Include="..\lua\src\lparser.c" />
+    <ClCompile Include="..\lua\src\lstate.c" />
+    <ClCompile Include="..\lua\src\lstring.c" />
+    <ClCompile Include="..\lua\src\lstrlib.c" />
+    <ClCompile Include="..\lua\src\ltable.c" />
+    <ClCompile Include="..\lua\src\ltablib.c" />
+    <ClCompile Include="..\lua\src\ltm.c" />
+    <ClCompile Include="..\lua\src\lundump.c" />
+    <ClCompile Include="..\lua\src\lutf8lib.c" />
+    <ClCompile Include="..\lua\src\lvm.c" />
+    <ClCompile Include="..\lua\src\lzio.c" />
+    <ClCompile Include="..\xxlib\ikcp.c" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\CatchFish.h" />
+    <ClInclude Include="..\Classes\CatchFish.hpp" />
+    <ClInclude Include="..\Classes\Dialer.h" />
+    <ClInclude Include="..\Classes\Dialer.hpp" />
+    <ClInclude Include="..\Classes\Dialer_UpdateCore.hpp" />
+    <ClInclude Include="..\Classes\Dialer_Panel.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_BigFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_BigFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombWeapon.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_BombWeapon.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Bullet.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Cannon.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Cannon.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_ColorFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_ColorFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Config.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Config.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Physics.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_Physics.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_SpriteFrame.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Configs_SpriteFrame.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillBullet.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillBullet.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillCannon.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillCannon.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillWeapon.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_DrillWeapon.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Fish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Fish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryBullet.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryBullet.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryCannon.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryCannon.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryWeapon.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_FuryWeapon.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Item.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Item.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_LightFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_LightFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_LightWeapon.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_LightWeapon.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Player.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Player.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_RoundFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_RoundFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Scene.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Scene.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_CircleFishs.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_CircleFishs.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RandomFishs.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RandomFishs.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RingFishs.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Emitter_RingFishs.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBigFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBigFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBombFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_Monitor_KeepBombFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_StageElement.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Stages_StageElement.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_WayFish.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_WayFish.hpp" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Weapon.h" />
+    <ClInclude Include="..\Classes\PKG_CatchFish_Weapon.hpp" />
+    <ClInclude Include="..\Classes\PKG_class.h" />
+    <ClInclude Include="..\Classes\PKG_class.hpp" />
+    <ClInclude Include="..\Classes\RefHolder.h" />
+    <ClInclude Include="..\lua\src\lapi.h" />
+    <ClInclude Include="..\lua\src\lauxlib.h" />
+    <ClInclude Include="..\lua\src\lcode.h" />
+    <ClInclude Include="..\lua\src\lctype.h" />
+    <ClInclude Include="..\lua\src\ldebug.h" />
+    <ClInclude Include="..\lua\src\ldo.h" />
+    <ClInclude Include="..\lua\src\lfunc.h" />
+    <ClInclude Include="..\lua\src\lgc.h" />
+    <ClInclude Include="..\lua\src\llex.h" />
+    <ClInclude Include="..\lua\src\llimits.h" />
+    <ClInclude Include="..\lua\src\lmem.h" />
+    <ClInclude Include="..\lua\src\lobject.h" />
+    <ClInclude Include="..\lua\src\lopcodes.h" />
+    <ClInclude Include="..\lua\src\lparser.h" />
+    <ClInclude Include="..\lua\src\lprefix.h" />
+    <ClInclude Include="..\lua\src\lstate.h" />
+    <ClInclude Include="..\lua\src\lstring.h" />
+    <ClInclude Include="..\lua\src\ltable.h" />
+    <ClInclude Include="..\lua\src\ltm.h" />
+    <ClInclude Include="..\lua\src\lua.h" />
+    <ClInclude Include="..\lua\src\lua.hpp" />
+    <ClInclude Include="..\lua\src\luaconf.h" />
+    <ClInclude Include="..\lua\src\lualib.h" />
+    <ClInclude Include="..\lua\src\lundump.h" />
+    <ClInclude Include="..\lua\src\lvm.h" />
+    <ClInclude Include="..\lua\src\lzio.h" />
+    <ClInclude Include="..\lua_bind\lua_all.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cca.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_actions.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_animationcache.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_application.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_assetsmanagerex.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_clippingnode.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_data.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_director.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_event.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_eventdispacher.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_eventlisteners.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_fileutils.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_label.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_layer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_node.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_ref.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_scene.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_scrollview.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_sprite.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_spriteframe.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_spriteframecache.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_texture.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_texturecache.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_tmxtiledmap.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_touch.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uibutton.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uieditbox.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uiimageview.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uilayout.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uiloadingbar.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_uiwidget.hpp" />
+    <ClInclude Include="..\lua_bind\lua_cc_userdefault.hpp" />
+    <ClInclude Include="..\lua_bind\lua_ext.hpp" />
+    <ClInclude Include="..\lua_bind\lua_func.hpp" />
+    <ClInclude Include="..\lua_bind\lua_keys.hpp" />
+    <ClInclude Include="..\lua_bind\lua_mempool.h" />
+    <ClInclude Include="..\lua_bind\lua_new_xxx.hpp" />
+    <ClInclude Include="..\lua_bind\lua_pushcall.hpp" />
+    <ClInclude Include="..\lua_bind\lua_spine.hpp" />
+    <ClInclude Include="..\lua_bind\lua_sys.hpp" />
+    <ClInclude Include="..\lua_bind\lua_to_xxx.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_bbuffer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uv.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvdialerpeer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvpeer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvresolver.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvdialer.hpp" />
+    <ClInclude Include="..\lua_bind\lua_xx_uvsimpeer.hpp" />
+    <ClInclude Include="..\xxlib\ajson.hpp" />
+    <ClInclude Include="..\xxlib\fixed_function.hpp" />
+    <ClInclude Include="..\xxlib\ikcp.h" />
+    <ClInclude Include="..\xxlib\xx_bbuffer.h" />
+    <ClInclude Include="..\xxlib\xx_dict.h" />
+    <ClInclude Include="..\xxlib\xx_list.h" />
+    <ClInclude Include="..\xxlib\xx_logger.h" />
+    <ClInclude Include="..\xxlib\xx_object.h" />
+    <ClInclude Include="..\xxlib\xx_pos.h" />
+    <ClInclude Include="..\xxlib\xx_queue.h" />
+    <ClInclude Include="..\xxlib\xx_random.h" />
+    <ClInclude Include="..\xxlib\xx_random.hpp" />
+    <ClInclude Include="..\xxlib\xx_sqlite.h" />
+    <ClInclude Include="..\xxlib\xx_threadpool.h" />
+    <ClInclude Include="..\xxlib\xx_uv.h" />
+    <ClInclude Include="..\xxlib\xx_uv_ext.h" />
+    <ClInclude Include="main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\cocos2d\cocos\2d\libcocos2d.vcxproj">
+      <Project>{98a51ba8-fc3a-415b-ac8f-8c7bd464e93e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\cocos2d\cocos\editor-support\spine\proj.win32\libSpine.vcxproj">
+      <Project>{b7c2a162-dec9-4418-972e-240ab3cbfcae}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\xxlib\lua.natvis" />
+    <Natvis Include="..\xxlib\xx.natvis" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
