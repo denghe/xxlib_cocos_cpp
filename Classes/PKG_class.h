@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 namespace PKG {
 	struct PkgGenMd5 {
 		inline static const std::string value = "8a9f3cba0ef0c5ae1221ec2135850f5a";

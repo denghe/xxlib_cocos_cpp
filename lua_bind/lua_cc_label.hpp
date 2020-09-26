@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 inline void Lua_Register_Label(lua_State* const& L)
 {
@@ -110,12 +110,12 @@ inline void Lua_Register_Label(lua_State* const& L)
 			o = cocos2d::Label::createWithBMFont(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
 			break;
 		}
-		case 7:
-		{
-			auto&& t = Lua_ToTuple<std::string, std::string, cocos2d::TextHAlignment, int, float, float>(L);
-			o = cocos2d::Label::createWithBMFont(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t), { std::get<4>(t) , std::get<5>(t) });
-			break;
-		}
+//		case 7:
+//		{
+//			auto&& t = Lua_ToTuple<std::string, std::string, cocos2d::TextHAlignment, int, float, float>(L);
+//			o = cocos2d::Label::createWithBMFont(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t), { std::get<4>(t) , std::get<5>(t) });
+//			break;
+//		}
 		default:
 			return luaL_error(L, "%s", "createWithBMFont Label error! need 2 ~ 4, 6 args: string bmfontPath, text, TextHAlignment hAlignment = TextHAlignment::LEFT, int maxLineWidth = 0,	float imageOffsetX, imageOffsetY");
 		}

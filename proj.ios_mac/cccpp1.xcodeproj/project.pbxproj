@@ -113,12 +113,7 @@
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
 		F5126DF721C8EB7700C03004 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F5126DF421C8EB7700C03004 /* Reachability.m */; };
 		F5126DF921C8EE3C00C03004 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5126DF821C8EE3C00C03004 /* SystemConfiguration.framework */; };
-		F5DAA7E522607A6E0019EF39 /* ikcp.c in Sources */ = {isa = PBXBuildFile; fileRef = F5DAA7D822607A6E0019EF39 /* ikcp.c */; };
-		F5DAA7E622607A6E0019EF39 /* ikcp.c in Sources */ = {isa = PBXBuildFile; fileRef = F5DAA7D822607A6E0019EF39 /* ikcp.c */; };
-		F5DAA7E722607A6E0019EF39 /* lua.natvis in Resources */ = {isa = PBXBuildFile; fileRef = F5DAA7DA22607A6E0019EF39 /* lua.natvis */; };
-		F5DAA7E822607A6E0019EF39 /* lua.natvis in Resources */ = {isa = PBXBuildFile; fileRef = F5DAA7DA22607A6E0019EF39 /* lua.natvis */; };
-		F5DAA7E922607A6E0019EF39 /* xx.natvis in Resources */ = {isa = PBXBuildFile; fileRef = F5DAA7E422607A6E0019EF39 /* xx.natvis */; };
-		F5DAA7EA22607A6E0019EF39 /* xx.natvis in Resources */ = {isa = PBXBuildFile; fileRef = F5DAA7E422607A6E0019EF39 /* xx.natvis */; };
+		F573CAD2251EDFFE002314AD /* ikcp.c in Sources */ = {isa = PBXBuildFile; fileRef = F573CACA251EDFFE002314AD /* ikcp.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -262,17 +257,6 @@
 		F5126DF421C8EB7700C03004 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		F5126DF621C8EB7700C03004 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		F5126DF821C8EE3C00C03004 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.1.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
-		F5371563237D0321003B107C /* ajson.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ajson.hpp; sourceTree = "<group>"; };
-		F5371565237D0321003B107C /* xx_logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_logger.h; sourceTree = "<group>"; };
-		F5371566237D0321003B107C /* xx_threadpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_threadpool.h; sourceTree = "<group>"; };
-		F5371567237D0321003B107C /* xx_sqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_sqlite.h; sourceTree = "<group>"; };
-		F5371568237D0322003B107C /* xx_uv_ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_uv_ext.h; sourceTree = "<group>"; };
-		F5371569237D0322003B107C /* xx_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_queue.h; sourceTree = "<group>"; };
-		F537156A237D0343003B107C /* lua_xx_uvpeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvpeer.hpp; sourceTree = "<group>"; };
-		F537156B237D0343003B107C /* lua_mempool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_mempool.h; sourceTree = "<group>"; };
-		F537156C237D0343003B107C /* lua_xx_uvdialer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvdialer.hpp; sourceTree = "<group>"; };
-		F537156D237D0343003B107C /* lua_xx_uvdialerpeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvdialerpeer.hpp; sourceTree = "<group>"; };
-		F537156E237D0343003B107C /* lua_xx_uvsimpeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvsimpeer.hpp; sourceTree = "<group>"; };
 		F537156F237D0456003B107C /* PKG_CatchFish_Stages_Emitter_RandomFishs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PKG_CatchFish_Stages_Emitter_RandomFishs.hpp; sourceTree = "<group>"; };
 		F5371570237D0456003B107C /* PKG_CatchFish_DrillBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKG_CatchFish_DrillBullet.h; sourceTree = "<group>"; };
 		F5371571237D0456003B107C /* PKG_CatchFish_WayFish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKG_CatchFish_WayFish.h; sourceTree = "<group>"; };
@@ -349,84 +333,79 @@
 		F53715B8237D045A003B107C /* PKG_CatchFish_Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKG_CatchFish_Scene.h; sourceTree = "<group>"; };
 		F53715B9237D045A003B107C /* Dialer_Panel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Dialer_Panel.hpp; sourceTree = "<group>"; };
 		F53715BA237D045A003B107C /* PKG_CatchFish_Weapon.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PKG_CatchFish_Weapon.hpp; sourceTree = "<group>"; };
-		F5DAA7D522607A6E0019EF39 /* xx_dict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_dict.h; sourceTree = "<group>"; };
-		F5DAA7D622607A6E0019EF39 /* xx_uv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_uv.h; sourceTree = "<group>"; };
-		F5DAA7D722607A6E0019EF39 /* xx_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_list.h; sourceTree = "<group>"; };
-		F5DAA7D822607A6E0019EF39 /* ikcp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ikcp.c; sourceTree = "<group>"; };
-		F5DAA7D922607A6E0019EF39 /* xx_uv_lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_uv_lua.h; sourceTree = "<group>"; };
-		F5DAA7DA22607A6E0019EF39 /* lua.natvis */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = lua.natvis; sourceTree = "<group>"; };
-		F5DAA7DB22607A6E0019EF39 /* xx_coros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_coros.h; sourceTree = "<group>"; };
-		F5DAA7DC22607A6E0019EF39 /* xx_pos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_pos.h; sourceTree = "<group>"; };
-		F5DAA7DD22607A6E0019EF39 /* xx_bbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_bbuffer.h; sourceTree = "<group>"; };
-		F5DAA7DE22607A6E0019EF39 /* xx_random.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = xx_random.hpp; sourceTree = "<group>"; };
-		F5DAA7DF22607A6E0019EF39 /* xx_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_object.h; sourceTree = "<group>"; };
-		F5DAA7E022607A6E0019EF39 /* xx_uv_coros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_uv_coros.h; sourceTree = "<group>"; };
-		F5DAA7E122607A6E0019EF39 /* ikcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ikcp.h; sourceTree = "<group>"; };
-		F5DAA7E222607A6E0019EF39 /* xx_random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_random.h; sourceTree = "<group>"; };
-		F5DAA7E322607A6E0019EF39 /* fixed_function.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fixed_function.hpp; sourceTree = "<group>"; };
-		F5DAA7E422607A6E0019EF39 /* xx.natvis */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = xx.natvis; sourceTree = "<group>"; };
-		F5DAA7ED22607A880019EF39 /* lua_cc_director.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_director.hpp; sourceTree = "<group>"; };
-		F5DAA7EE22607A880019EF39 /* lua_cc_layer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_layer.hpp; sourceTree = "<group>"; };
-		F5DAA7EF22607A880019EF39 /* lua_cc_uiwidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uiwidget.hpp; sourceTree = "<group>"; };
-		F5DAA7F022607A880019EF39 /* lua_cc_uieditbox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uieditbox.hpp; sourceTree = "<group>"; };
-		F5DAA7F122607A880019EF39 /* lua_cc_texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_texture.hpp; sourceTree = "<group>"; };
-		F5DAA7F222607A880019EF39 /* lua_xx_uvresolver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvresolver.hpp; sourceTree = "<group>"; };
-		F5DAA7F322607A880019EF39 /* lua_spine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_spine.hpp; sourceTree = "<group>"; };
-		F5DAA7F422607A880019EF39 /* lua_all.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_all.hpp; sourceTree = "<group>"; };
-		F5DAA7F522607A880019EF39 /* lua_cca.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cca.hpp; sourceTree = "<group>"; };
-		F5DAA7F622607A880019EF39 /* lua_cc_texturecache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_texturecache.hpp; sourceTree = "<group>"; };
-		F5DAA7F722607A880019EF39 /* lua_keys.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_keys.hpp; sourceTree = "<group>"; };
-		F5DAA7F822607A880019EF39 /* lua_cc_spriteframecache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_spriteframecache.hpp; sourceTree = "<group>"; };
-		F5DAA7F922607A880019EF39 /* lua_cc_fileutils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_fileutils.hpp; sourceTree = "<group>"; };
-		F5DAA7FA22607A880019EF39 /* lua_cc_uibutton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uibutton.hpp; sourceTree = "<group>"; };
-		F5DAA7FB22607A880019EF39 /* lua_to_xxx.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_to_xxx.hpp; sourceTree = "<group>"; };
-		F5DAA7FC22607A880019EF39 /* lua_pushcall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_pushcall.hpp; sourceTree = "<group>"; };
-		F5DAA7FD22607A880019EF39 /* lua_cc_userdefault.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_userdefault.hpp; sourceTree = "<group>"; };
-		F5DAA7FE22607A880019EF39 /* lua_cc_animationcache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_animationcache.hpp; sourceTree = "<group>"; };
-		F5DAA7FF22607A880019EF39 /* lua_cc_spriteframe.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_spriteframe.hpp; sourceTree = "<group>"; };
-		F5DAA80022607A880019EF39 /* lua_cc_uiimageview.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uiimageview.hpp; sourceTree = "<group>"; };
-		F5DAA80122607A880019EF39 /* lua_xx_uvkcpdialer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvkcpdialer.hpp; sourceTree = "<group>"; };
-		F5DAA80222607A880019EF39 /* lua_sys.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_sys.hpp; sourceTree = "<group>"; };
-		F5DAA80322607A880019EF39 /* lua_xx_uvtcpdialer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvtcpdialer.hpp; sourceTree = "<group>"; };
-		F5DAA80422607A880019EF39 /* lua_xx_uv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uv.hpp; sourceTree = "<group>"; };
-		F5DAA80522607A880019EF39 /* lua_cc_node.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_node.hpp; sourceTree = "<group>"; };
-		F5DAA80622607A880019EF39 /* lua_cc_uilayout.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uilayout.hpp; sourceTree = "<group>"; };
-		F5DAA80722607A880019EF39 /* lua_cc_application.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_application.hpp; sourceTree = "<group>"; };
-		F5DAA80822607A880019EF39 /* lua_cc_sprite.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_sprite.hpp; sourceTree = "<group>"; };
-		F5DAA80922607A880019EF39 /* lua_cc_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_scene.hpp; sourceTree = "<group>"; };
-		F5DAA80A22607A880019EF39 /* lua_cc_data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_data.hpp; sourceTree = "<group>"; };
-		F5DAA80B22607A880019EF39 /* lua_xx_bbuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_bbuffer.hpp; sourceTree = "<group>"; };
-		F5DAA80C22607A880019EF39 /* lua_xx_uvtcppeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvtcppeer.hpp; sourceTree = "<group>"; };
-		F5DAA80D22607A880019EF39 /* lua_cc_actions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_actions.hpp; sourceTree = "<group>"; };
-		F5DAA80E22607A880019EF39 /* lua_cc_event.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_event.hpp; sourceTree = "<group>"; };
-		F5DAA80F22607A880019EF39 /* lua_cc_clippingnode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_clippingnode.hpp; sourceTree = "<group>"; };
-		F5DAA81022607A880019EF39 /* lua_cc_touch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_touch.hpp; sourceTree = "<group>"; };
-		F5DAA81122607A880019EF39 /* lua_cc_eventlisteners.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_eventlisteners.hpp; sourceTree = "<group>"; };
-		F5DAA81222607A880019EF39 /* lua_cc_tmxtiledmap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_tmxtiledmap.hpp; sourceTree = "<group>"; };
-		F5DAA81322607A880019EF39 /* lua_cc_ref.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_ref.hpp; sourceTree = "<group>"; };
-		F5DAA81422607A880019EF39 /* lua_cc_label.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_label.hpp; sourceTree = "<group>"; };
-		F5DAA81522607A880019EF39 /* lua_cc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc.hpp; sourceTree = "<group>"; };
-		F5DAA81622607A880019EF39 /* lua_cc_assetsmanagerex.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_assetsmanagerex.hpp; sourceTree = "<group>"; };
-		F5DAA81722607A880019EF39 /* lua_func.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_func.hpp; sourceTree = "<group>"; };
-		F5DAA81822607A880019EF39 /* lua_new_xxx.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_new_xxx.hpp; sourceTree = "<group>"; };
-		F5DAA81922607A880019EF39 /* lua_xx.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx.hpp; sourceTree = "<group>"; };
-		F5DAA81A22607A880019EF39 /* lua_cc_eventdispacher.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_eventdispacher.hpp; sourceTree = "<group>"; };
-		F5DAA81B22607A880019EF39 /* lua_cc_uiloadingbar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uiloadingbar.hpp; sourceTree = "<group>"; };
-		F5DAA81C22607A880019EF39 /* lua_ext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_ext.hpp; sourceTree = "<group>"; };
-		F5DAA81D22607A880019EF39 /* lua_cc_scrollview.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_scrollview.hpp; sourceTree = "<group>"; };
-		F5DAA81E22607A880019EF39 /* lua_xx_uvkcppeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvkcppeer.hpp; sourceTree = "<group>"; };
+		F573CA8B251EDFC0002314AD /* lua_cc_application.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_application.hpp; sourceTree = "<group>"; };
+		F573CA8C251EDFC0002314AD /* lua_cc_touch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_touch.hpp; sourceTree = "<group>"; };
+		F573CA8D251EDFC0002314AD /* lua_cc_director.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_director.hpp; sourceTree = "<group>"; };
+		F573CA8E251EDFC0002314AD /* lua_pushcall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_pushcall.hpp; sourceTree = "<group>"; };
+		F573CA8F251EDFC0002314AD /* lua_cc_uiloadingbar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uiloadingbar.hpp; sourceTree = "<group>"; };
+		F573CA90251EDFC0002314AD /* lua_to_xxx.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_to_xxx.hpp; sourceTree = "<group>"; };
+		F573CA91251EDFC0002314AD /* lua_spine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_spine.hpp; sourceTree = "<group>"; };
+		F573CA92251EDFC0002314AD /* lua_xx.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx.hpp; sourceTree = "<group>"; };
+		F573CA93251EDFC0002314AD /* lua_cc_tmxtiledmap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_tmxtiledmap.hpp; sourceTree = "<group>"; };
+		F573CA94251EDFC0002314AD /* lua_cc_eventlisteners.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_eventlisteners.hpp; sourceTree = "<group>"; };
+		F573CA95251EDFC0002314AD /* lua_cc_actions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_actions.hpp; sourceTree = "<group>"; };
+		F573CA96251EDFC0002314AD /* lua_cc_uibutton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uibutton.hpp; sourceTree = "<group>"; };
+		F573CA97251EDFC0002314AD /* lua_cc_clippingnode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_clippingnode.hpp; sourceTree = "<group>"; };
+		F573CA98251EDFC0002314AD /* lua_cc_spriteframe.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_spriteframe.hpp; sourceTree = "<group>"; };
+		F573CA99251EDFC1002314AD /* lua_cc_spriteframecache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_spriteframecache.hpp; sourceTree = "<group>"; };
+		F573CA9A251EDFC1002314AD /* lua_xx_uvpeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvpeer.hpp; sourceTree = "<group>"; };
+		F573CA9B251EDFC1002314AD /* lua_new_xxx.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_new_xxx.hpp; sourceTree = "<group>"; };
+		F573CA9C251EDFC1002314AD /* lua_cc_uiwidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uiwidget.hpp; sourceTree = "<group>"; };
+		F573CA9D251EDFC1002314AD /* lua_cc_layer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_layer.hpp; sourceTree = "<group>"; };
+		F573CA9E251EDFC1002314AD /* lua_cc_userdefault.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_userdefault.hpp; sourceTree = "<group>"; };
+		F573CA9F251EDFC1002314AD /* lua_cc_ref.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_ref.hpp; sourceTree = "<group>"; };
+		F573CAA0251EDFC1002314AD /* lua_cc_label.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_label.hpp; sourceTree = "<group>"; };
+		F573CAA1251EDFC1002314AD /* lua_xx_uvdialerpeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvdialerpeer.hpp; sourceTree = "<group>"; };
+		F573CAA2251EDFC1002314AD /* lua_cc_animationcache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_animationcache.hpp; sourceTree = "<group>"; };
+		F573CAA3251EDFC1002314AD /* lua_xx_uvresolver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvresolver.hpp; sourceTree = "<group>"; };
+		F573CAA4251EDFC1002314AD /* lua_cc_fileutils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_fileutils.hpp; sourceTree = "<group>"; };
+		F573CAA5251EDFC1002314AD /* lua_func.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_func.hpp; sourceTree = "<group>"; };
+		F573CAA6251EDFC1002314AD /* lua_mempool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua_mempool.h; sourceTree = "<group>"; };
+		F573CAA7251EDFC1002314AD /* lua_cc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc.hpp; sourceTree = "<group>"; };
+		F573CAA8251EDFC1002314AD /* lua_all.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_all.hpp; sourceTree = "<group>"; };
+		F573CAA9251EDFC1002314AD /* lua_cc_event.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_event.hpp; sourceTree = "<group>"; };
+		F573CAAA251EDFC1002314AD /* lua_xx_uv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uv.hpp; sourceTree = "<group>"; };
+		F573CAAB251EDFC1002314AD /* lua_cc_scrollview.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_scrollview.hpp; sourceTree = "<group>"; };
+		F573CAAC251EDFC1002314AD /* lua_keys.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_keys.hpp; sourceTree = "<group>"; };
+		F573CAAD251EDFC1002314AD /* lua_cc_sprite.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_sprite.hpp; sourceTree = "<group>"; };
+		F573CAAE251EDFC1002314AD /* lua_cc_node.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_node.hpp; sourceTree = "<group>"; };
+		F573CAAF251EDFC1002314AD /* lua_cc_uieditbox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uieditbox.hpp; sourceTree = "<group>"; };
+		F573CAB0251EDFC1002314AD /* lua_cc_texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_texture.hpp; sourceTree = "<group>"; };
+		F573CAB1251EDFC1002314AD /* lua_cc_data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_data.hpp; sourceTree = "<group>"; };
+		F573CAB2251EDFC1002314AD /* lua_sys.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_sys.hpp; sourceTree = "<group>"; };
+		F573CAB3251EDFC1002314AD /* lua_cc_uiimageview.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uiimageview.hpp; sourceTree = "<group>"; };
+		F573CAB4251EDFC1002314AD /* lua_cc_uilayout.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_uilayout.hpp; sourceTree = "<group>"; };
+		F573CAB5251EDFC2002314AD /* lua_xx_uvsimpeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvsimpeer.hpp; sourceTree = "<group>"; };
+		F573CAB6251EDFC2002314AD /* lua_cc_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_scene.hpp; sourceTree = "<group>"; };
+		F573CAB7251EDFC2002314AD /* lua_xx_uvdialer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_uvdialer.hpp; sourceTree = "<group>"; };
+		F573CAB8251EDFC2002314AD /* lua_ext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_ext.hpp; sourceTree = "<group>"; };
+		F573CAB9251EDFC2002314AD /* lua_cc_eventdispacher.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_eventdispacher.hpp; sourceTree = "<group>"; };
+		F573CABA251EDFC2002314AD /* lua_cc_texturecache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_texturecache.hpp; sourceTree = "<group>"; };
+		F573CABB251EDFC2002314AD /* lua_cc_assetsmanagerex.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cc_assetsmanagerex.hpp; sourceTree = "<group>"; };
+		F573CABC251EDFC2002314AD /* lua_cca.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_cca.hpp; sourceTree = "<group>"; };
+		F573CABD251EDFC2002314AD /* lua_xx_bbuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua_xx_bbuffer.hpp; sourceTree = "<group>"; };
+		F573CAC0251EDFFE002314AD /* ajson.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ajson.hpp; sourceTree = "<group>"; };
+		F573CAC1251EDFFE002314AD /* xx_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_queue.h; sourceTree = "<group>"; };
+		F573CAC2251EDFFE002314AD /* xx_sqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_sqlite.h; sourceTree = "<group>"; };
+		F573CAC3251EDFFE002314AD /* xx_uv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_uv.h; sourceTree = "<group>"; };
+		F573CAC4251EDFFE002314AD /* xx_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_object.h; sourceTree = "<group>"; };
+		F573CAC5251EDFFE002314AD /* xx_uv_ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_uv_ext.h; sourceTree = "<group>"; };
+		F573CAC6251EDFFE002314AD /* xx_dict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_dict.h; sourceTree = "<group>"; };
+		F573CAC7251EDFFE002314AD /* xx_bbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_bbuffer.h; sourceTree = "<group>"; };
+		F573CAC8251EDFFE002314AD /* fixed_function.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fixed_function.hpp; sourceTree = "<group>"; };
+		F573CAC9251EDFFE002314AD /* ikcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ikcp.h; sourceTree = "<group>"; };
+		F573CACA251EDFFE002314AD /* ikcp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ikcp.c; sourceTree = "<group>"; };
+		F573CACB251EDFFE002314AD /* xx_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_list.h; sourceTree = "<group>"; };
+		F573CACC251EDFFE002314AD /* xx_logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_logger.h; sourceTree = "<group>"; };
+		F573CACD251EDFFE002314AD /* xx_random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_random.h; sourceTree = "<group>"; };
+		F573CACE251EDFFE002314AD /* xx_random.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = xx_random.hpp; sourceTree = "<group>"; };
+		F573CACF251EDFFE002314AD /* xx_threadpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_threadpool.h; sourceTree = "<group>"; };
+		F573CAD0251EDFFE002314AD /* optional.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = optional.hpp; sourceTree = "<group>"; };
+		F573CAD1251EDFFE002314AD /* xx_pos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xx_pos.h; sourceTree = "<group>"; };
 		F5DAA81F226086DC0019EF39 /* Dialer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Dialer.hpp; sourceTree = "<group>"; };
 		F5DAA820226086DC0019EF39 /* CatchFish.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CatchFish.hpp; sourceTree = "<group>"; };
-		F5DAA821226086DC0019EF39 /* ClientPeer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ClientPeer.hpp; sourceTree = "<group>"; };
 		F5DAA822226086DC0019EF39 /* CatchFish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatchFish.h; sourceTree = "<group>"; };
-		F5DAA823226086DC0019EF39 /* Physics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Physics.hpp; sourceTree = "<group>"; };
-		F5DAA824226086DC0019EF39 /* Fish.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Fish.hpp; sourceTree = "<group>"; };
-		F5DAA825226086DC0019EF39 /* Scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Scene.hpp; sourceTree = "<group>"; };
-		F5DAA826226086DC0019EF39 /* Bullet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Bullet.hpp; sourceTree = "<group>"; };
 		F5DAA827226086DC0019EF39 /* PKG_class.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKG_class.h; sourceTree = "<group>"; };
-		F5DAA828226086DC0019EF39 /* SpriteFrame.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SpriteFrame.hpp; sourceTree = "<group>"; };
-		F5DAA829226086DC0019EF39 /* Cannon.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Cannon.hpp; sourceTree = "<group>"; };
-		F5DAA82A226086DC0019EF39 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -636,18 +615,10 @@
 				F53715BA237D045A003B107C /* PKG_CatchFish_Weapon.hpp */,
 				F53715A2237D0459003B107C /* PKG_class.hpp */,
 				F53715AC237D0459003B107C /* RefHolder.h */,
-				F5DAA826226086DC0019EF39 /* Bullet.hpp */,
-				F5DAA829226086DC0019EF39 /* Cannon.hpp */,
 				F5DAA822226086DC0019EF39 /* CatchFish.h */,
 				F5DAA820226086DC0019EF39 /* CatchFish.hpp */,
-				F5DAA821226086DC0019EF39 /* ClientPeer.hpp */,
 				F5DAA81F226086DC0019EF39 /* Dialer.hpp */,
-				F5DAA824226086DC0019EF39 /* Fish.hpp */,
-				F5DAA823226086DC0019EF39 /* Physics.hpp */,
 				F5DAA827226086DC0019EF39 /* PKG_class.h */,
-				F5DAA82A226086DC0019EF39 /* Player.hpp */,
-				F5DAA825226086DC0019EF39 /* Scene.hpp */,
-				F5DAA828226086DC0019EF39 /* SpriteFrame.hpp */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
 			);
@@ -744,28 +715,24 @@
 		F5DAA7D422607A6E0019EF39 /* xxlib */ = {
 			isa = PBXGroup;
 			children = (
-				F5371563237D0321003B107C /* ajson.hpp */,
-				F5371565237D0321003B107C /* xx_logger.h */,
-				F5371569237D0322003B107C /* xx_queue.h */,
-				F5371567237D0321003B107C /* xx_sqlite.h */,
-				F5371566237D0321003B107C /* xx_threadpool.h */,
-				F5371568237D0322003B107C /* xx_uv_ext.h */,
-				F5DAA7D522607A6E0019EF39 /* xx_dict.h */,
-				F5DAA7D622607A6E0019EF39 /* xx_uv.h */,
-				F5DAA7D722607A6E0019EF39 /* xx_list.h */,
-				F5DAA7D822607A6E0019EF39 /* ikcp.c */,
-				F5DAA7D922607A6E0019EF39 /* xx_uv_lua.h */,
-				F5DAA7DA22607A6E0019EF39 /* lua.natvis */,
-				F5DAA7DB22607A6E0019EF39 /* xx_coros.h */,
-				F5DAA7DC22607A6E0019EF39 /* xx_pos.h */,
-				F5DAA7DD22607A6E0019EF39 /* xx_bbuffer.h */,
-				F5DAA7DE22607A6E0019EF39 /* xx_random.hpp */,
-				F5DAA7DF22607A6E0019EF39 /* xx_object.h */,
-				F5DAA7E022607A6E0019EF39 /* xx_uv_coros.h */,
-				F5DAA7E122607A6E0019EF39 /* ikcp.h */,
-				F5DAA7E222607A6E0019EF39 /* xx_random.h */,
-				F5DAA7E322607A6E0019EF39 /* fixed_function.hpp */,
-				F5DAA7E422607A6E0019EF39 /* xx.natvis */,
+				F573CAC0251EDFFE002314AD /* ajson.hpp */,
+				F573CAC8251EDFFE002314AD /* fixed_function.hpp */,
+				F573CACA251EDFFE002314AD /* ikcp.c */,
+				F573CAC9251EDFFE002314AD /* ikcp.h */,
+				F573CAD0251EDFFE002314AD /* optional.hpp */,
+				F573CAC7251EDFFE002314AD /* xx_bbuffer.h */,
+				F573CAC6251EDFFE002314AD /* xx_dict.h */,
+				F573CACB251EDFFE002314AD /* xx_list.h */,
+				F573CACC251EDFFE002314AD /* xx_logger.h */,
+				F573CAC4251EDFFE002314AD /* xx_object.h */,
+				F573CAD1251EDFFE002314AD /* xx_pos.h */,
+				F573CAC1251EDFFE002314AD /* xx_queue.h */,
+				F573CACD251EDFFE002314AD /* xx_random.h */,
+				F573CACE251EDFFE002314AD /* xx_random.hpp */,
+				F573CAC2251EDFFE002314AD /* xx_sqlite.h */,
+				F573CACF251EDFFE002314AD /* xx_threadpool.h */,
+				F573CAC5251EDFFE002314AD /* xx_uv_ext.h */,
+				F573CAC3251EDFFE002314AD /* xx_uv.h */,
 			);
 			name = xxlib;
 			path = ../xxlib;
@@ -774,61 +741,57 @@
 		F5DAA7EC22607A880019EF39 /* lua_bind */ = {
 			isa = PBXGroup;
 			children = (
-				F537156B237D0343003B107C /* lua_mempool.h */,
-				F537156C237D0343003B107C /* lua_xx_uvdialer.hpp */,
-				F537156D237D0343003B107C /* lua_xx_uvdialerpeer.hpp */,
-				F537156A237D0343003B107C /* lua_xx_uvpeer.hpp */,
-				F537156E237D0343003B107C /* lua_xx_uvsimpeer.hpp */,
-				F5DAA7ED22607A880019EF39 /* lua_cc_director.hpp */,
-				F5DAA7EE22607A880019EF39 /* lua_cc_layer.hpp */,
-				F5DAA7EF22607A880019EF39 /* lua_cc_uiwidget.hpp */,
-				F5DAA7F022607A880019EF39 /* lua_cc_uieditbox.hpp */,
-				F5DAA7F122607A880019EF39 /* lua_cc_texture.hpp */,
-				F5DAA7F222607A880019EF39 /* lua_xx_uvresolver.hpp */,
-				F5DAA7F322607A880019EF39 /* lua_spine.hpp */,
-				F5DAA7F422607A880019EF39 /* lua_all.hpp */,
-				F5DAA7F522607A880019EF39 /* lua_cca.hpp */,
-				F5DAA7F622607A880019EF39 /* lua_cc_texturecache.hpp */,
-				F5DAA7F722607A880019EF39 /* lua_keys.hpp */,
-				F5DAA7F822607A880019EF39 /* lua_cc_spriteframecache.hpp */,
-				F5DAA7F922607A880019EF39 /* lua_cc_fileutils.hpp */,
-				F5DAA7FA22607A880019EF39 /* lua_cc_uibutton.hpp */,
-				F5DAA7FB22607A880019EF39 /* lua_to_xxx.hpp */,
-				F5DAA7FC22607A880019EF39 /* lua_pushcall.hpp */,
-				F5DAA7FD22607A880019EF39 /* lua_cc_userdefault.hpp */,
-				F5DAA7FE22607A880019EF39 /* lua_cc_animationcache.hpp */,
-				F5DAA7FF22607A880019EF39 /* lua_cc_spriteframe.hpp */,
-				F5DAA80022607A880019EF39 /* lua_cc_uiimageview.hpp */,
-				F5DAA80122607A880019EF39 /* lua_xx_uvkcpdialer.hpp */,
-				F5DAA80222607A880019EF39 /* lua_sys.hpp */,
-				F5DAA80322607A880019EF39 /* lua_xx_uvtcpdialer.hpp */,
-				F5DAA80422607A880019EF39 /* lua_xx_uv.hpp */,
-				F5DAA80522607A880019EF39 /* lua_cc_node.hpp */,
-				F5DAA80622607A880019EF39 /* lua_cc_uilayout.hpp */,
-				F5DAA80722607A880019EF39 /* lua_cc_application.hpp */,
-				F5DAA80822607A880019EF39 /* lua_cc_sprite.hpp */,
-				F5DAA80922607A880019EF39 /* lua_cc_scene.hpp */,
-				F5DAA80A22607A880019EF39 /* lua_cc_data.hpp */,
-				F5DAA80B22607A880019EF39 /* lua_xx_bbuffer.hpp */,
-				F5DAA80C22607A880019EF39 /* lua_xx_uvtcppeer.hpp */,
-				F5DAA80D22607A880019EF39 /* lua_cc_actions.hpp */,
-				F5DAA80E22607A880019EF39 /* lua_cc_event.hpp */,
-				F5DAA80F22607A880019EF39 /* lua_cc_clippingnode.hpp */,
-				F5DAA81022607A880019EF39 /* lua_cc_touch.hpp */,
-				F5DAA81122607A880019EF39 /* lua_cc_eventlisteners.hpp */,
-				F5DAA81222607A880019EF39 /* lua_cc_tmxtiledmap.hpp */,
-				F5DAA81322607A880019EF39 /* lua_cc_ref.hpp */,
-				F5DAA81422607A880019EF39 /* lua_cc_label.hpp */,
-				F5DAA81522607A880019EF39 /* lua_cc.hpp */,
-				F5DAA81622607A880019EF39 /* lua_cc_assetsmanagerex.hpp */,
-				F5DAA81722607A880019EF39 /* lua_func.hpp */,
-				F5DAA81822607A880019EF39 /* lua_new_xxx.hpp */,
-				F5DAA81922607A880019EF39 /* lua_xx.hpp */,
-				F5DAA81A22607A880019EF39 /* lua_cc_eventdispacher.hpp */,
-				F5DAA81B22607A880019EF39 /* lua_cc_uiloadingbar.hpp */,
-				F5DAA81C22607A880019EF39 /* lua_ext.hpp */,
-				F5DAA81D22607A880019EF39 /* lua_cc_scrollview.hpp */,
-				F5DAA81E22607A880019EF39 /* lua_xx_uvkcppeer.hpp */,
+				F573CAA8251EDFC1002314AD /* lua_all.hpp */,
+				F573CA95251EDFC0002314AD /* lua_cc_actions.hpp */,
+				F573CAA2251EDFC1002314AD /* lua_cc_animationcache.hpp */,
+				F573CA8B251EDFC0002314AD /* lua_cc_application.hpp */,
+				F573CABB251EDFC2002314AD /* lua_cc_assetsmanagerex.hpp */,
+				F573CA97251EDFC0002314AD /* lua_cc_clippingnode.hpp */,
+				F573CAB1251EDFC1002314AD /* lua_cc_data.hpp */,
+				F573CA8D251EDFC0002314AD /* lua_cc_director.hpp */,
+				F573CAA9251EDFC1002314AD /* lua_cc_event.hpp */,
+				F573CAB9251EDFC2002314AD /* lua_cc_eventdispacher.hpp */,
+				F573CA94251EDFC0002314AD /* lua_cc_eventlisteners.hpp */,
+				F573CAA4251EDFC1002314AD /* lua_cc_fileutils.hpp */,
+				F573CAA0251EDFC1002314AD /* lua_cc_label.hpp */,
+				F573CA9D251EDFC1002314AD /* lua_cc_layer.hpp */,
+				F573CAAE251EDFC1002314AD /* lua_cc_node.hpp */,
+				F573CA9F251EDFC1002314AD /* lua_cc_ref.hpp */,
+				F573CAB6251EDFC2002314AD /* lua_cc_scene.hpp */,
+				F573CAAB251EDFC1002314AD /* lua_cc_scrollview.hpp */,
+				F573CAAD251EDFC1002314AD /* lua_cc_sprite.hpp */,
+				F573CA98251EDFC0002314AD /* lua_cc_spriteframe.hpp */,
+				F573CA99251EDFC1002314AD /* lua_cc_spriteframecache.hpp */,
+				F573CAB0251EDFC1002314AD /* lua_cc_texture.hpp */,
+				F573CABA251EDFC2002314AD /* lua_cc_texturecache.hpp */,
+				F573CA93251EDFC0002314AD /* lua_cc_tmxtiledmap.hpp */,
+				F573CA8C251EDFC0002314AD /* lua_cc_touch.hpp */,
+				F573CA96251EDFC0002314AD /* lua_cc_uibutton.hpp */,
+				F573CAAF251EDFC1002314AD /* lua_cc_uieditbox.hpp */,
+				F573CAB3251EDFC1002314AD /* lua_cc_uiimageview.hpp */,
+				F573CAB4251EDFC1002314AD /* lua_cc_uilayout.hpp */,
+				F573CA8F251EDFC0002314AD /* lua_cc_uiloadingbar.hpp */,
+				F573CA9C251EDFC1002314AD /* lua_cc_uiwidget.hpp */,
+				F573CA9E251EDFC1002314AD /* lua_cc_userdefault.hpp */,
+				F573CAA7251EDFC1002314AD /* lua_cc.hpp */,
+				F573CABC251EDFC2002314AD /* lua_cca.hpp */,
+				F573CAB8251EDFC2002314AD /* lua_ext.hpp */,
+				F573CAA5251EDFC1002314AD /* lua_func.hpp */,
+				F573CAAC251EDFC1002314AD /* lua_keys.hpp */,
+				F573CAA6251EDFC1002314AD /* lua_mempool.h */,
+				F573CA9B251EDFC1002314AD /* lua_new_xxx.hpp */,
+				F573CA8E251EDFC0002314AD /* lua_pushcall.hpp */,
+				F573CA91251EDFC0002314AD /* lua_spine.hpp */,
+				F573CAB2251EDFC1002314AD /* lua_sys.hpp */,
+				F573CA90251EDFC0002314AD /* lua_to_xxx.hpp */,
+				F573CABD251EDFC2002314AD /* lua_xx_bbuffer.hpp */,
+				F573CAAA251EDFC1002314AD /* lua_xx_uv.hpp */,
+				F573CAB7251EDFC2002314AD /* lua_xx_uvdialer.hpp */,
+				F573CAA1251EDFC1002314AD /* lua_xx_uvdialerpeer.hpp */,
+				F573CA9A251EDFC1002314AD /* lua_xx_uvpeer.hpp */,
+				F573CAA3251EDFC1002314AD /* lua_xx_uvresolver.hpp */,
+				F573CAB5251EDFC2002314AD /* lua_xx_uvsimpeer.hpp */,
+				F573CA92251EDFC0002314AD /* lua_xx.hpp */,
 			);
 			name = lua_bind;
 			path = ../lua_bind;
@@ -883,7 +846,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = NPNDP84QF9;
+						DevelopmentTeam = MPFH9F7JJN;
 					};
 				};
 			};
@@ -942,9 +905,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5DAA7E722607A6E0019EF39 /* lua.natvis in Resources */,
 				1A88B2641FC3D9C9005C14AE /* Images.xcassets in Resources */,
-				F5DAA7E922607A6E0019EF39 /* xx.natvis in Resources */,
 				E387F1902184BEC400C2842F /* res in Resources */,
 				1AF87B891F6F781D007BE51C /* LaunchScreenBackground.png in Resources */,
 				1AF87B881F6F781D007BE51C /* LaunchScreen.storyboard in Resources */,
@@ -955,8 +916,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5DAA7EA22607A6E0019EF39 /* xx.natvis in Resources */,
-				F5DAA7E822607A6E0019EF39 /* lua.natvis in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				E387F1912184BEC400C2842F /* res in Resources */,
 			);
@@ -1002,7 +961,7 @@
 				E318CB422192276F003245B4 /* llex.c in Sources */,
 				E318CB5E2192276F003245B4 /* lbaselib.c in Sources */,
 				1AF87B8B1F6F782A007BE51C /* RootViewController.mm in Sources */,
-				F5DAA7E522607A6E0019EF39 /* ikcp.c in Sources */,
+				F573CAD2251EDFFE002314AD /* ikcp.c in Sources */,
 				E318CB462192276F003245B4 /* lobject.c in Sources */,
 				E318CB342192276F003245B4 /* lstring.c in Sources */,
 				E318CB642192276F003245B4 /* lgc.c in Sources */,
@@ -1045,7 +1004,6 @@
 				E318CB352192276F003245B4 /* lstring.c in Sources */,
 				E318CB452192276F003245B4 /* lauxlib.c in Sources */,
 				E318CB2F2192276F003245B4 /* loslib.c in Sources */,
-				F5DAA7E622607A6E0019EF39 /* ikcp.c in Sources */,
 				E318CB3F2192276F003245B4 /* lmathlib.c in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				E318CB592192276F003245B4 /* lcode.c in Sources */,
@@ -1097,7 +1055,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = NPNDP84QF9;
+				DEVELOPMENT_TEAM = MPFH9F7JJN;
 				ENABLE_BITCODE = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -1117,7 +1075,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.denghe.cpp1;
+				PRODUCT_BUNDLE_IDENTIFIER = cpp.denghe.cccpp1;
 				SDKROOT = iphoneos;
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1133,7 +1091,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = NPNDP84QF9;
+				DEVELOPMENT_TEAM = MPFH9F7JJN;
 				ENABLE_BITCODE = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1152,7 +1110,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.denghe.cpp1;
+				PRODUCT_BUNDLE_IDENTIFIER = cpp.denghe.cccpp1;
 				SDKROOT = iphoneos;
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
