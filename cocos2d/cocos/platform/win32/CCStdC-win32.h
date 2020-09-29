@@ -93,9 +93,7 @@ typedef SSIZE_T ssize_t;
     #include "platform/win32/compat/stdint.h"
 #endif
 
-#ifndef _WINSOCKAPI_
 #define _WINSOCKAPI_
-#endif
 #ifndef NOMINMAX
   #define NOMINMAX
 #endif

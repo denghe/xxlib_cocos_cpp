@@ -46,8 +46,6 @@ import android.view.WindowManager;
 
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
-import java.io.File;
-
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
@@ -110,25 +108,12 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         }
     }
 
-	// xx
-    public static String libraryName = "MyGame";
     protected void onLoadNativeLibraries() {
         try {
-            String sofile = getFilesDir().getAbsolutePath() + "/lib" + libraryName + ".so";
-            Log.d("file so", sofile);
-            File file = new File(sofile);
-            if (file.exists()) {
-                try {
-                    Log.d("update", "onLoadNativeLibraries =" + file.getAbsolutePath() + " OK");
-                    System.load(file.getAbsolutePath());
-                } catch (UnsatisfiedLinkError err) {
-                    Log.d("update", "onLoadNativeLibraries = fail err " + err.getMessage());
-                    System.loadLibrary(libraryName);
-                }
-            } else {
-                System.loadLibrary(libraryName);
-            }
-
+            ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = ai.metaData;
+            String libName = bundle.getString("android.app.lib_name");
+            System.loadLibrary(libName);
         } catch (Exception e) {
             e.printStackTrace();
         }
