@@ -283,27 +283,27 @@ namespace xx::Lua {
     // 适配模板转为函数
     namespace Detail {
         template<typename Arg, typename...Args>
-        int Push(lua_State *const &L, Arg &&arg) {
+        inline int Push(lua_State *const &L, Arg &&arg) {
             return ::xx::Lua::PushToFuncs<Arg>::Push(L, std::forward<Arg>(arg));
         }
 
         template<typename Arg, typename...Args>
-        int Push(lua_State *const &L, Arg &&arg, Args &&...args) {
+        inline int Push(lua_State *const &L, Arg &&arg, Args &&...args) {
             int n = ::xx::Lua::PushToFuncs<Arg>::Push(L, std::forward<Arg>(arg));
             return n + Push(L, std::forward<Args>(args)...);
         }
 
-        int Push(lua_State *const &L) {
+        inline int Push(lua_State *const &L) {
             return 0;
         }
     }
 
     template<typename...Args>
-    int Push(lua_State *const &L, Args &&...args) {
+    inline int Push(lua_State *const &L, Args &&...args) {
         return ::xx::Lua::Detail::Push(L, std::forward<Args>(args)...);
     }
 
-    int Push(lua_State *const &L) {
+    inline int Push(lua_State *const &L) {
         return 0;
     }
 
@@ -311,19 +311,19 @@ namespace xx::Lua {
     namespace Detail {
 
         template<typename Arg, typename...Args>
-        void To(lua_State *const &L, int const &idx, Arg &arg, Args &...args) {
+        inline void To(lua_State *const &L, int const &idx, Arg &arg, Args &...args) {
             xx::Lua::PushToFuncs<Arg>::To(L, idx, arg);
             if constexpr(sizeof...(Args)) {
                 To(L, idx + 1, args...);
             }
         }
 
-        void To(lua_State *const &L, int const &idx) {
+        inline void To(lua_State *const &L, int const &idx) {
         }
     }
 
     template<typename...Args>
-    void To(lua_State *const &L, int const &idx, Args &...args) {
+    inline void To(lua_State *const &L, int const &idx, Args &...args) {
         xx::Lua::Detail::To(L, idx, args...);
     }
 

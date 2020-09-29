@@ -143,7 +143,7 @@ namespace xx {
 		void FillDA();
 
 		// 创建一个曲线连接途经点的 pathway
-		static std::shared_ptr<Pathway> Make(bool isLoop, std::vector<CurvePoint> const& ps);
+		static std::shared_ptr<Pathway> MakeCurve(bool isLoop, std::vector<CurvePoint> const& ps);
 	};
 
 
@@ -540,7 +540,7 @@ namespace xx {
 	}
 
 
-	inline std::shared_ptr<Pathway> Pathway::Make(bool isLoop, std::vector<CurvePoint> const& ps) {
+	inline std::shared_ptr<Pathway> Pathway::MakeCurve(bool isLoop, std::vector<CurvePoint> const& ps) {
 		auto rtv = xx::Make<xx::Pathway>();
 		rtv->isLoop = isLoop;
 

@@ -16,9 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librecast", "..\cocos2d\ext
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "res", "res", "{02F42E29-3EBC-4C73-8F65-86E96C1751D8}"
 	ProjectSection(SolutionItems) = preProject
-		..\res\libs.lua = ..\res\libs.lua
-		..\res\main.lua = ..\res\main.lua
-		..\res\PKG_class.lua = ..\res\PKG_class.lua
+		..\res\1.frames = ..\res\1.frames
+		..\res\1.frames.ext = ..\res\1.frames.ext
 	EndProjectSection
 EndProject
 Global

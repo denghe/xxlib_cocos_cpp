@@ -155,9 +155,6 @@
     <ClInclude Include="..\Classes\Anim.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\AppMacros.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\FileExts_class_lite.ajson.h">
       <Filter>src</Filter>
     </ClInclude>

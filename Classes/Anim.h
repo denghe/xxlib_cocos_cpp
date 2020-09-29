@@ -5,22 +5,13 @@
 #include "audio/include/AudioEngine.h"
 #include <spine/spine-cocos2dx.h>
 
-#include "AppMacros.h"
+#include "xx_lua.h"
+namespace XL = xx::Lua;
 
-//#include "xx_lua.h"
-//#include <iostream>
-//#include <chrono>
-//
-//namespace XL = xx::Lua;
-//
-//#include "FileExts_class_lite.h"
-//// todo: ajson macro
-//
-//
+#include "FileExts_class_lite.h"
+#include "FileExts_class_lite.ajson.h"
 
-// todo: 最后来补序列化支持, 以及加客户端判断宏以跳过一些服务器做不了或不需要做的事情
-
-// todo: size_t 换 int 以便 lua 更好的支持？
+inline static cocos2d::Size designResolutionSize = cocos2d::Size(1900, 1000);
 
 
 // 跨 frames / atlas / c3b 的动画基类
@@ -117,10 +108,16 @@ struct Anim_C3b : Anim {
 // 根据文件扩展名路由加载相应类型动画 并 设置参数为 循环播放第一个动作
 std::shared_ptr<Anim> CreateAnim(std::string const& fn, cocos2d::Node* const& container);
 
+/***************************************************************************/
+/***************************************************************************/
+
 // 动画扩展版基类。能沿着 pathway 移动。带碰撞检测啥的逻辑功能
 struct AnimExt {
 	// 当前动画
 	std::shared_ptr<Anim> anim;
+
+	// 子动画 for 顺着同一 pathway 移动的简单组合体. second 为 0 度时的偏移坐标
+	std::vector<std::pair<std::shared_ptr<Anim>, xx::Point>> childAnims;
 
 	// 文件名
 	std::string fileName;
@@ -146,8 +143,11 @@ struct AnimExt {
 	// 时间系数. 默认为 1, 0 为停止. 不能为负
 	float timeScale = 1;
 
-	// 子集合，组合啥的会用到。母体函数分发判断 lock attack 啥的。pathway 通常依附于母体，走相对坐标
-	std::vector<std::shared_ptr<AnimExt>> childs;
+	//// 父的弱引用。位于 childs 中的对象需要设置
+	//std::weak_ptr<AnimExt> parent;
+
+	//// 子集合，组合啥的会用到。母体函数分发判断 lock attack 啥的。pathway 通常依附于母体，走相对坐标
+	//std::vector<std::shared_ptr<AnimExt>> childs;
 
 	// 根据 fileName 加载文件. 成功返回 0. 该函数被设计为只执行一次（依赖成员变量初始值的正确性）
 	virtual int Load() = 0;
@@ -191,7 +191,7 @@ struct AnimExt {
 	virtual ~AnimExt() = default;
 };
 
-struct AnimExt_Anim : AnimExt {
+struct AnimExt_CPP : AnimExt {
 	// 文件内容容器
 	FileExts::File_AnimExt file;
 
@@ -227,17 +227,19 @@ struct AnimExt_Anim : AnimExt {
 	void Attack() override;
 	void Death() override;
 	void Draw() override;
-	~AnimExt_Anim() override;
+	~AnimExt_CPP() override;
 };
 
-struct AnimExt_Lua : AnimExt {
+struct AnimExt_LUA : AnimExt_CPP {
+	// todo: 先针对 组合体 来一发，将调整 childs[?] pos & angle & scale 的
 	// todo: override
 };
 
 // 根据文件扩展名路由加载相应类型扩展动画. 后续还要自己继续初始化，设置 pathway 啥的
 std::shared_ptr<AnimExt> CreateAnimExt(std::string const& fn, cocos2d::Node* const& container);
 
-
+/***************************************************************************/
+/***************************************************************************/
 
 //// 带移动功能的动画 基类
 //struct AnimBase : xx::Object {
