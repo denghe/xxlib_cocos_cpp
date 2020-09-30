@@ -198,7 +198,6 @@
 		F5D42165251F3E300024F131 /* FileExts_class_lite.h.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = FileExts_class_lite.h.inc; sourceTree = "<group>"; };
 		F5D42166251F3E300024F131 /* Pathway.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pathway.cpp; sourceTree = "<group>"; };
 		F5D42167251F3E300024F131 /* Anim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Anim.h; sourceTree = "<group>"; };
-		F5D42168251F3E300024F131 /* AppMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppMacros.h; sourceTree = "<group>"; };
 		F5D42169251F3E300024F131 /* Anim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Anim.cpp; sourceTree = "<group>"; };
 		F5D4216A251F3E300024F131 /* FileExts_class_lite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileExts_class_lite.cpp; sourceTree = "<group>"; };
 		F5D4216B251F3E300024F131 /* Pathway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pathway.h; sourceTree = "<group>"; };
@@ -374,7 +373,6 @@
 			children = (
 				F5D42169251F3E300024F131 /* Anim.cpp */,
 				F5D42167251F3E300024F131 /* Anim.h */,
-				F5D42168251F3E300024F131 /* AppMacros.h */,
 				F5D4216F251F3E300024F131 /* FileExts_class_lite.ajson.h */,
 				F5D4216A251F3E300024F131 /* FileExts_class_lite.cpp */,
 				F5D4216D251F3E300024F131 /* FileExts_class_lite.cpp.inc */,
@@ -878,6 +876,7 @@
 					"$(SRCROOT)/../lua/src",
 					"$(SRCROOT)/../lua_bind",
 					"$(SRCROOT)/../Classes",
+					"$(SRCROOT)/../asio/asio/include",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -907,6 +906,7 @@
 					"$(SRCROOT)/../lua/src",
 					"$(SRCROOT)/../lua_bind",
 					"$(SRCROOT)/../Classes",
+					"$(SRCROOT)/../asio/asio/include",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;

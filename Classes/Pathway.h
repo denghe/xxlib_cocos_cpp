@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "FileExts_class_lite.h"
 #include "xx_point.h"
 #include "ajson.hpp"
@@ -49,8 +49,8 @@ struct Loader<T, std::enable_if_t<std::is_same_v<T, FileExts::File_Frames> || st
 	// 加载并返回
 	std::shared_ptr<T> Load(std::string const& fn) {
 		// 在 cache 中查找. 已存在：短路返回
-		auto&& iter = cache.find(fn);
-		if (iter != cache.end()) return iter->second;
+		auto&& iter = this->cache.find(fn);
+		if (iter != this->cache.end()) return iter->second;
 
 		// 文件容器
 		auto r = xx::Make<T>();
@@ -59,7 +59,7 @@ struct Loader<T, std::enable_if_t<std::is_same_v<T, FileExts::File_Frames> || st
 		if (LoadJson(*r, fn)) return nullptr;
 
 		// 放入字典并返回
-		cache[fn] = r;
+        this->cache[fn] = r;
 		return r;
 	}
 };

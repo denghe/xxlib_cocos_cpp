@@ -29,6 +29,8 @@
 
 #include "Anim.h"
 
+#include "asio.hpp"
+
 class HelloWorld : public cocos2d::Scene
 {
 public:
@@ -51,6 +53,8 @@ private:
     //void initSpine();
 
     //void initDragon();
+    
+    asio::io_context io;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

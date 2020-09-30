@@ -111,19 +111,6 @@ void HelloWorld::initFish() {
 			ae->anim->scaleY = 1;
 			ae->SetPathway(0);
 			anims.push_back(ae);
-
-			//{
-			//	auto&& r = ae->childAnims.emplace_back(CreateAnim("skeleton.atlas", this), xx::Point{ 20, 50 });
-			//	r.first->SetAction("animation");
-			//	r.first->scaleX = 0.25f;
-			//	r.first->scaleY = 0.25f;
-			//}
-			//{
-			//	auto&& r = ae->childAnims.emplace_back(CreateAnim("skeleton.atlas", this), xx::Point{ 20, -50 });
-			//	r.first->SetAction("animation");
-			//	r.first->scaleX = 0.25f;
-			//	r.first->scaleY = 0.25f;
-			//}
 		}
 	}
 }
@@ -148,10 +135,11 @@ std::shared_ptr<xx::Pathway> MakeRandomLinePathway() {
 	return xx::PathwayMaker(srcPos).To(destPos).End();
 }
 
-static float time1 = 0;
 static int frame = 0;
 void HelloWorld::update(float delta)
 {
+    io.run_one();
+    
 	for (int i = (int)anims.size() - 1; i >= 0; --i) {
 		auto& anim = anims[i];
 		if (anim->Update(delta)) {
@@ -180,7 +168,7 @@ void HelloWorld::update(float delta)
 				{
 					auto&& a = CreateAnim("skeleton.atlas", this);
 					if (a) {
-						auto&& r = ae->childAnims.emplace_back(a, xx::Point{ 20, 50 });
+						ae->childAnims.emplace_back(a, xx::Point{ 20, 50 });
 						a->SetAction("animation");
 						a->scaleX = 0.25f;
 						a->scaleY = 0.25f;
@@ -189,7 +177,7 @@ void HelloWorld::update(float delta)
 				{
 					auto&& a = CreateAnim("skeleton.atlas", this);
 					if (a) {
-						auto&& r = ae->childAnims.emplace_back(a, xx::Point{ 20, -50 });
+						ae->childAnims.emplace_back(a, xx::Point{ 20, -50 });
 						a->SetAction("animation");
 						a->scaleX = 0.25f;
 						a->scaleY = 0.25f;
