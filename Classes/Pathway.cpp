@@ -2,10 +2,10 @@
 #include "FileExts_class_lite.ajson.h"
 #include "Tools.h"
 
-std::shared_ptr<xx::Pathway> PathwayLoader::Load(std::string const& fn) {
-	auto&& iter = pathways.find(fn);
+std::shared_ptr<xx::Pathway> Loader<xx::Pathway, void>::Load(std::string const& fn) {
+	auto&& iter = cache.find(fn);
 	// 已存在：短路返回
-	if (iter != pathways.end()) return iter->second;
+	if (iter != cache.end()) return iter->second;
 
 	FileExts::File_pathway f;
 
@@ -73,18 +73,6 @@ std::shared_ptr<xx::Pathway> PathwayLoader::Load(std::string const& fn) {
 	}
 
 	// 放入字典并返回
-	pathways[fn] = rtv;
+	cache[fn] = rtv;
 	return rtv;
-}
-
-// 清除 pathways 值部分引用计数为 1 的 移动路线
-void PathwayLoader::RemoveUnused() {
-	for (auto iter = pathways.begin(); iter != pathways.end(); ) {
-		if (iter->second.use_count() == 1) {
-			iter = pathways.erase(iter);
-		}
-		else {
-			++iter;
-		}
-	}
 }

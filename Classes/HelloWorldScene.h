@@ -48,9 +48,9 @@ private:
 
     void initFish();
 
-    void initSpine();
+    //void initSpine();
 
-    void initDragon();
+    //void initDragon();
 };
 
 #endif // __HELLOWORLD_SCENE_H__
