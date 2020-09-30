@@ -55,6 +55,7 @@ private:
     //void initDragon();
     
     asio::io_context io;
+    std::shared_ptr<asio::steady_timer> timer1;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

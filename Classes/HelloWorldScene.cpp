@@ -63,6 +63,10 @@ bool HelloWorld::init()
 	pathwayR = sqrt(_contentSize.width * _contentSize.width + _contentSize.height * _contentSize.height) / 2 + 75;
 
 	scheduleUpdate();
+    
+    xx::MakeTo(timer1, io, std::chrono::seconds(5));
+    timer1->async_wait([](const asio::error_code& ec) { printf("5 second\n"); });
+    
 	return true;
 }
 
@@ -138,7 +142,7 @@ std::shared_ptr<xx::Pathway> MakeRandomLinePathway() {
 static int frame = 0;
 void HelloWorld::update(float delta)
 {
-    io.run_one();
+    io.poll();
     
 	for (int i = (int)anims.size() - 1; i >= 0; --i) {
 		auto& anim = anims[i];
