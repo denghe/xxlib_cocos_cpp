@@ -158,6 +158,9 @@
     <ClInclude Include="..\Classes\FileExts_class_lite.ajson.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\xxlib\xx_asio.h">
+      <Filter>xxlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

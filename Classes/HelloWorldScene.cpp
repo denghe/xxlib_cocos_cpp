@@ -64,32 +64,10 @@ bool HelloWorld::init()
 
 	scheduleUpdate();
 
-	xx::MakeTo(timer1, io, std::chrono::seconds(5));
-	timer1->async_wait([](const asio::error_code& ec) { std::cout << "5 second\n"; });
+	ac.ResolveDomain("www.baidu.com");
 
-	xx::MakeTo(sock, io, asio::ip::udp::endpoint(asio::ip::udp::v4(), 0));
-
-	asio::ip::udp::resolver resolver(io);
-	asio::ip::udp::resolver::query query(asio::ip::udp::v4(), "127.0.0.1", "12345");
-	asio::ip::udp::resolver::iterator iterator = resolver.resolve(query);
-	send_to_addr = *iterator;
-	std::cout << "send_to_addr = " << send_to_addr << std::endl;
-
-	sock->async_receive_from(asio::buffer(data_, max_length), sender_endpoint, bind(&HelloWorld::handle_receive_from, this,
-		std::placeholders::_1,
-		std::placeholders::_2));
-
-	//sock->send_to(asio::buffer("asdfqwer", 8), send_to_addr);
 
 	return true;
-}
-
-
-void HelloWorld::handle_receive_from(const asio::error_code& error, size_t bytes_recvd) {
-	std::cout << "error = " << error << ", recv " << bytes_recvd << std::endl;
-	sock->async_receive_from(asio::buffer(data_, max_length), sender_endpoint, bind(&HelloWorld::handle_receive_from, this,
-		std::placeholders::_1,
-		std::placeholders::_2));
 }
 
 void HelloWorld::initFish() {
@@ -163,9 +141,11 @@ std::shared_ptr<xx::Pathway> MakeRandomLinePathway() {
 static int frame = 0;
 void HelloWorld::update(float delta)
 {
-	sock->send_to(asio::buffer("asdfqwer", 8), send_to_addr);
-
-	io.poll();
+	ac.Update(delta);
+	if (!ac.userInt && ac.domainResolvers.empty()) {
+		ac.userInt = 1;
+		ac.DumpDomainAddrs();
+	}
 
 	for (int i = (int)anims.size() - 1; i >= 0; --i) {
 		auto& anim = anims[i];

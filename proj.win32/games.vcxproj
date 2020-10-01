@@ -172,6 +172,7 @@
     <ClInclude Include="..\xxlib\ajson.hpp" />
     <ClInclude Include="..\xxlib\http_parser.h" />
     <ClInclude Include="..\xxlib\ikcp.h" />
+    <ClInclude Include="..\xxlib\xx_asio.h" />
     <ClInclude Include="..\xxlib\xx_chrono.h" />
     <ClInclude Include="..\xxlib\xx_data.h" />
     <ClInclude Include="..\xxlib\xx_data_queue.h" />

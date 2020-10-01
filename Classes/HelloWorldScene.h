@@ -29,7 +29,7 @@
 
 #include "Anim.h"
 
-#include "asio.hpp"
+#include "xx_asio.h"
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -54,14 +54,7 @@ private:
 
     //void initDragon();
     
-    asio::io_context io;
-    std::shared_ptr<asio::steady_timer> timer1;
-    std::shared_ptr<asio::ip::udp::socket> sock;// (io_service, udp::endpoint(udp::v4(), 0));
-    enum { max_length = 1024 };
-    char data_[max_length];
-    asio::ip::udp::endpoint send_to_addr;
-    asio::ip::udp::endpoint sender_endpoint;
-    void handle_receive_from(const asio::error_code& error, size_t bytes_recvd);
+    xx::Asio::Context ac;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
